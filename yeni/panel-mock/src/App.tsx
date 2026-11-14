@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Boxes, Building2, FileText, LayoutDashboard, LifeBuoy, Menu, Moon, Package, RefreshCw, RotateCcw, ScrollText, ShoppingCart, Store, Sun, Tag, Truck, Users, X, type LucideIcon } from 'lucide-react'
+import { Boxes, Building2, FileText, LayoutDashboard, LifeBuoy, Menu, Moon, Package, RefreshCw, RotateCcw, ScrollText, ShoppingCart, Sparkles, Store, Sun, Tag, Truck, Users, X, type LucideIcon } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
 import { sel } from './ui'
 import { Logo } from './logo'
+import Agent from './Agent'
 import Overview from './pages/Overview'
 import Orders from './pages/Orders'
 import Catalog, { Stock } from './pages/Catalog'
@@ -39,6 +40,7 @@ function useRoute() {
 function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchParams; dark: boolean; setDark: (f: (d: boolean) => boolean) => void }) {
   const st = useStore()
   const [menu, setMenu] = useState(false)
+  const [agent, setAgent] = useState(false)
   useEffect(() => setMenu(false), [page])
 
   const R = ROLES[st.role]
@@ -96,7 +98,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   )
 
   return (
-    <div className="min-h-screen md:pl-60">
+    <div className={`min-h-screen md:pl-60 ${agent ? 'xl:pr-[400px]' : ''}`}>
       <aside className="hidden md:block fixed inset-y-0 left-0 w-60 bg-card border-r border-line">{sidebar}</aside>
       {menu && <div className="md:hidden fixed inset-0 z-50 flex"><div className="w-64 max-w-[85vw] bg-card border-r border-line">{sidebar}</div><div className="flex-1 bg-black/40" onClick={() => setMenu(false)} /></div>}
 
@@ -119,9 +121,11 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
           </select>
         </label>
         <button onClick={() => setDark(d => !d)} aria-label="Açık / koyu tema" className="border border-line rounded-md bg-card size-8 grid place-items-center text-ink2">{dark ? <Sun size={16} /> : <Moon size={16} />}</button>
+        <button onClick={() => setAgent(a => !a)} aria-pressed={agent} className={`inline-flex items-center gap-1.5 rounded-md border h-8 px-2.5 text-sm font-medium ${agent ? 'bg-brand text-white border-brand' : 'bg-card border-line text-ink hover:bg-bg'}`}><Sparkles size={15} />Asistan</button>
       </header>
 
       <main className="px-3 md:px-5 py-4 max-w-[1500px]">{view}</main>
+      <Agent open={agent} onClose={() => setAgent(false)} />
       {st.toast && <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg">{st.toast}</div>}
     </div>
   )
