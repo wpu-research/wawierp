@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WawiERP Yenilikler</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#141413;--ink2:#52514e;--mute:#898781;--line:#e1e0d9;--brand:#3048c8;--brand-soft:#e3e7fb;--navy:#171b38;--gold:#ffd168;--violet:#6250d6;--violet-soft:#e6e2fa;--aqua:#12976a;--aqua-soft:#daf3ea;--orange:#d9601f;--orange-soft:#fbe5db;--red:#c93434;--red-soft:#fbe6e6;--amber:#9a6500;--amber-soft:#fbefd2;--green:#0c7a0c;--green-soft:#e2f3e2}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1e1e1c;--ink:#f0efec;--ink2:#c3c2b7;--mute:#8f8d86;--line:#33332f;--brand:#8496f5;--brand-soft:#232a52;--navy:#0e1126;--violet:#a096f0;--violet-soft:#2a2550;--aqua:#35b88a;--aqua-soft:#143326;--orange:#e07a4d;--orange-soft:#40251a;--red:#ee7878;--red-soft:#3d1e1e;--amber:#e0a43a;--amber-soft:#3a2f14;--green:#4fbf4f;--green-soft:#1a3320}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:0 16px 64px}
+.hero{background:var(--navy);color:#fff;padding:56px 16px 48px;margin-bottom:8px}
+.hero div{max-width:1008px;margin:0 auto}
+.hero .k{color:var(--gold);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{font-size:42px;line-height:1.08;margin:10px 0 12px;letter-spacing:-.015em}
+.hero p{font-size:18px;color:rgba(255,255,255,.78);max-width:64ch;margin:0}
+.hero a{display:inline-block;margin-top:22px;background:var(--gold);color:var(--navy);font-weight:700;text-decoration:none;border-radius:999px;padding:10px 20px}
+h2{font-size:24px;margin:0 0 4px;letter-spacing:-.01em}
+h3{font-size:16px;margin:0 0 4px}
+p{margin:8px 0}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:20px 0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand);font-weight:600;font-size:14px;margin-right:8px}
+.sub{color:var(--ink2);margin:0 0 16px;max-width:75ch}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{background:var(--bg);border-radius:10px;padding:14px}
+.tile b{display:block;font-size:28px;line-height:1.15;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+td.old{color:var(--ink2)}
+.feat{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:center;padding:20px 0;border-top:1px solid var(--line)}
+.feat:first-of-type{border-top:0;padding-top:4px}
+.feat:nth-of-type(even) .shot{order:2}
+.shot{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg);line-height:0}
+.shot img{width:100%;height:auto;display:block}
+.feat ul{margin:8px 0 0;padding-left:18px;color:var(--ink2);font-size:15px}
+.feat li{margin:3px 0}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:6px}
+.t1{background:var(--brand-soft);color:var(--brand)}.t2{background:var(--violet-soft);color:var(--violet)}.t3{background:var(--aqua-soft);color:var(--aqua)}.t4{background:var(--orange-soft);color:var(--orange)}.t5{background:var(--amber-soft);color:var(--amber)}
+.why{font-size:13px;color:var(--mute);margin-top:8px}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:10px 0}
+.fn{flex:1 1 140px;border-radius:10px;padding:12px;border:1px solid var(--line);background:var(--bg);font-size:14px}
+.fn b{display:block}.fn span{font-size:12.5px;color:var(--ink2)}
+.fn.a{background:var(--brand-soft);border-color:var(--brand)}.fn.b{background:var(--violet-soft);border-color:var(--violet)}.fn.c{background:var(--aqua-soft);border-color:var(--aqua)}
+.ar{display:flex;align-items:center;color:var(--mute);font-size:20px}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;margin-top:10px}
+.rule{background:var(--bg);border-radius:10px;padding:12px;font-size:14px}
+.rule b{display:block}
+.rule span{color:var(--ink2)}
+.st{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.ok{background:var(--green-soft);color:var(--green)}.mid{background:var(--amber-soft);color:var(--amber)}.no{background:var(--red-soft);color:var(--red)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+ol.q{padding-left:20px;margin:6px 0}ol.q li{margin:6px 0}
+.video{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#000;line-height:0}
+.video video{width:100%;height:auto;display:block}
+footer{color:var(--mute);font-size:13px;margin-top:24px}
+@media (max-width:760px){.feat{grid-template-columns:1fr}.feat:nth-of-type(even) .shot{order:0}.hero h1{font-size:32px}.ar{display:none}}
+</style>
+</head>
+<body>
+<div class="hero"><div>
+  <span class="k">14 Kasım 2026 · Yenilikler</span>
+  <h1>WawiERP'nin yeni paneli: neler değişti?</h1>
+  <p>Eski paneli inceleyip sorunlarını çıkardık, rakiplere baktık ve yeni bir panel tasarladık. Bu sayfa yeniliklerin tamamını ekran görüntüleriyle anlatıyor; sonunda seslendirilmiş bir tanıtım videosu var.</p>
+  <a href="#video">Videoyu izle ↓</a>
+</div></div>
+<main>
+
+<section>
+  <h2><span class="num">1</span>Bir bakışta</h2>
+  <p class="sub">Yeni panel tıklanabilir bir tasarım taslağıdır: ekranlar çalışır, veriler örnektir. Sipariş sayıları gerçek 30 günlük dağılımdan gelir.</p>
+  <div class="tiles">
+    <div class="tile"><b>31</b><span>ekran; 17'si bu turda eklendi</span></div>
+    <div class="tile"><b>14</b><span>hazır otomasyon kuralı</span></div>
+    <div class="tile"><b>1</b><span>yapay zekâ asistanı</span></div>
+    <div class="tile"><b>Ctrl K</b><span>her yerden arama</span></div>
+    <div class="tile"><b>3</b><span>rol: yönetici, depo, muhasebe</span></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Eski panelde ne vardı, şimdi ne var?</h2>
+  <table>
+    <tr><th>Konu</th><th>Eski panel</th><th>Yeni panel</th></tr>
+    <tr><td>Sipariş listesi</td><td class="old">Aynı liste beş ayrı ekranda</td><td>Tek liste, hazır görünümler</td></tr>
+    <tr><td>Sayılar</td><td class="old">Menüdeki sayı ile liste tutmuyor</td><td>Rozet ve liste aynı hesaptan</td></tr>
+    <tr><td>Kanal sorunları</td><td class="old">Ancak tek tek ekranlara girince görülüyor</td><td>Kanal sağlığı ve uyarılar tek yerde</td></tr>
+    <tr><td>Eksik ürün bilgisi</td><td class="old">43.921 resimsiz ürün, düzeltme akışı yok</td><td>"Sıradakini düzelt" kuyruğu</td></tr>
+    <tr><td>İadeler</td><td class="old">79 iadenin hepsi ilk aşamada</td><td>Dört adımlı iade akışı</td></tr>
+    <tr><td>Otomasyon</td><td class="old">Birkaç sabit kural</td><td>Olay, koşul, işlem ve onay düzeyiyle kural motoru</td></tr>
+    <tr><td>Müşteri bilgisi</td><td class="old">Sayfanın içine açık geliyor</td><td>Role göre gizli; açınca kayda geçer</td></tr>
+    <tr><td>Yardım</td><td class="old">Yok</td><td>Soru yanıtlayan ve iş hazırlayan asistan</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Yenilikler, ekran ekran</h2>
+  <p class="sub">Her yeniliğin altında, eski panelde gördüğümüz hangi soruna yanıt verdiği yazıyor.</p>
+
+  <div class="feat"><div class="shot"><img src="img/genel.jpg" alt="Genel bakış ekranı" loading="lazy"></div><div>
+    <span class="tag t1">Temel</span><h3>Genel bakış</h3>
+    <ul><li>Bugünün siparişleri, gönderilecekler, geciken ve sorunlu işler tek ekranda</li><li>Dikkat gerektiren kanal bağlantıları doğrudan görünür</li><li>Her kutu ilgili listeye götürür</li></ul>
+    <p class="why">Yanıt verdiği sorun: eski genel bakışta satış özeti yüklenmiyordu.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/siparis.jpg" alt="Siparişler ekranı" loading="lazy"></div><div>
+    <span class="tag t1">Temel</span><h3>Tek sipariş listesi</h3>
+    <ul><li>Tüm kanalların siparişleri bir arada</li><li>Hazır görünümler: gönderilecek, 2 günü aşan, drop bekleyen, sorunlu</li><li>Müşteri bilgisi gizli gelir; görüntülemek denetim kaydına yazılır</li></ul>
+    <p class="why">Yanıt verdiği sorun: aynı liste beş ekranda kopyaydı ve sayılar tutmuyordu.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/toplama.jpg" alt="Toplama listesi ve mobil depo önizlemesi" loading="lazy"></div><div>
+    <span class="tag t3">Depo</span><h3>Toplama listesi ve mobil depo</h3>
+    <ul><li>Aynı ürün tek seferde toplanır</li><li>Satırlar raf sırasına dizilir, depoda en kısa yol yürünür</li><li>Planlanan mobil uygulamanın önizlemesi: barkodu okut, sıradakine geç</li></ul>
+    <p class="why">Rakiplerde gördüğümüz: en güçlülerin hepsinde mobil toplama var.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/kanal.jpg" alt="Eşitleme işleri ekranı" loading="lazy"></div><div>
+    <span class="tag t1">Temel</span><h3>Kanal sağlığı ve eşitleme işleri</h3>
+    <ul><li>Her hesabın son eşitlemesi ve durumu</li><li>Başarısız iş kaç kez denendi, sıradaki deneme ne zaman</li><li>Tek tıkla yeniden deneme</li></ul>
+    <p class="why">Yanıt verdiği sorun: bir kanalın eşitlemesi haftalardır yarım kalmıştı ve görünmüyordu.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/kalite.jpg" alt="Veri kalitesi ekranı" loading="lazy"></div><div>
+    <span class="tag t3">Ürün</span><h3>Veri kalitesi kuyruğu</h3>
+    <ul><li>Eksik barkod ve görseller sıraya dizilir; önce satışı olanlar</li><li>Düzelt, kaydet, sıradakine geç</li><li>Olası mükerrer ürünler ayrı sekmede</li></ul>
+    <p class="why">Yanıt verdiği sorun: on binlerce resimsiz ve barkodsuz ürün.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/listeleme.jpg" alt="Toplu listeleme ekranı" loading="lazy"></div><div>
+    <span class="tag t4">Satış</span><h3>Toplu listeleme</h3>
+    <ul><li>Ürün seç, kanal seç, eksikleri tamamla, gönder</li><li>Her kanalın istediği bilgi ayrı gösterilir</li><li>Eksiği olan ilan atlanır ve nedeni yazılır</li></ul>
+    <p class="why">Yanıt verdiği sorun: her kanal için ayrı ekran ve ayrı akış.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/fiyat.jpg" alt="Fiyat ve kârlılık ekranı" loading="lazy"></div><div>
+    <span class="tag t4">Satış</span><h3>Fiyat kuralları ve kârlılık</h3>
+    <ul><li>Komisyon, kargo ve vergi düşülünce kalan kâr</li><li>Hedef kâr ve alt sınır fiyatı kuralları</li><li>Kanal bazında 30 günlük kârlılık</li></ul>
+    <p class="why">Komisyon oranları örnektir; gerçek oranlar girilince hesap gerçeğe döner.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/kural.jpg" alt="Otomasyon kuralları ekranı" loading="lazy"></div><div>
+    <span class="tag t2">Otomasyon</span><h3>Otomasyon kuralları</h3>
+    <ul><li>14 hazır kural: kaynak seçimi, etiket, fatura, stok eşitleme, yeniden deneme…</li><li>Üç düzey: yalnız öner, önce sor, kendiliğinden</li><li>Para ve fiyat kuralları kendiliğinden düzeyine alınamaz</li></ul>
+    <p class="why">Rakiplerde gördüğümüz: beş güçlü rakibin hepsinde kural motoru var.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/uyari.jpg" alt="Uyarılar ekranı" loading="lazy"></div><div>
+    <span class="tag t2">Otomasyon</span><h3>Uyarılar ve günlük özet</h3>
+    <ul><li>Her sabah dünün özeti ve bekleyen işler</li><li>Olağan dışı durumlar: sipariş kesilmesi, eksi stok, artan iade</li><li>Her uyarı ilgili ekrana götürür</li></ul></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/vardiya.jpg" alt="Vardiya önerisi ekranı" loading="lazy"></div><div>
+    <span class="tag t3">Depo</span><h3>Vardiya önerisi</h3>
+    <ul><li>Gerçek 30 günlük sipariş saatlerinden hesaplanır</li><li>En yoğun saatler 11:00–13:00; gece 02:00–05:00 neredeyse boş</li><li>Saat dilimine göre kaç kişi gerektiğini önerir</li></ul></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/finans.jpg" alt="Kârlılık ekranı" loading="lazy"></div><div>
+    <span class="tag t5">Finans</span><h3>Banka mutabakatı, muhasebe, kârlılık</h3>
+    <ul><li>Havaleler siparişlerle eşleştirilir; emin olunmayanlar onaya düşer</li><li>Muhasebe dosyası ve yapılandırılmış e-fatura için hazırlık</li><li>KDV şirketin ülkesine göre</li></ul>
+    <p class="why">Yanıt verdiği sorun: KDV özeti %19'a sabitti, ön muhasebe boş görünüyordu.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/platform.jpg" alt="Durum sayfası" loading="lazy"></div><div>
+    <span class="tag t5">Platform</span><h3>Çok müşterili ürün için</h3>
+    <ul><li>Kurulum sihirbazı: şirket, depo, kanal, ürün aktarımı, ekip</li><li>API anahtarları ve bildirim uçları</li><li>Kullanım ve abonelik; arka plan işleri için durum sayfası</li></ul>
+    <p class="why">Plan fiyatları örnektir; abonelik altyapısı henüz kararlaştırılmadı.</p></div></div>
+
+  <div class="feat"><div class="shot"><img src="img/arama.jpg" alt="Her yerden arama" loading="lazy"></div><div>
+    <span class="tag t1">Kolaylık</span><h3>Her yerden arama</h3>
+    <ul><li>Ctrl K ile açılır</li><li>Ekran adı, hazır görünüm, sipariş numarası ya da ürün</li><li>Ok tuşlarıyla gez, Enter ile aç</li></ul></div></div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Asistan</h2>
+  <p class="sub">Sağ alt köşedeki W düğmesiyle açılır. İki iş yapar: soru yanıtlar ve iş hazırlar. Hiçbir şeyi siz onaylamadan değiştirmez.</p>
+  <div class="cols">
+    <div><div class="shot"><img src="img/asistan1.jpg" alt="Asistan bir soruyu yanıtlıyor" loading="lazy"></div>
+      <h3 style="margin-top:12px">Soru sorarsınız</h3>
+      <div class="flow"><div class="fn a"><b>Soru</b><span>"Dün hangi kanaldan kaç sipariş geldi?"</span></div><div class="ar">›</div><div class="fn b"><b>Veriye bakar</b><span>Rakamı panel verisinden hesaplar</span></div><div class="ar">›</div><div class="fn c"><b>Yanıt + düğmeler</b><span>Dayandığı ekranlar yanıtın altında</span></div></div></div>
+    <div><div class="shot"><img src="img/asistan2.jpg" alt="Asistan bir işlem taslağı hazırlıyor" loading="lazy"></div>
+      <h3 style="margin-top:12px">İş istersiniz</h3>
+      <div class="flow"><div class="fn a"><b>İstek</b><span>"Ödenmiş siparişlerin etiketlerini hazırla"</span></div><div class="ar">›</div><div class="fn b"><b>Taslak</b><span>Ne yapacağını gösterir, bekler</span></div><div class="ar">›</div><div class="fn c"><b>Onay</b><span>Onaylarsanız yapılır ve kayda geçer</span></div></div></div>
+  </div>
+  <h3 style="margin-top:18px">Sınırları</h3>
+  <div class="rules">
+    <div class="rule"><b>Yetkiniz kadar</b><span>Rolünüzün yapamadığını asistan da yapamaz.</span></div>
+    <div class="rule"><b>En fazla 25 kayıt</b><span>Tek seferde daha fazlasını önermez.</span></div>
+    <div class="rule"><b>Para ve fiyat kapalı</b><span>İade ödemesi, fiyat değişikliği, iptal ve silme yapamaz.</span></div>
+    <div class="rule"><b>Müşteri bilgisi verilmez</b><span>Ad, adres, e-posta ve telefon asistana gitmez.</span></div>
+    <div class="rule"><b>Mesajlar veridir</b><span>Müşteri mesajındaki talimatı uygulamaz.</span></div>
+    <div class="rule"><b>Kendiliğinden kilitli</b><span>Onaysız çalışma, pilotta hata oranı ölçülünce açılır.</span></div>
+  </div>
+  <p class="note">Asistan, sunucuya bir yapay zekâ anahtarı tanımlandığında gerçek yapay zekâyla çalışır; tanımlı değilse hazır senaryoları kullanır. Videodaki kayıt hazır senaryolarla alındı.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Ne hazır, ne değil?</h2>
+  <table>
+    <tr><th>Parça</th><th>Durum</th><th>Açıklama</th></tr>
+    <tr><td>Panel ekranları</td><td><span class="st ok">Çalışıyor</span></td><td>31 ekranın hepsi tıklanabilir; veriler örnek.</td></tr>
+    <tr><td>Asistan, hazır senaryolar</td><td><span class="st ok">Çalışıyor</span></td><td>On senaryo denendi.</td></tr>
+    <tr><td>Asistan, gerçek yapay zekâ</td><td><span class="st mid">Kodu hazır</span></td><td>Bağlantı yazıldı ve sahte bir sunucuya karşı denendi; gerçek servisle denenmedi. Anahtar tanımlanınca devreye girer.</td></tr>
+    <tr><td>Açık tanıtım sayfası ve şifreli panel</td><td><span class="st ok">Yayında</span></td><td>Yeni ekranlar ve asistan henüz yayına gönderilmedi.</td></tr>
+    <tr><td>Gerçek sunucu ve veritabanı</td><td><span class="st no">Yok</span></td><td>Teknoloji kararları verildi; geliştirme eski kaynak kodun gelmesini bekliyor.</td></tr>
+    <tr><td>Pazaryeri bağlantıları</td><td><span class="st no">Yok</span></td><td>Taslakta gönderilen hiçbir ilan ya da etiket gerçek değil.</td></tr>
+    <tr><td>Mobil uygulama</td><td><span class="st no">Önizleme</span></td><td>Yalnız ekran tasarımı var.</td></tr>
+  </table>
+  <p class="note">Örnek değerler ekranlarda "örnek" rozetiyle işaretli: komisyon oranları, plan fiyatları, kural çalışma sayıları, muhasebe hesap numaraları.</p>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Sıradaki adımlar</h2>
+  <div class="cols">
+    <div><h3>Bizden</h3><ol class="q">
+      <li>Yeni ekranları ve asistanı yayına göndermek</li>
+      <li>Asistanı gerçek yapay zekâyla denemek</li>
+      <li>Ekranları telefon genişliğinde gözden geçirmek</li>
+      <li>Eski kaynak kod gelince iş kurallarını çıkarmak</li></ol></div>
+    <div><h3>Sizden</h3><ol class="q">
+      <li>Eski kaynak kodu ve veritabanı yapısı</li>
+      <li>Asistan için yapay zekâ anahtarı</li>
+      <li>Gerçek komisyon oranları ve KDV kuralları</li>
+      <li>Hangi rol neyi görmeli: ekip için rol listesi</li></ol></div>
+  </div>
+</section>
+
+<section id="video">
+  <h2><span class="num">7</span>Tanıtım videosu</h2>
+  <p class="sub">Panelde gezerek yenilikleri anlatan, Türkçe seslendirilmiş yaklaşık üç dakikalık video.</p>
+  <div class="video"><video controls preload="metadata" poster="wawierp-tanitim-kapak.jpg" src="wawierp-tanitim.mp4">Tarayıcınız videoyu oynatamıyor. Dosya: wawierp-tanitim.mp4</video></div>
+  <p class="note">Video bu sayfayla aynı klasördeki <code>wawierp-tanitim.mp4</code> dosyasından oynar; sayfayı başka bir yere taşırsanız videoyu ve <code>img</code> klasörünü de birlikte taşıyın. Ses bilgisayarda üretilmiş sentetik bir sestir. Kayıt tasarım taslağından alındı; ekrandaki veriler örnektir.</p>
+</section>
+
+<footer>İlgili sunumlar: <code>wawierp-analiz-sunumu.html</code>, <code>wawierp-rakipler-ve-yol-haritasi.html</code>, <code>wawierp-teknoloji-secenekleri.html</code>, <code>wawierp-mimari-ve-gecis.html</code> · Videoyu yeniden üretmek için: <code>video-uret.py</code></footer>
+</main>
+</body>
+</html>

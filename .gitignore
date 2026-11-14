@@ -12,3 +12,6 @@ graphify-out/.graphify_root
 # eski sistemden gelebilecek veri dökümleri (şema dışı)
 legacy/**/*.sql.gz
 legacy/**/dump*
+
+# video üretiminin ara dosyaları
+sunum/video/
