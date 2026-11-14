@@ -43,3 +43,23 @@ button:disabled { cursor: not-allowed; }
 @keyframes marquee { to { transform: translateX(calc(-50% - 6px)); } }
 @keyframes bob { 50% { transform: translateY(-10px); } }
 @media (prefers-reduced-motion: reduce) { .flow-line, .marquee, .float-a, .float-b { animation: none; } }
+
+/* ---------- ana sayfa: belirme, ışıklar, küçük hareketler ---------- */
+.rv { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.rv[data-in] { opacity: 1; transform: none; }
+.orb { position: absolute; border-radius: 9999px; filter: blur(70px); pointer-events: none; opacity: .55; }
+.orb-a { width: 420px; height: 420px; left: -120px; top: 120px; background: #6250d6; animation: drift 14s ease-in-out infinite; }
+.orb-b { width: 380px; height: 380px; right: -100px; top: 40px; background: #c98a00; opacity: .28; animation: drift 17s ease-in-out -6s infinite; }
+.orb-c { width: 520px; height: 520px; right: -160px; top: -120px; background: #3048c8; opacity: .6; animation: drift 16s ease-in-out infinite; }
+.bento { border: 1px solid var(--line); background: var(--bg); border-radius: 24px; padding: 24px; transition: border-color .2s, transform .25s, box-shadow .25s; }
+.bento:hover { border-color: var(--brand); transform: translateY(-4px); box-shadow: 0 22px 50px -28px var(--brand); }
+.chipx { display: inline-flex; align-items: center; gap: 6px; border-radius: 9999px; padding: 6px 12px; font-weight: 600; }
+.pulse { animation: pulse 1.4s ease-in-out infinite; }
+.caret { width: 1.5px; height: 16px; background: var(--brand); animation: blink 1s steps(1) infinite; }
+.grow-bar { animation: grow 1.6s cubic-bezier(.2,.7,.2,1) both; transform-origin: left; }
+.faq summary::-webkit-details-marker { display: none; }
+@keyframes drift { 50% { transform: translate(40px, -30px) scale(1.08); } }
+@keyframes pulse { 50% { transform: scale(1.7); opacity: .45; } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes grow { from { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } .orb, .pulse, .caret, .grow-bar { animation: none; } .bento:hover { transform: none; } }

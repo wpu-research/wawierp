@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react'
-import { ArrowRight, BarChart3, Boxes, Check, FileText, Globe2, KeyRound, Layers, Moon, PackageCheck, ScanBarcode, ShieldCheck, ShoppingCart, Smartphone, Sun, Truck, Users, Warehouse } from 'lucide-react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Activity, ArrowRight, BarChart3, Boxes, Check, ChevronDown, ExternalLink, FileText, Globe2, KeyRound, Layers, ListChecks, Lock, Moon, PackageCheck, ScanBarcode, ScanSearch, Search, ShieldCheck, ShoppingCart, Smartphone, Sparkles, Sun, Truck, Users, Warehouse, Workflow, X, Zap } from 'lucide-react'
 import { Logo } from '../logo'
 
 // Bu sayfa herkese açıktır: panel verisini (src/data*.ts) içe AKTARMAZ.
@@ -65,6 +65,65 @@ const CH: { group: string; on: string[]; off: string[] }[] = [
 const MARQUEE = ['Amazon', 'eBay', 'Shopify', 'Kaufland', 'METRO', 'OTTO', 'Trendyol', 'n11', 'Ozon', 'idealo', 'JTL-Shop', 'DHL', 'PostNL', 'Billbee', 'Asterbuy', 'Stockist24']
 const LANGS = ['Türkçe', 'English', 'Deutsch', 'Français', 'Italiano', 'Español', 'Nederlands', 'Polski', 'Português', '简体中文']
 
+// Bugünkü dağınık düzen ile yeni panelin karşılaştırması (panel incelemesinde görülenler).
+const BEFORE: [string, string, typeof Boxes][] = [
+  ['Aynı sipariş listesi beş ayrı ekranda', 'Tek sipariş listesi, hazır görünümler', ShoppingCart],
+  ['Menüdeki sayı ile liste birbirini tutmuyor', 'Rozet ve liste aynı hesaptan gelir', BarChart3],
+  ['Takılan eşitleme ancak ekrana girince görülür', 'Kanal sağlığı ve uyarılar tek yerde', Activity],
+  ['Etiket, fatura ve takip elle tetiklenir', 'Kurallar önerir, onayınızla çalışır', Workflow],
+]
+const WHO: [string, string, typeof Boxes][] = [
+  ['Depo bazlı satıcılar', 'Sayım, raflama, transfer, sipariş hazırlama ve kargoyu tek operasyonun parçaları olarak yönetin.', Warehouse],
+  ['Dropshipping ekipleri', 'Tedarikçi ürünlerini, drop miktarlarını ve tedarikçiye giden siparişleri fiziki stoktan ayrı izleyin.', Truck],
+  ['Çok kanallı ve B2B işletmeler', 'Birden çok şirketi ve mağazayı yönetin; toptan müşterinize kendi stoğunu ve belgelerini gösterin.', Users],
+]
+const FAQ: [string, string][] = [
+  ['Fiziki, sanal ve drop stok birlikte kullanılabilir mi?', 'Evet. Aynı katalogda ayrı stok türleri olarak yönetilirler. Bir satış hesabında hangi kaynağın kullanılacağı bağlantıya ve ürünün stok kurallarına bağlıdır; sayımlar birbirine karışmaz.'],
+  ['Kanal listesindeki her platform hazır bağlantı mı?', 'Hayır. “Wawi’de mevcut” ile “Kurulum talebi” ayrıdır. Platformun desteklediği işlemler bağlantıya göre değişir; başvuruda istediğiniz kanalları seçersiniz.'],
+  ['Müşteriler ve çalışanlar her şeyi görür mü?', 'Hayır. Erişim, kullanıcının depo ve bölüm yetkilerine göre belirlenir. Toptan müşteri portalı müşterinin kendi lokasyon, fatura ve cari bilgileriyle sınırlıdır.'],
+  ['iOS ve Android uygulaması hazır mı?', 'Henüz değil. Panel telefonda tarayıcıdan çalışır; mobil depo uygulaması tasarım aşamasındadır.'],
+  ['Asistan verilerimi kendi başına değiştirebilir mi?', 'Hayır. Asistan soru yanıtlar ve iş taslağı hazırlar; siz onaylamadan hiçbir şeyi değiştirmez. Para iadesi, fiyat değişikliği ve silme işlemleri asistana kapalıdır.'],
+]
+
+/* Ekrana girince yumuşakça beliren sarmalayıcı. Hareket azaltma tercihinde CSS geçişi kapatır. */
+function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [seen, setSeen] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === 'undefined') { setSeen(true); return }
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { setSeen(true); io.disconnect() } }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 })
+    io.observe(el); return () => io.disconnect()
+  }, [])
+  return <div ref={ref} data-in={seen || undefined} className={`rv ${className}`} style={delay ? { transitionDelay: `${delay}ms` } : undefined}>{children}</div>
+}
+/* Görününce sıfırdan hedefe sayan rakam. */
+function Count({ to, suffix = '' }: { to: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(to); return }
+    let raf = 0
+    const io = new IntersectionObserver(es => {
+      if (!es.some(e => e.isIntersecting)) return
+      io.disconnect(); const t0 = performance.now()
+      const tick = (t: number) => { const k = Math.min(1, (t - t0) / 900); setN(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) raf = requestAnimationFrame(tick) }
+      raf = requestAnimationFrame(tick)
+    }, { threshold: 0.4 })
+    io.observe(el); return () => { io.disconnect(); cancelAnimationFrame(raf) }
+  }, [to])
+  return <span ref={ref} className="num">{n}{suffix}</span>
+}
+const Head = ({ kick, title, text, dark }: { kick: string; title: string; text?: string; dark?: boolean }) => (
+  <Reveal className="max-w-[680px]">
+    <p className={`${kicker} ${dark ? 'text-gold' : 'text-brand'}`}>{kick}</p>
+    <h2 className="font-display m-0 mt-3 text-4xl md:text-5xl font-semibold tracking-[-0.02em] text-balance">{title}</h2>
+    {text && <p className={`mt-4 text-lg text-pretty ${dark ? 'text-white/70' : 'text-ink2'}`}>{text}</p>}
+  </Reveal>
+)
+const New = () => <span className="rounded-full bg-gold text-navy text-[10px] font-bold px-2 py-0.5 uppercase tracking-wide">Yeni</span>
+
 const Cta = ({ href, children, kind = 'solid' }: { href: string; children: ReactNode; kind?: 'solid' | 'ghost' | 'gold' }) => (
   <a href={href} className={`inline-flex items-center justify-center gap-2 rounded-full px-5 h-11 text-[15px] font-semibold no-underline transition-transform hover:-translate-y-0.5 ${
     kind === 'gold' ? 'bg-gold text-navy' : kind === 'solid' ? 'bg-brand text-white' : 'border border-white/25 text-white hover:bg-white/10'}`}>{children}</a>
@@ -84,7 +143,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
         <div className={`${wrap} h-16 flex items-center gap-6`}>
           <a href="#" className="text-white no-underline shrink-0" aria-label="WawiERP ana sayfa"><Logo height={30} onDark /></a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-white/75 flex-1" aria-label="Sayfa bölümleri">
-            {[['Stok modeli', 'stok'], ['Özellikler', 'ozellikler'], ['Depodan müşteriye', 'akis'], ['Satış kanalları', 'kanallar']].map(([l, id]) =>
+            {[['Yenilikler', 'yeni'], ['Stok modeli', 'stok'], ['Asistan', 'asistan'], ['Özellikler', 'ozellikler'], ['Satış kanalları', 'kanallar']].map(([l, id]) =>
               <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })} className="bg-transparent border-0 p-0 text-inherit hover:text-white">{l}</button>)}
           </nav>
           <span className="flex-1 md:hidden" />
@@ -98,17 +157,22 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
       <section className="hero relative overflow-hidden bg-navy text-white">
         <div className="hero-grid absolute inset-0" aria-hidden="true" />
         <div className="hero-glow absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px]" aria-hidden="true" />
-        <div className={`${wrap} relative pt-16 md:pt-24 pb-10 text-center`}>
-          <p className={`${kicker} text-gold inline-flex items-center gap-2`}><span className="h-px w-6 bg-gold" />Depo ve pazaryeri yönetimi<span className="h-px w-6 bg-gold" /></p>
+        <div className="orb orb-a" aria-hidden="true" /><div className="orb orb-b" aria-hidden="true" />
+        <div className={`${wrap} relative pt-14 md:pt-20 pb-10 text-center`}>
+          <button onClick={() => document.getElementById('yeni')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] pl-1.5 pr-3.5 h-8 text-[13px] text-white/85 hover:bg-white/10">
+            <New /> <span className="sm:hidden">Yenilikleri görün</span><span className="hidden sm:inline">Asistan, otomasyon kuralları ve kanal sağlığı</span> <ArrowRight size={13} />
+          </button>
+          <p className={`${kicker} text-gold flex justify-center items-center gap-2 mt-6`}><span className="h-px w-6 bg-gold" />Depo ve pazaryeri yönetimi<span className="h-px w-6 bg-gold" /></p>
           <h1 className="font-display m-0 mt-5 text-[44px] leading-[1.02] sm:text-6xl md:text-7xl font-semibold tracking-[-0.015em] text-balance">Tek panelden<br /><span className="hero-mark">dünyaya satış.</span></h1>
           <p className="mx-auto mt-6 max-w-[58ch] text-lg text-white/70 text-pretty">Ürünlerinizi, stoklarınızı ve siparişlerinizi WawiERP’de bir araya getirin. Almanya ve Türkiye pazaryerlerine, mağazalarınıza ve depolarınıza aynı çalışma alanından yön verin.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Cta href={PANEL} kind="gold">Paneli incele <ArrowRight size={16} /></Cta>
             <button onClick={() => document.getElementById('kanallar')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center justify-center rounded-full px-5 h-11 text-[15px] font-semibold border border-white/25 bg-transparent text-white hover:bg-white/10">Kanalları keşfet</button>
           </div>
-          <ul className="m-0 mt-7 p-0 list-none flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/60">
-            {['Çok depo, çok şirket', 'Fiziki · sanal · drop stok', `${onN} bağlı kanal`, '10 dil'].map(t => <li key={t} className="inline-flex items-center gap-1.5"><Check size={14} className="text-gold" />{t}</li>)}
-          </ul>
+          <dl className="m-0 mt-10 mx-auto max-w-[760px] grid grid-cols-2 sm:grid-cols-4 gap-px rounded-2xl overflow-hidden border border-white/10 bg-white/10">
+            {([[onN, '', 'bağlı kanal'], [3, '', 'stok modeli'], [5, '', 'adımda teslimat'], [10, '', 'dil']] as const).map(([n, sx, l]) => (
+              <div key={l} className="bg-navy/80 px-3 py-4"><dd className="m-0 font-display text-3xl md:text-4xl font-semibold text-white"><Count to={n} suffix={sx} /></dd><dt className="text-[13px] text-white/60 mt-0.5">{l}</dt></div>))}
+          </dl>
         </div>
         <div className={`${wrap} relative pb-0`}><Preview /></div>
       </section>
@@ -120,13 +184,79 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
         </div>
       </div>
 
+      {/* ---------- dağınık düzenden tek panele ---------- */}
+      <section className={`${wrap} py-20 md:py-28`}>
+        <Head kick="Neden yeni bir panel?" title="Dağınık ekranlardan tek, tutarlı bir çalışma alanına." text="Eski düzende aynı iş birkaç ekrana dağılıyordu. Yeni panelde her işin tek bir yeri var." />
+        <div className="mt-10 grid md:grid-cols-2 gap-4">
+          {BEFORE.map(([old, now, I], i) => (
+            <Reveal key={old} delay={i * 70}>
+              <div className="h-full rounded-3xl border border-line bg-card p-5 md:p-6 grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 items-start">
+                <span className="row-span-2 size-12 rounded-2xl bg-brand-soft text-brand grid place-items-center"><I size={22} /></span>
+                <p className="m-0 flex items-start gap-2 text-ink2 text-[15px]"><X size={16} className="text-bad shrink-0 mt-0.5" /><span className="line-through decoration-bad/40">{old}</span></p>
+                <p className="m-0 flex items-start gap-2 font-semibold text-[17px] leading-snug"><Check size={18} className="text-ok shrink-0 mt-0.5" />{now}</p>
+              </div>
+            </Reveal>))}
+        </div>
+      </section>
+
+      {/* ---------- yenilikler ---------- */}
+      <section id="yeni" className="bg-card border-y border-line scroll-mt-16">
+        <div className={`${wrap} py-20 md:py-28`}>
+          <Head kick="Yenilikler" title="Sizin yerinize düşünen bir panel." text="Sorunu siz aramazsınız, panel gösterir. Tekrarlayan işi siz yapmazsınız, kural yapar." />
+          <div className="mt-10 grid md:grid-cols-6 gap-4">
+            <Reveal className="md:col-span-4"><article className="bento h-full">
+              <div className="flex items-center gap-2"><New /><h3 className="font-display m-0 text-xl font-semibold">Otomasyon kuralları</h3></div>
+              <p className="m-0 mt-1.5 text-ink2 text-[15px]">Her kural bir olay, bir koşul ve bir işlemden oluşur. Önce yalnız öneri üretir; güven oluşunca kendiliğinden çalışır.</p>
+              <div className="mt-5 flex flex-wrap items-center gap-2 text-sm">
+                <span className="chipx bg-violet-soft text-violet"><Zap size={14} />Olay: ödeme alındı</span><span className="flow-line w-6" aria-hidden="true" />
+                <span className="chipx bg-brand-soft text-brand"><Workflow size={14} />Kural: fiziki stok ve adres tam</span><span className="flow-line w-6" aria-hidden="true" />
+                <span className="chipx bg-ok-soft text-ok"><Check size={14} />Etiketi oluştur</span>
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-2 text-center text-[13px]">
+                {[['Yalnız öner', 'bg-card text-ink2 border border-line'], ['Önce sor', 'bg-warn-soft text-warn'], ['Kendiliğinden', 'bg-ok-soft text-ok']].map(([l, c]) => <span key={l} className={`rounded-xl py-2 font-medium ${c}`}>{l}</span>)}
+              </div>
+            </article></Reveal>
+            <Reveal className="md:col-span-2" delay={80}><article className="bento h-full">
+              <div className="flex items-center gap-2"><New /><h3 className="font-display m-0 text-xl font-semibold">Kanal sağlığı</h3></div>
+              <p className="m-0 mt-1.5 text-ink2 text-[15px]">Takılan eşitleme haftalarca fark edilmeden kalmaz.</p>
+              <ul className="m-0 mt-4 p-0 list-none space-y-1.5 text-sm">
+                {([['ebay', 'eBay', 'Güncel', 'bg-ok'], ['kaufland', 'Kaufland', 'Güncel', 'bg-ok'], ['otto', 'OTTO', 'Sipariş çekme başarısız', 'bg-bad'], ['shopify', 'Shopify', 'Güncel', 'bg-ok']] as const).map(([m, l, t, c]) => (
+                  <li key={l} className="flex items-center gap-2 rounded-xl bg-bg px-2.5 py-1.5"><Mark name={m} size={20} /><span className="font-medium">{l}</span><span className="flex-1" /><span className="text-ink2 text-xs">{t}</span><span className={`size-2 rounded-full ${c} ${c === 'bg-bad' ? 'pulse' : ''}`} /></li>))}
+              </ul>
+            </article></Reveal>
+            <Reveal className="md:col-span-2"><article className="bento h-full">
+              <div className="flex items-center gap-2"><New /><h3 className="font-display m-0 text-xl font-semibold">Veri kalitesi kuyruğu</h3></div>
+              <p className="m-0 mt-1.5 text-ink2 text-[15px]">Eksik barkod ve görseller sıraya dizilir; önce satışı olanlar.</p>
+              <div className="mt-4 rounded-xl bg-bg p-3 text-sm">
+                <div className="flex items-center gap-2"><ScanSearch size={15} className="text-brand" /><span className="font-medium">Sıradaki ürün</span><span className="flex-1" /><span className="text-xs text-mute">Enter: kaydet</span></div>
+                <div className="mt-2 h-2 rounded-full bg-line overflow-hidden"><span className="block h-full w-[62%] bg-brand rounded-full grow-bar" /></div>
+                <div className="mt-1.5 text-xs text-ink2">Bugün düzeltilen: 31 / 50</div>
+              </div>
+            </article></Reveal>
+            <Reveal className="md:col-span-2" delay={80}><article className="bento h-full">
+              <div className="flex items-center gap-2"><New /><h3 className="font-display m-0 text-xl font-semibold">Toplama listesi</h3></div>
+              <p className="m-0 mt-1.5 text-ink2 text-[15px]">Aynı ürün tek seferde toplanır; satırlar raf sırasına dizilir.</p>
+              <ul className="m-0 mt-4 p-0 list-none space-y-1.5 text-sm">
+                {[['A-3-2', 'Toner siyah', '4', true], ['A-8-5', 'Mürekkep renkli', '2', true], ['C-1-4', 'Parfüm 100 ml', '3', false]].map(([b, n, q, d]) => (
+                  <li key={b as string} className="flex items-center gap-2 rounded-xl bg-bg px-2.5 py-1.5"><span className={`size-4 rounded grid place-items-center ${d ? 'bg-ok text-white' : 'border border-line'}`}>{d && <Check size={11} />}</span><span className="num font-semibold w-12">{b}</span><span className={`flex-1 truncate ${d ? 'text-mute line-through' : ''}`}>{n}</span><span className="num">{q}</span></li>))}
+              </ul>
+            </article></Reveal>
+            <Reveal className="md:col-span-2" delay={160}><article className="bento h-full">
+              <div className="flex items-center gap-2"><New /><h3 className="font-display m-0 text-xl font-semibold">Her yerden arama</h3></div>
+              <p className="m-0 mt-1.5 text-ink2 text-[15px]">Ekran, sipariş numarası ya da ürün: yazmanız yeterli.</p>
+              <div className="mt-4 rounded-xl border border-line bg-bg">
+                <div className="flex items-center gap-2 px-3 h-10 border-b border-line text-sm"><Search size={15} className="text-mute" /><span className="text-ink">iade</span><span className="caret" /><span className="flex-1" /><kbd className="rounded border border-line bg-card px-1.5 text-[11px] text-mute font-sans">Ctrl K</kbd></div>
+                <div className="px-3 py-2 text-sm flex items-center gap-3 bg-brand-soft/60"><span className="text-xs text-mute w-10">Ekran</span>İadeler</div>
+              </div>
+            </article></Reveal>
+          </div>
+          <Reveal className="mt-8 flex flex-wrap items-center gap-3"><Cta href={PANEL}>Yenilikleri panelde deneyin <ArrowRight size={16} /></Cta><span className="text-sm text-mute inline-flex items-center gap-1.5"><ListChecks size={15} />Panelde 17 yeni ekran “yeni” etiketiyle görünür.</span></Reveal>
+        </div>
+      </section>
+
       {/* ---------- üç stok modeli ---------- */}
       <section id="stok" className={`${wrap} py-20 md:py-28 scroll-mt-16`}>
-        <div className="max-w-[640px]">
-          <p className={`${kicker} text-brand`}>Üç stok modeli</p>
-          <h2 className="font-display m-0 mt-3 text-4xl md:text-5xl font-semibold tracking-[-0.02em] text-balance">Stok tek bir sayı değildir.</h2>
-          <p className="mt-4 text-lg text-ink2 text-pretty">Rafta sayılan, ilana açılan ve tedarikçiden gelen miktar üç ayrı şeydir. WawiERP üçünü ayrı tutar, hepsini aynı siparişe bağlar.</p>
-        </div>
+        <Head kick="Üç stok modeli" title="Stok tek bir sayı değildir." text="Rafta sayılan, ilana açılan ve tedarikçiden gelen miktar üç ayrı şeydir. WawiERP üçünü ayrı tutar, hepsini aynı siparişe bağlar." />
         <div role="tablist" aria-label="Stok modeli" className="mt-8 inline-flex rounded-full border border-line bg-card p-1">
           {STOCK.map((x, i) => <button key={x.key} role="tab" aria-selected={tab === i} onClick={() => setTab(i)} className={`rounded-full border-0 px-4 sm:px-5 h-10 text-sm font-semibold transition-colors ${tab === i ? 'bg-navy text-white' : 'bg-transparent text-ink2 hover:text-ink'}`}>{x.tab}</button>)}
         </div>
@@ -167,16 +297,47 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
         </div>
       </section>
 
+      {/* ---------- asistan ---------- */}
+      <section id="asistan" className="bg-navy text-white relative overflow-hidden scroll-mt-16">
+        <div className="orb orb-c" aria-hidden="true" />
+        <div className={`${wrap} relative py-20 md:py-28 grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-10 lg:gap-14 items-center`}>
+          <div>
+            <Head dark kick="Asistan" title="Sorun, yanıtlasın. İsteyin, hazırlasın." text="Sağ alt köşedeki düğmeye basın ve ne istediğinizi yazın. Rakamları panel verisinden hesaplar; bir iş istediğinizde önce taslağını gösterir." />
+            <ul className="m-0 mt-7 p-0 list-none grid sm:grid-cols-2 gap-3 text-[15px]">
+              {([['Rakamlar veriden gelir', 'Yanıtın altında dayandığı ekranların düğmeleri görünür.', BarChart3], ['Önce taslak, sonra onay', 'Siz onaylamadan hiçbir şeyi değiştirmez.', ShieldCheck], ['Yetkiniz kadar', 'Rolünüzün yapamadığını asistan da yapamaz.', Users], ['Para ve fiyat kapalı', 'İade ödemesi, fiyat değişikliği ve silme yapamaz.', Lock]] as const).map(([t, d, I]) => (
+                <li key={t} className="rounded-2xl border border-white/12 bg-white/[0.05] p-4"><I size={18} className="text-gold" /><b className="block mt-2 font-semibold">{t}</b><span className="text-white/65 text-sm">{d}</span></li>))}
+            </ul>
+            <p className="m-0 mt-5 text-sm text-white/50">Asistan tasarım aşamasındadır; panelde örnek verilerle denenebilir.</p>
+          </div>
+          <Reveal delay={120}><div className="relative mx-auto max-w-[440px]">
+            <div className="rounded-3xl bg-card text-ink shadow-[0_40px_120px_-30px_rgba(48,72,200,0.85)] border border-white/15 overflow-hidden text-[14px]">
+              <div className="flex items-center gap-2 px-4 h-12 border-b border-line"><span className="size-7 rounded-lg bg-brand-soft text-brand grid place-items-center"><Sparkles size={15} /></span><b className="font-semibold">Asistan</b><span className="flex-1" /><span className="rounded-full bg-ok-soft text-ok text-[11px] font-semibold px-2 py-0.5">Sistem yöneticisi yetkisiyle</span></div>
+              <div className="p-4 space-y-3 bg-card">
+                <div className="flex justify-end"><div className="rounded-2xl rounded-br-md bg-brand text-white px-3 py-2 max-w-[85%]">Dün hangi kanaldan kaç sipariş geldi?</div></div>
+                <div><div className="rounded-2xl rounded-bl-md bg-bg border border-line px-3 py-2.5">Dün 151 sipariş geldi.
+                  <ul className="m-0 mt-1.5 pl-4 text-ink2"><li>Shopify: 49</li><li>eBay: 37</li><li>Kaufland: 29</li></ul></div>
+                  <div className="mt-1.5 flex gap-1.5">{['Siparişler', 'Genel bakış'].map(l => <span key={l} className="inline-flex items-center gap-1 rounded-full border border-line px-2 py-0.5 text-xs text-ink2"><ExternalLink size={11} />{l}</span>)}</div></div>
+                <div className="flex justify-end"><div className="rounded-2xl rounded-br-md bg-brand text-white px-3 py-2 max-w-[85%]">Ödenmiş siparişlerin etiketlerini hazırla</div></div>
+                <div className="rounded-xl border border-brand bg-brand-soft/40 px-3 py-2.5">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-ink2"><ShieldCheck size={13} />Onayınızı bekliyor</div>
+                  <div className="mt-1 font-medium">25 sipariş için kargo etiketi oluştur</div>
+                  <div className="mt-2 flex gap-2"><span className="inline-flex items-center gap-1.5 rounded-md bg-brand text-white px-3 h-8 text-sm font-medium"><Check size={14} />Onayla</span><span className="inline-flex items-center rounded-md border border-line bg-card px-3 h-8 text-sm font-medium">Vazgeç</span></div>
+                </div>
+              </div>
+            </div>
+            <span className="float-a absolute -bottom-6 -right-3 size-16 rounded-2xl bg-[#3048C8] grid place-items-center shadow-2xl border border-white/20" aria-hidden="true"><Logo height={42} markOnly /></span>
+            <p className="m-0 mt-10 text-center text-xs text-white/45">Örnek veriler</p>
+          </div></Reveal>
+        </div>
+      </section>
+
       {/* ---------- özellikler ---------- */}
       <section id="ozellikler" className="bg-card border-y border-line scroll-mt-16">
         <div className={`${wrap} py-20 md:py-28`}>
-          <div className="max-w-[640px]">
-            <p className={`${kicker} text-brand`}>Wawi ile neler yapabilirsiniz?</p>
-            <h2 className="font-display m-0 mt-3 text-4xl md:text-5xl font-semibold tracking-[-0.02em] text-balance">Stoktan teslimata, tek çalışma alanı.</h2>
-          </div>
+          <Head kick="Wawi ile neler yapabilirsiniz?" title="Stoktan teslimata, tek çalışma alanı." />
           <div className="mt-10 grid md:grid-cols-3 gap-4">
             {FEATURES.map(f => (
-              <article key={f.title} className={`group rounded-3xl border border-line bg-bg p-6 transition-colors hover:border-brand ${f.span ?? ''}`}>
+              <article key={f.title} className={`group rounded-3xl border border-line bg-bg p-6 transition-all hover:border-brand hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_var(--brand)] ${f.span ?? ''}`}>
                 <span className="size-11 rounded-2xl bg-brand-soft text-brand grid place-items-center transition-colors group-hover:bg-brand group-hover:text-white"><f.icon size={20} /></span>
                 <h3 className="font-display m-0 mt-4 text-xl font-semibold">{f.title}</h3>
                 <p className="m-0 mt-1.5 text-ink2 text-[15px] text-pretty">{f.text}</p>
@@ -193,10 +354,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
 
       {/* ---------- depodan müşteriye ---------- */}
       <section id="akis" className={`${wrap} py-20 md:py-28 scroll-mt-16`}>
-        <div className="max-w-[640px]">
-          <p className={`${kicker} text-brand`}>Depodan müşteriye</p>
-          <h2 className="font-display m-0 mt-3 text-4xl md:text-5xl font-semibold tracking-[-0.02em]">Beş adım, tek akış.</h2>
-        </div>
+        <Head kick="Depodan müşteriye" title="Beş adım, tek akış." text="Bir sipariş, ürün kartından müşterinin kapısına kadar aynı ekranlarda izlenir." />
         <ol className="m-0 mt-10 p-0 list-none grid sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-0">
           {STEPS.map(([t, d], i) => (
             <li key={t} className="relative lg:pr-6">
@@ -237,6 +395,28 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
             ))}
           </div>
           <p className="m-0 mt-8 text-sm text-mute">Dolu rozet: bugün çalışan bağlantı. Kesik çizgili rozet: başvuruda işaretlerseniz kurulumu planlanır. Kullanılabilir işlemler platform bağlantısına göre değişir.</p>
+        </div>
+      </section>
+
+      {/* ---------- kimler için + sık sorulanlar ---------- */}
+      <section className={`${wrap} py-20 md:py-28`}>
+        <Head kick="Kimler için?" title="İş modeliniz değişebilir. Kontrol tek yerde kalır." />
+        <div className="mt-10 grid md:grid-cols-3 gap-4">
+          {WHO.map(([t, d, I], i) => (
+            <Reveal key={t} delay={i * 80}><article className="h-full rounded-3xl border border-line bg-card p-6">
+              <div className="flex items-center gap-3"><span className="font-display text-4xl font-semibold text-brand/25 num">{String(i + 1).padStart(2, '0')}</span><span className="size-11 rounded-2xl bg-brand-soft text-brand grid place-items-center"><I size={20} /></span></div>
+              <h3 className="font-display m-0 mt-4 text-xl font-semibold">{t}</h3><p className="m-0 mt-1.5 text-ink2 text-[15px] text-pretty">{d}</p>
+            </article></Reveal>))}
+        </div>
+        <div className="mt-16 grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] gap-8">
+          <Head kick="Sık sorulanlar" title="Başlamadan önce." />
+          <div className="space-y-2">
+            {FAQ.map(([q, a]) => (
+              <details key={q} className="faq group rounded-2xl border border-line bg-card px-5 open:border-brand">
+                <summary className="flex items-center gap-3 cursor-pointer list-none py-4 font-semibold text-[16px]"><span className="flex-1">{q}</span><ChevronDown size={18} className="text-mute transition-transform group-open:rotate-180" /></summary>
+                <p className="m-0 pb-4 text-ink2 text-[15px] text-pretty">{a}</p>
+              </details>))}
+          </div>
         </div>
       </section>
 
@@ -318,6 +498,10 @@ function Preview() {
       <div className="float-b hidden md:flex absolute -right-6 top-44 z-10 items-center gap-2.5 rounded-2xl bg-white text-navy px-3.5 py-2.5 shadow-2xl text-sm">
         <span className="size-8 rounded-full bg-[#fff4d8] text-[#9a6500] grid place-items-center"><Boxes size={15} /></span>
         <span><b className="block font-semibold leading-tight">Stok defteri −1</b><span className="text-[#454e80] text-xs">Almanya · raf A-3-2</span></span>
+      </div>
+      <div className="float-a hidden lg:flex absolute -left-14 bottom-16 z-10 items-center gap-2.5 rounded-2xl bg-white text-navy px-3.5 py-2.5 shadow-2xl text-sm">
+        <span className="size-8 rounded-full bg-[#e6e2fa] text-[#6250d6] grid place-items-center"><Sparkles size={15} /></span>
+        <span><b className="block font-semibold leading-tight">Asistan: taslak hazır</b><span className="text-[#454e80] text-xs">25 etiket · onayınızı bekliyor</span></span>
       </div>
       <div className="rounded-t-2xl border border-b-0 border-white/15 bg-card text-ink shadow-[0_-30px_120px_-30px_rgba(48,72,200,0.7)] overflow-hidden text-left">
         <div className="flex items-center gap-1.5 px-4 h-9 border-b border-line bg-bg">

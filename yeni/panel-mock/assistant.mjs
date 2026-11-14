@@ -28,7 +28,7 @@ Nasıl çalışırsın:
 
 Bu bir tasarım taslağıdır: veriler örnektir ve onaylanan işlemler gerçek bir sisteme gitmez. Sorulursa bunu açıkça söyle.`
 
-const SCREENS = ['overview', 'orders', 'labels', 'returns', 'support', 'catalog', 'stock', 'transfers', 'channels', 'sync', 'finance', 'b2b', 'team', 'audit']
+const SCREENS = ['overview', 'orders', 'picking', 'labels', 'returns', 'support', 'catalog', 'quality', 'content', 'stock', 'counting', 'replenish', 'transfers', 'channels', 'listing', 'prices', 'sync', 'rules', 'alerts', 'shifts', 'finance', 'bank', 'accounting', 'profit', 'b2b', 'onboarding', 'developers', 'billing', 'status', 'team', 'audit']
 const obj = (properties, required = []) => ({ type: 'object', properties, required, additionalProperties: false })
 const TOOLS = [
   { name: 'get_overview', description: 'Günün özeti: dün ve bugün gelen sipariş sayısı (kanal kırılımıyla), gönderilmeyi bekleyen, 2 günü aşan ve sorunlu sipariş sayıları, açık iade ve destek kaydı sayısı, sorunlu kanal hesabı ve başarısız eşitleme işi sayısı. Genel "durum nedir", "dün ne oldu" sorularında önce bunu çağır.', input_schema: obj({}) },
