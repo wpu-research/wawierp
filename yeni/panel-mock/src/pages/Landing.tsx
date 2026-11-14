@@ -1,7 +1,23 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { ArrowRight, BarChart3, Boxes, Check, FileText, Globe2, KeyRound, Layers, Moon, PackageCheck, ScanBarcode, ShieldCheck, ShoppingCart, Smartphone, Sun, Truck, Users, Warehouse } from 'lucide-react'
-import { CHANNEL, NOW, ORDERS0, account, dayKey, fmtDT, fmtMoney, fmtNum, toShip } from '../data'
-import { Logo } from '../ui'
+import { Logo } from '../logo'
+
+// Bu sayfa herkese açıktır: panel verisini (src/data*.ts) içe AKTARMAZ.
+// Geliştirme sunucusunda panel /panel.html adresindedir; yayında server.mjs /panel yolunu şifreyle sunar.
+const PANEL = location.protocol === 'file:' ? 'panel.html' : import.meta.env.DEV ? '/panel.html' : '/panel'
+const CHANNEL = { amazon: { label: 'Amazon', color: '#e08a00' }, ebay: { label: 'eBay', color: '#2a78d6' }, kaufland: { label: 'Kaufland', color: '#d03b3b' }, shopify: { label: 'Shopify', color: '#5e8e3e' }, otto: { label: 'OTTO', color: '#c2185b' } } as const
+
+// Kanal işaretleri canlı sitedeki /assets/img/channel-marks/ klasöründen. Logosu olmayan kanal iki harfle gösterilir.
+const MARKS = Object.fromEntries(Object.entries(import.meta.glob('../assets/marks/*.svg', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>)
+  .map(([k, v]) => [k.split('/').pop()!.replace('.svg', ''), 'data:image/svg+xml;utf8,' + encodeURIComponent(v)]))
+function Mark({ name, size = 22 }: { name: string; size?: number }) {
+  const src = MARKS[name.toLowerCase().replace(/[^a-z0-9]/g, '')]
+  return (
+    <span aria-hidden="true" className="inline-grid place-items-center rounded-md bg-white border border-black/10 shrink-0 text-[#454e80] font-semibold" style={{ width: size, height: size, fontSize: size * 0.42 }}>
+      {src ? <img src={src} alt="" style={{ width: size * 0.68, height: size * 0.68 }} /> : name.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 2)}
+    </span>
+  )
+}
 
 const wrap = 'max-w-[1180px] mx-auto px-4 md:px-6'
 const kicker = 'text-xs font-semibold tracking-[0.14em] uppercase'
@@ -66,14 +82,14 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
       {/* ---------- üst çubuk ---------- */}
       <header className="sticky top-0 z-40 bg-navy/90 backdrop-blur border-b border-white/10 text-white">
         <div className={`${wrap} h-16 flex items-center gap-6`}>
-          <a href="#/" className="text-white no-underline shrink-0" aria-label="WawiERP ana sayfa"><Logo height={30} onDark /></a>
+          <a href="#" className="text-white no-underline shrink-0" aria-label="WawiERP ana sayfa"><Logo height={30} onDark /></a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-white/75 flex-1" aria-label="Sayfa bölümleri">
             {[['Stok modeli', 'stok'], ['Özellikler', 'ozellikler'], ['Depodan müşteriye', 'akis'], ['Satış kanalları', 'kanallar']].map(([l, id]) =>
               <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })} className="bg-transparent border-0 p-0 text-inherit hover:text-white">{l}</button>)}
           </nav>
           <span className="flex-1 md:hidden" />
           <button onClick={() => setDark(d => !d)} aria-label="Açık / koyu tema" className="size-9 grid place-items-center rounded-full border border-white/20 bg-transparent text-white/80 hover:text-white">{dark ? <Sun size={16} /> : <Moon size={16} />}</button>
-          <a href="#/overview" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-white no-underline rounded-full border border-white/25 px-4 h-9 hover:bg-white/10">Firma girişi <ArrowRight size={14} /></a>
+          <a href={PANEL} className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-white no-underline rounded-full border border-white/25 px-4 h-9 hover:bg-white/10">Firma girişi <ArrowRight size={14} /></a>
           <button onClick={() => document.getElementById('basvuru')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center text-sm font-semibold rounded-full bg-gold text-navy border-0 px-4 h-9 whitespace-nowrap">Başvuru yap</button>
         </div>
       </header>
@@ -87,7 +103,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
           <h1 className="font-display m-0 mt-5 text-[44px] leading-[1.02] sm:text-6xl md:text-7xl font-semibold tracking-[-0.015em] text-balance">Tek panelden<br /><span className="hero-mark">dünyaya satış.</span></h1>
           <p className="mx-auto mt-6 max-w-[58ch] text-lg text-white/70 text-pretty">Ürünlerinizi, stoklarınızı ve siparişlerinizi WawiERP’de bir araya getirin. Almanya ve Türkiye pazaryerlerine, mağazalarınıza ve depolarınıza aynı çalışma alanından yön verin.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Cta href="#/overview" kind="gold">Paneli incele <ArrowRight size={16} /></Cta>
+            <Cta href={PANEL} kind="gold">Paneli incele <ArrowRight size={16} /></Cta>
             <button onClick={() => document.getElementById('kanallar')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center justify-center rounded-full px-5 h-11 text-[15px] font-semibold border border-white/25 bg-transparent text-white hover:bg-white/10">Kanalları keşfet</button>
           </div>
           <ul className="m-0 mt-7 p-0 list-none flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/60">
@@ -100,7 +116,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
       {/* ---------- kanal şeridi ---------- */}
       <div className="border-b border-line bg-card overflow-hidden" aria-label="Bağlı kanallar">
         <div className="marquee flex gap-3 py-4 w-max">
-          {[...MARQUEE, ...MARQUEE].map((c, i) => <span key={i} aria-hidden={i >= MARQUEE.length} className="rounded-full border border-line bg-bg px-4 py-1.5 text-sm font-medium text-ink2 whitespace-nowrap">{c}</span>)}
+          {[...MARQUEE, ...MARQUEE].map((c, i) => <span key={i} aria-hidden={i >= MARQUEE.length} className="inline-flex items-center gap-2 rounded-full border border-line bg-bg pl-2 pr-4 py-1.5 text-sm font-medium text-ink2 whitespace-nowrap"><Mark name={c} />{c}</span>)}
         </div>
       </div>
 
@@ -140,7 +156,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
               <ul className="m-0 p-0 list-none space-y-2">
                 {(['amazon', 'ebay', 'kaufland', 'shopify'] as const).map((c, i) => (
                   <li key={c} className="flex items-center justify-between gap-2 rounded-xl border border-line bg-bg px-3 py-2">
-                    <span className="inline-flex items-center gap-2 font-medium"><span className="size-2.5 rounded-full" style={{ background: CHANNEL[c].color }} />{CHANNEL[c].label}</span>
+                    <span className="inline-flex items-center gap-2 font-medium"><Mark name={c} size={24} />{CHANNEL[c].label}</span>
                     <span className="num text-sm text-ink2">{[119, 119, 40, 86][(i + tab) % 4]} adet</span>
                   </li>
                 ))}
@@ -214,8 +230,8 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
               <div key={g.group} className="grid md:grid-cols-[180px_1fr] gap-3 md:gap-6">
                 <h3 className="font-display m-0 text-lg font-semibold md:pt-1.5">{g.group}</h3>
                 <ul className="m-0 p-0 list-none flex flex-wrap gap-2">
-                  {flt !== 'off' && g.on.map(c => <li key={c} className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft text-brand px-3.5 py-1.5 text-sm font-semibold"><span className="size-1.5 rounded-full bg-brand" />{c}</li>)}
-                  {flt !== 'on' && g.off.map(c => <li key={c} className="rounded-full border border-dashed border-line text-ink2 px-3.5 py-1.5 text-sm">{c}</li>)}
+                  {flt !== 'off' && g.on.map(c => <li key={c} className="inline-flex items-center gap-2 rounded-full bg-brand-soft text-brand pl-1.5 pr-3.5 py-1.5 text-sm font-semibold"><Mark name={c} />{c}</li>)}
+                  {flt !== 'on' && g.off.map(c => <li key={c} className="inline-flex items-center gap-2 rounded-full border border-dashed border-line text-ink2 pl-1.5 pr-3.5 py-1.5 text-sm"><Mark name={c} />{c}</li>)}
                 </ul>
               </div>
             ))}
@@ -269,11 +285,11 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
       <footer className="bg-bg">
         <div className={`${wrap} py-12 grid md:grid-cols-[1.2fr_1fr_1fr] gap-8`}>
           <div><Logo height={32} /><p className="mt-3 text-ink2 max-w-[36ch]">Depolar, ürünler ve satış kanalları için tek çalışma alanı.</p>
-            <a href="#/overview" className="inline-flex items-center gap-1.5 mt-2 text-brand font-semibold no-underline">Firma girişi <ArrowRight size={14} /></a></div>
+            <a href={PANEL} className="inline-flex items-center gap-1.5 mt-2 text-brand font-semibold no-underline">Firma girişi <ArrowRight size={14} /></a></div>
           <div><h3 className={`${kicker} text-mute m-0`}>Diller</h3><ul className="m-0 mt-3 p-0 list-none grid grid-cols-2 gap-y-1.5 text-sm text-ink2">{LANGS.map(l => <li key={l} className="inline-flex items-center gap-1.5"><Globe2 size={12} className="text-mute" />{l}</li>)}</ul></div>
           <div><h3 className={`${kicker} text-mute m-0`}>Yasal</h3><ul className="m-0 mt-3 p-0 list-none space-y-1.5 text-sm text-ink2">{['Impressum', 'Datenschutz / Gizlilik', 'KVKK aydınlatma metni', 'Fiyatlandırma'].map(l => <li key={l} className="flex items-center gap-2">{l}<span className="rounded-full bg-warn-soft text-warn text-[10px] font-semibold px-2 py-0.5">eklenecek</span></li>)}</ul></div>
         </div>
-        <div className="border-t border-line"><div className={`${wrap} py-4 flex flex-wrap justify-between gap-2 text-xs text-mute`}><span>© 2026 WawiERP</span><span>Tasarım önerisi · mock. Yalnız Türkçe çizildi; diğer diller gerçek sitede.</span></div></div>
+        <div className="border-t border-line"><div className={`${wrap} py-4 flex flex-wrap justify-between gap-2 text-xs text-mute`}><span>© 2026 WawiERP</span><span>Tasarım önerisi · mock. Yalnız Türkçe çizildi; diğer diller gerçek sitede. Kanal adları ve logoları sahiplerinin markalarıdır.</span></div></div>
       </footer>
     </div>
   )
@@ -285,16 +301,14 @@ const Field = ({ label, name, type = 'text', required }: { label: string; name: 
   </label>
 )
 
-/* Hero'daki ürün önizlemesi: mock panelin gerçek verisinden çizilir. */
+/* Hero'daki ürün önizlemesi: tamamen temsili veriler (canlı sitedeki örnek tutarlar). */
+const BARS = [38, 52, 47, 44, 58, 61, 49, 43, 46, 50, 57, 72, 66, 69, 63, 41, 30, 36, 48, 45, 51, 49, 50, 64, 71, 88, 79, 77, 84, 96]
+const ROWS: [string, keyof typeof CHANNEL, string, string, string][] = [
+  ['EB-104512', 'ebay', 'Örnek Mağaza', '16:44', '€64,90'], ['SH-104511', 'shopify', 'ornekshop.de', '16:35', '€38,50'],
+  ['KL-104510', 'kaufland', 'Örnek Mağaza', '16:22', '€112,00'], ['OT-104509', 'otto', 'Örnek Mağaza', '16:09', '€79,95'], ['AZ-104508', 'amazon', 'Örnek Mağaza', '15:51', '€24,99'],
+]
 function Preview() {
-  const m = useMemo(() => {
-    const today = dayKey(NOW), days = new Map<string, number>()
-    for (let i = 29; i >= 0; i--) days.set(dayKey(NOW - i * 86400_000), 0)
-    let n = 0, eur = 0
-    for (const o of ORDERS0) { const k = dayKey(o.t); if (days.has(k)) days.set(k, days.get(k)! + 1); if (k === today) { n++; if (o.cur === 'EUR') eur += o.total } }
-    return { n, eur, bars: [...days.values()], ship: ORDERS0.filter(toShip).length, rows: ORDERS0.slice(0, 5) }
-  }, [])
-  const max = Math.max(...m.bars)
+  const max = Math.max(...BARS)
   return (
     <div className="preview relative mx-auto max-w-[1000px]">
       <div className="float-a hidden md:flex absolute -left-10 -top-7 z-10 items-center gap-2.5 rounded-2xl bg-white text-navy px-3.5 py-2.5 shadow-2xl text-sm">
@@ -317,21 +331,21 @@ function Preview() {
           </aside>
           <div className="p-4 space-y-3 min-w-0">
             <div className="grid grid-cols-3 gap-3">
-              {[['Bugün gelen sipariş', fmtNum(m.n), fmtMoney(m.eur, 'EUR', 0)], ['Gönderilecek', fmtNum(m.ship), 'Ödemesi tamam'], ['Bağlı hesap', '24', 'Pazaryeri ve mağaza']].map(([l, v, h]) => (
+              {[['Bugün gelen sipariş', '128', '€12.480'], ['Gönderilecek', '46', 'Ödemesi tamam'], ['Bağlı hesap', '12', 'Pazaryeri ve mağaza']].map(([l, v, h]) => (
                 <div key={l} className="rounded-xl border border-line px-3 py-2.5 min-w-0"><div className="text-[11px] text-mute truncate">{l}</div><div className="num font-display text-2xl font-semibold leading-tight">{v}</div><div className="text-[11px] text-ink2 truncate">{h}</div></div>))}
             </div>
             <div className="rounded-xl border border-line p-3">
-              <div className="text-xs font-semibold mb-2">Günlük sipariş · son 30 gün</div>
-              <div className="flex items-end gap-[3px] h-20">{m.bars.map((b, i) => <span key={i} className="flex-1 rounded-t-sm" style={{ height: `${Math.max(4, (b / max) * 100)}%`, background: i === m.bars.length - 1 ? 'var(--gold-deep)' : 'var(--brand)' }} />)}</div>
+              <div className="text-xs font-semibold mb-2 flex justify-between"><span>Günlük sipariş · son 30 gün</span><span className="font-normal text-mute">Örnek veriler · temsili tutarlar</span></div>
+              <div className="flex items-end gap-[3px] h-20">{BARS.map((b, i) => <span key={i} className="flex-1 rounded-t-sm" style={{ height: `${Math.max(4, (b / max) * 100)}%`, background: i === BARS.length - 1 ? 'var(--gold-deep)' : 'var(--brand)' }} />)}</div>
             </div>
             <ul className="m-0 p-0 list-none rounded-xl border border-line divide-y divide-line text-[13px]">
-              {m.rows.map(o => { const a = account(o.acc); return (
-                <li key={o.id} className="px-3 py-1.5 flex items-center gap-3">
-                  <span className="num font-medium w-[86px] shrink-0">{o.no}</span>
-                  <span className="inline-flex items-center gap-1.5 min-w-0 flex-1"><span className="size-2 rounded-full shrink-0" style={{ background: CHANNEL[a.type].color }} /><span className="truncate">{CHANNEL[a.type].label} · <span className="text-mute">{a.name}</span></span></span>
-                  <span className="hidden sm:inline text-mute num">{fmtDT(o.t)}</span>
-                  <span className="num w-[72px] text-right">{fmtMoney(o.total, o.cur)}</span>
-                </li>) })}
+              {ROWS.map(([no, c, store, t, total]) => (
+                <li key={no} className="px-3 py-1.5 flex items-center gap-3">
+                  <span className="num font-medium w-[86px] shrink-0">{no}</span>
+                  <span className="inline-flex items-center gap-1.5 min-w-0 flex-1"><Mark name={c} size={18} /><span className="truncate">{CHANNEL[c].label} · <span className="text-mute">{store}</span></span></span>
+                  <span className="hidden sm:inline text-mute num">{t}</span>
+                  <span className="num w-[72px] text-right">{total}</span>
+                </li>))}
             </ul>
           </div>
         </div>

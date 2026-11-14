@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Boxes, Building2, FileText, LayoutDashboard, LifeBuoy, Menu, Moon, Package, RefreshCw, RotateCcw, ScrollText, ShoppingCart, Store, Sun, Tag, Truck, Users, X, type LucideIcon } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
-import { Logo, sel } from './ui'
-import Landing from './pages/Landing'
+import { sel } from './ui'
+import { Logo } from './logo'
 import Overview from './pages/Overview'
 import Orders from './pages/Orders'
 import Catalog, { Stock } from './pages/Catalog'
@@ -11,6 +11,8 @@ import Channels, { Sync } from './pages/Channels'
 import Finance, { Returns } from './pages/Finance'
 import { AuditLog, Team } from './pages/Admin'
 import { B2BPage, Labels, Support, Transfers } from './pages/Extra'
+
+const HOME = location.protocol === 'file:' ? 'index.html' : '/'
 
 interface NavItem { key: string; label: string; icon: LucideIcon; draft?: boolean }
 const NAV: { group: string; items: NavItem[] }[] = [
@@ -28,7 +30,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
 ]
 
 function useRoute() {
-  const read = () => { const [p, q = ''] = (location.hash.replace(/^#\/?/, '') || 'home').split('?'); return { page: p, query: new URLSearchParams(q) } }
+  const read = () => { const [p, q = ''] = (location.hash.replace(/^#\/?/, '') || 'overview').split('?'); return { page: p, query: new URLSearchParams(q) } }
   const [r, setR] = useState(read)
   useEffect(() => { const f = () => { setR(read()); window.scrollTo(0, 0) }; addEventListener('hashchange', f); return () => removeEventListener('hashchange', f) }, [])
   return r
@@ -64,7 +66,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   const sidebar = (
     <nav className="flex flex-col h-full" aria-label="Ana menü">
       <div className="px-4 h-14 flex items-center justify-between border-b border-line shrink-0">
-        <a href="#/" className="flex items-center gap-2 no-underline text-ink" title="Ana sayfa">
+        <a href={HOME} className="flex items-center gap-2 no-underline text-ink" title="Ana sayfa">
           <Logo height={26} />
           <span className="rounded bg-warn-soft text-warn text-[10px] font-semibold px-1.5 py-0.5">MOCK</span>
         </a>
@@ -137,7 +139,7 @@ function Root() {
   const { page, query } = useRoute()
   const [dark, setDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches)
   useEffect(() => { document.documentElement.dataset.theme = dark ? 'dark' : 'light' }, [dark])
-  return page === 'home' ? <Landing dark={dark} setDark={setDark} /> : <Shell page={page} query={query} dark={dark} setDark={setDark} />
+  return <Shell page={page} query={query} dark={dark} setDark={setDark} />
 }
 
 export default function App() { return <StoreProvider><Root /></StoreProvider> }
