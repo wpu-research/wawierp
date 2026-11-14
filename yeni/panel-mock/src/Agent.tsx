@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import type Anthropic from '@anthropic-ai/sdk'
 import { ArrowUp, Check, ExternalLink, Lock, ShieldCheck, Sparkles, X } from 'lucide-react'
-import { CHANNEL, NOW, RET, account, dayKey, fmtMoney, fmtNum, hasIssue, overdue, toShip, type ChannelType, type Order } from './data'
+import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, overdue, toShip, type ChannelType, type Order } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
 
-/* Asistan paneli (mock). Gerçek bir yapay zekâ bağlı DEĞİL: yazılanı anahtar kelimelerle eşleştirir,
-   yanıtı mock veriden hesaplar. Amaç, hedef davranışı göstermek:
+/* Asistan paneli. Sunucuda API anahtarı tanımlıysa (server.mjs + assistant.mjs) gerçek yapay zekâya bağlanır:
+   model araç çağırır, araçlar burada mock verinin üzerinde çalışır, sonuç modele geri gider.
+   Anahtar yoksa ya da sunucu yoksa (npm run dev, dosyadan açma) hazır senaryolara düşer: yazılanı anahtar
+   kelimelerle eşleştirir, yanıtı mock veriden hesaplar. İki yolda da kurallar aynı:
    - her rakam veriden gelir ve dayandığı ekran bağlantısıyla birlikte sunulur
    - veri değiştiren her işlem önce taslak olarak gösterilir, kullanıcı onaylar
    - asistan, kendisine yazan kullanıcının rolünden fazlasını yapamaz
@@ -17,6 +20,12 @@ type ActKind = 'labels' | 'ship' | 'retry' | 'reply' | 'rule'
 interface Act { kind: ActKind; title: string; lines: string[]; ids: string[]; payload?: string; state: 'bekliyor' | 'uygulandi' | 'vazgecildi' }
 interface Msg { id: number; from: 'user' | 'agent'; body: ReactNode; sources?: Src[]; act?: Act }
 type Mode = 'yanit' | 'onay'
+type ApiMsg = Anthropic.Beta.BetaMessageParam
+type Block = Anthropic.Beta.BetaContentBlock
+type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[] }
+const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı' }
+// Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
+const API = location.origin + '/api/assistant'
 const CAP = 25 // tek seferde en fazla bu kadar kayda işlem önerilir
 
 const SUGGEST = ['Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
@@ -38,6 +47,154 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
   useEffect(() => { if (open) input.current?.focus() }, [open])
 
   const push = (m: Omit<Msg, 'id'>) => setMsgs(a => [...a, { ...m, id: seq.current++ }])
+
+  // ---- gerçek yapay zekâ bağlantısı ----
+  const [live, setLive] = useState<'bilinmiyor' | 'canli' | 'mock'>('bilinmiyor')
+  const api = useRef<ApiMsg[]>([])   // modele giden konuşma (araç çağrıları ve sonuçlarıyla)
+  const notes = useRef<string[]>([]) // onay / vazgeçme bilgisi bir sonraki mesajla modele iletilir
+  useEffect(() => {
+    if (location.protocol === 'file:') { setLive('mock'); return }
+    let off = false
+    fetch(API).then(r => (r.ok ? r.json() : null)).then(j => { if (!off) setLive(j?.live ? 'canli' : 'mock') }).catch(() => { if (!off) setLive('mock') })
+    return () => { off = true }
+  }, [])
+  const scopeText = [st.companyId ? 'seçili şirket' : 'tüm şirketler', st.whId ? 'seçili depo' : 'tüm depolar'].join(', ')
+
+  // Modelin çağırdığı araçlar. Hepsi o anki kapsamdaki veriyi okur; müşteri bilgisi döndürmez.
+  // Veri değiştiren tek araç propose_action'dır ve yalnız onay kartı oluşturur.
+  function runTool(name: string, input: Record<string, unknown>): ToolOut {
+    const int = (v: unknown, d: number, max: number) => Math.max(1, Math.min(max, typeof v === 'number' && Number.isFinite(v) ? Math.floor(v) : d))
+    const list = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [])
+    const hours = (t: number) => Math.round((NOW - t) / 3600_000)
+    const row = (o: Order) => ({ id: o.id, no: o.no, kanal: CHANNEL[account(o.acc).type].label, hesap: account(o.acc).name, durum: o.status, odeme: o.pay, etiket: o.label, tedarik: o.supply, bekleme_saat: hours(o.t), sorun: o.issue ?? null, ...(R.finance ? { tutar: o.total, para_birimi: o.cur } : {}) })
+    const today = dayKey(NOW), yest = dayKey(NOW - 86400_000)
+    const eur = (l: Order[]) => Math.round(l.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0))
+    const labelable = (o: Order) => toShip(o) && o.supply === 'fiziki' && o.label === 'yok' && !o.issue
+    const shippable = (o: Order) => o.label === 'hazir' && o.status === 'hazirlaniyor'
+    const ids = new Set(st.accounts.map(a => a.id))
+    const badJobs = st.jobs.filter(j => (j.status === 'basarisiz' || j.status === 'kismi') && (j.acc === null || ids.has(j.acc)))
+
+    switch (name) {
+      case 'get_overview': {
+        const dT = st.orders.filter(o => dayKey(o.t) === today), dY = st.orders.filter(o => dayKey(o.t) === yest)
+        return { src: [{ label: 'Genel bakış', href: '#/overview' }, { label: 'Siparişler', href: '#/orders' }], data: {
+          dun: { siparis: dY.length, kanal_dagilimi: byChannel(dY), ...(R.finance ? { ciro_eur: eur(dY) } : {}) },
+          bugun: { siparis: dT.length, ...(R.finance ? { ciro_eur: eur(dT) } : {}) },
+          gonderilecek: st.orders.filter(toShip).length, iki_gunu_asan: st.orders.filter(overdue).length, sorunlu: st.orders.filter(hasIssue).length,
+          acik_iade: st.orders.filter(o => o.ret && o.ret !== 'cozuldu').length, yanit_bekleyen_destek: st.tickets.filter(t => t.status === 'open').length,
+          sorunlu_kanal_hesabi: st.accounts.filter(a => a.health !== 'ok').length, basarisiz_esitleme_isi: badJobs.length,
+          not: R.finance ? undefined : 'Tutarlar bu role kapalı.',
+        } }
+      }
+      case 'list_orders': {
+        const view = String(input.view)
+        const f: Record<string, (o: Order) => boolean> = { toship: toShip, overdue, issue: hasIssue, drop: dropWaiting, label_missing: labelable, label_ready: shippable, today: o => dayKey(o.t) === today, yesterday: o => dayKey(o.t) === yest }
+        if (!f[view]) return { error: true, data: { hata: 'Bilinmeyen görünüm' } }
+        const l = st.orders.filter(f[view])
+        const hrefView = view === 'toship' || view === 'overdue' || view === 'issue' || view === 'drop' ? `#/orders?view=${view}` : view.startsWith('label') ? '#/labels' : '#/orders'
+        return { src: [{ label: view.startsWith('label') ? 'Kargo etiketleri' : 'Siparişler', href: hrefView }], data: { toplam: l.length, kanal_dagilimi: byChannel(l), satirlar: l.slice(0, int(input.limit, 25, 50)).map(row) } }
+      }
+      case 'get_channel_health':
+        return { src: [{ label: 'Kanallar', href: '#/channels' }, { label: 'Eşitleme işleri', href: '#/sync' }], data: {
+          hesap_sayisi: st.accounts.length,
+          sorunlu_hesaplar: st.accounts.filter(a => a.health !== 'ok').map(a => ({ hesap: a.name, kanal: CHANNEL[a.type].label, durum: a.health, not: a.note ?? null, son_esitleme_saat_once: hours(a.lastSync) })),
+          sorunlu_isler: badJobs.map(j => ({ id: j.id, hesap: j.acc ? account(j.acc).name : 'Sistem', tur: j.kind, durum: j.status, deneme: j.tries, mesaj: j.msg ?? null })),
+        } }
+      case 'get_data_quality': {
+        const selling = new Map<string, number>()
+        for (const o of st.orders) for (const i of o.items) selling.set(i.pid, (selling.get(i.pid) ?? 0) + i.qty)
+        const bad = st.products.filter(p => !p.image || !p.ean)
+        return { src: [{ label: 'Görseli eksik ürünler', href: '#/catalog?view=gorsel' }, { label: 'Barkodu eksik ürünler', href: '#/catalog?view=ean' }], data: {
+          urun_sayisi: st.products.length, gorseli_eksik: st.products.filter(p => !p.image).length, barkodu_eksik: st.products.filter(p => !p.ean).length,
+          eksigi_olup_son_30_gunde_satilan: bad.filter(p => selling.has(p.id)).length,
+          ornekler: bad.sort((a, b) => (selling.get(b.id) ?? 0) - (selling.get(a.id) ?? 0)).slice(0, 8).map(p => ({ sku: p.sku, ad: p.name, eksik: [!p.image && 'görsel', !p.ean && 'barkod'].filter(Boolean), son_30_gun_satis_adedi: selling.get(p.id) ?? 0 })),
+        } }
+      }
+      case 'get_returns': {
+        const rets = st.orders.filter(o => o.ret)
+        return { src: [{ label: 'İadeler', href: '#/returns' }], data: { toplam: rets.length, asamalar: RET.map(r => ({ asama: r.label, adet: rets.filter(o => o.ret === r.key).length })) } }
+      }
+      case 'get_open_tickets': {
+        const open = st.tickets.filter(t => t.status === 'open').sort((a, b) => a.t - b.t)
+        return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: [...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null })) } }
+      }
+      case 'open_screen': {
+        const page = String(input.page)
+        if (!SCREEN[page]) return { error: true, data: { hata: 'Bilinmeyen ekran' } }
+        if (R.nav !== 'all' && !R.nav.includes(page)) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) bu ekranı göremez.` } }
+        location.hash = `#/${page}`
+        return { src: [{ label: SCREEN[page], href: `#/${page}` }], data: { acildi: SCREEN[page] } }
+      }
+      case 'propose_action': {
+        const kind = String(input.kind), summary = String(input.summary ?? '').slice(0, 140)
+        if (mode === 'yanit') return { error: true, data: { hata: 'Kullanıcı "Yalnız yanıtla" düzeyini seçti; taslak hazırlanamaz. Kullanıcıya düzeyi "Hazırla, onayla" yapabileceğini söyle.' } }
+        const needOps = kind !== 'reply_ticket'
+        if (needOps && !R.ops) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) bu işlemi yapamaz; asistan da onun adına yapamaz.` } }
+        const made = (a: Omit<Act, 'state'>, extra: object = {}): ToolOut => ({ act: { ...a, state: 'bekliyor' }, data: { durum: 'Taslak hazır, kullanıcının onayını bekliyor. İşlem henüz yapılmadı.', kabul_edilen: a.ids.length || undefined, ...extra } })
+        if (kind === 'create_labels' || kind === 'ship_orders') {
+          const want = list(input.order_ids), okFn = kind === 'create_labels' ? labelable : shippable
+          const good = st.orders.filter(o => want.includes(o.id) && okFn(o))
+          if (!good.length) return { error: true, data: { hata: 'Verilen kimliklerden hiçbiri bu işleme uygun değil. Kimlikleri list_orders ile al (create_labels için view=label_missing, ship_orders için view=label_ready).' } }
+          const take = good.slice(0, CAP)
+          return made({ kind: kind === 'create_labels' ? 'labels' : 'ship', title: summary || (kind === 'create_labels' ? `${take.length} sipariş için kargo etiketi oluştur` : `${take.length} siparişi kargoya ver`), ids: take.map(o => o.id), lines: [`${take.length} sipariş`, ...byChannel(take), ...(good.length > CAP ? [`Üst sınır ${CAP}: ${good.length - CAP} sipariş bu tura alınmadı`] : [])] }, { reddedilen: want.length - good.length, ust_sinir_nedeniyle_alinmayan: Math.max(0, good.length - CAP) })
+        }
+        if (kind === 'retry_sync_jobs') {
+          const want = list(input.job_ids), good = st.jobs.filter(j => want.includes(j.id) && j.status === 'basarisiz').slice(0, CAP)
+          if (!good.length) return { error: true, data: { hata: 'Verilen kimliklerde yeniden denenebilecek başarısız iş yok. Kimlikleri get_channel_health ile al.' } }
+          return made({ kind: 'retry', title: summary || `${good.length} başarısız işi yeniden dene`, ids: good.map(j => j.id), lines: good.slice(0, 6).map(j => `${j.acc ? account(j.acc).name : 'Sistem'} · ${j.kind}`) }, { reddedilen: want.length - good.length })
+        }
+        if (kind === 'reply_ticket') {
+          const t = st.tickets.find(x => x.id === input.ticket_id && x.status === 'open'), text = String(input.reply_text ?? '').trim().slice(0, 1500)
+          if (!t || !text) return { error: true, data: { hata: 'Açık bir konuşma kimliği ve yanıt metni gerekli. Kimliği get_open_tickets ile al.' } }
+          return made({ kind: 'reply', title: summary || `“${t.subject}” konuşmasına yanıt gönder`, ids: [t.id], payload: text, lines: [`“${text}”`, `${account(t.acc).name} · gönderilmeden önce Destek ekranında düzenlenebilir`] })
+        }
+        if (kind === 'create_rule') {
+          const r = (input.rule ?? {}) as Record<string, unknown>
+          if (!r.event || !r.action) return { error: true, data: { hata: 'Kural için olay ve işlem gerekli.' } }
+          return made({ kind: 'rule', title: summary || 'Kural taslağı', ids: [], lines: [`Olay: ${String(r.event).slice(0, 120)}`, `Koşul: ${String(r.condition ?? 'yok').slice(0, 160)}`, `İşlem: ${String(r.action).slice(0, 160)}`, 'Mod: yalnız öner (7 gün), sonra onayınızla “önce sor”', `Üst sınır: tek seferde ${CAP} kayıt`] })
+        }
+        return { error: true, data: { hata: 'Bilinmeyen işlem türü' } }
+      }
+      default: return { error: true, data: { hata: 'Bilinmeyen araç' } }
+    }
+  }
+
+  async function runLive(t: string) {
+    const mark = api.current.length
+    const note = notes.current.length ? `[Panel notu: ${notes.current.join(' ')}]\n` : ''
+    notes.current = []
+    api.current.push({ role: 'user', content: note + t })
+    const sources = new Map<string, Src>()
+    try {
+      for (let turn = 0; turn < 8; turn++) {
+        const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode } }) })
+        const res = (await r.json().catch(() => ({}))) as { content?: Block[]; stop_reason?: string | null; message?: string }
+        if (!r.ok || !res.content) throw new Error(res.message || `Sunucu yanıt vermedi (${r.status})`)
+        api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
+        const said = res.content.flatMap(b => (b.type === 'text' ? [b.text] : [])).join('\n').trim()
+        const results: Anthropic.Beta.BetaToolResultBlockParam[] = []
+        const acts: Act[] = []
+        for (const b of res.content) {
+          if (b.type !== 'tool_use') continue
+          const out = runTool(b.name, (b.input ?? {}) as Record<string, unknown>)
+          if (out.act) acts.push(out.act)
+          for (const s of out.src ?? []) sources.set(s.href, s)
+          results.push({ type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(out.data), ...(out.error ? { is_error: true } : {}) })
+        }
+        const done = res.stop_reason !== 'tool_use' || !results.length
+        const text = said || (acts.length ? 'Taslağı hazırladım; onayınızı bekliyor.' : '')
+        if (res.stop_reason === 'refusal') push({ from: 'agent', body: <p className="m-0">Bu isteği yanıtlayamıyorum.</p> })
+        else if (acts.length) acts.forEach((act, i) => push({ from: 'agent', body: <div className="whitespace-pre-wrap">{i === 0 ? text : 'Bir taslak daha:'}</div>, act, sources: done && i === acts.length - 1 && sources.size ? [...sources.values()] : undefined }))
+        else if (done && text) push({ from: 'agent', body: <div className="whitespace-pre-wrap">{text}</div>, sources: sources.size ? [...sources.values()].slice(0, 4) : undefined })
+        if (done) return
+        api.current.push({ role: 'user', content: results })
+      }
+      push({ from: 'agent', body: <p className="m-0">Bu iş beklediğimden uzun sürdü; isteği daha küçük parçalara bölebilir misiniz?</p> })
+    } catch (e) {
+      api.current.length = mark // yarım kalan turu geri al ki sonraki istek geçerli kalsın
+      push({ from: 'agent', body: <p className="m-0 text-bad">{e instanceof Error ? e.message : 'Asistana ulaşılamadı.'}</p> })
+    } finally { setBusy(false) }
+  }
 
   // ---- yanıt üretimi: yalnız o anki kapsamdaki (şirket, depo, rol) veriyi okur ----
   function answer(qRaw: string): Omit<Msg, 'id' | 'from'> {
@@ -158,6 +315,7 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
     if (!t || busy) return
     push({ from: 'user', body: t })
     setText(''); setBusy(true)
+    if (live === 'canli') { void runLive(t); return }
     window.setTimeout(() => { push({ from: 'agent', ...answer(t) }); setBusy(false) }, 450)
   }
 
@@ -174,6 +332,7 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
       else if (a.kind === 'reply') st.replyTicket(a.ids[0], a.payload!)
       else st.notify('Kural yalnız öneri modunda başlatıldı (mock)')
     }
+    notes.current.push(`“${a.title}” taslağı ${ok ? 'kullanıcı tarafından onaylandı ve uygulandı.' : 'kullanıcı tarafından reddedildi; uygulanmadı.'}`)
     setMsgs(ms => ms.map(x => (x.id === id ? { ...x, act: { ...a, state: ok ? 'uygulandi' : 'vazgecildi' } } : x)))
   }
 
@@ -184,7 +343,7 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
       <header className="h-14 shrink-0 px-4 flex items-center gap-2 border-b border-line">
         <span className="size-7 grid place-items-center rounded-lg bg-brand-soft text-brand"><Sparkles size={16} /></span>
         <div className="min-w-0 flex-1"><div className="text-sm font-semibold leading-tight">Asistan</div><div className="text-[11px] text-mute truncate">{R.label} yetkisiyle · {scope}</div></div>
-        <Badge tone="warn" title="Gerçek yapay zekâ bağlı değil; hazır senaryolar mock veriden hesaplanır">MOCK</Badge>
+        {live === 'canli' ? <Badge tone="ok" title="Yanıtlar yapay zekâdan gelir; rakamlar panel verisinden hesaplanır">Yapay zekâ bağlı</Badge> : <Badge tone="warn" title="Sunucuda API anahtarı yok; hazır senaryolar mock veriden hesaplanır">Hazır senaryolar</Badge>}
         <button onClick={onClose} aria-label="Asistanı kapat" className="border-0 bg-transparent p-1.5 text-ink2 rounded-md hover:bg-bg"><X size={18} /></button>
       </header>
 
@@ -222,7 +381,7 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
             )}
           </div>
         ))}
-        {busy && <div className="text-sm text-mute" role="status">Veriye bakıyorum…</div>}
+        {busy && <div className="text-sm text-mute" role="status">{live === 'canli' ? 'Düşünüyorum ve veriye bakıyorum…' : 'Veriye bakıyorum…'}</div>}
         <div ref={end} />
       </div>
 

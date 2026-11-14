@@ -22,17 +22,47 @@ Servis GitHub deposuna bağlı (`wpu-research/wawierp`, dal `main`, kök `yeni/p
 `/` herkese açık tanıtım sayfası; `/panel` şifreli panel (içinde `#/overview` ve diğer ekranlar). İki sayfa ayrı derlenir ki ana sayfa paketi panel verisini içermesin.
 Geliştirme sunucusunda (`npm run dev`) panel `/panel.html` adresindedir.
 
-## Asistan paneli (mock)
+## Asistan
 
-Üst çubuktaki **Asistan** düğmesi sağda bir sohbet paneli açar (`src/Agent.tsx`). Gerçek bir yapay zekâ bağlı **değildir**:
-yazılanı anahtar kelimelerle eşleştirir ve yanıtı mock veriden hesaplar. Amaç hedef davranışı göstermektir:
+Sağ alt köşedeki **W** düğmesi asistan panelini açar (`src/Agent.tsx`). İki çalışma biçimi var:
 
-- her rakam o anki kapsamdaki (şirket, depo, rol) veriden hesaplanır ve dayandığı ekranın bağlantısıyla gelir
+- **Yapay zekâ bağlı:** sunucuda `ANTHROPIC_API_KEY` tanımlıysa panel `/api/assistant` ucuna bağlanır (`server.mjs` + `assistant.mjs`).
+  Model araç çağırır; araçlar tarayıcıda mock verinin üzerinde çalışır ve sonuç modele geri gider. Anahtar yalnız sunucuda durur.
+- **Hazır senaryolar:** anahtar yoksa, `npm run dev` ile çalışırken ya da dosya çift tıklamayla açıldığında yazılanı anahtar kelimelerle eşleştirir.
+
+İki biçimde de kurallar aynı:
+
+- her rakam o anki kapsamdaki (şirket, depo, rol) veriden hesaplanır; yanıtın altında dayandığı ekranların düğmeleri görünür
 - veri değiştiren işler (etiket, sevk, eşitlemeyi yeniden deneme, destek yanıtı, kural) önce taslak olarak gösterilir; kullanıcı onaylar
 - tek seferde en fazla 25 kayda işlem önerilir
 - asistan, kendisine yazan rolün yetkisinden fazlasını yapamaz; yetki onay anında yeniden denetlenir
-- para iadesi, fiyat değişikliği, iptal ve toplu silme asistana kapalıdır
-- müşteri adı ve iletişim bilgisi asistana gösterilmez
+- para iadesi, fiyat değişikliği, iptal ve toplu silme için araç yoktur
+- müşteri adı ve iletişim bilgisi asistana verilmez; müşteri mesajları veri olarak okunur, talimat olarak değil
 - "Kendiliğinden" düzeyi kilitlidir (pilottan sonra)
 
-Denenebilecek örnekler panelin içinde listelidir. Henüz karar değil; öneri (`kararlar/` altında kaydı yok).
+Sunucu ayarları (Railway değişkenleri):
+
+| Değişken | Anlamı | Varsayılan |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Yapay zekâ anahtarı; yoksa hazır senaryolar çalışır | yok |
+| `ASSISTANT_MODEL` | Kullanılacak model | `claude-opus-5-5` |
+| `ASSISTANT_PER_MINUTE` | Adres başına dakikalık istek sınırı | 20 |
+| `ASSISTANT_PER_DAY` | Günlük toplam istek sınırı | 400 |
+| `ASSISTANT_FALLBACKS` | `off` yapılırsa yedek modele geçiş kapanır | açık |
+
+Asistan ucu panelle aynı şifrenin arkasındadır. Mock'ta rol bilgisi tarayıcıdan gelir; gerçek sistemde oturumdan okunacak ve araçlar sunucuda çalışacak.
+
+## Yeni ekranlar
+
+Menüde "yeni" etiketiyle görünür; hepsi mock veri üzerinde çalışır, örnek değerler "örnek" rozetiyle işaretlidir.
+
+| Grup | Ekranlar | Dosya |
+|---|---|---|
+| Operasyon | Toplama listesi (mobil depo önizlemesiyle) | `src/pages/Warehouse.tsx` |
+| Ürün ve stok | Veri kalitesi, Ürün metni ve çeviri, Sayım planı, Tedarik önerileri | `Quality.tsx`, `Warehouse.tsx`, `Selling.tsx` |
+| Satış kanalları | Toplu listeleme, Fiyat ve kârlılık | `Selling.tsx` |
+| Otomasyon | Kurallar, Uyarılar ve özet, Vardiya önerisi | `Automation.tsx`, `Warehouse.tsx` |
+| Finans | Banka mutabakatı, Muhasebe aktarımı, Kârlılık | `Money.tsx` |
+| Platform | Kurulum sihirbazı, API ve bildirim uçları, Kullanım ve abonelik, Durum sayfası | `Platform.tsx` |
+
+Her yerden arama: `Ctrl K` (ekran, hazır görünüm, sipariş numarası, ürün).

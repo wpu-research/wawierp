@@ -6,8 +6,8 @@ export type Role = 'admin' | 'depo' | 'muhasebe'
 // Öneri niteliğinde rol tanımları; gerçek rol × modül matrisi sahibinin onayını bekliyor (docs/11 §3, soru 1).
 export const ROLES: Record<Role, { label: string; user: string; nav: string[] | 'all'; pii: 'tam' | 'adres'; ops: boolean; finance: boolean }> = {
   admin: { label: 'Sistem yöneticisi', user: 'Sistem Yöneticisi', nav: 'all', pii: 'tam', ops: true, finance: true },
-  depo: { label: 'Depo çalışanı', user: 'Depo Çalışanı 1', nav: ['overview', 'orders', 'labels', 'returns', 'catalog', 'stock', 'transfers'], pii: 'adres', ops: true, finance: false },
-  muhasebe: { label: 'Muhasebe', user: 'Muhasebe', nav: ['overview', 'orders', 'returns', 'support', 'finance', 'b2b', 'audit'], pii: 'tam', ops: false, finance: true },
+  depo: { label: 'Depo çalışanı', user: 'Depo Çalışanı 1', nav: ['overview', 'orders', 'labels', 'picking', 'returns', 'catalog', 'stock', 'transfers', 'counting', 'quality', 'alerts', 'shifts', 'status'], pii: 'adres', ops: true, finance: false },
+  muhasebe: { label: 'Muhasebe', user: 'Muhasebe', nav: ['overview', 'orders', 'returns', 'support', 'finance', 'b2b', 'bank', 'accounting', 'profit', 'prices', 'alerts', 'billing', 'audit'], pii: 'tam', ops: false, finance: true },
 }
 
 interface Ctx {
