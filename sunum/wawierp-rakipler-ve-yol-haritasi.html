@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WawiERP Rakipler ve Yol Haritası</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#141413;--ink2:#52514e;--mute:#898781;--line:#e1e0d9;--blue:#2a78d6;--blue-soft:#dbe9fa;--orange:#eb6834;--orange-soft:#fbe5db;--aqua:#1baf7a;--aqua-soft:#daf3ea;--violet:#6250d6;--violet-soft:#e6e2fa;--red:#d03b3b;--red-soft:#fbe6e6;--amber:#b97a00;--amber-soft:#fbefd2;--green:#0c8a0c;--green-soft:#e2f3e2;--gold:#c98a00}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1e1e1c;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--line:#33332f;--blue:#3987e5;--blue-soft:#1d3350;--orange:#e07a4d;--orange-soft:#40251a;--aqua:#35b88a;--aqua-soft:#143326;--violet:#9085e9;--violet-soft:#2a2550;--red:#e66767;--red-soft:#3d1e1e;--amber:#e0a43a;--amber-soft:#3a2f14;--green:#3fb23f;--green-soft:#1a3320;--gold:#e0a43a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
+header{padding:24px 0 8px}
+h1{font-size:34px;line-height:1.15;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:0 0 4px}
+h3{font-size:16px;margin:0 0 6px}
+p{margin:8px 0}
+a{color:var(--blue)}
+.lead{font-size:18px;color:var(--ink2);max-width:72ch}
+.meta{color:var(--mute);font-size:14px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:20px 0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:600;font-size:14px;margin-right:8px}
+.sub{color:var(--ink2);margin:0 0 16px}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.callout{border-left:4px solid var(--blue);background:var(--blue-soft);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.tag.g{background:var(--green-soft);color:var(--green)}.tag.a{background:var(--amber-soft);color:var(--amber)}.tag.r{background:var(--red-soft);color:var(--red)}.tag.b{background:var(--blue-soft);color:var(--blue)}.tag.n{background:var(--bg);color:var(--ink2)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:14px}
+.cmp{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.cmp .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cmp .who{font-size:13px;color:var(--mute)}
+.cmp ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink2)}
+.cmp li{margin:2px 0}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--red);font-weight:700}
+.price{font-size:13px;background:var(--bg);border-radius:8px;padding:8px 10px;margin-top:auto}
+.map svg text{font:12px system-ui,sans-serif;fill:var(--mute)}
+.mx{width:100%;border-collapse:separate;border-spacing:3px;font-size:13px}
+.mx th{font-weight:600;color:var(--ink2);padding:6px 4px;text-align:center;vertical-align:bottom}
+.mx th.r{text-align:left;font-weight:500;color:var(--ink);white-space:normal;min-width:150px}
+.mx td{text-align:center;border-radius:6px;padding:7px 2px;font-weight:700}
+.y{background:var(--green-soft);color:var(--green)}.p{background:var(--amber-soft);color:var(--amber)}.x{background:var(--red-soft);color:var(--red)}.q{background:var(--bg);color:var(--mute);font-weight:400}
+.mx .us{outline:2px solid var(--blue);outline-offset:-1px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--ink2);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:22px;height:18px;border-radius:5px;font-style:normal;text-align:center;font-weight:700;font-size:12px;line-height:18px}
+.pat{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.pt{background:var(--bg);border-radius:10px;padding:14px}
+.pt b{display:block}.pt span{font-size:14px;color:var(--ink2)}.pt em{display:block;font-style:normal;font-size:12px;color:var(--mute);margin-top:6px}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th,table.t td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{color:var(--ink2);font-weight:600}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:12px 0}
+.fn{flex:1 1 130px;border-radius:10px;padding:12px;border:1px solid var(--line);background:var(--bg);font-size:14px}
+.fn b{display:block}.fn span{font-size:12px;color:var(--ink2)}
+.fn.e{background:var(--violet-soft);border-color:var(--violet)}.fn.k{background:var(--blue-soft);border-color:var(--blue)}.fn.o{background:var(--aqua-soft);border-color:var(--aqua)}
+.ar{display:flex;align-items:center;color:var(--mute);font-size:20px}
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.ps{border-radius:10px;padding:12px;background:var(--bg);border-top:4px solid var(--blue)}
+.ps b{display:block;font-size:14px}.ps span{font-size:13px;color:var(--ink2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.box{border:1px solid var(--line);border-radius:12px;padding:16px}
+.box ul{margin:8px 0 0;padding-left:18px;font-size:14px;color:var(--ink2)}.box li{margin:3px 0}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.lv div{border-radius:10px;padding:12px;font-size:14px}
+.lv .a1{background:var(--green-soft)}.lv .a2{background:var(--amber-soft)}.lv .a3{background:var(--bg)}
+.lv b{display:block}
+.wave{display:grid;gap:10px}
+.wv{display:grid;grid-template-columns:120px 1fr;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px}
+.wv .k{border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;text-align:center;padding:6px}
+.w1{background:var(--blue)}.w2{background:var(--violet)}.w3{background:var(--aqua)}
+.wv ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--ink2);columns:2;column-gap:28px}
+.src{font-size:13px;color:var(--ink2);columns:2;column-gap:28px;padding-left:18px}
+footer{color:var(--mute);font-size:13px;margin-top:24px}
+@media (max-width:640px){.wv{grid-template-columns:1fr}.wv ul,.src{columns:1}.ar{display:none}.mx{font-size:11px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <p class="meta">14 Kasım 2026 · Rakip analizi ve geliştirme önerileri</p>
+  <h1>WawiERP: Rakipler ne yapıyor, biz ne eklemeliyiz?</h1>
+  <p class="lead">Pazardaki güçlü ürünleri inceledik, en iyilerin ortak özelliklerini çıkardık ve bunları kendi sistemimizde gördüğümüz eksiklerle birleştirdik. Sonuç: bir geliştirme listesi, bir otomasyon planı ve üç dalgalık bir yol haritası.</p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Pazar haritası</h2>
+  <p class="sub">Rakipler iki eksende ayrışıyor: hangi pazara baktıkları ve ne kadar derin oldukları. Yerleşim bizim değerlendirmemizdir, ölçüm değildir.</p>
+  <div class="map">
+  <svg viewBox="0 0 900 430" width="100%" role="img" aria-label="Rakiplerin pazar odağı ve ürün derinliğine göre konumu">
+    <rect x="70" y="20" width="800" height="350" rx="10" fill="var(--bg)"/>
+    <line x1="470" y1="20" x2="470" y2="370" stroke="var(--line)" stroke-dasharray="5 5"/>
+    <line x1="70" y1="195" x2="870" y2="195" stroke="var(--line)" stroke-dasharray="5 5"/>
+    <text x="270" y="392" text-anchor="middle">Almanya ve Avrupa odaklı</text>
+    <text x="670" y="392" text-anchor="middle">Türkiye odaklı</text>
+    <text x="470" y="414" text-anchor="middle" style="fill:var(--ink2);font-weight:600">Pazar odağı</text>
+    <text x="58" y="110" text-anchor="end">Tam ERP</text>
+    <text x="58" y="290" text-anchor="end">Hafif</text>
+    <text x="58" y="304" text-anchor="end">bağlayıcı</text>
+    <g font-size="13">
+      <circle cx="170" cy="80" r="26" fill="var(--violet-soft)" stroke="var(--violet)"/><text x="170" y="84" text-anchor="middle" style="fill:var(--ink)">JTL</text>
+      <circle cx="270" cy="62" r="30" fill="var(--violet-soft)" stroke="var(--violet)"/><text x="270" y="66" text-anchor="middle" style="fill:var(--ink)">plenty</text>
+      <circle cx="360" cy="98" r="28" fill="var(--violet-soft)" stroke="var(--violet)"/><text x="360" y="102" text-anchor="middle" style="fill:var(--ink)">Xentral</text>
+      <circle cx="130" cy="150" r="26" fill="var(--violet-soft)" stroke="var(--violet)"/><text x="130" y="154" text-anchor="middle" style="fill:var(--ink)">weclapp</text>
+      <circle cx="230" cy="170" r="27" fill="var(--violet-soft)" stroke="var(--violet)"/><text x="230" y="174" text-anchor="middle" style="fill:var(--ink)">Pickware</text>
+      <circle cx="180" cy="290" r="26" fill="var(--orange-soft)" stroke="var(--orange)"/><text x="180" y="294" text-anchor="middle" style="fill:var(--ink)">Billbee</text>
+      <circle cx="400" cy="250" r="30" fill="var(--orange-soft)" stroke="var(--orange)"/><text x="400" y="254" text-anchor="middle" style="fill:var(--ink)">Base</text>
+      <circle cx="640" cy="300" r="26" fill="var(--orange-soft)" stroke="var(--orange)"/><text x="640" y="304" text-anchor="middle" style="fill:var(--ink)">Sentos</text>
+      <circle cx="720" cy="270" r="26" fill="var(--orange-soft)" stroke="var(--orange)"/><text x="720" y="274" text-anchor="middle" style="fill:var(--ink)">Entegra</text>
+      <circle cx="790" cy="320" r="26" fill="var(--orange-soft)" stroke="var(--orange)"/><text x="790" y="324" text-anchor="middle" style="fill:var(--ink)">Dopigo</text>
+      <circle cx="700" cy="335" r="22" fill="var(--orange-soft)" stroke="var(--orange)"/><text x="700" y="339" text-anchor="middle" style="fill:var(--ink);font-size:11px">StockM.</text>
+      <rect x="436" y="118" width="168" height="54" rx="27" fill="var(--blue)"/><text x="520" y="142" text-anchor="middle" style="fill:#fff;font-weight:700;font-size:14px">WawiERP</text><text x="520" y="160" text-anchor="middle" style="fill:#fff;font-size:11px">iki pazar, tek panel</text>
+    </g>
+  </svg>
+  </div>
+  <div class="callout"><b>Boşluk ortada.</b> Almanya'daki güçlü ürünler Türkiye pazaryerlerini, Türkiye'deki entegratörler Avrupa pazaryerlerini kapsamıyor. Almanya, Hollanda ve Türkiye'de birden çok şirketle satan işletmeler için tek panel sunan bir ürün bu araştırmada bulunmadı.</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Güçlü rakipler</h2>
+  <p class="sub">Fiyatlar 14 Kasım 2026'da bulunan değerlerdir; "üçüncü taraf" yazanlar satıcının kendi sayfasından doğrulanamadı.</p>
+  <div class="cards">
+    <div class="cmp"><div class="top"><h3>JTL-Wawi</h3><span class="tag n">Almanya</span></div><span class="who">Almanya'da en yaygın ürün; masaüstü program</span>
+      <ul><li><span class="plus">+</span> Geniş iş ortağı ağı, ücretsiz giriş sürümü</li><li><span class="plus">+</span> Kural tabanlı iş akışları; mobil depo uygulamasında rota sıralı toplama</li><li><span class="minus">−</span> Masaüstü mimari; gelişmiş depo ayrı ürün</li><li><span class="minus">−</span> Türkiye pazaryerleri doğrulanamadı</li></ul>
+      <div class="price">Giriş ücretsiz (ayda 500 sipariş), üstü yaklaşık 99–369 €/ay · <i>üçüncü taraf</i></div></div>
+    <div class="cmp"><div class="top"><h3>plentyONE</h3><span class="tag n">Almanya</span></div><span class="who">Eski adıyla plentymarkets; büyük çok kanallı satıcılar</span>
+      <ul><li><span class="plus">+</span> Tam bulut, çok depo ve çok kanal için tasarlanmış</li><li><span class="plus">+</span> Olay ve eylem tabanlı otomasyon; yeni "Flow" aracına geçiyor</li><li><span class="minus">−</span> Fiyatı açık değil</li><li><span class="minus">−</span> Platforma bağımlılık</li></ul>
+      <div class="price">Güncel fiyat doğrulanamadı</div></div>
+    <div class="cmp"><div class="top"><h3>Xentral</h3><span class="tag n">Almanya</span></div><span class="who">Bulut ERP; yapay zekâda en iddialı</span>
+      <ul><li><span class="plus">+</span> Açık API, kodsuz akış düzenleyici</li><li><span class="plus">+</span> Yapay zekâ ajanları: e-postadan tedarikçi faturası işleme, yardımcı asistan</li><li><span class="minus">−</span> Giriş paketi tek mağaza ve tek pazaryeri ile sınırlı</li><li><span class="minus">−</span> Türkiye ve Hollanda pazaryerleri doğrulanamadı</li></ul>
+      <div class="price">99 €/ay + sipariş başı 0,30 €; üst paketler 349–849 €/ay · <i>resmi</i></div></div>
+    <div class="cmp"><div class="top"><h3>Base</h3><span class="tag n">Polonya, Avrupa</span></div><span class="who">Eski adıyla BaseLinker; kanal merkezi</span>
+      <ul><li><span class="plus">+</span> Çok geniş kanal kapsamı, hesap sayısı sınırsız</li><li><span class="plus">+</span> "Olay, koşul, eylem" kuralları; barkod okutunca tetiklenen işlemler</li><li><span class="minus">−</span> Muhasebe ve ERP derinliği sınırlı</li><li><span class="minus">−</span> N11, Ozon ve METRO listesinde yok</li></ul>
+      <div class="price">Ücretsiz (100 sipariş); 99 $/ay (1.000 sipariş, sonrası 0,49 $) · <i>resmi</i></div></div>
+    <div class="cmp"><div class="top"><h3>Billbee</h3><span class="tag n">Almanya</span></div><span class="who">Küçük ve orta satıcı için sade araç</span>
+      <ul><li><span class="plus">+</span> Düşük giriş ücreti, kolay kurulum</li><li><span class="plus">+</span> Kurallarla otomatik fatura, etiket, müşteri e-postası, ödeme hatırlatma</li><li><span class="minus">−</span> Depo derinliği sınırlı görünüyor</li><li><span class="minus">−</span> Kaufland, METRO ve Türkiye sayfasında görülmedi</li></ul>
+      <div class="price">En az 9 €/ay; sipariş sayısına göre artar · <i>resmi</i></div></div>
+    <div class="cmp"><div class="top"><h3>Türkiye entegratörleri</h3><span class="tag n">Türkiye</span></div><span class="who">Entegra, Sentos, StockMount, Dopigo</span>
+      <ul><li><span class="plus">+</span> Trendyol, Hepsiburada, N11 kapsamı</li><li><span class="plus">+</span> Türkiye e-fatura ve kargo bağlantıları, TL fiyat</li><li><span class="minus">−</span> Kaufland, OTTO, METRO hiçbirinde doğrulanamadı</li><li><span class="minus">−</span> Çok depo ve çok şirket derinliği belgelenmemiş</li></ul>
+      <div class="price">Yıllık lisans; resmi fiyatların çoğu yayınlanmıyor</div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>En iyilerin ortak yaptıkları</h2>
+  <p class="sub">Farklı ürünler, aynı beş fikir. Bunlar artık ayrıcalık değil, beklenti.</p>
+  <div class="pat">
+    <div class="pt"><b>1 · Kural motoru</b><span>"Şu olursa, şu koşulda, şunu yap." Kullanıcı kendi otomasyonunu kod yazmadan kurar.</span><em>Base, Billbee, JTL, plentyONE ve Xentral'in hepsinde var.</em></div>
+    <div class="pt"><b>2 · Mobil depo</b><span>Telefon ya da el terminaliyle toplama; uygulama çalışanı raflar arasında en kısa sırayla yürütür.</span><em>JTL'nin mobil depo uygulaması; Base'in toplama ve paketleme yardımcısı.</em></div>
+    <div class="pt"><b>3 · Otomatik belge ve iletişim</b><span>Fatura, kargo etiketi, takip e-postası ve ödeme hatırlatma kendiliğinden; çok dilli ve çok vergili.</span><em>Billbee bunu ana özelliği olarak sunuyor.</em></div>
+    <div class="pt"><b>4 · Açık kapılar</b><span>Belgelenmiş API; yapay zekâ asistanlarının bağlanabildiği hazır bağlantı noktaları.</span><em>Xentral ve Base, yapay zekâ asistanları için bağlantı sunuyor.</em></div>
+    <div class="pt"><b>5 · Yapay zekâ yardımcıları</b><span>E-postadan gelen faturayı okuyup kaydeden, sistemdeki veriyi soruyla sorgulatan ajanlar. Karar ve onay insanda kalıyor.</span><em>En ileride Xentral; 360'tan fazla müşteriyle denediğini duyurdu.</em></div>
+    <div class="pt"><b>6 · Muhasebe bağlantısı</b><span>Mali müşavirin kullandığı sisteme doğrudan aktarım.</span><em>Billbee ve Xentral, Almanya'nın muhasebe pazaryerinde listeleniyor.</em></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Yetenek karşılaştırması</h2>
+  <p class="sub">Mavi çerçeveli iki sütun biziz: bugünkü sistem ve hedef.</p>
+  <div style="overflow-x:auto">
+  <table class="mx">
+    <tr><th class="r"></th><th>JTL</th><th>plenty</th><th>Xentral</th><th>Base</th><th>Billbee</th><th>TR<br>enteg.</th><th>Wawi<br>bugün</th><th>Wawi<br>hedef</th></tr>
+    <tr><th class="r">Kural tabanlı otomasyon</th><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="q">?</td><td class="p us">kısmi</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Mobil depo uygulaması</th><td class="y">✓</td><td class="q">?</td><td class="q">?</td><td class="p">kısmi</td><td class="q">?</td><td class="q">?</td><td class="p us">kısmi</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Almanya pazaryerleri (Kaufland, OTTO)</th><td class="y">✓</td><td class="q">?</td><td class="y">✓</td><td class="y">✓</td><td class="p">kısmi</td><td class="q">?</td><td class="y us">✓</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Türkiye pazaryerleri (Trendyol, N11)</th><td class="q">?</td><td class="q">?</td><td class="q">?</td><td class="p">kısmi</td><td class="q">?</td><td class="y">✓</td><td class="y us">✓</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Çok depo</th><td class="y">✓</td><td class="y">✓</td><td class="q">?</td><td class="y">✓</td><td class="q">?</td><td class="q">?</td><td class="y us">✓</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Çok şirket ve toptan müşteri portalı</th><td class="q">?</td><td class="q">?</td><td class="q">?</td><td class="q">?</td><td class="q">?</td><td class="q">?</td><td class="y us">✓</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Belgelenmiş açık API</th><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="q">?</td><td class="x us">✗</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Yapay zekâ yardımcıları</th><td class="q">?</td><td class="q">?</td><td class="y">✓</td><td class="p">kısmi</td><td class="q">?</td><td class="q">?</td><td class="x us">✗</td><td class="y us">✓</td></tr>
+    <tr><th class="r">Kendi kendine kayıt ve açık fiyat</th><td class="p">kısmi</td><td class="q">?</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="p">kısmi</td><td class="x us">✗</td><td class="y us">✓</td></tr>
+  </table>
+  </div>
+  <div class="legend"><span><i class="y">✓</i>var</span><span><i class="p">~</i>kısmi</span><span><i class="x">✗</i>yok</span><span><i class="q">?</i>bu araştırmada doğrulanamadı</span></div>
+  <p class="note">"?" o özelliğin olmadığı anlamına gelmez; yalnız bulduğumuz kaynaklarda görülmedi. Wawi bugün sütunu panel incelemesine dayanıyor: eBay için toner ve parfüm kategori kuralları ile mobil tarayıcıda barkodla sayım mevcut.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Biz nerede güçlüyüz, nerede eksik?</h2>
+  <div class="grid3">
+    <div class="box"><h3>Güçlü olduğumuz yer</h3><ul>
+      <li>Almanya ve Türkiye pazaryerleri aynı panelde</li>
+      <li>12 şirket, 5 depo: çok şirketli yapı gerçek kullanımda sınanmış</li>
+      <li>Fiziki, sanal ve tedarikçi stoğunun ayrı tutulması</li>
+      <li>Toptan müşteri portalı ve cari hesap</li></ul></div>
+    <div class="box"><h3>Rakiplerin gerisinde kaldığımız yer</h3><ul>
+      <li>Kullanıcının kendi kurabildiği kural motoru yok</li>
+      <li>Mağazada yayımlanmış mobil uygulama yok</li>
+      <li>Belgelenmiş açık API yok</li>
+      <li>Kendi kendine kayıt ve açık fiyat yok</li>
+      <li>Yapay zekâ özelliği yok</li></ul></div>
+    <div class="box"><h3>Önce düzeltilmesi gerekenler</h3><ul>
+      <li>Eksiye düşen stok</li>
+      <li>Birbirini tutmayan sayaçlar</li>
+      <li>Yavaş ve takılan listeler</li>
+      <li>Haftalardır yarım kalan kanal eşitlemeleri</li>
+      <li>İlerlemeyen 79 iade</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Eklenecek geliştirmeler</h2>
+  <p class="sub">İlk beşi bugün gördüğümüz sorunlara doğrudan yanıt veriyor. "Çaba" kaba bir yargıdır.</p>
+  <table class="t">
+    <tr><th>Geliştirme</th><th>Dayandığı bulgu</th><th>Çaba</th></tr>
+    <tr><td><b>Kanal sağlık ekranı</b><br>Her kanalın son eşitlemesi, bekleyen ve hatalı işleri; sorun olunca bildirim</td><td>Ozon 18 Ekim'den beri yarım; OTTO eşitlemesi başarısız</td><td><span class="tag g">Küçük</span></td></tr>
+    <tr><td><b>Fazla satış koruması</b><br>Sipariş gelince stok ayırma; eksiye düşmeyi engelleme</td><td>Kritik stok listesinin ilk 25 satırı eksi</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td><b>Veri kalitesi kuyruğu</b><br>Eksik barkod, görsel ve kategori için "sıradakini düzelt" akışı</td><td>43.921 resimsiz ürün</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td><b>Sipariş detay sayfası, tek sipariş listesi</b><br>Kayıtlı filtreler, toplu işlem, zaman çizelgesi</td><td>Detay sayfası yok; aynı liste beş ekranda</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td><b>İade akışı</b><br>Müşteri iade formu; geldi, kontrol edildi, ödendi adımları</td><td>79 iadenin hepsi ilk aşamada</td><td><span class="tag a">Orta</span></td></tr>
+  </table>
+  <h3 style="margin-top:20px">Sonraki adaylar</h3>
+  <div class="grid3">
+    <div class="box"><h3>Depo</h3><ul><li>Mobil depo uygulaması</li><li>Raf sırasına göre toplu toplama listesi</li><li>Yoğun saatlere göre vardiya önerisi</li></ul></div>
+    <div class="box"><h3>Satış ve fiyat</h3><ul><li>Bir ürünü tek adımda çok kanala gönderme</li><li>Komisyon ve kargo dahil net kâr</li><li>Yavaş satan stok raporu</li><li>Yeniden sipariş önerisi</li></ul></div>
+    <div class="box"><h3>Finans</h3><ul><li>Ülkeye göre KDV, yapılandırılmış e-fatura</li><li>Muhasebe sistemine aktarım</li><li>Banka mutabakatı ekranı</li><li>Kanal bazında kârlılık</li></ul></div>
+    <div class="box"><h3>Yapay zekâ</h3><ul><li>Ürün metni yazma ve çeviri</li><li>Destek yanıtı taslağı</li><li>Soru sorarak rapor alma</li><li>Anormallik uyarısı</li></ul></div>
+    <div class="box"><h3>Çok müşterili ürün</h3><ul><li>Kendi kendine kurulum</li><li>Açık API ve bildirim uçları</li><li>Kullanım ve abonelik ekranı</li></ul></div>
+    <div class="box"><h3>Kullanım kolaylığı</h3><ul><li>Her yerden arama</li><li>Klavye kısayolları, kayıtlı görünümler</li><li>Riskli işlemde "geri al"</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span>Otomasyon: üç katmanlı çekirdek</h2>
+  <p class="sub">Tek tek özellik yazmak yerine bir çekirdek kurulur. Sonrasında yeni otomasyon, yeni kod değil yeni kuraldır. En güçlü rakiplerin hepsi bu yapıyı kullanıyor.</p>
+  <div class="flow">
+    <div class="fn e"><b>Olay</b><span>Sipariş geldi · stok düştü · eşitleme başarısız · ödeme alındı</span></div><div class="ar">›</div>
+    <div class="fn k"><b>Kural</b><span>Koşul sağlanıyorsa şu işlemi yap</span></div><div class="ar">›</div>
+    <div class="fn o"><b>Onay düzeyi</b><span>Kendiliğinden yap · önce sor · yalnız haber ver</span></div>
+  </div>
+  <h3 style="margin-top:18px">Siparişten teslimata, elle dokunmadan</h3>
+  <div class="pipe">
+    <div class="ps"><b>1 · Sipariş gelir</b><span>Stok ayrılır, diğer kanallarda düşer</span></div>
+    <div class="ps"><b>2 · Kaynak seçilir</b><span>Uygun depo; yoksa tedarikçi</span></div>
+    <div class="ps"><b>3 · Etiket hazırlanır</b><span>Taşıyıcı ülke ve ağırlığa göre</span></div>
+    <div class="ps"><b>4 · Fatura kesilir</b><span>Pazaryerine ve müşteriye gider</span></div>
+    <div class="ps"><b>5 · Takip edilir</b><span>Gecikme olursa öne çıkar</span></div>
+  </div>
+  <div class="grid3">
+    <div class="box"><h3>Stok</h3><ul><li>Kanallar arası anlık stok eşitleme</li><li>Az kalan üründe güvenlik payı</li><li>Yeniden sipariş taslağı</li><li>Depolar arası aktarım önerisi</li><li>Şüpheli stok için sayım planı</li></ul></div>
+    <div class="box"><h3>İlan ve fiyat</h3><ul><li>Yeni ürüne otomatik ilan taslağı</li><li>Kategori ve özellik eşleme önerisi</li><li>Stok bitince durdur, gelince aç</li><li>Maliyet değişince fiyat güncelle</li><li>Reddedilen ilanı düzeltip yeniden dene</li></ul></div>
+    <div class="box"><h3>İade, destek, finans</h3><ul><li>Kurala uyan iadeyi kendiliğinden onayla</li><li>"Siparişim nerede" sorusuna otomatik yanıt</li><li>Havaleyi siparişle eşleştir</li><li>Vadesi geçen fatura için hatırlatma</li><li>Ay sonu muhasebe dosyası</li></ul></div>
+    <div class="box"><h3>Sistemin kendi sağlığı</h3><ul><li>Başarısız işi artan aralıkla yeniden dene</li><li>Üç denemeden sonra insana haber ver</li><li>Her sabah günlük özet</li><li>Sipariş aniden kesilirse uyarı</li></ul></div>
+  </div>
+  <h3 style="margin-top:18px">Güvenlik kemeri</h3>
+  <div class="lv">
+    <div class="a3"><b>Önce: yalnız öner</b>Her yeni kural önce yalnız ne yapacağını gösterir.</div>
+    <div class="a2"><b>Sonra: önce sor</b>Sonuçlar doğru çıkınca tek tıkla onay ister.</div>
+    <div class="a1"><b>En son: kendiliğinden</b>Güven oluşunca kendi çalışır; her işlem kayda geçer ve geri alınabilir.</div>
+  </div>
+  <div class="callout warn"><b>Otomasyon hatayı da hızlandırır.</b> Fiyat değiştirme, toplu ilan kaldırma ve ödeme iadesi gibi işlemlerde üst sınır olmalı.</div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>Önerilen sıra: üç dalga</h2>
+  <p class="sub">Önce sağlam temel, sonra otomasyon, en son rakiplerden ayrıştıran özellikler. Takvim değil, sıra.</p>
+  <div class="wave">
+    <div class="wv"><div class="k w1">1 · Sağlam temel</div><div><b>Bugünkü sorunları kapatan çekirdek</b><ul><li>Stok defteri ve fazla satış koruması</li><li>Kanallar arası stok eşitleme</li><li>Kanal sağlık ekranı</li><li>Tek sipariş listesi ve detay sayfası</li><li>Tutarlı sayaçlar</li><li>İade akışı</li></ul></div></div>
+    <div class="wv"><div class="k w2">2 · Otomasyon</div><div><b>Rakiplerle aynı düzeye gelmek</b><ul><li>Olay, kural, onay çekirdeği</li><li>Otomatik etiket ve fatura</li><li>Kendini onaran eşitleme</li><li>Veri kalitesi kuyruğu</li><li>Açık API</li><li>Muhasebe aktarımı ve ülkeye göre KDV</li></ul></div></div>
+    <div class="wv"><div class="k w3">3 · Fark yaratan</div><div><b>Rakiplerden ayrışmak</b><ul><li>Mobil depo uygulaması</li><li>Yapay zekâ: ürün metni, destek taslağı, soruyla rapor</li><li>Kendi kendine kurulum ve abonelik</li><li>Kullanıcının kendi kurduğu kurallar</li><li>Fiyat kuralları ve kârlılık</li></ul></div></div>
+  </div>
+  <div class="callout"><b>Konumlanma önerisi:</b> "Almanya ve Türkiye'de satan, birden çok şirketi olan işletmeler için tek panel." Bu, rakiplerin hiçbirinin açıkça sahiplenmediği bir alan.</div>
+</section>
+
+<section>
+  <h2><span class="num">9</span>Sınırlar ve kaynaklar</h2>
+  <p class="note" style="font-size:14px">Rakip bilgileri yalnız genel web araştırmasına dayanıyor; hiçbir ürün denenmedi. Kaynakların çoğu satıcıların kendi tanıtım ve yardım sayfaları. JTL ve plentyONE fiyatları resmi sayfadan doğrulanamadı. Türkiye entegratörlerinin kapsam ve fiyat bilgileri kısmen üçüncü taraf kaynaklardan. Pazar haritasındaki yerleşim ve "çaba" etiketleri bizim yargımızdır. Kendi sistemimize dair bulgular panelin yalnız okunarak incelenmesinden geliyor; sunucu kodu görülmedi.</p>
+  <ol class="src">
+    <li><a href="https://base.com/en-EN/help/kbc/automatic-actions">Base · otomatik eylemler</a></li>
+    <li><a href="https://base.com/en-US/pricing/">Base · fiyatlar</a></li>
+    <li><a href="https://base.com/en-EN/help/kb-tag/mcp/">Base · yapay zekâ asistanı bağlantısı</a></li>
+    <li><a href="https://www.billbee.io/en/features/automatic-invoicing">Billbee · otomatik fatura</a></li>
+    <li><a href="https://www.billbee.io/en/features/payment-reminder">Billbee · ödeme hatırlatma</a></li>
+    <li><a href="https://www.billbee.io/preise">Billbee · fiyatlar</a></li>
+    <li><a href="https://omr.com/de/reviews/product/billbee">OMR · Billbee incelemesi</a></li>
+    <li><a href="https://guide.jtl-software.com/en/jtl-wawi/jtl-workflows/">JTL · iş akışları</a></li>
+    <li><a href="https://guide.jtl-software.com/en/jtl-wms/">JTL · depo yönetimi</a></li>
+    <li><a href="https://guide.jtl-software.com/en/jtl-wms/goods-issue/goods-issue-via-pick-to-box/">JTL · mobil toplama</a></li>
+    <li><a href="https://erp-software.org/software/jtl/">erp-software.org · JTL</a></li>
+    <li><a href="https://www.plentyone.com/product/process-automation">plentyONE · süreç otomasyonu</a></li>
+    <li><a href="https://whatsnew.plentyone.com/en/product-updates/deprecation-of-procedure-manager-and-transition-to-modern-flow-automation">plentyONE · Flow'a geçiş</a></li>
+    <li><a href="https://xentral.com/de/preise">Xentral · fiyatlar</a></li>
+    <li><a href="https://xentral.com/en/blog/agentic-ai-in-ecommerce">Xentral · yapay zekâ ajanları</a></li>
+    <li><a href="https://xentral.com/en/blog/erp-workflow-automation-flow-editor">Xentral · akış düzenleyici</a></li>
+    <li><a href="https://www.eurotransport.de/logistik/spedition-und-logistik/ki-im-fulfillment-bei-mader-xentral-automatisiert-routinearbeit/">eurotransport · Xentral yapay zekâ haberi</a></li>
+    <li><a href="https://www.datev.de/web/de/marktplatz/billbee">DATEV pazaryeri · Billbee</a></li>
+    <li><a href="https://www.datev.de/web/de/marktplatz/xentral-erp">DATEV pazaryeri · Xentral</a></li>
+    <li><a href="https://www.pickware.com/en/pricing">Pickware · fiyatlar</a></li>
+    <li><a href="https://www.weclapp.com/de/preise/">weclapp · fiyatlar</a></li>
+    <li><a href="https://sentos.com.tr">Sentos</a> · <a href="https://stockmount.com">StockMount</a></li>
+  </ol>
+</section>
+
+<footer>Ayrıntılı rakip tablosu: <code>docs/10-rakip-ve-hedef-mimari.md</code> · Sorun listesi: <code>docs/11-yeniden-tasarim-girdileri.md</code> · Diğer sunumlar: <code>sunum/</code> klasörü</footer>
+</main>
+</body>
+</html>
