@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WawiERP Analiz Sunumu</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#141413;--ink2:#52514e;--mute:#898781;--line:#e1e0d9;--blue:#2a78d6;--blue-soft:#dbe9fa;--orange:#eb6834;--aqua:#1baf7a;--red:#d03b3b;--red-soft:#fbe6e6;--amber:#b97a00;--amber-soft:#fbefd2;--green:#0c8a0c;--green-soft:#e2f3e2}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1e1e1c;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--line:#33332f;--blue:#3987e5;--blue-soft:#1d3350;--orange:#d95926;--aqua:#199e70;--red:#e66767;--red-soft:#3d1e1e;--amber:#e0a43a;--amber-soft:#3a2f14;--green:#3fb23f;--green-soft:#1a3320}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:32px 16px 64px}
+header{padding:24px 0 8px}
+h1{font-size:34px;line-height:1.15;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:0 0 4px}
+h3{font-size:16px;margin:20px 0 8px}
+p{margin:8px 0}
+.lead{font-size:18px;color:var(--ink2);max-width:70ch}
+.meta{color:var(--mute);font-size:14px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:20px 0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:600;font-size:14px;margin-right:8px}
+.sub{color:var(--ink2);margin:0 0 16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--bg);border-radius:10px;padding:14px}
+.tile b{display:block;font-size:26px;line-height:1.2;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--ink2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.bars{display:grid;gap:8px;margin:8px 0}
+.bar{display:grid;grid-template-columns:minmax(110px,34%) 1fr auto;gap:10px;align-items:center;font-size:14px}
+.bar .l{color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .t{height:14px;background:var(--bg);border-radius:4px;overflow:hidden}
+.bar .f{height:100%;background:var(--blue);border-radius:0 4px 4px 0}
+.bar .v{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.bar.red .f{background:var(--red)} .bar.gray .f{background:var(--mute)} .bar.orange .f{background:var(--orange)} .bar.aqua .f{background:var(--aqua)}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.callout{border-left:4px solid var(--blue);background:var(--blue-soft);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+.callout.bad{border-color:var(--red);background:var(--red-soft)}
+.pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;background:var(--bg);border-radius:10px;padding:12px 14px;margin:8px 0}
+.pair div{text-align:center}.pair b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.pair span{font-size:13px;color:var(--ink2)}.pair i{font-style:normal;color:var(--red);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.tag.r{background:var(--red-soft);color:var(--red)} .tag.a{background:var(--amber-soft);color:var(--amber)} .tag.g{background:var(--green-soft);color:var(--green)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.opt{border:1px solid var(--line);border-radius:12px;padding:16px}
+.opt.pick{border:2px solid var(--blue)}
+.opt h3{margin:0 0 4px}.opt ul{margin:8px 0 0;padding-left:18px;font-size:14px;color:var(--ink2)}
+.chart{width:100%;overflow-x:auto}
+svg text{font:12px system-ui,sans-serif;fill:var(--mute)}
+.heat{display:grid;grid-template-columns:44px repeat(24,1fr);gap:2px;font-size:11px;color:var(--mute)}
+.heat div{height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center}
+.heat .h{background:none}
+ol.steps{padding-left:20px}ol.steps li{margin:6px 0}
+footer{color:var(--mute);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <p class="meta">14 Kasım 2026 · Analiz özeti</p>
+  <h1>WawiERP: Sistem ne durumda, nereye gitmeli?</h1>
+  <p class="lead">Paneli yalnız okuyarak inceledik: hiçbir veriye dokunmadan ekranları gezdik, sayıları topladık ve sorunları sıraladık. Bu sayfa bulguları sade bir dille özetliyor.</p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Sistem ne yapıyor?</h2>
+  <p class="sub">Depo, pazaryeri, sipariş ve ön muhasebeyi tek panelde toplayan bir ERP. Aynı ürünü birçok satış kanalında yönetiyor.</p>
+  <div class="tiles">
+    <div class="tile"><b>5</b><span>depo</span></div>
+    <div class="tile"><b>12</b><span>şirket</span></div>
+    <div class="tile"><b>41</b><span>satış kanalı</span></div>
+    <div class="tile"><b>232.500</b><span>katalog ürünü</span></div>
+    <div class="tile"><b>33.600</b><span>toplam sipariş</span></div>
+    <div class="tile"><b>54</b><span>farklı ekran</span></div>
+  </div>
+  <div class="cols">
+    <div><h3>Depolardaki ürün sayısı</h3><div class="bars" id="c-depo"></div></div>
+    <div><h3>Satış kanalları (hesap sayısı)</h3><div class="bars" id="c-kanal"></div></div>
+  </div>
+  <p class="note">Ürünlerin büyük kısmı ve 1,8 milyon adetlik tedarikçi (drop) stoğunun tamamı Almanya deposunda.</p>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Ne kadar sipariş geliyor?</h2>
+  <p class="sub">Son 24 saatte 155 sipariş geldi. Bu, son 30 günün ortalamasının neredeyse iki katı.</p>
+  <div class="cols">
+    <div><h3>Günlük sipariş (ortalama)</h3><div class="bars" id="c-gun"></div></div>
+    <div><h3>Son 30 günde siparişler hangi platformdan?</h3><div class="bars" id="c-plat"></div></div>
+  </div>
+  <div class="tiles">
+    <div class="tile"><b>2.555</b><span>sipariş, son 30 gün</span></div>
+    <div class="tile"><b>≈240 bin €</b><span>sipariş tutarı, son 30 gün</span></div>
+    <div class="tile"><b>≈94 €</b><span>ortalama sepet</span></div>
+    <div class="tile"><b>%38</b><span>Shopify mağazalarının payı</span></div>
+  </div>
+  <div id="ord-box">
+    <h3>Gün gün ve saat saat dağılım</h3>
+    <div class="callout"><b>Günde 150 sipariş normal değil, son haftanın zirvesi.</b> Sıradan bir gün yaklaşık 72 sipariş getiriyor. Son yedi günde ortalama 121'e çıktı; 13 Kasım 151 siparişle ayın en yoğun günü oldu.</div>
+    <div class="tiles">
+      <div class="tile"><b>72</b><span>sıradan bir gün (ortanca)</span></div>
+      <div class="tile"><b>30 – 151</b><span>en sakin ve en yoğun gün</span></div>
+      <div class="tile"><b>11:00 – 13:00</b><span>en yoğun saatler</span></div>
+      <div class="tile"><b>%5</b><span>gece 00–07 arası gelen sipariş</span></div>
+    </div>
+    <p class="note" id="ord-wait"></p>
+    <div id="ord-charts"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>En önemli sorunlar</h2>
+  <p class="sub">Sorunları "ne kadar zarar verir" ve "ne sıklıkta olur" diye puanladık (en yüksek 9).</p>
+  <div class="bars" id="c-sorun"></div>
+  <p class="note">Puanlar bizim değerlendirmemiz; sizin önceliklerinizle birlikte gözden geçirilmeli.</p>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Sistem neden yavaş?</h2>
+  <p class="sub">Listeler geç açılıyor, bazıları hiç açılmıyor. Yavaşlığın büyük kısmı birkaç ortak istekten geliyor.</p>
+  <div class="cols">
+    <div><h3>En yavaş istekler (saniye)</h3><div class="bars" id="c-yavas"></div></div>
+    <div>
+      <h3>Her sayfa açılışında</h3>
+      <div class="tiles">
+        <div class="tile"><b>91–98</b><span>arka plan isteği</span></div>
+        <div class="tile"><b>43</b><span>betik dosyası, hepsi her sayfada</span></div>
+      </div>
+      <div class="callout warn"><b>Menü sayaçları ortak yavaşlatıcı.</b> Sol menüdeki sayıları getiren istek hemen her sayfada 5–19 saniye sürüyor ve tüm ekranları bekletiyor.</div>
+    </div>
+  </div>
+  <p class="note">Stok işleyicisi de gecikmiş: 592 düzeltme satırı ve 106 açık sipariş-stok işlemi bekliyor.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Sayılar birbirini tutmuyor</h2>
+  <p class="sub">Aynı bilgi farklı ekranlarda farklı görünüyor. Bu, ekibin sisteme güvenini zedeler.</p>
+  <div class="cols">
+    <div>
+      <div class="pair"><div><b>208</b><span>menüde "fiziki sipariş"</span></div><i>≠</i><div><b>26</b><span>listede görünen</span></div></div>
+      <div class="pair"><div><b>450</b><span>genel bakışta açık ticket</span></div><i>≠</i><div><b>≈3.400</b><span>ticket ekranında</span></div></div>
+    </div>
+    <div>
+      <div class="pair"><div><b>0</b><span>ön muhasebede sipariş</span></div><i>≠</i><div><b>155</b><span>sipariş özetinde (24 saat)</span></div></div>
+      <div class="pair"><div><b>0</b><span>fatura (varsayılan depo)</span></div><i>≠</i><div><b>1.763</b><span>fatura (Almanya deposu)</span></div></div>
+    </div>
+  </div>
+  <div class="callout bad"><b>Negatif stok var.</b> Kritik stok listesinin ilk 25 satırının tamamı eksi değerde (−73 ile −7 arası). Olmayan ürün satılıyor olabilir.</div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Diğer dikkat çekenler</h2>
+  <table>
+    <tr><th>Konu</th><th>Ne gördük</th><th>Önem</th></tr>
+    <tr><td>Müşteri bilgisi</td><td>Ad, adres, e-posta ve telefon, ekranda kapalı görünse bile sayfanın içine geliyor.</td><td><span class="tag r">Yüksek</span></td></tr>
+    <tr><td>Vergi</td><td>KDV özeti %19'a sabit; oysa şirketler Almanya, Hollanda ve Türkiye'de.</td><td><span class="tag r">Yüksek</span></td></tr>
+    <tr><td>İadeler</td><td>79 iadenin tamamı ilk aşamada duruyor, hiçbiri ilerlememiş.</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Kanal eşitlemeleri</td><td>Ozon son tam aktarımı 18 Ekim'de ve yarım kalmış; OTTO'nun son sipariş eşitlemesi başarısız.</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Amazon</td><td>Bir hesaptaki 5.793 ürünün yalnız 1'inde teklif var.</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Kopya kod</td><td>Aynı sipariş listesi 5 ekranda, her satış kanalı için ayrı sayfa yazılmış.</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Altyapı</td><td>Sunucuda güvenlik desteği bitmiş bir PHP sürümü çalışıyor.</td><td><span class="tag r">Yüksek</span></td></tr>
+    <tr><td>Kim ne yaptı?</td><td>Kayıtlarda kullanıcı yalnız PIN'in son iki hanesiyle görünüyor.</td><td><span class="tag a">Orta</span></td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="num">7</span>Nereye gitmeli? Üç yol</h2>
+  <p class="sub">Süre ve ekip rakamları kaba tahmindir; kaynak kodu görmeden yapıldı.</p>
+  <div class="opts">
+    <div class="opt pick"><h3>A · Yerinde yenileme</h3><span class="tag g">Önerilen başlangıç</span>
+      <ul><li>Mevcut sistem çalışırken parça parça düzenlenir</li><li>Risk: düşük–orta</li><li>3–5 kişi, 9–18 ay</li><li>Veri ve iş kuralları korunur</li></ul></div>
+    <div class="opt"><h3>B · Hazır ERP çekirdeği</h3>
+      <ul><li>Stok ve muhasebe hazır alınır, kanallar ayrı yazılır</li><li>Risk: orta–yüksek</li><li>4–7 kişi, 12–24 ay</li><li>Veri taşıma ve uyum belirsiz</li></ul></div>
+    <div class="opt"><h3>C · Sıfırdan yeni sistem</h3>
+      <ul><li>En temiz yapı, en yüksek maliyet</li><li>Risk: yüksek</li><li>6–10 kişi, 18–36 ay</li><li>İki sistem uzun süre birlikte çalışır</li></ul></div>
+  </div>
+  <h3>Tahmini süre (ay)</h3>
+  <div class="chart" id="c-sure"></div>
+  <div class="callout"><b>Neden A?</b> Gördüğümüz sorunların çoğu (yavaş sorgular, tutmayan sayılar, kopya kod, açıkta kalan müşteri bilgisi) sistemi baştan yazmadan çözülebilir. Sistemi dışarıya hizmet olarak satmayı düşünüyorsanız bu değerlendirme değişebilir.</div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>Sıradaki adımlar</h2>
+  <div class="cols">
+    <div>
+      <h3>Hemen yapılabilecekler</h3>
+      <ol class="steps">
+        <li>Menü sayaçlarını hızlandırmak (tüm ekranlar rahatlar)</li>
+        <li>Müşteri bilgisini yalnız yetkili role göstermek</li>
+        <li>Negatif stokların nedenini bulmak</li>
+        <li>Sayaçları ve listeleri aynı kaynaktan beslemek</li>
+        <li>PHP sürümünü desteklenen sürüme yükseltmek</li>
+      </ol>
+    </div>
+    <div>
+      <h3>Sizden beklediğimiz yanıtlar</h3>
+      <ol class="steps">
+        <li>Öncelik hangisi: güvenlik, hız, yoksa yeni özellik?</li>
+        <li>Sistem yalnız kendi şirketleriniz için mi, dışarıya da satılacak mı?</li>
+        <li>Her şirket için hangi KDV kuralları geçerli?</li>
+        <li>Müşteri bilgisini kimler görmeli?</li>
+        <li>İadeler neden ilk aşamada duruyor?</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">9</span>Bu analiz nasıl yapıldı?</h2>
+  <p class="sub">Bulgular kaybolmasın diye iki kalıcı yapı kurduk: bir bilgi haritası ve bir hafıza.</p>
+  <div class="cols">
+    <div><h3>Bilgi haritasının büyümesi (kavram sayısı)</h3><div class="bars" id="c-graf"></div></div>
+    <div>
+      <div class="tiles">
+        <div class="tile"><b>18</b><span>analiz belgesi</span></div>
+        <div class="tile"><b>2.338</b><span>kavramlar arası bağlantı</span></div>
+      </div>
+      <p class="note">Sınırlar: Sunucu kodu ve veritabanı yapısı henüz elimizde değil; iç yapıya dair çıkarımlar ekranlardan yapıldı. Ürün kartlarına ve stok/fiyat verilerine hiçbir işlem yapılmadı. Bazı ekranlar (PIN yetkileri, METRO listeleri) görülemedi.</p>
+    </div>
+  </div>
+</section>
+
+<footer>Kaynak belgeler: <code>docs/</code> klasörü · Ayrıntılı sorun listesi: <code>docs/11-yeniden-tasarim-girdileri.md</code></footer>
+</main>
+
+<script>
+const ORD = {"byDay":{"2026-11-14":{"n":92},"2026-11-13":{"n":151},"2026-11-12":{"n":125},"2026-11-11":{"n":112},"2026-11-10":{"n":115},"2026-11-09":{"n":143},"2026-11-08":{"n":108},"2026-11-07":{"n":95},"2026-11-06":{"n":63},"2026-11-05":{"n":63},"2026-11-04":{"n":64},"2026-11-03":{"n":54},"2026-11-02":{"n":63},"2026-11-01":{"n":47},"2026-10-31":{"n":30},"2026-10-30":{"n":55},"2026-10-29":{"n":95},"2026-10-28":{"n":103},"2026-10-27":{"n":99},"2026-10-26":{"n":114},"2026-10-25":{"n":78},"2026-10-24":{"n":68},"2026-10-23":{"n":62},"2026-10-22":{"n":54},"2026-10-21":{"n":70},"2026-10-20":{"n":78},"2026-10-19":{"n":72},"2026-10-18":{"n":61},"2026-10-17":{"n":57},"2026-10-16":{"n":87},"2026-10-15":{"n":27}},"byHour":[36,22,7,10,9,15,27,76,88,141,159,180,186,154,165,178,153,130,168,151,155,109,111,75],"weekdayHour_MonFirst":[[2,3,1,1,1,2,4,14,14,28,30,34,22,31,17,25,26,25,29,22,23,13,15,10],[5,4,1,0,1,1,3,8,13,19,19,21,23,26,19,26,25,18,22,26,17,22,16,11],[6,3,0,1,0,0,8,11,14,24,24,26,28,16,24,19,19,12,26,20,27,10,19,12],[1,2,1,3,3,2,4,16,7,21,16,27,30,17,24,23,17,12,31,32,22,19,18,16],[9,5,1,3,1,2,3,13,19,19,20,36,38,27,29,33,20,30,26,18,27,19,13,7],[7,3,1,1,2,5,3,8,14,14,26,22,28,14,28,35,29,19,13,15,22,9,15,9],[6,2,2,1,1,3,2,6,7,16,24,14,17,23,24,17,17,14,21,18,17,17,15,10]]};
+const fmt = n => Number(n).toLocaleString('tr-TR');
+function bars(id, rows, opt){opt=opt||{};const el=document.getElementById(id);const max=opt.max||Math.max(...rows.map(r=>r[1]));
+  el.innerHTML=rows.map(r=>'<div class="bar '+(r[2]||opt.cls||'')+'"><span class="l" title="'+r[0]+'">'+r[0]+'</span><span class="t"><span class="f" style="display:block;width:'+Math.max(1,r[1]/max*100).toFixed(1)+'%"></span></span><span class="v">'+fmt(r[1])+(opt.unit||'')+'</span></div>').join('')}
+bars('c-depo',[['Almanya',122934],['Istanbul',8985],['Hollanda',7926],['Mega B',6651],['Technowelt',4579]]);
+bars('c-kanal',[['Shopify',9],['eBay',8],['Web mağazası',7],['Kaufland',6],['Amazon',3],['METRO',2],['Diğer (9 tür)',6,'gray']]);
+bars('c-gun',[['Son 24 saat',155,'orange'],['Önceki 24 saat',138],['Son 7 gün ort.',127],['Son 30 gün ort.',85,'gray']]);
+bars('c-plat',[['Shopify',977],['eBay',551],['Kaufland',433],['OTTO',358],['Web mağazası',112],['METRO',89],['Amazon',15],['N11 + Trendyol + Ozon',20,'gray']]);
+bars('c-sorun',[['Müşteri bilgisi açıkta',9,'red'],['Sayılar birbirini tutmuyor',9,'red'],['KDV %19\'a sabit',6],['Sayfalar çok ağır ve yavaş',6],['İki ayrı kayıt yolu',6],['Kim ne yaptı belli değil',6],['Eski PHP sürümü',6],['Stok defteri yok, stok gecikiyor',6],['Kanal başına kopya kod',6],['İadeler ilerlemiyor',4,'gray'],['Kanal sağlığı görünmüyor',4,'gray']],{max:9});
+bars('c-yavas',[['Tüm siparişler sayfası',30,'red'],['Menü sayaçları (en kötü)',19,'red'],['Kaufland ürün listesi',13],['Kanal iş listesi',12],['Ozon ürün listesi',11],['Shopify ürün listesi',9]],{unit:' sn'});
+bars('c-graf',[['İlk kurulum',116,'gray'],['Panel analizi',773],['Derin analiz',926,'aqua']]);
+(function(){const o=[['A · Yerinde yenileme',9,18],['B · Hazır ERP çekirdeği',12,24],['C · Sıfırdan yeni sistem',18,36]];const W=900,L=210,R=20,rh=34,sc=(W-L-R)/36;
+  let s='<svg viewBox="0 0 '+W+' '+(o.length*rh+34)+'" width="100%" role="img" aria-label="Üç seçeneğin tahmini süre aralıkları">';
+  for(let m=0;m<=36;m+=6){const x=L+m*sc;s+='<line x1="'+x+'" y1="4" x2="'+x+'" y2="'+(o.length*rh+6)+'" stroke="var(--line)"/><text x="'+x+'" y="'+(o.length*rh+24)+'" text-anchor="middle">'+m+'</text>'}
+  o.forEach((r,i)=>{const y=10+i*rh;s+='<text x="0" y="'+(y+15)+'" style="fill:var(--ink2);font-size:14px">'+r[0]+'</text><rect x="'+(L+r[1]*sc)+'" y="'+y+'" width="'+((r[2]-r[1])*sc)+'" height="20" rx="4" fill="'+(i===0?'var(--blue)':'var(--mute)')+'"/><text x="'+(L+r[2]*sc+6)+'" y="'+(y+15)+'" style="fill:var(--ink)">'+r[1]+'–'+r[2]+'</text>'});
+  document.getElementById('c-sure').innerHTML=s+'</svg>'})();
+function renderOrders(d){if(!d)return;document.getElementById('ord-wait').remove();const box=document.getElementById('ord-charts');
+  const days=Object.keys(d.byDay).sort();const dn=days.map(k=>d.byDay[k].n);const W=900,H=220,L=36,B=26,T=10,bw=(W-L)/days.length;const mx=Math.max(...dn);
+  const full=days.slice(1,-1).map(k=>d.byDay[k].n);const avg=full.reduce((a,b)=>a+b,0)/full.length;
+  let s='<h3>Gün gün sipariş sayısı</h3><div class="chart"><svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Son 30 günün günlük sipariş sayıları">';
+  for(let g=0;g<=mx;g+=Math.ceil(mx/4/10)*10){const y=H-B-(g/mx)*(H-B-T);s+='<line x1="'+L+'" y1="'+y+'" x2="'+W+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(L-6)+'" y="'+(y+4)+'" text-anchor="end">'+g+'</text>'}
+  days.forEach((k,i)=>{const h=(dn[i]/mx)*(H-B-T);const wd=(new Date(k+'T12:00:00Z').getUTCDay()+6)%7;const part=(i===0||i===days.length-1);
+    s+='<rect x="'+(L+i*bw+1)+'" y="'+(H-B-h)+'" width="'+(bw-2)+'" height="'+h+'" rx="2" fill="'+(part?'var(--line)':wd>=5?'var(--orange)':'var(--blue)')+'"><title>'+k+': '+dn[i]+' sipariş</title></rect>';
+    if(i%3===0)s+='<text x="'+(L+i*bw+bw/2)+'" y="'+(H-8)+'" text-anchor="middle">'+k.slice(8)+'.'+k.slice(5,7)+'</text>'});
+  const ay=H-B-(avg/mx)*(H-B-T);s+='<line x1="'+L+'" y1="'+ay+'" x2="'+W+'" y2="'+ay+'" stroke="var(--ink2)" stroke-dasharray="5 4"/><text x="'+(W-4)+'" y="'+(ay-5)+'" text-anchor="end" style="fill:var(--ink2)">ortalama '+Math.round(avg)+'</text></svg></div><p class="note">Mavi: hafta içi · Turuncu: hafta sonu · Gri: yarım gün (ilk ve son gün). Kesik çizgi tam günlerin ortalaması.</p>';
+  const hr=d.byHour,hm=Math.max(...hr);s+='<h3>Günün hangi saatinde sipariş geliyor? (30 gün toplamı, Almanya saati)</h3><div class="chart"><svg viewBox="0 0 '+W+' 200" width="100%" role="img" aria-label="Saatlere göre sipariş sayısı">';
+  const hb=(W-L)/24;const top=hr.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]).slice(0,3).map(x=>x[1]);
+  hr.forEach((v,i)=>{const h=(v/hm)*150;s+='<rect x="'+(L+i*hb+2)+'" y="'+(170-h)+'" width="'+(hb-4)+'" height="'+h+'" rx="3" fill="'+(top.includes(i)?'var(--orange)':'var(--blue)')+'"><title>'+i+':00 – '+v+' sipariş</title></rect><text x="'+(L+i*hb+hb/2)+'" y="188" text-anchor="middle">'+i+'</text>'+(top.includes(i)?'<text x="'+(L+i*hb+hb/2)+'" y="'+(165-h)+'" text-anchor="middle" style="fill:var(--ink)">'+v+'</text>':'')});
+  s+='</svg></div>';
+  const wh=d.weekdayHour_MonFirst,wm=Math.max(...wh.flat()),nm=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+  s+='<h3>Hafta günü ve saate göre yoğunluk</h3><div class="heat"><div class="h"></div>'+Array.from({length:24},(_,i)=>'<div class="h">'+i+'</div>').join('');
+  wh.forEach((row,i)=>{s+='<div class="h" style="justify-content:flex-start">'+nm[i]+'</div>'+row.map((v,h)=>'<div title="'+nm[i]+' '+h+':00 – '+v+' sipariş" style="background:color-mix(in srgb,var(--blue) '+Math.round(v/wm*100)+'%,var(--bg))"></div>').join('')});
+  s+='</div><p class="note">Koyu renk daha çok sipariş demek. Kutunun üzerine gelince sayıyı görürsünüz. Veri: 15 Ekim – 14 Kasım 2026 arası 2.555 siparişin 2.505\'i (iki sayfa okunamadı), Almanya saatiyle. Hafta günü ortalamaları yalnız 4–5 haftaya dayanıyor.</p>';
+  box.innerHTML=s}
+renderOrders(ORD);
+</script>
+</body>
+</html>

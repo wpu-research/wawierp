@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WawiERP Mimari ve Geçiş</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#141413;--ink2:#52514e;--mute:#898781;--line:#e1e0d9;--blue:#2a78d6;--blue-soft:#dbe9fa;--orange:#eb6834;--orange-soft:#fbe5db;--aqua:#1baf7a;--aqua-soft:#daf3ea;--violet:#6250d6;--violet-soft:#e6e2fa;--red:#d03b3b;--red-soft:#fbe6e6;--amber:#b97a00;--amber-soft:#fbefd2;--green:#0c8a0c;--green-soft:#e2f3e2}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1e1e1c;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--line:#33332f;--blue:#3987e5;--blue-soft:#1d3350;--orange:#e07a4d;--orange-soft:#40251a;--aqua:#35b88a;--aqua-soft:#143326;--violet:#9085e9;--violet-soft:#2a2550;--red:#e66767;--red-soft:#3d1e1e;--amber:#e0a43a;--amber-soft:#3a2f14;--green:#3fb23f;--green-soft:#1a3320}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:32px 16px 64px}
+header{padding:24px 0 8px}
+h1{font-size:34px;line-height:1.15;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:0 0 4px}
+h3{font-size:16px;margin:0 0 6px}
+p{margin:8px 0}
+.lead{font-size:18px;color:var(--ink2);max-width:70ch}
+.meta{color:var(--mute);font-size:14px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:20px 0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:600;font-size:14px;margin-right:8px}
+.sub{color:var(--ink2);margin:0 0 16px}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.callout{border-left:4px solid var(--blue);background:var(--blue-soft);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+.callout.bad{border-color:var(--red);background:var(--red-soft)}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.tag.g{background:var(--green-soft);color:var(--green)}.tag.a{background:var(--amber-soft);color:var(--amber)}.tag.r{background:var(--red-soft);color:var(--red)}.tag.b{background:var(--blue-soft);color:var(--blue)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--bg);border-radius:10px;padding:14px}
+.tile b{display:block;font-size:18px;line-height:1.3}
+.tile span{font-size:13px;color:var(--ink2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.arch{display:grid;gap:6px}
+.arch .row{display:grid;gap:6px;grid-auto-flow:column;grid-auto-columns:1fr}
+.nd{border-radius:10px;padding:10px 12px;text-align:center;border:1px solid var(--line);background:var(--bg);font-size:14px}
+.nd b{display:block}.nd span{font-size:12px;color:var(--ink2)}
+.nd.bad{background:var(--red-soft);border-color:var(--red)}
+.nd.v{background:var(--violet-soft);border-color:var(--violet)}.nd.b{background:var(--blue-soft);border-color:var(--blue)}.nd.a{background:var(--aqua-soft);border-color:var(--aqua)}.nd.o{background:var(--orange-soft);border-color:var(--orange)}
+.dn{text-align:center;color:var(--mute);line-height:1}
+.archt{font-size:13px;font-weight:600;color:var(--ink2);margin:0 0 8px;text-transform:none}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+td.old{color:var(--ink2)}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.rule{background:var(--bg);border-radius:10px;padding:14px}
+.rule b{display:block;margin-bottom:2px}.rule span{font-size:14px;color:var(--ink2)}
+.gantt{display:grid;gap:6px;margin:12px 0}
+.ph{display:grid;grid-template-columns:minmax(150px,26%) 1fr;gap:10px;align-items:center;font-size:14px}
+.ph .t{position:relative;height:26px;background:var(--bg);border-radius:6px}
+.ph .f{position:absolute;top:0;bottom:0;border-radius:6px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden}
+.c0{background:var(--mute)}.c1{background:var(--violet)}.c2{background:var(--blue)}.c3{background:var(--aqua)}.c4{background:var(--orange)}.c5{background:var(--green)}
+.steps{display:grid;gap:10px;margin-top:8px}
+.st{display:grid;grid-template-columns:76px 1fr;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px}
+.st .k{font-weight:700;font-size:14px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;min-height:44px}
+.st h3{margin:0}.st p{margin:4px 0 0;font-size:14px;color:var(--ink2)}
+.st .done{font-size:13px;color:var(--ink);margin-top:6px}
+.bars{display:grid;gap:8px;margin:8px 0}
+.bar{display:grid;grid-template-columns:minmax(190px,36%) 1fr auto;gap:10px;align-items:center;font-size:14px}
+.bar .l{color:var(--ink2)}.bar .t{height:14px;background:var(--bg);border-radius:4px;overflow:hidden}.bar .f{display:block;height:100%;background:var(--blue);border-radius:0 4px 4px 0}.bar.pilot .f{background:var(--green)}
+.bar .v{font-variant-numeric:tabular-nums;min-width:70px;text-align:right}
+ol.q{padding-left:20px}ol.q li{margin:8px 0}
+footer{color:var(--mute);font-size:13px;margin-top:24px}
+@media (max-width:560px){.arch .row{grid-auto-flow:row}.st{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <p class="meta">14 Kasım 2026 · Mimari ve geçiş planı (öneri)</p>
+  <h1>WawiERP: Eski sistemden yenisine nasıl geçeriz?</h1>
+  <p class="lead">Yeni sistem sıfırdan yazılacak ve çok müşteriye hizmet verecek. Eski sistem, yenisi hazır olana kadar çalışmaya devam edecek. Bu sayfa iki mimariyi yan yana gösteriyor ve geçişi adım adım anlatıyor.</p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Verilen kararlar</h2>
+  <div class="tiles">
+    <div class="tile"><b>Çok kiracılı</b><span>Birçok müşteri kuruluşu aynı platformda</span></div>
+    <div class="tile"><b>Sıfırdan yazılacak</b><span>Eski kod taşınmıyor; kurallar okunup yeniden yazılıyor</span></div>
+    <div class="tile"><b>Ekip: siz + Claude</b><span>Tek geliştirici, yapay zekâ destekli</span></div>
+  </div>
+  <div class="callout"><b>Yığın onaylandı: TypeScript, PostgreSQL, React.</b> Tek kişilik, yapay zekâ destekli bir ekipte ekranların ve sunucunun aynı dilde olması işi sadeleştirir. Sunucu NestJS, barındırma AWS Frankfurt.</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>İki mimari yan yana</h2>
+  <p class="sub">Solda bugünkü yapı, sağda önerilen yapı.</p>
+  <div class="cols">
+    <div>
+      <p class="archt">Bugün</p>
+      <div class="arch">
+        <div class="nd"><b>Tarayıcı</b><span>43 betik dosyası, her sayfada hepsi</span></div>
+        <div class="dn">↓</div>
+        <div class="nd"><b>Cloudflare</b></div>
+        <div class="dn">↓</div>
+        <div class="nd bad"><b>Tek PHP sunucusu</b><span>54 ekran tek giriş noktasından · iki ayrı kayıt yolu · her kanal için kopya kod · desteği bitmiş PHP sürümü</span></div>
+        <div class="dn">↓</div>
+        <div class="nd"><b>Veritabanı</b><span>türü ve yapısı henüz görülmedi</span></div>
+      </div>
+      <p class="note">Pazaryeri eşitlemeleri ve stok işleyicisi aynı sunucuda çalışıyor; takıldıklarında ekranlar da yavaşlıyor.</p>
+    </div>
+    <div>
+      <p class="archt">Yeni</p>
+      <div class="arch">
+        <div class="nd v"><b>Tarayıcı ve mobil</b><span>React · tek bileşen ve çeviri sistemi</span></div>
+        <div class="dn">↓</div>
+        <div class="nd"><b>Cloudflare</b></div>
+        <div class="dn">↓</div>
+        <div class="nd b"><b>API · tek kayıt yolu</b><span>kimlik, yetki ve kiracı kontrolü burada</span></div>
+        <div class="dn">↓</div>
+        <div class="nd a"><b>Modüler uygulama</b><span>katalog · stok defteri · sipariş · kargo · fatura · cari</span></div>
+        <div class="dn">↓</div>
+        <div class="row">
+          <div class="nd"><b>PostgreSQL</b><span>her satırda kiracı</span></div>
+          <div class="nd o"><b>Kuyruk + işçiler</b><span>kanal eklentileri</span></div>
+          <div class="nd"><b>Dosya deposu</b><span>etiket, fatura</span></div>
+        </div>
+      </div>
+      <p class="note">Eşitlemeler ayrı işçilerde çalışır; biri takılsa ekranlar etkilenmez.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Ne değişiyor?</h2>
+  <table>
+    <tr><th>Konu</th><th>Bugün</th><th>Yeni</th></tr>
+    <tr><td>Müşteri yapısı</td><td class="old">Tek kurulum, 12 şirket</td><td>Çok kiracı; her müşteri yalnız kendi verisini görür</td></tr>
+    <tr><td>Stok</td><td class="old">Ayrı alanlar, sayılar tutmuyor, negatif stok var</td><td>Tek hareket defteri; her sayı defterden hesaplanır</td></tr>
+    <tr><td>Pazaryerleri</td><td class="old">Kanal başına ayrı sayfa ve kod</td><td>Tek akış, kanal başına eklenti</td></tr>
+    <tr><td>Kayıt yolu</td><td class="old">Formlar ve ayrı uçlar, iki yol</td><td>Tek API</td></tr>
+    <tr><td>Ağır işler</td><td class="old">Ekranlarla aynı sunucuda</td><td>Kuyrukta, durumu görünür, yeniden denenir</td></tr>
+    <tr><td>Sayfa yükü</td><td class="old">Sayfa başına 91–98 istek</td><td>Sayfa neye ihtiyaç duyuyorsa o</td></tr>
+    <tr><td>Giriş</td><td class="old">PIN; kayıtta yalnız son iki hane</td><td>Kişiye özel hesap, iki adımlı doğrulama</td></tr>
+    <tr><td>Müşteri bilgisi</td><td class="old">Sayfanın içine açık geliyor</td><td>Yalnız yetkili role, gerektiğinde</td></tr>
+    <tr><td>Vergi</td><td class="old">KDV %19'a sabit</td><td>Şirketin ülkesine göre</td></tr>
+    <tr><td>Dil</td><td class="old">Üç ayrı çeviri yöntemi</td><td>Tek çeviri sistemi</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Geçişin dört kuralı</h2>
+  <div class="rules">
+    <div class="rule"><b>Tek yazan</b><span>Bir satış kanalına aynı anda yalnız bir sistem yazar. Kanal ya eskide ya yenide.</span></div>
+    <div class="rule"><b>Önce gölgede</b><span>Yeni sistem önce yalnız izler ve hesaplar; sonuçları eskisiyle karşılaştırılır.</span></div>
+    <div class="rule"><b>Küçükten büyüğe</b><span>En az siparişli kanal önce, en yoğun kanal en son taşınır.</span></div>
+    <div class="rule"><b>Geri dönüş hazır</b><span>Her taşımanın bir geri alma adımı vardır; denenmeden taşıma yapılmaz.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Aşamalar</h2>
+  <p class="sub">Çubuklar yalnız sırayı ve hangi işlerin örtüştüğünü gösterir; takvim değildir.</p>
+  <div class="gantt">
+    <div class="ph"><span>0 · Hazırlık</span><span class="t"><span class="f c0" style="left:0;width:12%">eski sistemi oku</span></span></div>
+    <div class="ph"><span>1 · Temel</span><span class="t"><span class="f c1" style="left:10%;width:18%">kiracı, giriş, katalog</span></span></div>
+    <div class="ph"><span>2 · Stok defteri</span><span class="t"><span class="f c2" style="left:26%;width:20%">gölgede çalışır</span></span></div>
+    <div class="ph"><span>3 · Pilot</span><span class="t"><span class="f c3" style="left:44%;width:14%">Istanbul deposu</span></span></div>
+    <div class="ph"><span>4 · Kanal dalgaları</span><span class="t"><span class="f c4" style="left:56%;width:30%">kanal kanal taşıma</span></span></div>
+    <div class="ph"><span>5 · Kapanış</span><span class="t"><span class="f c5" style="left:84%;width:16%">eski sistem kapanır</span></span></div>
+  </div>
+  <div class="steps">
+    <div class="st"><div class="k c0">Aşama 0</div><div><h3>Hazırlık: eski sistemi anlamak</h3><p>Eski kaynak kod ve veritabanı yapısı incelenir, iş kuralları yazıya dökülür. Müşteri bilgisi maskelenmiş bir deneme kopyası kurulur.</p><p class="done"><b>Bitti sayılır:</b> her modülün kuralları belgelendi; veri yapısı doğrulandı.</p></div></div>
+    <div class="st"><div class="k c1">Aşama 1</div><div><h3>Temel: kiracı, giriş, şirket, depo, katalog</h3><p>Yeni sistemin iskeleti kurulur. Katalog eski sistemden düzenli olarak yalnız okunarak kopyalanır; yeni sistem henüz hiçbir yere yazmaz.</p><p class="done"><b>Bitti sayılır:</b> yeni sistemde ürünler ve depolar eskisiyle aynı görünüyor.</p></div></div>
+    <div class="st"><div class="k c2">Aşama 2</div><div><h3>Stok defteri, gölgede</h3><p>Yeni stok defteri eski sistemdeki hareketleri izleyerek kendi stoğunu hesaplar. İki sistemin sayıları her gün karşılaştırılır; farklar tek tek açıklanır.</p><p class="done"><b>Bitti sayılır:</b> farklar belirli bir eşiğin altında ve nedenleri biliniyor.</p></div></div>
+    <div class="st"><div class="k c3">Aşama 3</div><div><h3>Pilot: en küçük, en ayrı parça</h3><p>İlk gerçek geçiş. Öneri: Istanbul deposu ve Türkiye kanalları. Sipariş, kargo ve fatura akışı uçtan uca yeni sistemde çalışır.</p><p class="done"><b>Bitti sayılır:</b> pilot kanallar belirli bir süre sorunsuz yeni sistemde çalıştı.</p></div></div>
+    <div class="st"><div class="k c4">Aşama 4</div><div><h3>Kanal dalgaları</h3><p>Kalan kanallar küçükten büyüğe taşınır. Her dalgadan önce gölge karşılaştırması, sonra geçiş, sonra izleme.</p><p class="done"><b>Bitti sayılır:</b> tüm kanallar yeni sistemde; eski sisteme yazan kalmadı.</p></div></div>
+    <div class="st"><div class="k c5">Aşama 5</div><div><h3>Kapanış ve dış müşteriler</h3><p>Eski sistem yalnız okunur hale getirilir, arşivlenir ve kapatılır. Abonelik ve müşteri kaydı açılır.</p><p class="done"><b>Bitti sayılır:</b> eski sistem kapalı; ilk dış müşteri kendi başına kayıt olabiliyor.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Hangi kanal ne zaman taşınmalı?</h2>
+  <p class="sub">Son 30 günün sipariş sayıları. Az siparişli kanalda hata az zarar verir; bu yüzden sıra aşağıdan yukarıya.</p>
+  <div class="bars">
+    <div class="bar"><span class="l">Shopify mağazaları · en son</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">977</span></div>
+    <div class="bar"><span class="l">eBay</span><span class="t"><span class="f" style="width:56.4%"></span></span><span class="v">551</span></div>
+    <div class="bar"><span class="l">Kaufland</span><span class="t"><span class="f" style="width:44.3%"></span></span><span class="v">433</span></div>
+    <div class="bar"><span class="l">OTTO</span><span class="t"><span class="f" style="width:36.6%"></span></span><span class="v">358</span></div>
+    <div class="bar"><span class="l">Web mağazaları</span><span class="t"><span class="f" style="width:11.5%"></span></span><span class="v">112</span></div>
+    <div class="bar"><span class="l">METRO</span><span class="t"><span class="f" style="width:9.1%"></span></span><span class="v">89</span></div>
+    <div class="bar"><span class="l">Amazon</span><span class="t"><span class="f" style="width:1.5%"></span></span><span class="v">15</span></div>
+    <div class="bar pilot"><span class="l">N11 + Trendyol + Ozon · pilot</span><span class="t"><span class="f" style="width:2%"></span></span><span class="v">20</span></div>
+  </div>
+  <div class="callout"><b>Neden Istanbul pilotu?</b> Kendi deposu var (8.985 ürün), yalnız iki şirket bağlı ve ayda yaklaşık 20 sipariş alıyor. Diğer depolardan ayrı olduğu için bir sorun çıkarsa ana işi etkilemez.</div>
+  <p class="note">Geçiş anları için en sakin zaman 02:00–06:00 arası: 30 günlük ölçümde siparişlerin yalnız yüzde beşi 00:00–07:00 arasında geldi.</p>
+</section>
+
+<section>
+  <h2><span class="num">7</span>Riskler ve önlemler</h2>
+  <table>
+    <tr><th>Risk</th><th>Önlem</th><th>Önem</th></tr>
+    <tr><td>İki sistem aynı stoğu farklı görür, fazla satış olur</td><td>Tek yazan kuralı; gölge karşılaştırması; kanal taşınana kadar stok eski sistemden</td><td><span class="tag r">Yüksek</span></td></tr>
+    <tr><td>Eski veri kirli: negatif stok, mükerrer kartlar, yer tutucu müşteri kayıtları</td><td>Taşımadan önce temizlik listesi; açılış stoğu sayımla doğrulanır</td><td><span class="tag r">Yüksek</span></td></tr>
+    <tr><td>Tek geliştirici: bilgi tek kişide kalır</td><td>Her kural için test; karar kayıtları; hafıza ve bilgi haritası güncel tutulur</td><td><span class="tag r">Yüksek</span></td></tr>
+    <tr><td>Fatura numaraları ve saklama yükümlülüğü</td><td>Numara sırası kesintisiz devam eder; eski faturalar değiştirilmeden arşivlenir</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Pazaryeri bağlantıları: yeniden yetkilendirme, hız sınırları</td><td>Kanal başına deneme hesabı; geçiş öncesi bağlantı testi</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Ekibin yeni ekranlara alışması</td><td>Pilotta gerçek kullanıcılarla deneme; eski ve yeni ekran eşleme tablosu</td><td><span class="tag a">Orta</span></td></tr>
+    <tr><td>Eski kuralların gözden kaçması</td><td>Aşama 0'da kod okuması; gölge döneminde farkların incelenmesi</td><td><span class="tag a">Orta</span></td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="num">8</span>Birlikte nasıl çalışacağız?</h2>
+  <div class="rules">
+    <div class="rule"><b>Küçük dilimler</b><span>Her seferinde tek bir iş: bir modül, bir ekran, bir kanal.</span></div>
+    <div class="rule"><b>Önce test</b><span>Her iş kuralı bir testle yazılır; test geçmeden dilim bitmez.</span></div>
+    <div class="rule"><b>Karar kaydı</b><span>Her önemli seçim ve gerekçesi yazılır; sonradan "neden böyle" sorusu yanıtsız kalmaz.</span></div>
+    <div class="rule"><b>Kısa oturumlar</b><span>Her oturum tek konuya odaklanır; hafıza ve bilgi haritası bağlamı taşır.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">9</span>İlk adımlar</h2>
+  <ol class="q">
+    <li><b>Eski kaynak kodu ve veritabanı yapısını paylaşmanız.</b> Aşama 0 bununla başlar; süre tahmini ancak bundan sonra yapılabilir.</li>
+    <li><b>Teknoloji seçimleri tamamlandı:</b> NestJS, Prisma, BullMQ, AWS Frankfurt. Ayrıntı teknoloji sunumunda.</li>
+    <li><b>Müşterilerin ne kadar ayrı tutulacağına karar vermeniz</b> (ortak veritabanı önerildi).</li>
+    <li><b>Pilot önerisini değerlendirmeniz:</b> Istanbul deposu uygun mu?</li>
+    <li><b>Deneme ortamı:</b> müşteri bilgisi maskelenmiş bir kopya kurulabilir mi?</li>
+  </ol>
+  <p class="note">Sınırlar: Bu plan panel ekranlarından ve ön yüz dosyalarından çıkarılan bilgilere dayanıyor. Sunucu kodu, veritabanı yapısı ve zamanlanmış işler görülmedi; aşamaların içeriği kod incelemesinden sonra değişebilir. Süre verilmedi, çünkü eldeki bilgiyle güvenilir bir tahmin yapılamıyor.</p>
+</section>
+
+<footer>Karar kayıtları: <code>kararlar/0001-cok-kiracili-sistem.md</code>, <code>kararlar/0002-sifirdan-gelistirme.md</code> · İlgili sunumlar: <code>sunum/wawierp-analiz-sunumu.html</code>, <code>sunum/wawierp-teknoloji-secenekleri.html</code></footer>
+</main>
+</body>
+</html>

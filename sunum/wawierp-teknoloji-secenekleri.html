@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WawiERP Teknoloji Seçenekleri</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#141413;--ink2:#52514e;--mute:#898781;--line:#e1e0d9;--blue:#2a78d6;--blue-soft:#dbe9fa;--orange:#eb6834;--orange-soft:#fbe5db;--aqua:#1baf7a;--aqua-soft:#daf3ea;--violet:#6250d6;--violet-soft:#e6e2fa;--red:#d03b3b;--red-soft:#fbe6e6;--amber:#b97a00;--amber-soft:#fbefd2;--green:#0c8a0c;--green-soft:#e2f3e2}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1e1e1c;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--line:#33332f;--blue:#3987e5;--blue-soft:#1d3350;--orange:#e07a4d;--orange-soft:#40251a;--aqua:#35b88a;--aqua-soft:#143326;--violet:#9085e9;--violet-soft:#2a2550;--red:#e66767;--red-soft:#3d1e1e;--amber:#e0a43a;--amber-soft:#3a2f14;--green:#3fb23f;--green-soft:#1a3320}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:32px 16px 64px}
+header{padding:24px 0 8px}
+h1{font-size:34px;line-height:1.15;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:0 0 4px}
+h3{font-size:16px;margin:0 0 6px}
+p{margin:8px 0}
+.lead{font-size:18px;color:var(--ink2);max-width:70ch}
+.meta{color:var(--mute);font-size:14px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:20px 0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:600;font-size:14px;margin-right:8px}
+.sub{color:var(--ink2);margin:0 0 16px}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.callout{border-left:4px solid var(--blue);background:var(--blue-soft);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.tag.g{background:var(--green-soft);color:var(--green)}.tag.a{background:var(--amber-soft);color:var(--amber)}.tag.r{background:var(--red-soft);color:var(--red)}.tag.b{background:var(--blue-soft);color:var(--blue)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cols3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.box{border:1px solid var(--line);border-radius:12px;padding:16px}
+.box.pick{border:2px solid var(--blue)}
+.box ul{margin:8px 0 0;padding-left:18px;font-size:14px;color:var(--ink2)}
+.box li{margin:3px 0}
+.plus{color:var(--green);font-weight:600}.minus{color:var(--red);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--bg);border-radius:10px;padding:14px}
+.tile b{display:block;font-size:26px;line-height:1.2;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--ink2)}
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:12px 0}
+.chain .n{flex:1 1 120px;border-radius:10px;padding:12px;text-align:center;background:var(--bg);border:1px solid var(--line)}
+.chain .n b{display:block}.chain .n span{font-size:12px;color:var(--ink2)}
+.chain .n.new{background:var(--blue-soft);border-color:var(--blue)}
+.chain .ar{display:flex;align-items:center;color:var(--mute);font-size:20px}
+.stack{display:grid;gap:6px;margin:12px 0}
+.layer{display:grid;grid-template-columns:150px 1fr;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.layer .k{padding:12px;font-weight:600;font-size:14px;display:flex;align-items:center}
+.layer .v{padding:12px;background:var(--card)}
+.layer .v b{display:block}.layer .v span{font-size:13px;color:var(--ink2)}
+.l1 .k{background:var(--violet-soft);color:var(--violet)}.l2 .k{background:var(--blue-soft);color:var(--blue)}.l3 .k{background:var(--aqua-soft);color:var(--aqua)}.l4 .k{background:var(--orange-soft);color:var(--orange)}.l5 .k{background:var(--bg);color:var(--ink2)}
+.meter{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;font-size:13px;color:var(--ink2);margin-top:6px}
+.meter .t{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}.meter .f{display:block;height:100%;background:var(--blue);border-radius:4px}
+.meter.cost .f{background:var(--orange)}
+.bars{display:grid;gap:8px;margin:8px 0}
+.bar{display:grid;grid-template-columns:minmax(150px,34%) 1fr auto;gap:10px;align-items:center;font-size:14px}
+.bar .l{color:var(--ink2)}.bar .t{height:14px;background:var(--bg);border-radius:4px;overflow:hidden}.bar .f{display:block;height:100%;background:var(--blue);border-radius:0 4px 4px 0}.bar.gray .f{background:var(--mute)}
+.bar .v{font-variant-numeric:tabular-nums;min-width:90px;text-align:right}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+ul.check{list-style:none;padding:0;margin:8px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+ul.check li{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:14px}
+ul.check li b{display:block}
+ol.q{padding-left:20px}ol.q li{margin:10px 0}ol.q b{display:block}
+footer{color:var(--mute);font-size:13px;margin-top:24px}
+@media (max-width:560px){.layer{grid-template-columns:1fr}.chain .ar{display:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <p class="meta">14 Kasım 2026 · Tartışma belgesi</p>
+  <h1>WawiERP: Çok kiracılı sistem için hangi teknolojiler?</h1>
+  <p class="lead">Karar verildi: sistem birden fazla müşteri kuruluşuna hizmet verecek. Bu sayfa önerilen teknoloji yığınını ve birlikte karar vermemiz gereken üç konuyu özetliyor. Temel seçimler karara bağlandı; aşağıdaki ilk tablo sonucu gösteriyor.</p>
+</header>
+
+<section>
+  <h2><span class="num">✓</span>Verilen kararlar</h2>
+  <p class="sub">Aşağıdaki seçimler 14 Kasım 2026'da karara bağlandı. Sayfanın geri kalanı bu kararların gerekçesini ve tartışılan seçenekleri gösteriyor.</p>
+  <table>
+    <tr><th>Konu</th><th>Karar</th><th>Elenen</th></tr>
+    <tr><td>Dil</td><td><b>TypeScript</b> (ekranlar ve sunucu)</td><td>PHP</td></tr>
+    <tr><td>Veritabanı</td><td><b>PostgreSQL</b></td><td>—</td></tr>
+    <tr><td>Sunucu çerçevesi</td><td><b>NestJS</b></td><td>Fastify</td></tr>
+    <tr><td>Veri erişimi</td><td><b>Prisma</b></td><td>Drizzle</td></tr>
+    <tr><td>Müşteri ayrımı</td><td><b>Ortak şema + satır düzeyi güvenlik</b></td><td>Karma; müşteri başına veritabanı</td></tr>
+    <tr><td>İş kuyruğu</td><td><b>BullMQ + Redis</b></td><td>pg-boss</td></tr>
+    <tr><td>Ekranlar</td><td><b>Vite + React</b>, <b>shadcn/ui + Tailwind</b></td><td>Next.js; Mantine</td></tr>
+    <tr><td>Barındırma</td><td><b>AWS, Frankfurt</b></td><td>GCP; Hetzner + Coolify; Railway</td></tr>
+    <tr><td>Giriş</td><td><b>Uygulama içi kimlik modülü</b></td><td>Keycloak; dış kimlik servisi</td></tr>
+  </table>
+  <p class="note">Hâlâ açık: abonelik ve ödeme altyapısı, izleme araçları, pilot kapsamı.</p>
+</section>
+
+<section>
+  <h2><span class="num">1</span>"Çok kiracılı" ne demek?</h2>
+  <p class="sub">Tek bir sistem, birbirinden habersiz birçok müşteriye hizmet verir. Her müşteri yalnız kendi verisini görür.</p>
+  <div class="chain">
+    <div class="n new"><b>Kiracı</b><span>müşteri kuruluşu · yeni katman</span></div><div class="ar">›</div>
+    <div class="n"><b>Şirket</b><span>bugün 12</span></div><div class="ar">›</div>
+    <div class="n"><b>Depo</b><span>bugün 5</span></div><div class="ar">›</div>
+    <div class="n"><b>Kanal</b><span>eBay, Shopify…</span></div><div class="ar">›</div>
+    <div class="n"><b>Hesap</b><span>bugün 41</span></div>
+  </div>
+  <p class="note">Bugünkü yapının en üstüne "kiracı" eklenir. Mevcut 12 şirket ilk kiracı ya da kiracılar olur.</p>
+  <div class="callout warn"><b>Önceki öneri değişti.</b> Sistemi yalnız yerinde yenilemek artık yetmez. Kiracıları birbirinden ayırmak sonradan eklenemez; en baştan tasarlanması gerekir.</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Yığını belirleyen gerçek: ölçek küçük</h2>
+  <p class="sub">Bugün ayda 2.555 sipariş var. Yüz müşteriye çıksanız bile tek bir iyi kurulmuş veritabanı bunu rahat taşır.</p>
+  <div class="bars">
+    <div class="bar gray"><span class="l">Bugün</span><span class="t"><span class="f" style="width:1%"></span></span><span class="v">2.555 / ay</span></div>
+    <div class="bar"><span class="l">10 benzer müşteri</span><span class="t"><span class="f" style="width:10%"></span></span><span class="v">≈25.500 / ay</span></div>
+    <div class="bar"><span class="l">100 benzer müşteri</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">≈255.000 / ay</span></div>
+  </div>
+  <p class="note">Hesap: bugünkü aylık sipariş × müşteri sayısı. Gerçek müşteriler daha küçük ya da büyük olabilir.</p>
+  <div class="callout"><b>Sonuç: karmaşık altyapıya gerek yok.</b> Asıl zorluk büyüklük değil. Asıl zorluk üç şey: müşterileri birbirinden ayırmak, pazaryerleriyle güvenilir eşitleme ve doğru stok.</div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Önerilen yapı, katman katman</h2>
+  <p class="sub">Tek uygulama, net modüller, arka planda çalışan işçiler. Çok sayıda küçük servise bölmek bu ölçekte yalnız iş yükü getirir.</p>
+  <div class="stack">
+    <div class="layer l1"><div class="k">Ekranlar</div><div class="v"><b>React + TypeScript</b><span>Tek bileşen kütüphanesi, tek çeviri sistemi. Bugün her sayfa 91–98 istek atıyor; hedef bunun küçük bir kısmı.</span></div></div>
+    <div class="layer l2"><div class="k">API</div><div class="v"><b>REST + OpenAPI, tek yazma yolu</b><span>Ekranlar, mobil uygulama ve müşterilerin kendi yazılımları aynı kapıdan girer.</span></div></div>
+    <div class="layer l3"><div class="k">İş mantığı</div><div class="v"><b>Modüler tek uygulama</b><span>Katalog, stok defteri, sipariş, kargo, fatura, cari. Her pazaryeri aynı arayüze takılan bir eklenti.</span></div></div>
+    <div class="layer l4"><div class="k">Arka plan işleri</div><div class="v"><b>İş kuyruğu + işçiler</b><span>Pazaryeri eşitleme, etiket, fatura. Başarısız iş yeniden denenir, durumu ekranda görünür.</span></div></div>
+    <div class="layer l5"><div class="k">Veri</div><div class="v"><b>PostgreSQL + dosya deposu</b><span>Her satırda kiracı kimliği; veritabanı, bir kiracının diğerinin verisini görmesini kendisi engeller.</span></div></div>
+  </div>
+  <table>
+    <tr><th>Parça</th><th>Öneri</th><th>Bugünkü hangi sorunu çözer?</th></tr>
+    <tr><td>Stok</td><td>Yalnız ekleme yapılan hareket defteri</td><td>Negatif stok, tutmayan sayılar, geciken stok işleyicisi</td></tr>
+    <tr><td>Pazaryerleri</td><td>Tek arayüz, kanal başına eklenti</td><td>Her kanal için ayrı yazılmış kopya kod</td></tr>
+    <tr><td>Giriş</td><td>Kişiye özel hesap, iki adımlı doğrulama; depoda isteğe bağlı PIN</td><td>"Kim ne yaptı" belli değil</td></tr>
+    <tr><td>Arama</td><td>Önce veritabanının kendi araması</td><td>Yavaş ürün listeleri</td></tr>
+    <tr><td>Barındırma</td><td>Avrupa'da, konteyner tabanlı; Cloudflare önde kalır</td><td>Tek ve kararsız sunucu, eski PHP sürümü</td></tr>
+    <tr><td>İzleme</td><td>Hata ve hız takibi, ayrı denetim kaydı</td><td>Hataların gürültüde kaybolması</td></tr>
+    <tr><td>Gelir</td><td>Sipariş sayısına göre abonelik</td><td>Yeni gereksinim</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Tartışma 1 · Hangi dil?</h2>
+  <p class="sub">Yığındaki tek gerçek ikilem. Yanıt ekibe bağlı.</p>
+  <div class="callout"><b>Karar verildi: TypeScript.</b> Sistem sıfırdan, sizinle Claude tarafından geliştirilecek; ekranlar ve sunucu tek dilde olacak. Veritabanı PostgreSQL, ön yüz React.</div>
+  <div class="cols">
+    <div class="box">
+      <h3>PHP <span class="tag b">Symfony ya da Laravel</span></h3>
+      <ul>
+        <li><span class="plus">+</span> Mevcut sistemle aynı dil</li>
+        <li><span class="plus">+</span> Eski ekranlar çalışırken parça parça taşınır</li>
+        <li><span class="plus">+</span> Geçiş riski en düşük</li>
+        <li><span class="minus">−</span> Ekranlar ve sunucu iki ayrı dil</li>
+      </ul>
+      <p class="note">Uygun olduğu durum: bugünkü ekip PHP biliyor ve devam edecek.</p>
+    </div>
+    <div class="box">
+      <h3>TypeScript <span class="tag b">NestJS</span></h3>
+      <ul>
+        <li><span class="plus">+</span> Ekranlar ve sunucu tek dil</li>
+        <li><span class="plus">+</span> Hatalar yazım aşamasında yakalanır</li>
+        <li><span class="minus">−</span> İş kurallarının tamamı yeniden yazılır</li>
+        <li><span class="minus">−</span> İki sistem daha uzun süre birlikte çalışır</li>
+      </ul>
+      <p class="note">Uygun olduğu durum: yeni ekip kuruluyor ya da geliştirme ağırlıkla yapay zekâ destekli.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Tartışma 2 · Müşteriler ne kadar ayrı tutulsun?</h2>
+  <p class="sub">Daha sıkı ayrım daha güvenli ama daha pahalı ve yönetmesi daha zor.</p>
+  <div class="cols3">
+    <div class="box pick">
+      <h3>Ortak veritabanı</h3><span class="tag g">Önerilen başlangıç</span>
+      <p class="note">Herkes aynı tablolarda; her satırda kiracı kimliği, ayrımı veritabanı zorlar.</p>
+      <div class="meter"><span>Ayrım</span><span class="t"><span class="f" style="width:60%"></span></span></div>
+      <div class="meter cost"><span>Maliyet</span><span class="t"><span class="f" style="width:20%"></span></span></div>
+    </div>
+    <div class="box">
+      <h3>Müşteri başına şema</h3>
+      <p class="note">Aynı veritabanı, her müşteriye ayrı tablo takımı. Güncellemeler her müşteri için tekrarlanır.</p>
+      <div class="meter"><span>Ayrım</span><span class="t"><span class="f" style="width:80%"></span></span></div>
+      <div class="meter cost"><span>Maliyet</span><span class="t"><span class="f" style="width:55%"></span></span></div>
+    </div>
+    <div class="box">
+      <h3>Müşteri başına veritabanı</h3>
+      <p class="note">Tam ayrım. Büyük ya da hassas müşteriler için; her biri ayrı yedek ve bakım ister.</p>
+      <div class="meter"><span>Ayrım</span><span class="t"><span class="f" style="width:100%"></span></span></div>
+      <div class="meter cost"><span>Maliyet</span><span class="t"><span class="f" style="width:90%"></span></span></div>
+    </div>
+  </div>
+  <p class="note">Çubuklar göreli bir karşılaştırmadır, ölçüm değildir. Karma yol da mümkün: küçük müşteriler ortak veritabanında, büyükler ayrı.</p>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Tartışma 3 · Mevcut 12 şirket nasıl taşınacak?</h2>
+  <div class="cols">
+    <div class="box">
+      <h3>Önce yeni müşteriler</h3>
+      <ul>
+        <li>Yeni sistem boş kurulur, yeni müşterilerle başlar</li>
+        <li>Mevcut şirketler eski sistemde kalır, sonra taşınır</li>
+        <li><span class="plus">+</span> Bugünkü işleyiş risk altına girmez</li>
+        <li><span class="minus">−</span> İki sistem uzun süre birlikte bakılır</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Önce mevcut şirketler</h3>
+      <ul>
+        <li>Mevcut şirketler ilk kiracı olur</li>
+        <li>Sistem gerçek veri ve gerçek siparişle olgunlaşır</li>
+        <li><span class="plus">+</span> Dış müşteriye sınanmış ürün sunulur</li>
+        <li><span class="minus">−</span> Taşıma sırasında hata günlük işi etkiler</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span>Çok kiracılılığın getirdiği yeni işler</h2>
+  <p class="sub">Bugünkü sistemde yok; hangi teknoloji seçilirse seçilsin yapılacak.</p>
+  <ul class="check">
+    <li><b>Müşteri kaydı ve kurulum</b>Yeni müşteri kendi hesabını açıp depo ve kanal tanımlar.</li>
+    <li><b>Şifreli kanal bilgileri</b>Her müşterinin pazaryeri anahtarları ayrı ve şifreli saklanır.</li>
+    <li><b>Kota ve hız sınırı</b>Bir müşterinin yoğunluğu diğerlerini yavaşlatmaz.</li>
+    <li><b>Abonelik ve faturalama</b>Kullanıma göre ücret, ödeme takibi.</li>
+    <li><b>Veri dışa aktarma ve silme</b>GDPR ve KVKK gereği, müşteri ayrılırken.</li>
+    <li><b>Ülke bazlı KDV</b>Almanya, Hollanda ve Türkiye için ayrı kurallar.</li>
+    <li><b>Yapılandırılmış e-fatura</b>Almanya'da aşamalı zorunlu hale geliyor; tarihleri doğrulanmalı.</li>
+    <li><b>Müşteri bazlı izleme</b>Hangi müşteride hangi eşitleme takıldı, tek ekrandan.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">8</span>Karar için sizden gereken üç bilgi</h2>
+  <ol class="q">
+    <li><b>Sistemi bugün kim geliştiriyor, hangi dili biliyor?</b>Dil seçimini bu belirler.</li>
+    <li><b>Hedef müşteri kim: küçük satıcı mı, büyük toptancı mı?</b>Müşterilerin ne kadar ayrı tutulacağını ve fiyat modelini bu belirler.</li>
+    <li><b>İlk dış müşteriyi ne zaman almak istiyorsunuz?</b>Taşıma yolunu ve ilk sürümün kapsamını bu belirler.</li>
+  </ol>
+  <p class="note">Sınır: Bu öneriler panel ekranlarından ve ön yüz dosyalarından çıkarılan bilgilere dayanıyor. Sunucu kodu ve veritabanı yapısı görülmedi; mevcut veritabanının türü bilinmiyor.</p>
+</section>
+
+<footer>Karar kaydı: <code>kararlar/0001-cok-kiracili-sistem.md</code> · Ayrıntı: <code>docs/10-rakip-ve-hedef-mimari.md</code>, <code>docs/11-yeniden-tasarim-girdileri.md</code></footer>
+</main>
+</body>
+</html>
