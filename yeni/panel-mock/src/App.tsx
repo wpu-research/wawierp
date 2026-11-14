@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Boxes, Building2, FileText, LayoutDashboard, LifeBuoy, Menu, Moon, Package, RefreshCw, RotateCcw, ScrollText, ShoppingCart, Store, Sun, Tag, Truck, Users, Warehouse, X, type LucideIcon } from 'lucide-react'
+import { Boxes, Building2, FileText, LayoutDashboard, LifeBuoy, Menu, Moon, Package, RefreshCw, RotateCcw, ScrollText, ShoppingCart, Store, Sun, Tag, Truck, Users, X, type LucideIcon } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
-import { sel } from './ui'
+import { Logo, sel } from './ui'
+import Landing from './pages/Landing'
 import Overview from './pages/Overview'
 import Orders from './pages/Orders'
 import Catalog, { Stock } from './pages/Catalog'
@@ -27,18 +28,15 @@ const NAV: { group: string; items: NavItem[] }[] = [
 ]
 
 function useRoute() {
-  const read = () => { const [p, q = ''] = (location.hash.replace(/^#\/?/, '') || 'overview').split('?'); return { page: p, query: new URLSearchParams(q) } }
+  const read = () => { const [p, q = ''] = (location.hash.replace(/^#\/?/, '') || 'home').split('?'); return { page: p, query: new URLSearchParams(q) } }
   const [r, setR] = useState(read)
   useEffect(() => { const f = () => { setR(read()); window.scrollTo(0, 0) }; addEventListener('hashchange', f); return () => removeEventListener('hashchange', f) }, [])
   return r
 }
 
-function Shell() {
+function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchParams; dark: boolean; setDark: (f: (d: boolean) => boolean) => void }) {
   const st = useStore()
-  const { page, query } = useRoute()
   const [menu, setMenu] = useState(false)
-  const [dark, setDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches)
-  useEffect(() => { document.documentElement.dataset.theme = dark ? 'dark' : 'light' }, [dark])
   useEffect(() => setMenu(false), [page])
 
   const R = ROLES[st.role]
@@ -66,9 +64,8 @@ function Shell() {
   const sidebar = (
     <nav className="flex flex-col h-full" aria-label="Ana menü">
       <div className="px-4 h-14 flex items-center justify-between border-b border-line shrink-0">
-        <a href="#/overview" className="flex items-center gap-2 no-underline text-ink">
-          <span className="size-7 rounded-lg bg-brand text-white grid place-items-center"><Warehouse size={16} /></span>
-          <span className="font-semibold tracking-tight">WawiERP</span>
+        <a href="#/" className="flex items-center gap-2 no-underline text-ink" title="Ana sayfa">
+          <Logo height={26} />
           <span className="rounded bg-warn-soft text-warn text-[10px] font-semibold px-1.5 py-0.5">MOCK</span>
         </a>
         <button className="md:hidden border-0 bg-transparent p-1.5 text-ink2" aria-label="Menüyü kapat" onClick={() => setMenu(false)}><X size={18} /></button>
@@ -136,4 +133,11 @@ const NoAccess = () => (
   </div>
 )
 
-export default function App() { return <StoreProvider><Shell /></StoreProvider> }
+function Root() {
+  const { page, query } = useRoute()
+  const [dark, setDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches)
+  useEffect(() => { document.documentElement.dataset.theme = dark ? 'dark' : 'light' }, [dark])
+  return page === 'home' ? <Landing dark={dark} setDark={setDark} /> : <Shell page={page} query={query} dark={dark} setDark={setDark} />
+}
+
+export default function App() { return <StoreProvider><Root /></StoreProvider> }

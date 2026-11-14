@@ -2,20 +2,21 @@
 
 :root {
   --bg: #f6f5f1; --card: #ffffff; --ink: #141413; --ink2: #52514e; --mute: #898781; --line: #e1e0d9;
-  --brand: #2a78d6; --brand-soft: #dbe9fa; --ok: #0c7a0c; --ok-soft: #e2f3e2; --warn: #9a6500; --warn-soft: #fbefd2;
+  --brand: #3048c8; --brand-soft: #e3e7fb; --navy: #171b38; --gold: #ffd168; --gold-deep: #e0a43a; --ok: #0c7a0c; --ok-soft: #e2f3e2; --warn: #9a6500; --warn-soft: #fbefd2;
   --bad: #c93434; --bad-soft: #fbe6e6; --violet: #6250d6; --violet-soft: #e6e2fa;
 }
 [data-theme="dark"] {
   --bg: #141413; --card: #1e1e1c; --ink: #f0efec; --ink2: #c3c2b7; --mute: #8f8d86; --line: #33332f;
-  --brand: #5b9ff0; --brand-soft: #1d3350; --ok: #4fbf4f; --ok-soft: #1a3320; --warn: #e0a43a; --warn-soft: #3a2f14;
+  --brand: #8496f5; --brand-soft: #232a52; --navy: #0e1126; --gold: #ffd168; --gold-deep: #ffd168; --ok: #4fbf4f; --ok-soft: #1a3320; --warn: #e0a43a; --warn-soft: #3a2f14;
   --bad: #ee7878; --bad-soft: #3d1e1e; --violet: #a096f0; --violet-soft: #2a2550;
 }
 @theme inline {
   --color-bg: var(--bg); --color-card: var(--card); --color-ink: var(--ink); --color-ink2: var(--ink2);
-  --color-mute: var(--mute); --color-line: var(--line); --color-brand: var(--brand); --color-brand-soft: var(--brand-soft);
+  --color-mute: var(--mute); --color-line: var(--line); --color-brand: var(--brand); --color-navy: var(--navy); --color-gold: var(--gold); --color-brand-soft: var(--brand-soft);
   --color-ok: var(--ok); --color-ok-soft: var(--ok-soft); --color-warn: var(--warn); --color-warn-soft: var(--warn-soft);
   --color-bad: var(--bad); --color-bad-soft: var(--bad-soft); --color-violet: var(--violet); --color-violet-soft: var(--violet-soft);
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 html { color-scheme: light; }
 html[data-theme="dark"] { color-scheme: dark; }
@@ -25,3 +26,20 @@ select, input { color: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+/* ---------- ana sayfa ---------- */
+.landing { font-size: 16px; }
+.hero-grid { background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 75% 65% at 50% 30%, #000 30%, transparent 100%); }
+.hero-glow { background: radial-gradient(closest-side, rgba(48,72,200,.75), transparent); filter: blur(30px); pointer-events: none; }
+.hero-mark { background: linear-gradient(100deg, #ffd168 10%, #fff1c9 55%, #ffd168 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.flow-line { display: block; height: 2px; min-width: 24px; background-image: linear-gradient(90deg, var(--brand) 50%, transparent 50%); background-size: 12px 2px; animation: flow 0.9s linear infinite; }
+@media (max-width: 767px) { .flow-line { width: 2px; height: 22px; min-width: 0; margin: 0 auto; background-image: linear-gradient(180deg, var(--brand) 50%, transparent 50%); background-size: 2px 12px; animation-name: flow-y; } }
+.marquee { animation: marquee 38s linear infinite; }
+.marquee:hover { animation-play-state: paused; }
+.float-a { animation: bob 5s ease-in-out infinite; }
+.float-b { animation: bob 6s ease-in-out -2.5s infinite; }
+@keyframes flow { to { background-position: 12px 0; } }
+@keyframes flow-y { to { background-position: 0 12px; } }
+@keyframes marquee { to { transform: translateX(calc(-50% - 6px)); } }
+@keyframes bob { 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { .flow-line, .marquee, .float-a, .float-b { animation: none; } }

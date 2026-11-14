@@ -17,4 +17,5 @@ Yığın: Vite + React + TypeScript + Tailwind (`kararlar/0004`). shadcn/ui bile
 
 https://panel-production-80dcabfa.up.railway.app — proje `wawierp-panel-mock`, servis `panel`.
 Şifreli (Basic auth): kullanıcı `PANEL_USER`, şifre `PANEL_PASSWORD` Railway değişkenlerinde. Şifre depoya yazılmaz.
-Yeniden yayın: bu klasörde `railway up --service panel`.
+Servis GitHub deposuna bağlı (`wpu-research/wawierp`, dal `main`, kök `yeni/panel-mock`): `main`'e push yeniden yayınlar.
+Açılış `#/` ana sayfa (tanıtım), `#/overview` ve sonrası panel.
