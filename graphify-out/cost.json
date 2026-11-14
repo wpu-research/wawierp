@@ -19,8 +19,15 @@
       "input_tokens": 91888,
       "output_tokens": 0,
       "files": 28
+    },
+    {
+      "date": "2026-11-14T21:39:20.415038+00:00",
+      "input_tokens": 150000,
+      "output_tokens": 0,
+      "files": 35,
+      "note": "kararlar 0006-0007, sunumlar, mock panel kodu (AST)"
     }
   ],
-  "total_input_tokens": 626442,
+  "total_input_tokens": 776442,
   "total_output_tokens": 0
 }

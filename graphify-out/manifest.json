@@ -126,106 +126,106 @@
     "semantic_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4"
   },
   "yeni/panel-mock/package.json": {
-    "mtime": 1794676063.3414586,
-    "seen": 1794684924.844916,
-    "ast_hash": "31a7d8dc9b37b932c0486720311df766",
-    "semantic_hash": "31a7d8dc9b37b932c0486720311df766"
+    "mtime": 1794689205.2256947,
+    "seen": 1794692324.9968367,
+    "ast_hash": "73d45744ebcba53fd9f3e16573d987f8",
+    "semantic_hash": "73d45744ebcba53fd9f3e16573d987f8"
   },
   "yeni/panel-mock/src/App.tsx": {
-    "mtime": 1794684548.3049777,
-    "seen": 1794684924.844919,
-    "ast_hash": "37a216f8374f5ddd08ff1a3a8fcf1153",
-    "semantic_hash": "37a216f8374f5ddd08ff1a3a8fcf1153"
+    "mtime": 1794691556.2485392,
+    "seen": 1794692324.9968405,
+    "ast_hash": "001e413b86c8f000946f16dbcf4df125",
+    "semantic_hash": "001e413b86c8f000946f16dbcf4df125"
   },
   "yeni/panel-mock/src/data.ts": {
-    "mtime": 1794676201.6565187,
-    "seen": 1794684924.8449204,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.9968414,
     "ast_hash": "b68521c8b8a3cd8a5985ef0115354d1d",
     "semantic_hash": "b68521c8b8a3cd8a5985ef0115354d1d"
   },
   "yeni/panel-mock/src/data2.ts": {
-    "mtime": 1794684430.6355815,
-    "seen": 1794684924.8449216,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.9968421,
     "ast_hash": "3f8f8dbb97817cd9fc5d3511d4e285d8",
     "semantic_hash": "3f8f8dbb97817cd9fc5d3511d4e285d8"
   },
   "yeni/panel-mock/src/dist30.json": {
-    "mtime": 1794676063.3404586,
-    "seen": 1794684924.8449225,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.9968433,
     "ast_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4",
     "semantic_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4"
   },
   "yeni/panel-mock/src/main.tsx": {
-    "mtime": 1794684149.1830935,
-    "seen": 1794684924.8449235,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.9968457,
     "ast_hash": "2bc88ff678ee3bffb33fb9e71ed4d2df",
     "semantic_hash": "2bc88ff678ee3bffb33fb9e71ed4d2df"
   },
   "yeni/panel-mock/src/pages/Admin.tsx": {
-    "mtime": 1794684548.3049777,
-    "seen": 1794684924.8449244,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.9968467,
     "ast_hash": "dffd991306fc299b74abc5871e8d3531",
     "semantic_hash": "dffd991306fc299b74abc5871e8d3531"
   },
   "yeni/panel-mock/src/pages/Catalog.tsx": {
-    "mtime": 1794684025.4776044,
-    "seen": 1794684924.8449252,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.996848,
     "ast_hash": "b40879adf10ed962ea425d77ae3aca6f",
     "semantic_hash": "b40879adf10ed962ea425d77ae3aca6f"
   },
   "yeni/panel-mock/src/pages/Channels.tsx": {
-    "mtime": 1794684062.6097355,
-    "seen": 1794684924.844926,
+    "mtime": 1794685144.9340732,
+    "seen": 1794692324.996849,
     "ast_hash": "d6931aac913f6a9f80e00e6fe9a028c5",
     "semantic_hash": "d6931aac913f6a9f80e00e6fe9a028c5"
   },
   "yeni/panel-mock/src/pages/Extra.tsx": {
-    "mtime": 1794684586.961054,
-    "seen": 1794684924.844927,
+    "mtime": 1794685144.9350731,
+    "seen": 1794692324.99685,
     "ast_hash": "20719487474acdd6330d4dfc68a7cb59",
     "semantic_hash": "20719487474acdd6330d4dfc68a7cb59"
   },
   "yeni/panel-mock/src/pages/Finance.tsx": {
-    "mtime": 1794684089.7088408,
-    "seen": 1794684924.8449278,
+    "mtime": 1794685144.9350731,
+    "seen": 1794692324.9968507,
     "ast_hash": "6da6633d5950abd8729408235933ba8c",
     "semantic_hash": "6da6633d5950abd8729408235933ba8c"
   },
   "yeni/panel-mock/src/pages/Orders.tsx": {
-    "mtime": 1794684214.6423867,
-    "seen": 1794684924.8449287,
-    "ast_hash": "bd0328b0ea9e47c78827cfeeccfb8c63",
-    "semantic_hash": "bd0328b0ea9e47c78827cfeeccfb8c63"
+    "mtime": 1794691556.2495391,
+    "seen": 1794692324.9968543,
+    "ast_hash": "0841b8c4f07e5998ff9d3136e90b2f19",
+    "semantic_hash": "0841b8c4f07e5998ff9d3136e90b2f19"
   },
   "yeni/panel-mock/src/pages/Overview.tsx": {
-    "mtime": 1794683933.5373828,
-    "seen": 1794684924.8449295,
+    "mtime": 1794685144.9350731,
+    "seen": 1794692324.996855,
     "ast_hash": "9424a35d6cc17c51db36cdc6c2cc440c",
     "semantic_hash": "9424a35d6cc17c51db36cdc6c2cc440c"
   },
   "yeni/panel-mock/src/store.tsx": {
-    "mtime": 1794684786.837582,
-    "seen": 1794684924.8449306,
-    "ast_hash": "6b69c8a7bb1c5414d23d232dbb701705",
-    "semantic_hash": "6b69c8a7bb1c5414d23d232dbb701705"
+    "mtime": 1794691772.1412897,
+    "seen": 1794692324.996861,
+    "ast_hash": "8697c407b2976d52aa0325db96a4ef7a",
+    "semantic_hash": "8697c407b2976d52aa0325db96a4ef7a"
   },
   "yeni/panel-mock/src/ui.tsx": {
-    "mtime": 1794676238.5034692,
-    "seen": 1794684924.8449316,
+    "mtime": 1794686165.6731937,
+    "seen": 1794692324.9968617,
     "ast_hash": "090aa0e6f3c3aaff68c5933e5b2f8206",
     "semantic_hash": "090aa0e6f3c3aaff68c5933e5b2f8206"
   },
   "yeni/panel-mock/tsconfig.json": {
-    "mtime": 1794676063.3434584,
-    "seen": 1794684924.8449323,
+    "mtime": 1794685144.9350731,
+    "seen": 1794692324.9968636,
     "ast_hash": "a390d69561cfce0a731d52518ccb3b7b",
     "semantic_hash": "a390d69561cfce0a731d52518ccb3b7b"
   },
   "yeni/panel-mock/vite.config.ts": {
-    "mtime": 1794676063.3424585,
-    "seen": 1794684924.844933,
-    "ast_hash": "3ccda5eeb7be3962836cadc37f2aaccd",
-    "semantic_hash": "3ccda5eeb7be3962836cadc37f2aaccd"
+    "mtime": 1794686165.6741936,
+    "seen": 1794692324.9968646,
+    "ast_hash": "78f468d59a8335ec9ab25a3d63803d62",
+    "semantic_hash": "78f468d59a8335ec9ab25a3d63803d62"
   },
   "kararlar/0001-cok-kiracili-sistem.md": {
     "mtime": 1794673673.7366438,
@@ -276,15 +276,411 @@
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
-    "mtime": 1794684214.6453862,
-    "seen": 1794684924.8449688,
-    "ast_hash": "b37cf7cac9007d47be5272d6fc393f83",
-    "semantic_hash": "b37cf7cac9007d47be5272d6fc393f83"
+    "mtime": 1794692053.954454,
+    "seen": 1794692324.9969008,
+    "ast_hash": "a28423d7fb918cdb0666d37356e2ef22",
+    "semantic_hash": "a28423d7fb918cdb0666d37356e2ef22"
   },
   "yeni/panel-mock/index.html": {
-    "mtime": 1794676063.3444583,
-    "seen": 1794684924.8449695,
-    "ast_hash": "fc669bdea0dd07d6e47f4026ebbd5207",
-    "semantic_hash": "fc669bdea0dd07d6e47f4026ebbd5207"
+    "mtime": 1794686165.6741936,
+    "seen": 1794692324.9969018,
+    "ast_hash": "dc1baff8bc3c3c9eb164d9fb106b2795",
+    "semantic_hash": "dc1baff8bc3c3c9eb164d9fb106b2795"
+  },
+  "sunum/video-uret.py": {
+    "mtime": 1794689920.3226223,
+    "seen": 1794692324.9968317,
+    "ast_hash": "75474701c15475ad12a5124b15ab168c",
+    "semantic_hash": "75474701c15475ad12a5124b15ab168c"
+  },
+  "yeni/panel-mock/assistant.mjs": {
+    "mtime": 1794691556.2495391,
+    "seen": 1794692324.9968345,
+    "ast_hash": "ee1bad32ef5ae422b5039d19237aa736",
+    "semantic_hash": "ee1bad32ef5ae422b5039d19237aa736"
+  },
+  "yeni/panel-mock/server.mjs": {
+    "mtime": 1794691556.2495391,
+    "seen": 1794692324.996838,
+    "ast_hash": "26f6b621227b47d7806dd06923e56da5",
+    "semantic_hash": "26f6b621227b47d7806dd06923e56da5"
+  },
+  "yeni/panel-mock/src/Agent.tsx": {
+    "mtime": 1794691470.689624,
+    "seen": 1794692324.9968393,
+    "ast_hash": "bd93a278e2682e2e291dd37d3e11bf56",
+    "semantic_hash": "bd93a278e2682e2e291dd37d3e11bf56"
+  },
+  "yeni/panel-mock/src/landing-main.tsx": {
+    "mtime": 1794686165.6741936,
+    "seen": 1794692324.9968443,
+    "ast_hash": "067a09cf0a1b621f340b6b37a5f0969a",
+    "semantic_hash": "067a09cf0a1b621f340b6b37a5f0969a"
+  },
+  "yeni/panel-mock/src/logo.tsx": {
+    "mtime": 1794686165.6731937,
+    "seen": 1794692324.996845,
+    "ast_hash": "06f16bad5c5d916810b279653000281b",
+    "semantic_hash": "06f16bad5c5d916810b279653000281b"
+  },
+  "yeni/panel-mock/src/pages/Automation.tsx": {
+    "mtime": 1794689010.8622265,
+    "seen": 1794692324.9968474,
+    "ast_hash": "24ac223f170a7048d1dcbf733c5cab7b",
+    "semantic_hash": "24ac223f170a7048d1dcbf733c5cab7b"
+  },
+  "yeni/panel-mock/src/pages/Landing.tsx": {
+    "mtime": 1794690747.531915,
+    "seen": 1794692324.9968517,
+    "ast_hash": "e3ec3cadd69f617b9766001a03dd62cc",
+    "semantic_hash": "e3ec3cadd69f617b9766001a03dd62cc"
+  },
+  "yeni/panel-mock/src/pages/Mobile.tsx": {
+    "mtime": 1794691397.5774078,
+    "seen": 1794692324.9968524,
+    "ast_hash": "1a5e8376eceb191a3093cf6c73effc72",
+    "semantic_hash": "1a5e8376eceb191a3093cf6c73effc72"
+  },
+  "yeni/panel-mock/src/pages/Money.tsx": {
+    "mtime": 1794689013.91317,
+    "seen": 1794692324.9968529,
+    "ast_hash": "41db2229751e7c777e5f51972ef85375",
+    "semantic_hash": "41db2229751e7c777e5f51972ef85375"
+  },
+  "yeni/panel-mock/src/pages/Platform.tsx": {
+    "mtime": 1794689009.6192493,
+    "seen": 1794692324.9968557,
+    "ast_hash": "1f3407152d8b50b992785f51a8739669",
+    "semantic_hash": "1f3407152d8b50b992785f51a8739669"
+  },
+  "yeni/panel-mock/src/pages/Portal.tsx": {
+    "mtime": 1794691370.4870696,
+    "seen": 1794692324.996857,
+    "ast_hash": "8db58a5650d0d6a974daf74a43e6bc0c",
+    "semantic_hash": "8db58a5650d0d6a974daf74a43e6bc0c"
+  },
+  "yeni/panel-mock/src/pages/Quality.tsx": {
+    "mtime": 1794691594.8845987,
+    "seen": 1794692324.9968576,
+    "ast_hash": "d4075da093bbf6077f2161c65cf674e3",
+    "semantic_hash": "d4075da093bbf6077f2161c65cf674e3"
+  },
+  "yeni/panel-mock/src/pages/Reservations.tsx": {
+    "mtime": 1794691354.6984553,
+    "seen": 1794692324.9968584,
+    "ast_hash": "245a629e512de1b589e6e5835d71e91c",
+    "semantic_hash": "245a629e512de1b589e6e5835d71e91c"
+  },
+  "yeni/panel-mock/src/pages/Selling.tsx": {
+    "mtime": 1794689022.6890082,
+    "seen": 1794692324.9968588,
+    "ast_hash": "c848e2ac22bff85890369920aaafaf92",
+    "semantic_hash": "c848e2ac22bff85890369920aaafaf92"
+  },
+  "yeni/panel-mock/src/pages/Warehouse.tsx": {
+    "mtime": 1794688989.9326138,
+    "seen": 1794692324.9968598,
+    "ast_hash": "e47fd2dd286c3ef2b31575f59ba9a971",
+    "semantic_hash": "e47fd2dd286c3ef2b31575f59ba9a971"
+  },
+  "yeni/panel-mock/src/vite-env.d.ts": {
+    "mtime": 1794686258.181887,
+    "seen": 1794692324.9968624,
+    "ast_hash": "0352474ba2918efe13895edbc3780d94",
+    "semantic_hash": "0352474ba2918efe13895edbc3780d94"
+  },
+  "kararlar/0006-asistan-katmani.md": {
+    "mtime": 1794692053.9364543,
+    "seen": 1794692324.996894,
+    "ast_hash": "333e27ac0e9ae444e7595924ccd8d6ba",
+    "semantic_hash": "333e27ac0e9ae444e7595924ccd8d6ba"
+  },
+  "kararlar/0007-otomasyon-cekirdegi.md": {
+    "mtime": 1794692053.9374542,
+    "seen": 1794692324.996895,
+    "ast_hash": "4288816b25c4a5ffac12bd983c95ffb6",
+    "semantic_hash": "4288816b25c4a5ffac12bd983c95ffb6"
+  },
+  "sunum/wawierp-rakipler-ve-yol-haritasi.html": {
+    "mtime": 1794687972.48455,
+    "seen": 1794692324.9968987,
+    "ast_hash": "20a99badda1a0b9bb6fd26ffa945f1a6",
+    "semantic_hash": "20a99badda1a0b9bb6fd26ffa945f1a6"
+  },
+  "sunum/wawierp-yenilikler.html": {
+    "mtime": 1794690038.9605331,
+    "seen": 1794692324.9969,
+    "ast_hash": "e0164fa9149b28584742cab880e776db",
+    "semantic_hash": "e0164fa9149b28584742cab880e776db"
+  },
+  "yeni/panel-mock/panel.html": {
+    "mtime": 1794686165.6741936,
+    "seen": 1794692324.9969025,
+    "ast_hash": "9aa7d781de02f048e2a5e9a8c1c564f9",
+    "semantic_hash": "9aa7d781de02f048e2a5e9a8c1c564f9"
+  },
+  "sunum/img/arama.jpg": {
+    "mtime": 1794689952.9574685,
+    "seen": 1794692324.9969032,
+    "ast_hash": "62c6e8d76cefdbae5f24c80bd0e3d607",
+    "semantic_hash": "62c6e8d76cefdbae5f24c80bd0e3d607"
+  },
+  "sunum/img/asistan1.jpg": {
+    "mtime": 1794689953.1004636,
+    "seen": 1794692324.9969037,
+    "ast_hash": "fb734cdb4668c2a66aafe2a98a186a7e",
+    "semantic_hash": "fb734cdb4668c2a66aafe2a98a186a7e"
+  },
+  "sunum/img/asistan2.jpg": {
+    "mtime": 1794689953.2574582,
+    "seen": 1794692324.9969044,
+    "ast_hash": "482c31695b172878e965f93df4867cea",
+    "semantic_hash": "482c31695b172878e965f93df4867cea"
+  },
+  "sunum/img/finans.jpg": {
+    "mtime": 1794689952.7614756,
+    "seen": 1794692324.9969056,
+    "ast_hash": "320d02cb734842596a5ee0848097f66f",
+    "semantic_hash": "320d02cb734842596a5ee0848097f66f"
+  },
+  "sunum/img/fiyat.jpg": {
+    "mtime": 1794689952.2244942,
+    "seen": 1794692324.9969063,
+    "ast_hash": "eb023c27f1d0052a9ac1dafe0837c454",
+    "semantic_hash": "eb023c27f1d0052a9ac1dafe0837c454"
+  },
+  "sunum/img/genel.jpg": {
+    "mtime": 1794689951.5015197,
+    "seen": 1794692324.9969072,
+    "ast_hash": "918a97b7e4a4c32f4b2e29514520afbd",
+    "semantic_hash": "918a97b7e4a4c32f4b2e29514520afbd"
+  },
+  "sunum/img/kalite.jpg": {
+    "mtime": 1794689951.9885025,
+    "seen": 1794692324.9969077,
+    "ast_hash": "dcf938accca9e2f59711725d988abe51",
+    "semantic_hash": "dcf938accca9e2f59711725d988abe51"
+  },
+  "sunum/img/kanal.jpg": {
+    "mtime": 1794689951.8725066,
+    "seen": 1794692324.9969084,
+    "ast_hash": "d25bc495dcb13712a6cf7c3ca69a3973",
+    "semantic_hash": "d25bc495dcb13712a6cf7c3ca69a3973"
+  },
+  "sunum/img/kural.jpg": {
+    "mtime": 1794689952.3944883,
+    "seen": 1794692324.9969096,
+    "ast_hash": "c9eda4ba174d2715cbebf69d4df5791f",
+    "semantic_hash": "c9eda4ba174d2715cbebf69d4df5791f"
+  },
+  "sunum/img/listeleme.jpg": {
+    "mtime": 1794689952.0944989,
+    "seen": 1794692324.9969103,
+    "ast_hash": "b30ce6d32c9ca85bc450ca5daaca0ea1",
+    "semantic_hash": "b30ce6d32c9ca85bc450ca5daaca0ea1"
+  },
+  "sunum/img/platform.jpg": {
+    "mtime": 1794689952.8704717,
+    "seen": 1794692324.996911,
+    "ast_hash": "364ebc93375fb898d0722d3ea4e8c2c3",
+    "semantic_hash": "364ebc93375fb898d0722d3ea4e8c2c3"
+  },
+  "sunum/img/siparis.jpg": {
+    "mtime": 1794689951.603516,
+    "seen": 1794692324.9969118,
+    "ast_hash": "d81137b6848d7788de6f84cc0041f1de",
+    "semantic_hash": "d81137b6848d7788de6f84cc0041f1de"
+  },
+  "sunum/img/toplama.jpg": {
+    "mtime": 1794689951.7435112,
+    "seen": 1794692324.9969127,
+    "ast_hash": "6a07e5e6b869d6979706add42a774791",
+    "semantic_hash": "6a07e5e6b869d6979706add42a774791"
+  },
+  "sunum/img/uyari.jpg": {
+    "mtime": 1794689952.5294836,
+    "seen": 1794692324.9969134,
+    "ast_hash": "bf007573a70e3e7960b4bab6ee4cf6ec",
+    "semantic_hash": "bf007573a70e3e7960b4bab6ee4cf6ec"
+  },
+  "sunum/img/vardiya.jpg": {
+    "mtime": 1794689952.6484795,
+    "seen": 1794692324.9969141,
+    "ast_hash": "fafdd56b7e653e19af94c991adc6ec34",
+    "semantic_hash": "fafdd56b7e653e19af94c991adc6ec34"
+  },
+  "sunum/wawierp-tanitim-kapak.jpg": {
+    "mtime": 1794689920.4226186,
+    "seen": 1794692324.9969149,
+    "ast_hash": "4db9406bb4c57d33c25cb350596bfe8c",
+    "semantic_hash": "4db9406bb4c57d33c25cb350596bfe8c"
+  },
+  "yeni/panel-mock/src/assets/marks/aliexpress.svg": {
+    "mtime": 1794686236.4571872,
+    "seen": 1794692324.9969168,
+    "ast_hash": "1ca90870ce829682adbf14031f0cfd02",
+    "semantic_hash": "1ca90870ce829682adbf14031f0cfd02"
+  },
+  "yeni/panel-mock/src/assets/marks/allegro.svg": {
+    "mtime": 1794686236.4981866,
+    "seen": 1794692324.9969177,
+    "ast_hash": "33f500b3a2bb4982f6e601c6a710a64f",
+    "semantic_hash": "33f500b3a2bb4982f6e601c6a710a64f"
+  },
+  "yeni/panel-mock/src/assets/marks/amazon.svg": {
+    "mtime": 1794686236.5341861,
+    "seen": 1794692324.9969184,
+    "ast_hash": "1ab2a827ea30a5450670007d1d33cb57",
+    "semantic_hash": "1ab2a827ea30a5450670007d1d33cb57"
+  },
+  "yeni/panel-mock/src/assets/marks/bigcommerce.svg": {
+    "mtime": 1794686236.5631857,
+    "seen": 1794692324.9969192,
+    "ast_hash": "03ef0add1f184b3c23b42637e82416a3",
+    "semantic_hash": "03ef0add1f184b3c23b42637e82416a3"
+  },
+  "yeni/panel-mock/src/assets/marks/dhl.svg": {
+    "mtime": 1794686236.602185,
+    "seen": 1794692324.9969199,
+    "ast_hash": "34b2f49705b6c5d045c5204a9341b773",
+    "semantic_hash": "34b2f49705b6c5d045c5204a9341b773"
+  },
+  "yeni/panel-mock/src/assets/marks/dpd.svg": {
+    "mtime": 1794686236.6371846,
+    "seen": 1794692324.9969206,
+    "ast_hash": "da881ee087479497aadf1d8fcd762ce8",
+    "semantic_hash": "da881ee087479497aadf1d8fcd762ce8"
+  },
+  "yeni/panel-mock/src/assets/marks/ebay.svg": {
+    "mtime": 1794686236.677184,
+    "seen": 1794692324.9969213,
+    "ast_hash": "58e0a45f1848902bd0601c7f52dacdfa",
+    "semantic_hash": "58e0a45f1848902bd0601c7f52dacdfa"
+  },
+  "yeni/panel-mock/src/assets/marks/etsy.svg": {
+    "mtime": 1794686236.7181835,
+    "seen": 1794692324.996922,
+    "ast_hash": "e78d29ee89b58a2d6a47c7af55bac122",
+    "semantic_hash": "e78d29ee89b58a2d6a47c7af55bac122"
+  },
+  "yeni/panel-mock/src/assets/marks/fedex.svg": {
+    "mtime": 1794686236.7431831,
+    "seen": 1794692324.996923,
+    "ast_hash": "26752ebbb890dc93526cd09c4e930466",
+    "semantic_hash": "26752ebbb890dc93526cd09c4e930466"
+  },
+  "yeni/panel-mock/src/assets/marks/flipkart.svg": {
+    "mtime": 1794686236.7811825,
+    "seen": 1794692324.9969234,
+    "ast_hash": "1f7f056d2303446227c83ae14ad1e1a3",
+    "semantic_hash": "1f7f056d2303446227c83ae14ad1e1a3"
+  },
+  "yeni/panel-mock/src/assets/marks/hermes.svg": {
+    "mtime": 1794686236.8141823,
+    "seen": 1794692324.9969242,
+    "ast_hash": "b1a7b61c9ac2383882485357d046f221",
+    "semantic_hash": "b1a7b61c9ac2383882485357d046f221"
+  },
+  "yeni/panel-mock/src/assets/marks/kaufland.svg": {
+    "mtime": 1794686236.8541815,
+    "seen": 1794692324.9969249,
+    "ast_hash": "75d35305ad995419c5368a0a6ae07689",
+    "semantic_hash": "75d35305ad995419c5368a0a6ae07689"
+  },
+  "yeni/panel-mock/src/assets/marks/magento.svg": {
+    "mtime": 1794686236.8811812,
+    "seen": 1794692324.9969273,
+    "ast_hash": "cb220e0e6e3dab0e9427137b01cb25a5",
+    "semantic_hash": "cb220e0e6e3dab0e9427137b01cb25a5"
+  },
+  "yeni/panel-mock/src/assets/marks/metro.svg": {
+    "mtime": 1794686236.897181,
+    "seen": 1794692324.996928,
+    "ast_hash": "d3b7492a4e460d4516ea46b6716f9e5e",
+    "semantic_hash": "d3b7492a4e460d4516ea46b6716f9e5e"
+  },
+  "yeni/panel-mock/src/assets/marks/otto.svg": {
+    "mtime": 1794686236.9251807,
+    "seen": 1794692324.9969287,
+    "ast_hash": "d8ae873d576c736ec7c339b6612a09b6",
+    "semantic_hash": "d8ae873d576c736ec7c339b6612a09b6"
+  },
+  "yeni/panel-mock/src/assets/marks/prestashop.svg": {
+    "mtime": 1794686236.9521801,
+    "seen": 1794692324.9969296,
+    "ast_hash": "ec69fdd94d9f676a545b3520e680041b",
+    "semantic_hash": "ec69fdd94d9f676a545b3520e680041b"
+  },
+  "yeni/panel-mock/src/assets/marks/rakuten.svg": {
+    "mtime": 1794686236.9611802,
+    "seen": 1794692324.9969304,
+    "ast_hash": "af0d727ab5fbaecd94008c4231d0f326",
+    "semantic_hash": "af0d727ab5fbaecd94008c4231d0f326"
+  },
+  "yeni/panel-mock/src/assets/marks/shopee.svg": {
+    "mtime": 1794686236.96818,
+    "seen": 1794692324.9969308,
+    "ast_hash": "25fd60959f22dba0c830693158b8f285",
+    "semantic_hash": "25fd60959f22dba0c830693158b8f285"
+  },
+  "yeni/panel-mock/src/assets/marks/shopify.svg": {
+    "mtime": 1794686236.9761798,
+    "seen": 1794692324.9969316,
+    "ast_hash": "87af3ae567983eaf1c00ecb9fcf6842f",
+    "semantic_hash": "87af3ae567983eaf1c00ecb9fcf6842f"
+  },
+  "yeni/panel-mock/src/assets/marks/shopware.svg": {
+    "mtime": 1794686236.98518,
+    "seen": 1794692324.9969323,
+    "ast_hash": "c3fd71913aeedc3aa1b2f5cca973241a",
+    "semantic_hash": "c3fd71913aeedc3aa1b2f5cca973241a"
+  },
+  "yeni/panel-mock/src/assets/marks/squarespace.svg": {
+    "mtime": 1794686237.0031796,
+    "seen": 1794692324.9969332,
+    "ast_hash": "6aceb49dc85ca777c538d530690e5478",
+    "semantic_hash": "6aceb49dc85ca777c538d530690e5478"
+  },
+  "yeni/panel-mock/src/assets/marks/taobao.svg": {
+    "mtime": 1794686237.0221794,
+    "seen": 1794692324.996934,
+    "ast_hash": "487ebf3518456cb4ad02e036deacb1e2",
+    "semantic_hash": "487ebf3518456cb4ad02e036deacb1e2"
+  },
+  "yeni/panel-mock/src/assets/marks/ups.svg": {
+    "mtime": 1794686237.0521789,
+    "seen": 1794692324.9969347,
+    "ast_hash": "26342ff01f856abc6dbbed9b6052a337",
+    "semantic_hash": "26342ff01f856abc6dbbed9b6052a337"
+  },
+  "yeni/panel-mock/src/assets/marks/walmart.svg": {
+    "mtime": 1794686237.0671787,
+    "seen": 1794692324.9969354,
+    "ast_hash": "d348496f161e33c4b349a916f9590722",
+    "semantic_hash": "d348496f161e33c4b349a916f9590722"
+  },
+  "yeni/panel-mock/src/assets/marks/wix.svg": {
+    "mtime": 1794686237.0801785,
+    "seen": 1794692324.996936,
+    "ast_hash": "0d828049fc22b53bf400d6c752ca6d8b",
+    "semantic_hash": "0d828049fc22b53bf400d6c752ca6d8b"
+  },
+  "yeni/panel-mock/src/assets/marks/woocommerce.svg": {
+    "mtime": 1794686237.0901783,
+    "seen": 1794692324.996937,
+    "ast_hash": "1af52dd76d4ec6b2c9e317a6d3d92c82",
+    "semantic_hash": "1af52dd76d4ec6b2c9e317a6d3d92c82"
+  },
+  "yeni/panel-mock/src/assets/marks/zalando.svg": {
+    "mtime": 1794686237.0981781,
+    "seen": 1794692324.9969378,
+    "ast_hash": "6b270412451d98cb5d90235075a13f58",
+    "semantic_hash": "6b270412451d98cb5d90235075a13f58"
+  },
+  "sunum/wawierp-tanitim.mp4": {
+    "mtime": 1794689953.2724576,
+    "seen": 1794692324.9969385,
+    "ast_hash": "a94fd737cbe2b14bf9edcc557ccafc74",
+    "semantic_hash": "a94fd737cbe2b14bf9edcc557ccafc74"
   }
 }
