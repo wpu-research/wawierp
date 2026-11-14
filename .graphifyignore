@@ -1,0 +1,4 @@
+
+# mock panel: bağımlılıklar ve derleme çıktısı
+yeni/**/node_modules/
+yeni/**/dist/

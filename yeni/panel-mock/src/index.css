@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f5f1; --card: #ffffff; --ink: #141413; --ink2: #52514e; --mute: #898781; --line: #e1e0d9;
+  --brand: #2a78d6; --brand-soft: #dbe9fa; --ok: #0c7a0c; --ok-soft: #e2f3e2; --warn: #9a6500; --warn-soft: #fbefd2;
+  --bad: #c93434; --bad-soft: #fbe6e6; --violet: #6250d6; --violet-soft: #e6e2fa;
+}
+[data-theme="dark"] {
+  --bg: #141413; --card: #1e1e1c; --ink: #f0efec; --ink2: #c3c2b7; --mute: #8f8d86; --line: #33332f;
+  --brand: #5b9ff0; --brand-soft: #1d3350; --ok: #4fbf4f; --ok-soft: #1a3320; --warn: #e0a43a; --warn-soft: #3a2f14;
+  --bad: #ee7878; --bad-soft: #3d1e1e; --violet: #a096f0; --violet-soft: #2a2550;
+}
+@theme inline {
+  --color-bg: var(--bg); --color-card: var(--card); --color-ink: var(--ink); --color-ink2: var(--ink2);
+  --color-mute: var(--mute); --color-line: var(--line); --color-brand: var(--brand); --color-brand-soft: var(--brand-soft);
+  --color-ok: var(--ok); --color-ok-soft: var(--ok-soft); --color-warn: var(--warn); --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad); --color-bad-soft: var(--bad-soft); --color-violet: var(--violet); --color-violet-soft: var(--violet-soft);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.45; }
+.num { font-variant-numeric: tabular-nums; }
+select, input { color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }

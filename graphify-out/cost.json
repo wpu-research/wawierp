@@ -13,8 +13,14 @@
       "output_tokens": 0,
       "files": 7,
       "note": "3 cikarim ajani toplam token"
+    },
+    {
+      "date": "2026-11-14T19:35:25.464416+00:00",
+      "input_tokens": 91888,
+      "output_tokens": 0,
+      "files": 28
     }
   ],
-  "total_input_tokens": 534554,
+  "total_input_tokens": 626442,
   "total_output_tokens": 0
 }
