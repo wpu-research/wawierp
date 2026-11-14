@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, LayoutDashboard, LifeBuoy, ListChecks, Menu, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShoppingCart, Store, Sun, Tag, TrendingUp, Truck, Users, Workflow, X, type LucideIcon } from 'lucide-react'
+import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, LayoutDashboard, LifeBuoy, ListChecks, Menu, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Undo2, UserRound, Users, Workflow, X, type LucideIcon } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, account, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
 import { sel } from './ui'
@@ -18,6 +18,9 @@ import { ListingWizard, PriceRules, Replenish } from './pages/Selling'
 import { ContentStudio, QualityQueue } from './pages/Quality'
 import { Accounting, BankMatch, Profit } from './pages/Money'
 import { Billing, Developers, Onboarding, Status } from './pages/Platform'
+import { Reservations } from './pages/Reservations'
+import { CustomerPortal, ReturnForm } from './pages/Portal'
+import { MobileDepot } from './pages/Mobile'
 
 const HOME = location.protocol === 'file:' ? 'index.html' : '/'
 
@@ -25,12 +28,12 @@ interface NavItem { key: string; label: string; icon: LucideIcon; draft?: boolea
 const NAV: { group: string; items: NavItem[] }[] = [
   { group: '', items: [{ key: 'overview', label: 'Genel bakış', icon: LayoutDashboard }] },
   { group: 'Operasyon', items: [
-    { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks, fresh: true }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
-    { key: 'returns', label: 'İadeler', icon: RotateCcw }, { key: 'support', label: 'Destek', icon: LifeBuoy },
+    { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks, fresh: true }, { key: 'mobile', label: 'Mobil depo', icon: Smartphone, fresh: true }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
+    { key: 'returns', label: 'İadeler', icon: RotateCcw }, { key: 'return-form', label: 'Müşteri iade formu', icon: Undo2, fresh: true }, { key: 'support', label: 'Destek', icon: LifeBuoy },
   ] },
   { group: 'Ürün ve stok', items: [
     { key: 'catalog', label: 'Katalog', icon: Package }, { key: 'quality', label: 'Veri kalitesi', icon: ScanSearch, fresh: true }, { key: 'content', label: 'Ürün metni ve çeviri', icon: Languages, fresh: true },
-    { key: 'stock', label: 'Stok defteri', icon: Boxes }, { key: 'counting', label: 'Sayım planı', icon: ClipboardCheck, fresh: true }, { key: 'replenish', label: 'Tedarik önerileri', icon: PackagePlus, fresh: true },
+    { key: 'stock', label: 'Stok defteri', icon: Boxes }, { key: 'reservations', label: 'Stok ayırma', icon: ShieldCheck, fresh: true }, { key: 'counting', label: 'Sayım planı', icon: ClipboardCheck, fresh: true }, { key: 'replenish', label: 'Tedarik önerileri', icon: PackagePlus, fresh: true },
     { key: 'transfers', label: 'Depo transferi', icon: Truck },
   ] },
   { group: 'Satış kanalları', items: [
@@ -41,7 +44,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
   ] },
   { group: 'Finans', items: [
     { key: 'finance', label: 'Faturalar ve KDV', icon: FileText }, { key: 'bank', label: 'Banka mutabakatı', icon: Landmark, fresh: true }, { key: 'accounting', label: 'Muhasebe aktarımı', icon: FileSpreadsheet, fresh: true },
-    { key: 'profit', label: 'Kârlılık', icon: TrendingUp, fresh: true }, { key: 'b2b', label: 'Cari ve B2B portal', icon: Building2 },
+    { key: 'profit', label: 'Kârlılık', icon: TrendingUp, fresh: true }, { key: 'b2b', label: 'Cari ve B2B portal', icon: Building2 }, { key: 'portal', label: 'Müşteri portalı önizleme', icon: UserRound, fresh: true },
   ] },
   { group: 'Platform', items: [
     { key: 'onboarding', label: 'Kurulum sihirbazı', icon: Rocket, fresh: true }, { key: 'developers', label: 'API ve bildirim uçları', icon: Code2, fresh: true },
@@ -67,8 +70,24 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   const [menu, setMenu] = useState(false)
   const [agent, setAgent] = useState(false)
   const [find, setFind] = useState(false)
+  const [keys, setKeys] = useState(false)
+  const undoRef = useRef(st.undoLast); undoRef.current = st.undoLast
+  // Klavye kısayolları: Ctrl K arama, Ctrl Z geri al, ? yardım, a asistan, g + harf ekrana git.
   useEffect(() => {
-    const f = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setFind(v => !v) } }
+    let g = 0
+    const f = (e: KeyboardEvent) => {
+      const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase()
+      if (mod && k === 'k') { e.preventDefault(); setFind(v => !v); return }
+      const el = e.target as HTMLElement | null
+      if (el && (el.isContentEditable || /^(input|textarea|select)$/i.test(el.tagName))) return
+      if (mod && k === 'z') { e.preventDefault(); undoRef.current(); return }
+      if (mod || e.altKey) return
+      if (e.key === '?') { setKeys(v => !v); return }
+      if (k === 'escape') { setKeys(false); return }
+      if (Date.now() - g < 1500 && GOTO[k]) { location.hash = '#/' + GOTO[k][0]; g = 0; return }
+      if (k === 'g') { g = Date.now(); return }
+      if (k === 'a') setAgent(v => !v)
+    }
     addEventListener('keydown', f); return () => removeEventListener('keydown', f)
   }, [])
   useEffect(() => setMenu(false), [page])
@@ -97,7 +116,10 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
     page === 'rules' ? <Rules /> : page === 'alerts' ? <Alerts /> : page === 'shifts' ? <Shifts /> : page === 'picking' ? <Picking /> : page === 'counting' ? <Counting /> :
     page === 'listing' ? <ListingWizard /> : page === 'prices' ? <PriceRules /> : page === 'replenish' ? <Replenish /> : page === 'quality' ? <QualityQueue /> : page === 'content' ? <ContentStudio /> :
     page === 'bank' ? <BankMatch /> : page === 'accounting' ? <Accounting /> : page === 'profit' ? <Profit /> :
-    page === 'onboarding' ? <Onboarding /> : page === 'developers' ? <Developers /> : page === 'billing' ? <Billing /> : page === 'status' ? <Status /> : <NoAccess />
+    page === 'onboarding' ? <Onboarding /> : page === 'developers' ? <Developers /> : page === 'billing' ? <Billing /> : page === 'status' ? <Status /> :
+    page === 'reservations' ? <Reservations /> : page === 'portal' ? <CustomerPortal /> : page === 'return-form' ? <ReturnForm /> : <NoAccess />
+
+  if (page === 'mobile' && allowed('mobile')) return <MobileDepot />
 
   const sidebar = (
     <nav className="flex flex-col h-full" aria-label="Ana menü">
@@ -167,7 +189,13 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
         </button>
       )}
       {find && <Palette onClose={() => setFind(false)} allowed={allowed} />}
-      {st.toast && <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg">{st.toast}</div>}
+      {(st.toast || st.undo) && (
+        <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg max-w-[92vw]">
+          <span className="truncate">{st.toast ?? `Son işlem: ${st.undo!.label}`}</span>
+          {st.undo && <button onClick={st.undoLast} className="shrink-0 inline-flex items-center gap-1 rounded-md border border-bg/40 bg-transparent text-bg px-2 h-7 text-xs font-semibold hover:bg-bg/15"><Undo2 size={13} />Geri al</button>}
+        </div>
+      )}
+      {keys && <Shortcuts onClose={() => setKeys(false)} />}
     </div>
   )
 }
@@ -208,7 +236,27 @@ function Palette({ onClose, allowed }: { onClose: () => void; allowed: (k: strin
               <span className="w-16 shrink-0 text-[11px] text-mute">{r.kind}</span><span className="flex-1 truncate text-sm text-ink">{r.label}</span>{r.sub && <span className="text-xs text-mute truncate max-w-[40%]">{r.sub}</span>}
             </button></li>))}
         </ul>
-        <div className="px-4 py-2 border-t border-line text-[11px] text-mute">↑ ↓ ile gez · Enter ile aç · Ctrl K ile aç/kapat</div>
+        <div className="px-4 py-2 border-t border-line text-[11px] text-mute">↑ ↓ ile gez · Enter ile aç · Ctrl K ile aç/kapat · tüm kısayollar için ?</div>
+      </div>
+    </div>
+  )
+}
+
+const GOTO: Record<string, [string, string]> = { h: ['overview', 'Genel bakış'], o: ['orders', 'Siparişler'], t: ['picking', 'Toplama listesi'], i: ['returns', 'İadeler'], k: ['catalog', 'Katalog'], s: ['stock', 'Stok defteri'], r: ['reservations', 'Stok ayırma'], e: ['sync', 'Eşitleme işleri'], u: ['alerts', 'Uyarılar'], f: ['finance', 'Faturalar'] }
+function Shortcuts({ onClose }: { onClose: () => void }) {
+  const K = ({ children }: { children: string }) => <kbd className="rounded border border-line bg-bg px-1.5 py-0.5 text-[11px] font-sans">{children}</kbd>
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/40 grid place-items-center px-3" onClick={onClose}>
+      <div role="dialog" aria-label="Klavye kısayolları" className="w-full max-w-md rounded-2xl bg-card border border-line shadow-2xl p-5" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between"><h2 className="m-0 text-base font-semibold">Klavye kısayolları</h2><button onClick={onClose} aria-label="Kapat" className="border-0 bg-transparent p-1 text-ink2"><X size={18} /></button></div>
+        <dl className="m-0 mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm items-center">
+          <dt><K>Ctrl</K> <K>K</K></dt><dd className="m-0">Her yerden arama</dd>
+          <dt><K>Ctrl</K> <K>Z</K></dt><dd className="m-0">Son işlemi geri al (10 saniye içinde)</dd>
+          <dt><K>A</K></dt><dd className="m-0">Asistanı aç ya da kapat</dd>
+          <dt><K>?</K></dt><dd className="m-0">Bu listeyi göster</dd>
+          {Object.entries(GOTO).map(([k, [, l]]) => <div key={k} className="contents"><dt><K>G</K> <K>{k.toUpperCase()}</K></dt><dd className="m-0">{l}</dd></div>)}
+        </dl>
+        <p className="m-0 mt-3 text-xs text-mute">Bir yazı alanındayken harf kısayolları çalışmaz.</p>
       </div>
     </div>
   )

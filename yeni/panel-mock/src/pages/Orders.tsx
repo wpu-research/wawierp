@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Check, Eye, FileText, Lock, Search, Tag, Truck } from 'lucide-react'
+import { Bookmark, Check, Eye, FileText, Lock, Search, Tag, Truck, X } from 'lucide-react'
 import { CHANNEL, NOW, OSTATUS, SUPPLY, account, ago, company, dropWaiting, fmtDT, fmtMoney, hasIssue, isOpen, mask, overdue, product, toShip, whName, type ChannelType, type OStatus, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Pager, Tabs, sel, td, th, type Tone } from '../ui'
@@ -18,7 +18,8 @@ const STONE: Record<OStatus, Tone> = { yeni: 'info', hazirlaniyor: 'warn', kargo
 const SIZE = 25
 
 export default function Orders({ query }: { query: URLSearchParams }) {
-  const { orders, role, createLabels, ship, issueInvoices } = useStore()
+  const { orders, role, createLabels, ship, issueInvoices, views, saveView, removeView } = useStore()
+  const [naming, setNaming] = useState<string | null>(null)
   const R = ROLES[role]
   const [view, setView] = useState<View>('toship')
   const [q, setQ] = useState('')
@@ -47,6 +48,21 @@ export default function Orders({ query }: { query: URLSearchParams }) {
       <PageHead title="Siparişler" desc="Bütün kanalların siparişleri tek listede. Kanal, şirket ve depo birer süzgeçtir; kanal başına ayrı sayfa yoktur."
         legacy={['orders-pool', 'orders-ebay', 'orders-kaufland', 'warehouse-orders', 'company-home&view=orders', 'metro&view=orders', 'tr-market&tab=orders', 'otto_tab=orders', 'amazon_tab=orders', '/allordersfilter', 'problem-orders', 'asterbuy-orders']} />
       <Tabs items={VIEWS.map(v => ({ key: v.key, label: v.label, count: counts[v.key], tone: v.tone }))} value={view} onChange={setView} />
+      {/* Kayıtlı görünümler: o anki sekme, kanal ve arama birlikte saklanır (bu tarayıcıda). */}
+      <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs">
+        <span className="text-mute inline-flex items-center gap-1"><Bookmark size={13} />Görünümlerim</span>
+        {views.map(v => (
+          <span key={v.id} className="inline-flex items-center rounded-full border border-line bg-card">
+            <button onClick={() => { if (VIEWS.some(x => x.key === v.view)) setView(v.view as View); setChan(v.chan as ChannelType | ''); setQ(v.q) }} className="border-0 bg-transparent pl-2.5 pr-1 h-6 text-ink hover:text-brand">{v.name}</button>
+            <button onClick={() => removeView(v.id)} aria-label={`${v.name} görünümünü sil`} className="border-0 bg-transparent pr-1.5 h-6 text-mute hover:text-bad"><X size={12} /></button>
+          </span>))}
+        {naming === null ? <button onClick={() => setNaming('')} className="rounded-full border border-dashed border-line bg-transparent px-2.5 h-6 text-ink2 hover:border-brand">+ Bu görünümü kaydet</button> : (
+          <form className="inline-flex items-center gap-1" onSubmit={e => { e.preventDefault(); const n = naming.trim(); if (n) saveView({ name: n.slice(0, 30), view, chan, q }); setNaming(null) }}>
+            <input autoFocus value={naming} onChange={e => setNaming(e.target.value)} onKeyDown={e => { if (e.key === 'Escape') setNaming(null) }} placeholder="Görünüm adı" aria-label="Görünüm adı" className="h-6 w-36 rounded-md border border-line bg-card px-2 text-xs" />
+            <button type="submit" className="rounded-md border border-brand bg-brand text-white px-2 h-6">Kaydet</button>
+          </form>)}
+        {views.length === 0 && naming === null && <span className="text-mute">Sık kullandığınız süzgeci adıyla saklayın.</span>}
+      </div>
       <Card pad={false} className="mt-2">
         <div className="flex flex-wrap items-center gap-2 p-3 border-b border-line">
           <label className="relative flex-1 min-w-[180px] max-w-sm">

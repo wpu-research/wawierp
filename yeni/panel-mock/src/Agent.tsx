@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ArrowUp, Check, ExternalLink, Lock, ShieldCheck, Sparkles, X } from 'lucide-react'
-import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, overdue, toShip, type ChannelType, type Order } from './data'
+import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
 
@@ -16,19 +16,20 @@ import { Badge, Btn } from './ui'
    - müşteri adı ve iletişim bilgisi asistana gösterilmez */
 
 type Src = { label: string; href: string }
-type ActKind = 'labels' | 'ship' | 'retry' | 'reply' | 'rule'
-interface Act { kind: ActKind; title: string; lines: string[]; ids: string[]; payload?: string; state: 'bekliyor' | 'uygulandi' | 'vazgecildi' }
+type ActKind = 'labels' | 'ship' | 'retry' | 'reply' | 'rule' | 'plan'
+type Step = { kind: 'labels' | 'ship' | 'retry'; ids: string[]; label: string }
+interface Act { kind: ActKind; title: string; lines: string[]; ids: string[]; payload?: string; steps?: Step[]; auto?: boolean; state: 'bekliyor' | 'uygulandi' | 'vazgecildi' }
 interface Msg { id: number; from: 'user' | 'agent'; body: ReactNode; sources?: Src[]; act?: Act }
-type Mode = 'yanit' | 'onay'
+type Mode = 'yanit' | 'onay' | 'oto'
 type ApiMsg = Anthropic.Beta.BetaMessageParam
 type Block = Anthropic.Beta.BetaContentBlock
 type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[] }
-const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
+const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
 // Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
 const API = location.origin + '/api/assistant'
 const CAP = 25 // tek seferde en fazla bu kadar kayda işlem önerilir
 
-const SUGGEST = ['Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
+const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta risk var mı?', 'Hangi ürünler bitmek üzere?', 'Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
 
 const norm = (s: string) => s.toLocaleLowerCase('tr-TR')
 const plural = (n: number, w: string) => `${fmtNum(n)} ${w}`
@@ -45,8 +46,63 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
   const input = useRef<HTMLTextAreaElement>(null)
   useEffect(() => { end.current?.scrollIntoView({ block: 'end' }) }, [msgs, busy])
   useEffect(() => { if (open) input.current?.focus() }, [open])
+  const greeted = useRef(false)
+  useEffect(() => {
+    if (!open || greeted.current) return
+    greeted.current = true
+    const ids = new Set(st.accounts.map(a => a.id))
+    const failed = st.jobs.filter(j => j.status === 'basarisiz' && (j.acc === null || ids.has(j.acc))).length
+    const late = st.orders.filter(overdue).length, risk = stockRisks().eksi.length, waiting = st.tickets.filter(t => t.status === 'open').length
+    const items = [failed && `${fmtNum(failed)} eşitleme işi başarısız`, late && `${fmtNum(late)} sipariş 2 günü aştı`, risk && `${fmtNum(risk)} üründe satılabilir stok eksiye düştü`, waiting && `${fmtNum(waiting)} müşteri sorusu yanıt bekliyor`].filter(Boolean) as string[]
+    if (!items.length) return
+    setMsgs(a => (a.length ? a : [{ id: seq.current++, from: 'agent', body: <><p className="m-0 font-medium">Siz sormadan fark ettiklerim:</p><ul className="m-0 mt-1.5 pl-4">{items.map(i => <li key={i}>{i}</li>)}</ul><p className="m-0 mt-2 text-ink2">İsterseniz “Günü kapat” diyerek bunlar için bir plan hazırlatabilirsiniz.</p></>,
+      sources: [{ label: 'Eşitleme işleri', href: '#/sync' }, { label: '2 günü aşanlar', href: '#/orders?view=overdue' }, { label: 'Stok ayırma', href: '#/reservations' }, { label: 'Destek', href: '#/support' }] }]))
+  // yalnız ilk açılışta çalışır
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
 
   const push = (m: Omit<Msg, 'id'>) => setMsgs(a => [...a, { ...m, id: seq.current++ }])
+
+  // ---- ortak hesaplar (hazır senaryolar ve yapay zekâ araçları aynı sayıları kullanır) ----
+  const stockRisks = () => {
+    const res = new Map<string, number>()
+    for (const o of st.orders) if (isOpen(o) && o.supply === 'fiziki') for (const i of o.items) res.set(i.pid + '|' + o.wh, (res.get(i.pid + '|' + o.wh) ?? 0) + i.qty)
+    const rows: { ad: string; sku: string; depo: string; fiziki: number; ayrilan: number; satilabilir: number; min: number }[] = []
+    let sayimYok = 0
+    for (const p of st.products) for (const [wh, r] of Object.entries(p.stock)) {
+      if (!r) continue
+      if (r.fiziki === null) { sayimYok++; continue }
+      const a = res.get(p.id + '|' + wh) ?? 0
+      rows.push({ ad: p.name, sku: p.sku, depo: whName(wh as WhId), fiziki: r.fiziki, ayrilan: a, satilabilir: r.fiziki - a, min: r.min })
+    }
+    const eksi = rows.filter(r => r.satilabilir < 0).sort((a, b) => a.satilabilir - b.satilabilir)
+    const az = rows.filter(r => r.satilabilir >= 0 && r.satilabilir <= r.min).sort((a, b) => a.satilabilir - b.satilabilir)
+    return { eksi, az, sayimYok, ayrilanToplam: rows.reduce((s, r) => s + r.ayrilan, 0) }
+  }
+  const replenish = () => {
+    const sold = new Map<string, number>()
+    for (const o of st.orders) if (o.status !== 'iptal') for (const i of o.items) sold.set(i.pid, (sold.get(i.pid) ?? 0) + i.qty)
+    return st.products.filter(p => sold.has(p.id)).map(p => {
+      const stok = Object.values(p.stock).reduce((s, r) => s + (r?.fiziki ?? 0), 0), gunluk = sold.get(p.id)! / 30
+      return { ad: p.name, sku: p.sku, son_30_gun_satis: sold.get(p.id)!, fiziki_stok: stok, kac_gun_yeter: Math.max(0, Math.round(stok / gunluk)), onerilen_siparis_30_gun: Math.max(0, Math.ceil(gunluk * 30 - stok)) }
+    }).sort((a, b) => a.kac_gun_yeter - b.kac_gun_yeter)
+  }
+  const labelable = (o: Order) => toShip(o) && o.supply === 'fiziki' && o.label === 'yok' && !o.issue
+  const shippable = (o: Order) => o.label === 'hazir' && o.status === 'hazirlaniyor'
+
+  // İşlemi uygular; denetim kaydına "asistan aracılığıyla" notu düşer.
+  const exec = (kind: Step['kind'] | 'reply', ids: string[], payload?: string) => {
+    if (kind === 'labels') st.createLabels(ids, 'asistan')
+    else if (kind === 'ship') st.ship(ids, 'asistan')
+    else if (kind === 'retry') ids.forEach(id => st.retryJob(id, 'asistan'))
+    else st.replyTicket(ids[0], payload!, 'asistan')
+  }
+  // "Kendiliğinden" düzeyinde yalnız en düşük riskli iş (başarısız eşitlemeyi yeniden deneme) onaysız uygulanır.
+  const auto = (a: Act): Act => {
+    if (mode !== 'oto' || a.kind !== 'retry' || !R.ops) return a
+    exec('retry', a.ids)
+    return { ...a, state: 'uygulandi', auto: true }
+  }
 
   // ---- gerçek yapay zekâ bağlantısı ----
   const [live, setLive] = useState<'bilinmiyor' | 'canli' | 'mock'>('bilinmiyor')
@@ -69,8 +125,6 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
     const row = (o: Order) => ({ id: o.id, no: o.no, kanal: CHANNEL[account(o.acc).type].label, hesap: account(o.acc).name, durum: o.status, odeme: o.pay, etiket: o.label, tedarik: o.supply, bekleme_saat: hours(o.t), sorun: o.issue ?? null, ...(R.finance ? { tutar: o.total, para_birimi: o.cur } : {}) })
     const today = dayKey(NOW), yest = dayKey(NOW - 86400_000)
     const eur = (l: Order[]) => Math.round(l.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0))
-    const labelable = (o: Order) => toShip(o) && o.supply === 'fiziki' && o.label === 'yok' && !o.issue
-    const shippable = (o: Order) => o.label === 'hazir' && o.status === 'hazirlaniyor'
     const ids = new Set(st.accounts.map(a => a.id))
     const badJobs = st.jobs.filter(j => (j.status === 'basarisiz' || j.status === 'kismi') && (j.acc === null || ids.has(j.acc)))
 
@@ -118,6 +172,22 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
         const open = st.tickets.filter(t => t.status === 'open').sort((a, b) => a.t - b.t)
         return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: [...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null })) } }
       }
+      case 'get_stock_risks': {
+        const r = stockRisks()
+        return { src: [{ label: 'Stok ayırma', href: '#/reservations' }, { label: 'Sayım planı', href: '#/counting' }], data: { aciklama: 'satilabilir = sayılmış fiziki stok − açık siparişler için ayrılan', eksiye_dusen: r.eksi.length, tukenmek_uzere: r.az.length, hic_sayilmamis_depo_kaydi: r.sayimYok, ayrilan_toplam_adet: r.ayrilanToplam, eksiye_dusenler: r.eksi.slice(0, 8), tukenmek_uzere_olanlar: r.az.slice(0, 8) } }
+      }
+      case 'get_replenishment':
+        return { src: [{ label: 'Tedarik önerileri', href: '#/replenish' }], data: { not: 'Satış hızı son 30 günün siparişlerinden; stok tüm depoların sayılmış fiziki toplamı.', urunler: replenish().slice(0, int(input.limit, 8, 20)) } }
+      case 'get_channel_performance': {
+        if (!R.finance) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) tutarları göremez.` } }
+        const m = new Map<ChannelType, { siparis: number; ciro_eur: number }>()
+        for (const o of st.orders) { if (o.status === 'iptal') continue; const t = account(o.acc).type, x = m.get(t) ?? { siparis: 0, ciro_eur: 0 }; x.siparis++; if (o.cur === 'EUR') x.ciro_eur += o.total; m.set(t, x) }
+        const bekleyen = st.orders.filter(o => o.pay === 'bekliyor')
+        return { src: [{ label: 'Kârlılık', href: '#/profit' }, { label: 'Banka mutabakatı', href: '#/bank' }], data: {
+          donem: 'son 30 gün; yalnız EUR siparişler ciroya dahil', kanallar: [...m.entries()].map(([t, x]) => ({ kanal: CHANNEL[t].label, siparis: x.siparis, ciro_eur: Math.round(x.ciro_eur), ortalama_sepet_eur: x.siparis ? Math.round(x.ciro_eur / x.siparis) : 0 })).sort((a, b) => b.ciro_eur - a.ciro_eur),
+          odeme_bekleyen_siparis: bekleyen.length, odeme_bekleyen_tutar_eur: Math.round(bekleyen.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0)),
+        } }
+      }
       case 'open_screen': {
         const page = String(input.page)
         if (!SCREEN[page]) return { error: true, data: { hata: 'Bilinmeyen ekran' } }
@@ -130,7 +200,7 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
         if (mode === 'yanit') return { error: true, data: { hata: 'Kullanıcı "Yalnız yanıtla" düzeyini seçti; taslak hazırlanamaz. Kullanıcıya düzeyi "Hazırla, onayla" yapabileceğini söyle.' } }
         const needOps = kind !== 'reply_ticket'
         if (needOps && !R.ops) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) bu işlemi yapamaz; asistan da onun adına yapamaz.` } }
-        const made = (a: Omit<Act, 'state'>, extra: object = {}): ToolOut => ({ act: { ...a, state: 'bekliyor' }, data: { durum: 'Taslak hazır, kullanıcının onayını bekliyor. İşlem henüz yapılmadı.', kabul_edilen: a.ids.length || undefined, ...extra } })
+        const made = (a: Omit<Act, 'state'>, extra: object = {}): ToolOut => { const act = auto({ ...a, state: 'bekliyor' }); return { act, data: { durum: act.auto ? 'Kullanıcı “Kendiliğinden” düzeyini seçtiği için bu düşük riskli işlem onay beklemeden uygulandı ve denetim kaydına yazıldı.' : 'Taslak hazır, kullanıcının onayını bekliyor. İşlem henüz yapılmadı.', kabul_edilen: a.ids.length || undefined, ...extra } } }
         if (kind === 'create_labels' || kind === 'ship_orders') {
           const want = list(input.order_ids), okFn = kind === 'create_labels' ? labelable : shippable
           const good = st.orders.filter(o => want.includes(o.id) && okFn(o))
@@ -200,7 +270,7 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
   function answer(qRaw: string): Omit<Msg, 'id' | 'from'> {
     const q = norm(qRaw)
     const has = (...k: string[]) => k.some(x => q.includes(x))
-    const draft = (a: Omit<Act, 'state'>): Act | undefined => (mode === 'onay' ? { ...a, state: 'bekliyor' } : undefined)
+    const draft = (a: Omit<Act, 'state'>): Act | undefined => (mode === 'yanit' ? undefined : auto({ ...a, state: 'bekliyor' }))
     const noDraft = mode === 'yanit' ? <p className="m-0 mt-2 text-mute">İşlem önerisi kapalı: “Yalnız yanıtla” modundasınız.</p> : null
 
     // korumalı işlemler: para, fiyat, toplu silme
@@ -208,6 +278,40 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
       body: <><p className="m-0"><Lock size={13} className="inline -mt-0.5 mr-1" />Bu işlemi yapamam. Ödeme iadesi, fiyat değişikliği, iptal ve toplu kaldırma bu basamakta asistana kapalı.</p>
         <p className="m-0 mt-2 text-ink2">İlgili ekranı açabilirim; işlemi siz yaparsınız ve denetim kaydına sizin adınıza yazılır.</p></>,
       sources: [{ label: 'İadeler', href: '#/returns' }, { label: 'Katalog', href: '#/catalog' }],
+    }
+
+    if (has('günü kapat', 'gün sonu', 'hepsini hazırla')) {
+      if (!R.ops) return { body: <p className="m-0">Rolünüz ({R.label}) bu işlemleri yapamıyor; ben de sizin adınıza yapamam.</p> }
+      const jobIds = new Set(st.accounts.map(a => a.id))
+      const steps: Step[] = [
+        { kind: 'labels' as const, ids: st.orders.filter(labelable).slice(0, CAP).map(o => o.id), label: 'kargo etiketi oluştur' },
+        { kind: 'ship' as const, ids: st.orders.filter(shippable).slice(0, CAP).map(o => o.id), label: 'etiketi hazır siparişi kargoya ver' },
+        { kind: 'retry' as const, ids: st.jobs.filter(j => j.status === 'basarisiz' && (j.acc === null || jobIds.has(j.acc))).slice(0, CAP).map(j => j.id), label: 'başarısız eşitlemeyi yeniden dene' },
+      ].filter(s => s.ids.length)
+      if (!steps.length) return { body: <p className="m-0">Bugün için bekleyen etiket, sevk ya da başarısız eşitleme yok.</p>, sources: [{ label: 'Genel bakış', href: '#/overview' }] }
+      return {
+        body: <><p className="m-0">Günü kapatmak için {steps.length} adımlı bir plan hazırladım. Onaylarsanız adımlar sırayla uygulanır; her biri denetim kaydına ayrı yazılır.</p>{noDraft}</>,
+        sources: [{ label: 'Kargo etiketleri', href: '#/labels' }, { label: 'Eşitleme işleri', href: '#/sync' }],
+        act: mode === 'yanit' ? undefined : { kind: 'plan', title: `${steps.length} adımlı plan`, ids: [], steps, state: 'bekliyor', lines: steps.map((s, i) => `Adım ${i + 1}: ${s.ids.length} ${s.label}`).concat(`Her adımda üst sınır ${CAP} kayıt`) },
+      }
+    }
+
+    if (has('risk', 'eksi stok', 'tüken', 'fazla satış', 'stokta')) {
+      const r = stockRisks()
+      return {
+        body: <><p className="m-0">{r.eksi.length ? `${fmtNum(r.eksi.length)} üründe satılabilir stok eksiye düşmüş: açık siparişler eldeki sayılmış stoktan fazla.` : 'Satılabilir stoğu eksiye düşen ürün yok.'} {fmtNum(r.az.length)} ürün tükenmek üzere, {fmtNum(r.sayimYok)} depo kaydı hiç sayılmamış.</p>
+          {r.eksi.length > 0 && <ul className="m-0 mt-2 pl-4">{r.eksi.slice(0, 5).map(x => <li key={x.sku + x.depo}>{x.ad} · {x.depo}: {x.fiziki} sayılmış, {x.ayrilan} ayrılmış</li>)}</ul>}
+          <p className="m-0 mt-2 text-ink2">Açık siparişler için ayrılan toplam: {fmtNum(r.ayrilanToplam)} adet.</p></>,
+        sources: [{ label: 'Stok ayırma', href: '#/reservations' }, { label: 'Sayım planı', href: '#/counting' }],
+      }
+    }
+
+    if (has('bitmek üzere', 'bitecek', 'tedarik', 'yeniden sipariş', 'kaç gün')) {
+      const r = replenish().slice(0, 6)
+      return {
+        body: r.length ? <><p className="m-0">Satış hızına göre en önce bitecek ürünler:</p><ul className="m-0 mt-2 pl-4">{r.map(x => <li key={x.sku}>{x.ad}: yaklaşık {x.kac_gun_yeter} gün yeter (stok {fmtNum(x.fiziki_stok)}, 30 günde {fmtNum(x.son_30_gun_satis)} satıldı)</li>)}</ul></> : <p className="m-0">Son 30 günde satışı olan ürün bulamadım.</p>,
+        sources: [{ label: 'Tedarik önerileri', href: '#/replenish' }],
+      }
     }
 
     if (has('kural', 'otomatik', 'otomatize', 'her zaman', 'gelince')) return {
@@ -326,11 +430,9 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
     // Taslak hazırlandıktan sonra rol değişmiş olabilir: onay anında yetki yeniden denetlenir.
     if (ok && a.kind !== 'reply' && !R.ops) { st.notify(`Rolünüz (${R.label}) bu işlemi onaylayamaz`); return }
     if (ok) {
-      if (a.kind === 'labels') st.createLabels(a.ids)
-      else if (a.kind === 'ship') st.ship(a.ids)
-      else if (a.kind === 'retry') a.ids.forEach(st.retryJob)
-      else if (a.kind === 'reply') st.replyTicket(a.ids[0], a.payload!)
-      else st.notify('Kural yalnız öneri modunda başlatıldı (mock)')
+      if (a.kind === 'plan') (a.steps ?? []).forEach(s => exec(s.kind, s.ids))
+      else if (a.kind === 'rule') st.notify('Kural yalnız öneri modunda başlatıldı (mock)')
+      else exec(a.kind, a.ids, a.payload)
     }
     notes.current.push(`“${a.title}” taslağı ${ok ? 'kullanıcı tarafından onaylandı ve uygulandı.' : 'kullanıcı tarafından reddedildi; uygulanmadı.'}`)
     setMsgs(ms => ms.map(x => (x.id === id ? { ...x, act: { ...a, state: ok ? 'uygulandi' : 'vazgecildi' } } : x)))
@@ -351,7 +453,9 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
         {([['yanit', 'Yalnız yanıtla'], ['onay', 'Hazırla, onayla']] as const).map(([k, l]) => (
           <button key={k} role="radio" aria-checked={mode === k} onClick={() => setMode(k)} className={`rounded-full border px-2.5 h-7 font-medium ${mode === k ? 'bg-brand text-white border-brand' : 'bg-card border-line text-ink2 hover:bg-bg'}`}>{l}</button>
         ))}
-        <button role="radio" aria-checked={false} disabled title="Pilotta hata oranı ölçüldükten sonra açılır" className="rounded-full border border-dashed border-line px-2.5 h-7 text-mute bg-transparent inline-flex items-center gap-1"><Lock size={11} />Kendiliğinden</button>
+        <button role="radio" aria-checked={mode === 'oto'} title="Yalnız başarısız eşitlemeyi yeniden deneme onaysız uygulanır; diğer her iş onayınızı bekler"
+          onClick={() => { if (mode === 'oto') return; if (!R.ops) { st.notify(`Rolünüz (${R.label}) bu düzeyi açamaz`); return } setMode('oto'); push({ from: 'agent', body: <p className="m-0"><Lock size={13} className="inline -mt-0.5 mr-1" />“Kendiliğinden” düzeyi açıldı. Bu düzeyde yalnız başarısız eşitlemeleri yeniden denemeyi onayınızı beklemeden yaparım ve sonucu size bildiririm. Etiket, sevk, destek yanıtı ve kurallar yine onayınızı bekler; para ve fiyat işlemleri kapalı kalır.</p> }) }}
+          className={`rounded-full border px-2.5 h-7 font-medium inline-flex items-center gap-1 ${mode === 'oto' ? 'bg-brand text-white border-brand' : 'bg-card border-dashed border-line text-ink2 hover:bg-bg'}`}>Kendiliğinden</button>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3" aria-live="polite">
@@ -369,13 +473,13 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
             {m.sources && <div className="mt-1.5 flex flex-wrap gap-1.5">{m.sources.map(s => <a key={s.href + s.label} href={s.href} className="inline-flex items-center gap-1 rounded-full border border-line bg-card px-2 py-0.5 text-xs text-ink2 no-underline hover:border-brand hover:text-brand"><ExternalLink size={11} />{s.label}</a>)}</div>}
             {m.act && (
               <div className={`mt-2 rounded-xl border px-3 py-2.5 ${m.act.state === 'bekliyor' ? 'border-brand bg-brand-soft/40' : 'border-line bg-card'}`}>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-ink2"><ShieldCheck size={13} />{m.act.state === 'bekliyor' ? 'Onayınızı bekliyor' : m.act.state === 'uygulandi' ? 'Uygulandı' : 'Vazgeçildi'}</div>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-ink2"><ShieldCheck size={13} />{m.act.state === 'bekliyor' ? 'Onayınızı bekliyor' : m.act.state === 'uygulandi' ? (m.act.auto ? 'Kendiliğinden uygulandı' : 'Uygulandı') : 'Vazgeçildi'}</div>
                 <div className="mt-1 font-medium">{m.act.title}</div>
                 <ul className="m-0 mt-1 pl-4 text-ink2 text-[13px]">{m.act.lines.map(l => <li key={l}>{l}</li>)}</ul>
                 {m.act.state === 'bekliyor' ? (
                   <div className="mt-2.5 flex gap-2"><Btn variant="primary" onClick={() => decide(m.id, true)}><Check size={14} />Onayla</Btn><Btn onClick={() => decide(m.id, false)}>Vazgeç</Btn></div>
                 ) : m.act.state === 'uygulandi' ? (
-                  <p className="m-0 mt-2 text-xs text-mute">{m.act.kind === 'rule' ? 'Kural 7 gün yalnız öneri üretecek.' : <>İşlem sizin adınıza yapıldı ve <a href="#/audit" className="text-brand">denetim kaydına</a> yazıldı.</>}</p>
+                  <p className="m-0 mt-2 text-xs text-mute">{m.act.kind === 'rule' ? 'Kural 7 gün yalnız öneri üretecek.' : <>İşlem sizin adınıza yapıldı ve <a href="#/audit" className="text-brand">denetim kaydına</a> “asistan aracılığıyla” notuyla yazıldı. 10 saniye içinde alttaki bildirimden geri alabilirsiniz.</>}</p>
                 ) : null}
               </div>
             )}

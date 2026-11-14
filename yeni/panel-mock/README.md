@@ -38,7 +38,9 @@ Sağ alt köşedeki **W** düğmesi asistan panelini açar (`src/Agent.tsx`). İ
 - asistan, kendisine yazan rolün yetkisinden fazlasını yapamaz; yetki onay anında yeniden denetlenir
 - para iadesi, fiyat değişikliği, iptal ve toplu silme için araç yoktur
 - müşteri adı ve iletişim bilgisi asistana verilmez; müşteri mesajları veri olarak okunur, talimat olarak değil
-- "Kendiliğinden" düzeyi kilitlidir (pilottan sonra)
+- "Kendiliğinden" düzeyinde yalnız başarısız eşitlemeyi yeniden deneme onaysız uygulanır; diğer her iş onay bekler
+- her asistan işlemi denetim kaydına "asistan aracılığıyla" notuyla yazılır
+- panel açıldığında asistan, sormadan fark ettiklerini bildirir; "Günü kapat" çok adımlı bir plan hazırlar
 
 Sunucu ayarları (Railway değişkenleri):
 
@@ -66,3 +68,19 @@ Menüde "yeni" etiketiyle görünür; hepsi mock veri üzerinde çalışır, ör
 | Platform | Kurulum sihirbazı, API ve bildirim uçları, Kullanım ve abonelik, Durum sayfası | `Platform.tsx` |
 
 Her yerden arama: `Ctrl K` (ekran, hazır görünüm, sipariş numarası, ürün).
+
+## Sonradan eklenenler
+
+| Özellik | Nerede |
+|---|---|
+| Geri alma: veri değiştiren her işlemden sonra 10 saniye "Geri al" (Ctrl Z) | `src/store.tsx`, alt bildirim |
+| Klavye kısayolları: `?` listeyi açar; `G` + harf ekrana gider; `A` asistan | `src/App.tsx` |
+| Kayıtlı görünümler: Siparişler'de süzgeci adıyla saklama (tarayıcıda) | `src/pages/Orders.tsx` |
+| Stok ayırma ve fazla satış koruması | `src/pages/Reservations.tsx` |
+| Toptan müşteri portalı (müşteri görünümü): fiyat listesi, yeniden sipariş, sepet | `src/pages/Portal.tsx` |
+| Müşteri iade formu (müşteri görünümü) | `src/pages/Portal.tsx` |
+| Mobil depo web prototipi: topla, paketle, say, kabul; çevrimdışı kuyruk | `src/pages/Mobile.tsx`, `#/mobile` |
+| Yapay zekâyla ürün metni: anahtar varsa `/api/content` | `assistant.mjs`, `src/pages/Quality.tsx` |
+| Asistanın yeni araçları: stok riski, tedarik önerisi, kanal performansı | `assistant.mjs`, `src/Agent.tsx` |
+
+Mobil depo bir web prototipidir; mağazalarda yayımlanmış bir uygulama değildir.

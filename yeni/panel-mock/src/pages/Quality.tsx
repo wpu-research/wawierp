@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Check, ImagePlus, Keyboard, RefreshCw, SkipForward } from 'lucide-react'
+import { Check, ImagePlus, Keyboard, RefreshCw, SkipForward, Sparkles } from 'lucide-react'
 import { NOW, fmtNum, type Product } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone } from '../ui'
@@ -185,9 +185,25 @@ export function ContentStudio() {
   const [lang, setLang] = useState<(typeof LANGS)[number]>('TR')
   const [v, setV] = useState(0)
   const [acc, setAcc] = useState<{ pid: string; ch: string; title: string; v: number; lang: string }[]>([])
+  // Sunucuda yapay zekâ anahtarı varsa metni model yazar (/api/content); yoksa şablonlar kullanılır.
+  const [ai, setAi] = useState<{ title: string; bullets: string[] } | null>(null)
+  const [aiBusy, setAiBusy] = useState(false)
+  const [live, setLive] = useState(false)
+  useEffect(() => { if (location.protocol === 'file:') return; fetch(location.origin + '/api/assistant').then(r => (r.ok ? r.json() : null)).then(j => setLive(!!j?.live)).catch(() => {}) }, [])
+  useEffect(() => setAi(null), [pid, ch, lang])
   const p = products.find(x => x.id === pid) ?? products[0]
   if (!p) return <Empty>Ürün yok.</Empty>
-  const title = VARIANTS[v](p), rule = CH[ch]
+  const title = ai?.title ?? VARIANTS[v](p), rule = CH[ch]
+  const LANGNAME: Record<string, string> = { TR: 'Türkçe', DE: 'Almanca', EN: 'İngilizce', NL: 'Felemenkçe', FR: 'Fransızca' }
+  const gen = async () => {
+    setAiBusy(true)
+    try {
+      const r = await fetch(location.origin + '/api/content', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product: { name: p.name, brand: p.brand, cat: p.cat, sku: p.sku }, channel: CH[ch].label, max: rule.max, lang: LANGNAME[lang] ?? lang }) })
+      const j = (await r.json().catch(() => ({}))) as { title?: string; bullets?: string[]; message?: string }
+      if (!r.ok || !j.title) throw new Error(j.message || 'Metin üretilemedi')
+      setAi({ title: j.title, bullets: j.bullets ?? [] })
+    } catch (e) { notify(e instanceof Error ? e.message : 'Metin üretilemedi') } finally { setAiBusy(false) }
+  }
   const tr = TR_SAMPLES[p.name]?.[lang]
   const rules = (t: string) => [
     { ok: t.length <= rule.max, text: `En çok ${rule.max} karakter (${t.length})` },
@@ -201,7 +217,8 @@ export function ContentStudio() {
   return (
     <>
       <PageHead title="Ürün metni ve çeviri" desc="Kanal kurallarına uygun başlık ve madde işaretli açıklama taslağı üretin." />
-      <div className="mb-3 rounded-lg border border-line bg-warn-soft text-warn px-3 py-2 text-sm">Bu mock dil modeli çağırmaz; metinler sabit şablonlardan gelir. Gerçek sistemde yapay zekâ yazar, siz onaylarsınız.</div>
+      {live ? <div className="mb-3 rounded-lg border border-line bg-ok-soft text-ok px-3 py-2 text-sm">Yapay zekâ bağlı: “Yapay zekâyla üret” seçili ürün, kanal ve dil için başlık ve maddeleri yazar. Kabul etmeden hiçbir yere kaydedilmez.</div>
+        : <div className="mb-3 rounded-lg border border-line bg-warn-soft text-warn px-3 py-2 text-sm">Yapay zekâ bağlı değil; metinler sabit şablonlardan gelir. Sunucuya anahtar tanımlanınca “Yapay zekâyla üret” düğmesi görünür.</div>}
       <Card className="mb-3"><div className="grid sm:grid-cols-2 gap-3">
         <label className="text-sm">Ürün<select className={sel + ' w-full mt-1'} value={p.id} onChange={e => { setPid(e.target.value); setV(0) }}>{products.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
         <label className="text-sm">Kanal<select className={sel + ' w-full mt-1'} value={ch} onChange={e => setCh(e.target.value)}>{Object.entries(CH).map(([k, c]) => <option key={k} value={k}>{c.label} · en çok {c.max} karakter</option>)}</select></label>
@@ -210,20 +227,21 @@ export function ContentStudio() {
         <Card title="Mevcut başlık" right={<Badge>{p.name.length} karakter</Badge>}>
           <p className="m-0 text-sm">{p.name}</p><ul className="list-none p-0 mt-2 space-y-1 text-xs">{sc(p.name)}</ul>
         </Card>
-        <Card title="Taslak" right={<span className="flex gap-1"><Badge tone="violet">örnek şablon {v + 1}/{VARIANTS.length}</Badge><Badge tone={title.length <= rule.max ? 'ok' : 'bad'}>{title.length}/{rule.max}</Badge></span>}>
+        <Card title="Taslak" right={<span className="flex gap-1">{ai ? <Badge tone="ok">yapay zekâ taslağı</Badge> : <Badge tone="violet">örnek şablon {v + 1}/{VARIANTS.length}</Badge>}<Badge tone={title.length <= rule.max ? 'ok' : 'bad'}>{title.length}/{rule.max}</Badge></span>}>
           <p className="m-0 text-sm font-medium">{title}</p>
-          <ul className="m-0 mt-2 pl-4 text-sm text-ink2 space-y-0.5">{bullets(p, v).map(b => <li key={b}>{b}</li>)}</ul>
+          <ul className="m-0 mt-2 pl-4 text-sm text-ink2 space-y-0.5">{(ai?.bullets ?? bullets(p, v)).map(b => <li key={b}>{b}</li>)}</ul>
           <ul className="list-none p-0 mt-2 space-y-1 text-xs">{sc(title)}</ul>
           <div className="flex flex-wrap gap-2 mt-3">
             <Btn variant="primary" disabled={!canEdit} onClick={accept}><Check size={15} />Taslağı kabul et</Btn>
-            <Btn onClick={() => setV(x => (x + 1) % VARIANTS.length)}><RefreshCw size={15} />Yeniden üret</Btn>
+            {live && <Btn onClick={gen} disabled={aiBusy || !canEdit}><Sparkles size={15} />{aiBusy ? 'Yazıyor…' : ai ? 'Yeniden yazdır' : 'Yapay zekâyla üret'}</Btn>}
+            <Btn onClick={() => { setAi(null); setV(x => (x + 1) % VARIANTS.length) }}><RefreshCw size={15} />{live ? 'Şablona dön' : 'Yeniden üret'}</Btn>
           </div>
           {!canEdit && <div className="text-xs text-mute mt-1">Bu rolde yalnızca görüntüleme var.</div>}
         </Card>
       </div>
       <Card title="Çeviri" right={<Badge tone="violet">örnek</Badge>} className="mt-3">
         <div className="flex gap-1 mb-2" role="group" aria-label="Dil">{LANGS.map(l => <Btn key={l} variant={l === lang ? 'primary' : 'outline'} onClick={() => setLang(l)} aria-pressed={l === lang}>{l}</Btn>)}</div>
-        {lang === 'TR' ? <p className="m-0 text-sm">{title}</p> : tr ? <p className="m-0 text-sm"><b>{p.brand} {tr}</b></p>
+        {lang === 'TR' || ai ? <p className="m-0 text-sm">{title}</p> : tr ? <p className="m-0 text-sm"><b>{p.brand} {tr}</b></p>
           : <p className="m-0 text-sm text-mute">gerçek sistemde yapay zekâ çevirir; bu mock'ta örnek gösterilir. (Sabit çeviri yalnızca {Object.keys(TR_SAMPLES).length} ürün için var.)</p>}
       </Card>
       <Card title="Son kabul edilen taslaklar" className="mt-3" pad={false}>

@@ -2,7 +2,7 @@
 import { createServer } from 'node:http'
 import { readFileSync } from 'node:fs'
 import { timingSafeEqual } from 'node:crypto'
-import { assistantStatus, handleAssistant } from './assistant.mjs'
+import { assistantStatus, handleAssistant, handleContent } from './assistant.mjs'
 
 const home = readFileSync(new URL('./dist/index.html', import.meta.url))
 const panel = readFileSync(new URL('./dist/panel.html', import.meta.url))
@@ -25,14 +25,14 @@ createServer(async (req, res) => {
   const page = { 'Content-Type': 'text/html; charset=utf-8' }
   if (path === '/') return res.writeHead(200, { ...base, ...page }).end(home)
   // Asistan ucu panelle aynı şifrenin arkasındadır; anahtar yalnız sunucuda durur.
-  if (path === '/api/assistant') {
+  if (path === '/api/assistant' || path === '/api/content') {
     if (!pass) return json(res, base, 503, { live: false, message: 'PANEL_PASSWORD ayarlanmamış' })
     if (!ok(req.headers.authorization)) return json(res, base, 401, { message: 'Giriş gerekli' })
     if (req.method === 'GET') return json(res, base, 200, assistantStatus())
     if (req.method !== 'POST') return json(res, base, 405, { message: 'Yöntem desteklenmiyor' })
     try {
       const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim()
-      const [code, body] = await handleAssistant(req, ip)
+      const [code, body] = await (path === '/api/content' ? handleContent : handleAssistant)(req, ip)
       return json(res, base, code, body)
     } catch (e) { console.error('assistant route:', e); return json(res, base, 500, { message: 'Asistan beklenmeyen bir hata verdi.' }) }
   }
