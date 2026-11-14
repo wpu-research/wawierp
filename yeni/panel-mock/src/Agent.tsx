@@ -34,7 +34,7 @@ const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta
 const norm = (s: string) => s.toLocaleLowerCase('tr-TR')
 const plural = (n: number, w: string) => `${fmtNum(n)} ${w}`
 
-export default function Agent({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function Agent({ open, onClose, ask }: { open: boolean; onClose: () => void; ask?: { text: string; n: number } | null }) {
   const st = useStore()
   const R = ROLES[st.role]
   const [mode, setMode] = useState<Mode>('onay')
@@ -422,6 +422,14 @@ export default function Agent({ open, onClose }: { open: boolean; onClose: () =>
     if (live === 'canli') { void runLive(t); return }
     window.setTimeout(() => { push({ from: 'agent', ...answer(t) }); setBusy(false) }, 450)
   }
+
+  // Bildirimden gelen istek: panel açılır ve soru kullanıcının yerine gönderilir.
+  const sendRef = useRef(send); sendRef.current = send
+  useEffect(() => {
+    if (!ask) return
+    const t = window.setTimeout(() => sendRef.current(ask.text), 500) // bağlantı durumu belli olsun
+    return () => window.clearTimeout(t)
+  }, [ask?.n]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function decide(id: number, ok: boolean) {
     const m = msgs.find(x => x.id === id)

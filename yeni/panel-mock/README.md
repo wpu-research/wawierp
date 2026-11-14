@@ -84,3 +84,17 @@ Her yerden arama: `Ctrl K` (ekran, hazır görünüm, sipariş numarası, ürün
 | Asistanın yeni araçları: stok riski, tedarik önerisi, kanal performansı | `assistant.mjs`, `src/Agent.tsx` |
 
 Mobil depo bir web prototipidir; mağazalarda yayımlanmış bir uygulama değildir.
+
+## Bildirim merkezi
+
+Üst çubuktaki zil (`B` kısayolu), panelin kendiliğinden söylediklerini listeler (`src/Notifications.tsx`):
+
+- üç tür: **Yapılacaklar** (sizi bekleyen iş), **Sorunlar** (bozulan ya da takılan), **Olanlar** (bilgi)
+- her bildirim tek cümle, bir açıklama, bir zaman ve ilgili ekranı açan bir düğme taşır; uygun olanlarda "Asistana hazırlat"
+- aynı türden olaylar gruplanır ("X ve 2 iş daha eşitlenemedi")
+- okunmamışlar noktayla işaretlidir; sayı değişirse bildirim yeniden okunmamış olur
+- "Ben alıyorum", "1 saat ertele", "Yarın sabah", "Tümünü okundu say", sessiz mod
+- yalnız seçili rolü ilgilendiren bildirimler görünür; metinlerde müşteri adı ve adresi geçmez
+- bildirimler panel verisinden hesaplanır: sorun düzelince kendiliğinden kapanır ve "Çözülenler" altında görünür
+
+Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bildirimi, e-posta özeti ve mobil bildirim gerçek sistemde gelecek; mock'ta yoktur.

@@ -5,6 +5,7 @@ import { ROLES, StoreProvider, useStore, type Role } from './store'
 import { sel } from './ui'
 import { Logo } from './logo'
 import Agent from './Agent'
+import Notifications from './Notifications'
 import Overview from './pages/Overview'
 import Orders from './pages/Orders'
 import Catalog, { Stock } from './pages/Catalog'
@@ -71,6 +72,8 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   const [agent, setAgent] = useState(false)
   const [find, setFind] = useState(false)
   const [keys, setKeys] = useState(false)
+  const [bell, setBell] = useState(false)
+  const [ask, setAsk] = useState<{ text: string; n: number } | null>(null)
   const undoRef = useRef(st.undoLast); undoRef.current = st.undoLast
   // Klavye kısayolları: Ctrl K arama, Ctrl Z geri al, ? yardım, a asistan, g + harf ekrana git.
   useEffect(() => {
@@ -87,6 +90,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
       if (Date.now() - g < 1500 && GOTO[k]) { location.hash = '#/' + GOTO[k][0]; g = 0; return }
       if (k === 'g') { g = Date.now(); return }
       if (k === 'a') setAgent(v => !v)
+      if (k === 'b') setBell(v => !v)
     }
     addEventListener('keydown', f); return () => removeEventListener('keydown', f)
   }, [])
@@ -173,6 +177,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
         </label>
         <span className="flex-1" />
         <button onClick={() => setFind(true)} className="inline-flex items-center gap-2 rounded-md border border-line bg-bg h-8 pl-2.5 pr-2 text-sm text-mute hover:border-brand"><Search size={14} /><span className="hidden sm:inline">Ara</span><kbd className="hidden sm:inline rounded border border-line bg-card px-1 text-[10px] font-sans">Ctrl K</kbd></button>
+        <Notifications open={bell} setOpen={setBell} onAsk={text => { setAgent(true); setAsk({ text, n: Date.now() }) }} />
         <label className="flex items-center gap-1.5 text-xs text-mute">Rol
           <select className={sel} value={st.role} onChange={e => st.setRole(e.target.value as Role)}>
             {(Object.keys(ROLES) as Role[]).map(r => <option key={r} value={r}>{ROLES[r].label}</option>)}
@@ -182,7 +187,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
       </header>
 
       <main className="px-3 md:px-5 py-4 max-w-[1500px]">{view}</main>
-      <Agent open={agent} onClose={() => setAgent(false)} />
+      <Agent open={agent} onClose={() => setAgent(false)} ask={ask} />
       {!agent && (
         <button onClick={() => setAgent(true)} aria-label="Asistanı aç" title="Asistan" className="fixed bottom-5 right-5 z-40 size-14 grid place-items-center rounded-2xl border-0 bg-[#3048C8] shadow-lg shadow-black/25 hover:scale-105 transition-transform">
           <Logo height={38} markOnly />
@@ -253,6 +258,7 @@ function Shortcuts({ onClose }: { onClose: () => void }) {
           <dt><K>Ctrl</K> <K>K</K></dt><dd className="m-0">Her yerden arama</dd>
           <dt><K>Ctrl</K> <K>Z</K></dt><dd className="m-0">Son işlemi geri al (10 saniye içinde)</dd>
           <dt><K>A</K></dt><dd className="m-0">Asistanı aç ya da kapat</dd>
+          <dt><K>B</K></dt><dd className="m-0">Bildirimleri aç ya da kapat</dd>
           <dt><K>?</K></dt><dd className="m-0">Bu listeyi göster</dd>
           {Object.entries(GOTO).map(([k, [, l]]) => <div key={k} className="contents"><dt><K>G</K> <K>{k.toUpperCase()}</K></dt><dd className="m-0">{l}</dd></div>)}
         </dl>
