@@ -60,10 +60,10 @@
     "semantic_hash": "327672659adc4e35a7f8462f8b6c71ff"
   },
   "docs/04-kavram-koprusu.md": {
-    "mtime": 1794713239.8528411,
-    "seen": 1794715034.5510592,
-    "ast_hash": "7840531f85b9489acb85d16b54cbef06",
-    "semantic_hash": "7840531f85b9489acb85d16b54cbef06"
+    "mtime": 1794715035.5219162,
+    "seen": 1794718985.1263485,
+    "ast_hash": "331af7c6852cbc75d18a9f8dc619ef28",
+    "semantic_hash": "331af7c6852cbc75d18a9f8dc619ef28"
   },
   "docs/05-bilgi-mimarisi.md": {
     "mtime": 1794670228.544962,
@@ -132,10 +132,10 @@
     "semantic_hash": "73d45744ebcba53fd9f3e16573d987f8"
   },
   "yeni/panel-mock/src/App.tsx": {
-    "mtime": 1794714708.2041948,
-    "seen": 1794715034.5510137,
-    "ast_hash": "f993c47456f54c30b9c538711f1f75c0",
-    "semantic_hash": "f993c47456f54c30b9c538711f1f75c0"
+    "mtime": 1794715726.1102524,
+    "seen": 1794718985.1263034,
+    "ast_hash": "6064532698fd8b9f1a720e07ab45924b",
+    "semantic_hash": "6064532698fd8b9f1a720e07ab45924b"
   },
   "yeni/panel-mock/src/data.ts": {
     "mtime": 1794685144.9340732,
@@ -168,10 +168,10 @@
     "semantic_hash": "dffd991306fc299b74abc5871e8d3531"
   },
   "yeni/panel-mock/src/pages/Catalog.tsx": {
-    "mtime": 1794685144.9340732,
-    "seen": 1794692324.996848,
-    "ast_hash": "b40879adf10ed962ea425d77ae3aca6f",
-    "semantic_hash": "b40879adf10ed962ea425d77ae3aca6f"
+    "mtime": 1794715187.798726,
+    "seen": 1794718985.1263223,
+    "ast_hash": "3dc16efbe735a44afde1ebd7504e3d71",
+    "semantic_hash": "3dc16efbe735a44afde1ebd7504e3d71"
   },
   "yeni/panel-mock/src/pages/Channels.tsx": {
     "mtime": 1794685144.9340732,
@@ -180,22 +180,22 @@
     "semantic_hash": "d6931aac913f6a9f80e00e6fe9a028c5"
   },
   "yeni/panel-mock/src/pages/Extra.tsx": {
-    "mtime": 1794685144.9350731,
-    "seen": 1794692324.99685,
-    "ast_hash": "20719487474acdd6330d4dfc68a7cb59",
-    "semantic_hash": "20719487474acdd6330d4dfc68a7cb59"
+    "mtime": 1794715726.1112523,
+    "seen": 1794718985.1263242,
+    "ast_hash": "e5b4c212ae65a885ea0183c8b6ccc6b0",
+    "semantic_hash": "e5b4c212ae65a885ea0183c8b6ccc6b0"
   },
   "yeni/panel-mock/src/pages/Finance.tsx": {
-    "mtime": 1794685144.9350731,
-    "seen": 1794692324.9968507,
-    "ast_hash": "6da6633d5950abd8729408235933ba8c",
-    "semantic_hash": "6da6633d5950abd8729408235933ba8c"
+    "mtime": 1794715726.1102524,
+    "seen": 1794718985.1263251,
+    "ast_hash": "abc8875eb2e0a1d0f57c8597a93c7b07",
+    "semantic_hash": "abc8875eb2e0a1d0f57c8597a93c7b07"
   },
   "yeni/panel-mock/src/pages/Orders.tsx": {
-    "mtime": 1794691556.2495391,
-    "seen": 1794692324.9968543,
-    "ast_hash": "0841b8c4f07e5998ff9d3136e90b2f19",
-    "semantic_hash": "0841b8c4f07e5998ff9d3136e90b2f19"
+    "mtime": 1794715187.7977262,
+    "seen": 1794718985.12633,
+    "ast_hash": "aca63981ccfddfa100464adfd8a50d14",
+    "semantic_hash": "aca63981ccfddfa100464adfd8a50d14"
   },
   "yeni/panel-mock/src/pages/Overview.tsx": {
     "mtime": 1794714745.8871017,
@@ -210,10 +210,10 @@
     "semantic_hash": "8697c407b2976d52aa0325db96a4ef7a"
   },
   "yeni/panel-mock/src/ui.tsx": {
-    "mtime": 1794714745.8871017,
-    "seen": 1794715034.5510492,
-    "ast_hash": "0ae31257ecfde204b4d97c6c59265585",
-    "semantic_hash": "0ae31257ecfde204b4d97c6c59265585"
+    "mtime": 1794715726.1092525,
+    "seen": 1794718985.1263397,
+    "ast_hash": "f029de693dc36caeeec2cdb1736c983a",
+    "semantic_hash": "f029de693dc36caeeec2cdb1736c983a"
   },
   "yeni/panel-mock/tsconfig.json": {
     "mtime": 1794685144.9350731,
@@ -276,10 +276,10 @@
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
-    "mtime": 1794714920.0801387,
-    "seen": 1794715034.5510926,
-    "ast_hash": "22567fc1c1608e4bd7e1d37667d43eff",
-    "semantic_hash": "22567fc1c1608e4bd7e1d37667d43eff"
+    "mtime": 1794717896.7324703,
+    "seen": 1794718985.1263785,
+    "ast_hash": "b3202880348dc1c10dc09234c92e1e13",
+    "semantic_hash": "b3202880348dc1c10dc09234c92e1e13"
   },
   "yeni/panel-mock/index.html": {
     "mtime": 1794686165.6741936,
@@ -336,10 +336,10 @@
     "semantic_hash": "d73f4b4743d250701146f4d90e8b5a66"
   },
   "yeni/panel-mock/src/pages/Mobile.tsx": {
-    "mtime": 1794691397.5774078,
-    "seen": 1794692324.9968524,
-    "ast_hash": "1a5e8376eceb191a3093cf6c73effc72",
-    "semantic_hash": "1a5e8376eceb191a3093cf6c73effc72"
+    "mtime": 1794715726.1112523,
+    "seen": 1794718985.1263275,
+    "ast_hash": "cfb219537b673453416b8cede7853aa5",
+    "semantic_hash": "cfb219537b673453416b8cede7853aa5"
   },
   "yeni/panel-mock/src/pages/Money.tsx": {
     "mtime": 1794689013.91317,
@@ -354,34 +354,34 @@
     "semantic_hash": "1f3407152d8b50b992785f51a8739669"
   },
   "yeni/panel-mock/src/pages/Portal.tsx": {
-    "mtime": 1794691370.4870696,
-    "seen": 1794692324.996857,
-    "ast_hash": "8db58a5650d0d6a974daf74a43e6bc0c",
-    "semantic_hash": "8db58a5650d0d6a974daf74a43e6bc0c"
+    "mtime": 1794715726.1112523,
+    "seen": 1794718985.126333,
+    "ast_hash": "48c0c3d3dd34f28217bddc5918876cb5",
+    "semantic_hash": "48c0c3d3dd34f28217bddc5918876cb5"
   },
   "yeni/panel-mock/src/pages/Quality.tsx": {
-    "mtime": 1794691594.8845987,
-    "seen": 1794692324.9968576,
-    "ast_hash": "d4075da093bbf6077f2161c65cf674e3",
-    "semantic_hash": "d4075da093bbf6077f2161c65cf674e3"
+    "mtime": 1794715726.1112523,
+    "seen": 1794718985.126334,
+    "ast_hash": "6e79f2b2e11cf501690033b20e1578cc",
+    "semantic_hash": "6e79f2b2e11cf501690033b20e1578cc"
   },
   "yeni/panel-mock/src/pages/Reservations.tsx": {
-    "mtime": 1794691354.6984553,
-    "seen": 1794692324.9968584,
-    "ast_hash": "245a629e512de1b589e6e5835d71e91c",
-    "semantic_hash": "245a629e512de1b589e6e5835d71e91c"
+    "mtime": 1794715187.798726,
+    "seen": 1794718985.126335,
+    "ast_hash": "0d92f5640bda81f56e197733ab1ee668",
+    "semantic_hash": "0d92f5640bda81f56e197733ab1ee668"
   },
   "yeni/panel-mock/src/pages/Selling.tsx": {
-    "mtime": 1794689022.6890082,
-    "seen": 1794692324.9968588,
-    "ast_hash": "c848e2ac22bff85890369920aaafaf92",
-    "semantic_hash": "c848e2ac22bff85890369920aaafaf92"
+    "mtime": 1794715726.1102524,
+    "seen": 1794718985.1263359,
+    "ast_hash": "72e382d0fb0bb743ed6b548cfd4ae3c8",
+    "semantic_hash": "72e382d0fb0bb743ed6b548cfd4ae3c8"
   },
   "yeni/panel-mock/src/pages/Warehouse.tsx": {
-    "mtime": 1794688989.9326138,
-    "seen": 1794692324.9968598,
-    "ast_hash": "e47fd2dd286c3ef2b31575f59ba9a971",
-    "semantic_hash": "e47fd2dd286c3ef2b31575f59ba9a971"
+    "mtime": 1794715187.798726,
+    "seen": 1794718985.1263366,
+    "ast_hash": "cf99a0059edfd5f2395f2129ebf17988",
+    "semantic_hash": "cf99a0059edfd5f2395f2129ebf17988"
   },
   "yeni/panel-mock/src/vite-env.d.ts": {
     "mtime": 1794686258.181887,
@@ -706,5 +706,239 @@
     "seen": 1794715034.5510182,
     "ast_hash": "5b4dd360dd1e4f66739d318889c1294c",
     "semantic_hash": "5b4dd360dd1e4f66739d318889c1294c"
+  },
+  "yeni/panel-mock/src/Thumb.tsx": {
+    "mtime": 1794716024.2822747,
+    "seen": 1794718985.1263096,
+    "ast_hash": "e9bfa52e3709d4e266c7157434724dbc",
+    "semantic_hash": "e9bfa52e3709d4e266c7157434724dbc"
+  },
+  "yeni/panel-mock/src/flows.tsx": {
+    "mtime": 1794715681.5124385,
+    "seen": 1794718985.126315,
+    "ast_hash": "b421e87e85b65f1233e1f15147a8403d",
+    "semantic_hash": "b421e87e85b65f1233e1f15147a8403d"
+  },
+  "yeni/panel-mock/src/photos.ts": {
+    "mtime": 1794716009.2795513,
+    "seen": 1794718985.1263373,
+    "ast_hash": "29c2aa0134ba50177be63ca0b4519575",
+    "semantic_hash": "29c2aa0134ba50177be63ca0b4519575"
+  },
+  "yeni/panel-mock/GORSEL-KAYNAKLARI.md": {
+    "mtime": 1794716009.2795513,
+    "seen": 1794718985.1263776,
+    "ast_hash": "0d6e54717fe8658b00de618b23b9fefc",
+    "semantic_hash": "0d6e54717fe8658b00de618b23b9fefc"
+  },
+  "yeni/panel-mock/src/assets/products/00.webp": {
+    "mtime": 1794716009.1245542,
+    "seen": 1794718985.126425,
+    "ast_hash": "d77f3da0697eac745c0e3cfe66785395",
+    "semantic_hash": "d77f3da0697eac745c0e3cfe66785395"
+  },
+  "yeni/panel-mock/src/assets/products/01.webp": {
+    "mtime": 1794716009.129554,
+    "seen": 1794718985.1264262,
+    "ast_hash": "3a3d4693d77e2b3e960c53fa04f4c2ec",
+    "semantic_hash": "3a3d4693d77e2b3e960c53fa04f4c2ec"
+  },
+  "yeni/panel-mock/src/assets/products/02.webp": {
+    "mtime": 1794716009.1355538,
+    "seen": 1794718985.1264272,
+    "ast_hash": "0d6e18e7c96e2602ba6bda80ccdca3c2",
+    "semantic_hash": "0d6e18e7c96e2602ba6bda80ccdca3c2"
+  },
+  "yeni/panel-mock/src/assets/products/03.webp": {
+    "mtime": 1794716009.1405537,
+    "seen": 1794718985.126428,
+    "ast_hash": "b66a6c0dcc1be9853cc0fee2e79c3aaa",
+    "semantic_hash": "b66a6c0dcc1be9853cc0fee2e79c3aaa"
+  },
+  "yeni/panel-mock/src/assets/products/04.webp": {
+    "mtime": 1794716009.1485536,
+    "seen": 1794718985.1264288,
+    "ast_hash": "7854e76447f12d85802ba281acd54393",
+    "semantic_hash": "7854e76447f12d85802ba281acd54393"
+  },
+  "yeni/panel-mock/src/assets/products/05.webp": {
+    "mtime": 1794716009.1545534,
+    "seen": 1794718985.1264298,
+    "ast_hash": "dcce9998fde6c100b3858b882e8947ea",
+    "semantic_hash": "dcce9998fde6c100b3858b882e8947ea"
+  },
+  "yeni/panel-mock/src/assets/products/06.webp": {
+    "mtime": 1794716009.1605535,
+    "seen": 1794718985.1264305,
+    "ast_hash": "ff124c1a62cc8f50086291e8c8ce8e0b",
+    "semantic_hash": "ff124c1a62cc8f50086291e8c8ce8e0b"
+  },
+  "yeni/panel-mock/src/assets/products/07.webp": {
+    "mtime": 1794716009.1635535,
+    "seen": 1794718985.1264312,
+    "ast_hash": "b8101e303673bd2cdb7f5d9dfda5f07c",
+    "semantic_hash": "b8101e303673bd2cdb7f5d9dfda5f07c"
+  },
+  "yeni/panel-mock/src/assets/products/08.webp": {
+    "mtime": 1794716009.1665533,
+    "seen": 1794718985.126432,
+    "ast_hash": "43bc4d40f35c141e3ec08ab74e06c035",
+    "semantic_hash": "43bc4d40f35c141e3ec08ab74e06c035"
+  },
+  "yeni/panel-mock/src/assets/products/09.webp": {
+    "mtime": 1794716009.1735532,
+    "seen": 1794718985.1264331,
+    "ast_hash": "37d890c690f1b961434761ecab46e13d",
+    "semantic_hash": "37d890c690f1b961434761ecab46e13d"
+  },
+  "yeni/panel-mock/src/assets/products/10.webp": {
+    "mtime": 1794716009.175553,
+    "seen": 1794718985.1264338,
+    "ast_hash": "8767967dbfe3a1c9184bd67852e7cadd",
+    "semantic_hash": "8767967dbfe3a1c9184bd67852e7cadd"
+  },
+  "yeni/panel-mock/src/assets/products/11.webp": {
+    "mtime": 1794716009.179553,
+    "seen": 1794718985.1264346,
+    "ast_hash": "bf50da0dcd99a387d1cea5f8d60975e1",
+    "semantic_hash": "bf50da0dcd99a387d1cea5f8d60975e1"
+  },
+  "yeni/panel-mock/src/assets/products/12.webp": {
+    "mtime": 1794716009.183553,
+    "seen": 1794718985.1264353,
+    "ast_hash": "41ab6d52b339a5423dc5ed8c6a0632ca",
+    "semantic_hash": "41ab6d52b339a5423dc5ed8c6a0632ca"
+  },
+  "yeni/panel-mock/src/assets/products/14.webp": {
+    "mtime": 1794716009.190553,
+    "seen": 1794718985.1264362,
+    "ast_hash": "25b0e6886064c91967cf02c2cfee4f4f",
+    "semantic_hash": "25b0e6886064c91967cf02c2cfee4f4f"
+  },
+  "yeni/panel-mock/src/assets/products/15.webp": {
+    "mtime": 1794716009.194553,
+    "seen": 1794718985.1264372,
+    "ast_hash": "0b747b33e6e1fac2e41c2dbe5c39103f",
+    "semantic_hash": "0b747b33e6e1fac2e41c2dbe5c39103f"
+  },
+  "yeni/panel-mock/src/assets/products/16.webp": {
+    "mtime": 1794716009.1995528,
+    "seen": 1794718985.1264381,
+    "ast_hash": "73de1ea3f0f8197c0a4b0461dc3f9021",
+    "semantic_hash": "73de1ea3f0f8197c0a4b0461dc3f9021"
+  },
+  "yeni/panel-mock/src/assets/products/17.webp": {
+    "mtime": 1794716009.2045527,
+    "seen": 1794718985.1264389,
+    "ast_hash": "961285cd6c86481350d3e3d18e069185",
+    "semantic_hash": "961285cd6c86481350d3e3d18e069185"
+  },
+  "yeni/panel-mock/src/assets/products/18.webp": {
+    "mtime": 1794716009.2085526,
+    "seen": 1794718985.12644,
+    "ast_hash": "1006fb42a1b46e5fe1502c0b22b58469",
+    "semantic_hash": "1006fb42a1b46e5fe1502c0b22b58469"
+  },
+  "yeni/panel-mock/src/assets/products/19.webp": {
+    "mtime": 1794716009.2115524,
+    "seen": 1794718985.1264408,
+    "ast_hash": "ab5259a8e4bd5d23b2aa612e2f273288",
+    "semantic_hash": "ab5259a8e4bd5d23b2aa612e2f273288"
+  },
+  "yeni/panel-mock/src/assets/products/20.webp": {
+    "mtime": 1794716009.2145524,
+    "seen": 1794718985.1264415,
+    "ast_hash": "9fe30984b5171373ee35bfeacd531f9d",
+    "semantic_hash": "9fe30984b5171373ee35bfeacd531f9d"
+  },
+  "yeni/panel-mock/src/assets/products/21.webp": {
+    "mtime": 1794716009.2185524,
+    "seen": 1794718985.1264424,
+    "ast_hash": "9b96e7d4ef3f908f1674573b019dc6b4",
+    "semantic_hash": "9b96e7d4ef3f908f1674573b019dc6b4"
+  },
+  "yeni/panel-mock/src/assets/products/22.webp": {
+    "mtime": 1794716009.2225523,
+    "seen": 1794718985.1264431,
+    "ast_hash": "5e04bb9e13a9e88570592ff203cab262",
+    "semantic_hash": "5e04bb9e13a9e88570592ff203cab262"
+  },
+  "yeni/panel-mock/src/assets/products/23.webp": {
+    "mtime": 1794716009.2275522,
+    "seen": 1794718985.126444,
+    "ast_hash": "a903c25c5f0442498275bf5351c905bb",
+    "semantic_hash": "a903c25c5f0442498275bf5351c905bb"
+  },
+  "yeni/panel-mock/src/assets/products/24.webp": {
+    "mtime": 1794716009.2305522,
+    "seen": 1794718985.1264448,
+    "ast_hash": "bbae3091831f4220f1c4994e2317e373",
+    "semantic_hash": "bbae3091831f4220f1c4994e2317e373"
+  },
+  "yeni/panel-mock/src/assets/products/25.webp": {
+    "mtime": 1794716009.235552,
+    "seen": 1794718985.1264455,
+    "ast_hash": "ff1b1f2a7287effccd00847399d9fd86",
+    "semantic_hash": "ff1b1f2a7287effccd00847399d9fd86"
+  },
+  "yeni/panel-mock/src/assets/products/26.webp": {
+    "mtime": 1794716009.240552,
+    "seen": 1794718985.1264465,
+    "ast_hash": "7b783079837ccd784959bea133a653c4",
+    "semantic_hash": "7b783079837ccd784959bea133a653c4"
+  },
+  "yeni/panel-mock/src/assets/products/27.webp": {
+    "mtime": 1794716009.2465518,
+    "seen": 1794718985.1264474,
+    "ast_hash": "fe177d28ada05991155b5b1705f295b0",
+    "semantic_hash": "fe177d28ada05991155b5b1705f295b0"
+  },
+  "yeni/panel-mock/src/assets/products/28.webp": {
+    "mtime": 1794716009.2495518,
+    "seen": 1794718985.1264482,
+    "ast_hash": "a041018414d4f6d413aeefc84eb401b4",
+    "semantic_hash": "a041018414d4f6d413aeefc84eb401b4"
+  },
+  "yeni/panel-mock/src/assets/products/29.webp": {
+    "mtime": 1794716009.2535517,
+    "seen": 1794718985.1264489,
+    "ast_hash": "a77e6d52a2b3694bf19054849c57df37",
+    "semantic_hash": "a77e6d52a2b3694bf19054849c57df37"
+  },
+  "yeni/panel-mock/src/assets/products/30.webp": {
+    "mtime": 1794716009.2575517,
+    "seen": 1794718985.1264496,
+    "ast_hash": "05c4d22ea63291eb0867f3e53707edfa",
+    "semantic_hash": "05c4d22ea63291eb0867f3e53707edfa"
+  },
+  "yeni/panel-mock/src/assets/products/31.webp": {
+    "mtime": 1794716009.2625515,
+    "seen": 1794718985.1264505,
+    "ast_hash": "299a507ee977748b1b7ec5a311d82a4a",
+    "semantic_hash": "299a507ee977748b1b7ec5a311d82a4a"
+  },
+  "yeni/panel-mock/src/assets/products/32.webp": {
+    "mtime": 1794716009.2665515,
+    "seen": 1794718985.1264513,
+    "ast_hash": "03e60e0aee973e4ce23171d56c342d92",
+    "semantic_hash": "03e60e0aee973e4ce23171d56c342d92"
+  },
+  "yeni/panel-mock/src/assets/products/33.webp": {
+    "mtime": 1794716009.2715514,
+    "seen": 1794718985.126452,
+    "ast_hash": "787e9877327dd49635bd6ad9c7cf9ccc",
+    "semantic_hash": "787e9877327dd49635bd6ad9c7cf9ccc"
+  },
+  "yeni/panel-mock/src/assets/products/34.webp": {
+    "mtime": 1794716009.2755513,
+    "seen": 1794718985.1264527,
+    "ast_hash": "4054de1a8929b90a9397d7a8a65e1822",
+    "semantic_hash": "4054de1a8929b90a9397d7a8a65e1822"
+  },
+  "yeni/panel-mock/src/assets/products/35.webp": {
+    "mtime": 1794716009.2795513,
+    "seen": 1794718985.1264539,
+    "ast_hash": "ab778659a2197445a104368afc6c8807",
+    "semantic_hash": "ab778659a2197445a104368afc6c8807"
   }
 }
