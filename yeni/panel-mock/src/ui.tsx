@@ -1,5 +1,6 @@
-import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { createContext, useContext, useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { ChevronLeft, ChevronRight, CircleHelp, Inbox, X, type LucideIcon } from 'lucide-react'
+import { FLOWS } from './flows'
 import { CHANNEL, account, fmtNum } from './data'
 
 export type Tone = 'neutral' | 'ok' | 'warn' | 'bad' | 'info' | 'violet'
@@ -49,16 +50,43 @@ export function Stat({ label, value, hint, tone, href }: { label: string; value:
   return href ? <a href={href} className={cls + ' hover:border-brand'}>{body}</a> : <div className={cls}>{body}</div>
 }
 
+/* Kabuk, açık ekranın menü simgesini buradan verir; başlığın yanında görünür. */
+export const PageIcon = createContext<LucideIcon | null>(null)
+const FLOW_KEY = 'wawi-mock-flow'
+const flowOn = () => { try { return localStorage.getItem(FLOW_KEY) !== '0' } catch { return true } }
+
 export function PageHead({ title, desc, legacy, actions }: { title: string; desc?: string; legacy?: string[]; actions?: ReactNode }) {
+  const Icon = useContext(PageIcon), flow = FLOWS[title]
+  const [show, setShow] = useState(flowOn)
+  const flip = () => setShow(v => { try { localStorage.setItem(FLOW_KEY, v ? '0' : '1') } catch { /* yalnız bu oturum */ } return !v })
   return (
     <div className="mb-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="m-0 font-display text-[22px] font-semibold tracking-tight">{title}</h1>
-          {desc && <p className="m-0 mt-0.5 text-ink2 max-w-[75ch]">{desc}</p>}
+        <div className="min-w-0 flex items-start gap-3">
+          {Icon && <span className="head-icon hidden sm:grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-soft text-brand"><Icon size={21} /></span>}
+          <div className="min-w-0">
+            <h1 className="m-0 font-display text-[22px] font-semibold tracking-tight">{title}</h1>
+            {desc && <p className="m-0 mt-0.5 text-ink2 max-w-[75ch]">{desc}</p>}
+            {flow && !show && <button onClick={flip} className="mt-1 inline-flex items-center gap-1 border-0 bg-transparent p-0 text-xs text-brand"><CircleHelp size={12} />Nasıl çalışır?</button>}
+          </div>
         </div>
         {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
       </div>
+      {flow && show && (
+        <div className="mt-3 hidden lg:flex items-center gap-2 rounded-2xl border border-line bg-card pl-4 pr-2 py-2.5 overflow-hidden" role="group" aria-label={`${title}: nasıl çalışır`}>
+          <ol className="m-0 p-0 list-none flex flex-1 min-w-0 items-center gap-2">
+            {flow.map(([I, a, b], i) => (
+              <li key={a} className="contents">
+                {i > 0 && <span className="flow-line flex-1 !min-w-3" aria-hidden />}
+                <div className="flow-step flex items-center gap-2.5 min-w-0" style={{ animationDelay: `${i * 90}ms` }}>
+                  <span className={`size-9 shrink-0 rounded-xl grid place-items-center ${i === flow.length - 1 ? 'bg-ok-soft text-ok' : 'bg-brand-soft text-brand'}`}><I size={17} /></span>
+                  <div className="leading-tight min-w-0"><div className="text-[13px] font-medium truncate">{a}</div><div className="text-[11px] text-mute truncate">{b}</div></div>
+                </div>
+              </li>))}
+          </ol>
+          <button onClick={flip} aria-label="Akış şeridini gizle" title="Gizle" className="shrink-0 size-7 grid place-items-center rounded-md border-0 bg-transparent text-mute hover:bg-bg hover:text-ink"><X size={14} /></button>
+        </div>
+      )}
       {legacy && legacy.length > 0 && (
         <details className="mt-2 text-xs text-mute">
           <summary className="cursor-pointer select-none">Eski panelde {legacy.length} ayrı ekranın yerine geçer</summary>
@@ -74,7 +102,7 @@ export function Tabs<T extends string>({ items, value, onChange }: { items: { ke
     <div className="flex gap-1 overflow-x-auto pb-1" role="tablist">
       {items.map(i => (
         <button key={i.key} role="tab" aria-selected={value === i.key} onClick={() => onChange(i.key)}
-          className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 h-8 text-sm whitespace-nowrap ${value === i.key ? 'bg-ink text-bg border-ink font-medium' : 'bg-card border-line text-ink2 hover:bg-bg'}`}>
+          className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 h-8 text-sm whitespace-nowrap transition-colors duration-150 ${value === i.key ? 'bg-ink text-bg border-ink font-medium' : 'bg-card border-line text-ink2 hover:bg-bg'}`}>
           {i.label}
           {i.count !== undefined && <span className={`num rounded-full px-1.5 text-xs ${value === i.key ? 'bg-bg/20' : i.tone === 'bad' && i.count > 0 ? 'bg-bad-soft text-bad' : 'bg-bg text-mute'}`}>{fmtNum(i.count)}</span>}
         </button>
@@ -87,8 +115,8 @@ export function Drawer({ open, title, sub, onClose, children, footer }: { open: 
   if (!open) return null
   return (
     <div className="fixed inset-0 z-40 flex justify-end" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <aside className="relative w-full max-w-[560px] h-full bg-card border-l border-line flex flex-col shadow-2xl">
+      <div className="fade-in absolute inset-0 bg-black/40" onClick={onClose} />
+      <aside className="drawer-in relative w-full max-w-[560px] h-full bg-card border-l border-line flex flex-col shadow-2xl">
         <header className="flex items-start justify-between gap-3 px-5 py-4 border-b border-line">
           <div className="min-w-0"><div className="text-base font-semibold truncate">{title}</div>{sub && <div className="text-xs text-mute mt-0.5">{sub}</div>}</div>
           <button onClick={onClose} aria-label="Kapat" className="rounded-md p-1.5 hover:bg-bg border-0 bg-transparent text-ink2"><X size={18} /></button>
@@ -150,7 +178,7 @@ export function HBars({ data, fmt = fmtNum }: { data: { label: ReactNode; value:
       {data.map((d, i) => (
         <div key={i} className="grid grid-cols-[minmax(90px,32%)_1fr_auto] items-center gap-2 text-sm">
           <span className="truncate text-ink2">{d.label}</span>
-          <span className="h-3 rounded bg-bg overflow-hidden"><span className="block h-full rounded" style={{ width: `${(d.value / max) * 100}%`, background: d.color ?? 'var(--brand)' }} /></span>
+          <span className="h-3 rounded bg-bg overflow-hidden"><span className="grow-bar block h-full rounded" style={{ width: `${(d.value / max) * 100}%`, background: d.color ?? 'var(--brand)', animationDelay: `${i * 60}ms` }} /></span>
           <span className="num text-right min-w-[72px]">{fmt(d.value)}</span>
         </div>
       ))}
@@ -158,4 +186,9 @@ export function HBars({ data, fmt = fmtNum }: { data: { label: ReactNode; value:
   )
 }
 
-export const Empty = ({ children }: { children: ReactNode }) => <div className="px-4 py-10 text-center text-mute">{children}</div>
+export const Empty = ({ children }: { children: ReactNode }) => (
+  <div className="px-4 py-10 text-center text-mute">
+    <span className="float-a mx-auto mb-3 size-14 grid place-items-center rounded-2xl bg-bg border border-line text-mute"><Inbox size={24} /></span>
+    {children}
+  </div>
+)

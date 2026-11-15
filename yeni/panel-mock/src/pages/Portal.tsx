@@ -4,6 +4,7 @@ import { NOW, PRODUCTS, RET, VAT, company, fmtDT, fmtMoney, fmtNum, product, typ
 import { b2bTotals, type B2B } from '../data2'
 import { useStore } from '../store'
 import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th } from '../ui'
+import { Thumb } from '../Thumb'
 
 const inp = 'h-8 rounded-md border border-line bg-card px-2 text-sm max-w-full'
 const hash = (s: string) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7)
@@ -73,7 +74,7 @@ function PriceList({ c, tier, onAdd }: { c: B2B; tier: number; onAdd: (pid: stri
           const s = stockWord(p), n = qty[p.id] ?? 1
           return (
             <tr key={p.id}>
-              <td className={td}><div className="font-medium">{p.name}</div><div className="text-xs text-mute">{p.brand} · {p.sku}</div></td>
+              <td className={td}><div className="flex items-center gap-3"><Thumb p={p} size={48} /><div><div className="font-medium">{p.name}</div><div className="text-xs text-mute">{p.brand} · {p.sku}</div></div></div></td>
               <td className={td + ' num text-right text-mute line-through'}>{fmtMoney(p.price)}</td>
               <td className={td + ' num text-right font-semibold'}>{fmtMoney(p.price * (1 - tier / 100))}</td>
               <td className={td}><Badge tone="info">%{tier}</Badge></td>
@@ -131,7 +132,7 @@ function CartView({ c, tier, cart, setCart, note, setNote, sent, onSend }: { c: 
           <div className="overflow-x-auto"><table className="w-full text-sm">
             <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Birim</th><th className={th}>Adet</th><th className={th + ' text-right'}>Tutar</th><th className={th} /></tr></thead>
             <tbody>{ids.map(id => { const p = product(id), u = p.price * (1 - tier / 100); return (
-              <tr key={id}><td className={td}>{p.name}</td><td className={td + ' num text-right'}>{fmtMoney(u)}</td>
+              <tr key={id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} />{p.name}</div></td><td className={td + ' num text-right'}>{fmtMoney(u)}</td>
                 <td className={td}><Stepper value={cart[id]} label={p.name} onChange={v => setCart(k => ({ ...k, [id]: v }))} /></td>
                 <td className={td + ' num text-right'}>{fmtMoney(u * cart[id])}</td>
                 <td className={td}><Btn variant="ghost" aria-label={`${p.name} sepetten çıkar`} onClick={() => setCart(k => { const n = { ...k }; delete n[id]; return n })}><Trash2 size={14} /></Btn></td></tr>) })}</tbody></table></div>)}

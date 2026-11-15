@@ -119,7 +119,8 @@ Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bil
 
 ## Ürün görselleri ve yol gösteren hareket
 
-- `src/Thumb.tsx`: sipariş, iade, katalog, stok defteri, toplama, sayım, stok ayırma ve veri kalitesi listelerinde ürün görseli. Mock'ta görsel, kategoriye göre çizilmiş satır içi bir SVG'dir (ağ isteği yok). Görseli olmayan ürün kırmızı kesik çizgili kutuyla görünür. Siparişte birden çok kalem varsa ilk görselin köşesinde "+n" yazar.
+- `src/Thumb.tsx`: ürün adı geçen bütün listelerde (sipariş, iade, katalog, stok defteri, toplama, sayım, stok ayırma, veri kalitesi, toplu listeleme, tedarik, transfer, toptan portal, mobil depo) gerçek ürün fotoğrafı. Fotoğraflar Wikimedia Commons'tan alındı, 128 piksele küçültüldü (35 adet, toplam 71 KB); kaynak ve lisanslar `GORSEL-KAYNAKLARI.md` dosyasında. Ürün adları uydurma olduğu için fotoğraf yalnız ürün türünü gösterir. Fotoğrafı bulunamayan tür kategori çizimine düşer. Görseli olmayan ürün kırmızı kesik çizgili kutuyla görünür. Siparişte birden çok kalem varsa ilk görselin köşesinde "+n" yazar.
 - İadeler ekranının üstünde dört adımlı akış şeridi (etiket, depo kontrolü, para iadesi, kapanış); bir iade ilerletilince kartı yeni sütunda kısa bir vurguyla belirir.
 - Hareketler yalnız `transform` ve `opacity` kullanır, kısa sürer, "hareketi azalt" tercihinde kapanır.
 - Gerçek sistemde aynı kutuya küçük boyutlu (ör. 96 piksel, WebP), geç yüklenen ürün fotoğrafı gelir; liste başına yalnız görünen satırların görseli indirilir.
+- **Bütün ekranlarda:** başlığın yanında ekranın simgesi; 26 ekranın başında o işin dört adımda nasıl aktığını gösteren şerit (`src/flows.tsx`, geniş ekranda görünür, ✕ ile gizlenir, "Nasıl çalışır?" ile geri gelir); tablolarda satırların sırayla belirmesi; çekmecelerin kayarak açılması; boş listelerde küçük bir çizim; çubukların büyüyerek dolması.

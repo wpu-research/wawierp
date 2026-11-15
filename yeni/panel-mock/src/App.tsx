@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, ChevronRight, LayoutDashboard, LifeBuoy, Lightbulb, ListChecks, Menu, MessagesSquare, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Undo2, UserRound, Users, Workflow, X } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, account, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
-import { sel } from './ui'
+import { PageIcon, sel } from './ui'
 import { Logo } from './logo'
 import Agent from './Agent'
 import Notifications from './Notifications'
@@ -167,7 +167,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
         <button onClick={() => setDark(d => !d)} aria-label="Açık / koyu tema" className="border border-line rounded-md bg-card size-8 grid place-items-center text-ink2">{dark ? <Sun size={16} /> : <Moon size={16} />}</button>
       </header>
 
-      <main key={page} className="page-in px-3 md:px-5 py-4 max-w-[1500px]">{view}</main>
+      <main key={page} className="page-in px-3 md:px-5 py-4 max-w-[1500px]"><PageIcon.Provider value={here?.icon ?? null}>{view}</PageIcon.Provider></main>
       <Agent open={agent} onClose={() => setAgent(false)} ask={ask} />
       <button onClick={() => setAgent(v => !v)} aria-label={agent ? 'Asistanı kapat' : 'Asistanı aç'} aria-expanded={agent} title="Asistan (A)" className={`launcher fixed bottom-5 right-5 z-40 size-14 grid place-items-center rounded-full border-0 bg-[#3048C8] text-white shadow-lg shadow-[#3048C8]/40 hover:scale-105 transition-transform ${agent ? 'max-sm:hidden' : ''}`}>
         {agent ? <X size={24} /> : <Logo height={38} markOnly />}

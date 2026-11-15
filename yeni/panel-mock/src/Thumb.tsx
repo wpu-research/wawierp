@@ -1,9 +1,10 @@
-/* Ürün görseli: mock'ta kategoriye göre çizilmiş hafif bir SVG (ağ isteği yok, birkaç yüz bayt).
-   Gerçek sistemde aynı kutuya küçük boyutlu, geç yüklenen ürün fotoğrafı gelir.
+/* Ürün görseli: gerçek fotoğraf (128 piksel, WebP, geç yüklenir). Fotoğrafı olmayan ürün türü için
+   kategoriye göre çizilmiş hafif bir SVG'ye düşer.
    Görseli olmayan ürün kesik çizgili kutuyla görünür; veri kalitesi sorunu ilk bakışta fark edilir. */
 import type { ReactNode } from 'react'
 import { ImageOff } from 'lucide-react'
 import type { Product } from './data'
+import { PHOTO } from './photos'
 
 const TINT: Record<string, [string, string]> = {
   'Parfüm': ['#f3e8ff', '#7c3aed'], 'Toner': ['#e0f2fe', '#0369a1'], 'Elektronik': ['#e3e7fb', '#3048c8'],
@@ -23,6 +24,12 @@ export function Thumb({ p, size = 36, className = '' }: { p: Pick<Product, 'name
   if (!p.image) return (
     <span title="Görsel eksik" className={`shrink-0 grid place-items-center border border-dashed border-bad/60 bg-bad-soft text-bad ${className}`} style={{ width: size, height: size, borderRadius: r }}>
       <ImageOff size={Math.round(size * 0.42)} aria-label="Görsel eksik" />
+    </span>
+  )
+  const photo = PHOTO[p.name]
+  if (photo) return (
+    <span className={`thumb shrink-0 block overflow-hidden bg-bg ring-1 ring-line ${className}`} style={{ width: size, height: size, borderRadius: r }}>
+      <img src={photo} alt={p.name} width={size} height={size} loading="lazy" decoding="async" />
     </span>
   )
   const [bg, fg] = TINT[p.cat] ?? ['#e3e7fb', '#3048c8']

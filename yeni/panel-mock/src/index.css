@@ -96,3 +96,22 @@ tr:hover .thumb, li:hover > div > .thumb, a:hover .thumb { transform: scale(1.08
 .card-in { animation: card-in .45s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes card-in { from { opacity: 0; transform: translateY(8px) scale(.97); box-shadow: 0 0 0 2px var(--brand); } 60% { box-shadow: 0 0 0 2px var(--brand); } to { box-shadow: 0 0 0 0 transparent; } }
 @media (prefers-reduced-motion: reduce) { .card-in { animation: none; } tr:hover .thumb, li:hover > div > .thumb, a:hover .thumb { transform: none; } }
+
+/* ---------- bütün panel: yol gösteren küçük hareketler ---------- */
+.flow-step { animation: msg-in .35s ease-out both; }
+.head-icon { animation: head-icon .4s cubic-bezier(.2,.8,.2,1) both; }
+.drawer-in { animation: drawer-in .24s cubic-bezier(.2,.7,.2,1) both; }
+.fade-in { animation: fade-in .2s ease-out both; }
+.page-in tbody tr { animation: row-in .28s ease-out both; }
+.page-in tbody tr:nth-child(2) { animation-delay: 20ms; } .page-in tbody tr:nth-child(3) { animation-delay: 40ms; } .page-in tbody tr:nth-child(4) { animation-delay: 60ms; }
+.page-in tbody tr:nth-child(5) { animation-delay: 80ms; } .page-in tbody tr:nth-child(6) { animation-delay: 100ms; } .page-in tbody tr:nth-child(7) { animation-delay: 120ms; }
+.page-in tbody tr:nth-child(8) { animation-delay: 140ms; } .page-in tbody tr:nth-child(n+9) { animation-delay: 160ms; }
+button:not(:disabled):active { transform: scale(.97); }
+button { transition: background-color .15s, border-color .15s, color .15s, opacity .15s; }
+input[type="checkbox"] { accent-color: var(--brand); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@keyframes head-icon { from { opacity: 0; transform: scale(.6) rotate(-12deg); } }
+@keyframes drawer-in { from { transform: translateX(100%); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes row-in { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .flow-step, .head-icon, .drawer-in, .fade-in, .page-in tbody tr { animation: none; } button:not(:disabled):active { transform: none; } }

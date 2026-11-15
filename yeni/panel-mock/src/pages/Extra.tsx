@@ -3,6 +3,7 @@ import { ArrowRight, Check, Download, Plus, RotateCw, Send, Truck } from 'lucide
 import { CHANNEL, COMPANIES, NOW, OSTATUS, WAREHOUSES, account, ago, company, fmtDT, fmtMoney, fmtNum, mask, product, whName, type Cur, type WhId } from '../data'
 import { CARRIERS, TFLOW, TK, b2bTotals, carrierOf, type TStatus, type TkStatus } from '../data2'
 import { ROLES, useStore } from '../store'
+import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone } from '../ui'
 
 const inp = 'h-8 rounded-md border border-line bg-card px-2 text-sm w-full'
@@ -165,7 +166,7 @@ export function Transfers() {
               <table className="w-full border-collapse text-sm">
                 <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Planlanan</th><th className={th + ' text-right'}>Kabul edilen</th><th className={th + ' text-right'}>Fark</th></tr></thead>
                 <tbody>{open.lines.map(l => { const p = product(l.pid), d = l.received === undefined ? null : l.received - l.qty; return (
-                  <tr key={l.pid}><td className={td}><div className="truncate max-w-[230px]">{p.name}</div><div className="text-xs text-mute num">{p.sku}</div></td>
+                  <tr key={l.pid}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div className="min-w-0"><div className="truncate max-w-[210px]">{p.name}</div><div className="text-xs text-mute num">{p.sku}</div></div></div></td>
                     <td className={td + ' text-right num'}>{fmtNum(l.qty)}</td><td className={td + ' text-right num'}>{l.received === undefined ? '—' : fmtNum(l.received)}</td>
                     <td className={`${td} text-right num ${d ? 'text-bad font-medium' : 'text-mute'}`}>{d === null ? '—' : d}</td></tr>
                 ) })}</tbody>

@@ -2,6 +2,7 @@ import { useMemo, useState, type ButtonHTMLAttributes, type ReactNode } from 're
 import { Check, ChevronLeft, ChevronRight, ListChecks, Minus, Package, Plus, ScanBarcode, Truck, Wifi, WifiOff } from 'lucide-react'
 import { CHANNEL, WAREHOUSES, account, fmtNum, product, toShip, type Order, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
+import { Thumb } from '../Thumb'
 import { Badge } from '../ui'
 
 const binCmp = (a: string, b: string) => a.localeCompare(b, 'tr', { numeric: true })
@@ -76,6 +77,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
         {flash ? <div className="py-20 text-ok text-2xl font-bold inline-flex items-center gap-2"><Check size={32} /> Okundu</div> : <>
           <div className="text-sm text-mute">Rafa git</div>
           <div className="num text-6xl font-extrabold text-brand leading-tight">{line.bin}</div>
+          <div className="mt-3 flex justify-center"><Thumb p={p} size={96} /></div>
           <div className="mt-3 text-xl font-semibold leading-snug">{p.name}</div>
           <div className="num text-sm text-mute mt-1">{p.sku}</div>
           <div className="mt-4 text-sm text-mute">Al</div>
@@ -131,7 +133,7 @@ function Pack({ batch, act }: { batch: Order[]; act: Act }) {
               <button key={key} onClick={() => setTicks(t => ({ ...t, [key]: !t[key] }))} aria-pressed={on}
                 className={`w-full min-h-14 rounded-xl border px-3 py-2 text-left flex items-center gap-3 ${on ? 'bg-ok-soft border-ok' : 'bg-bg border-line'}`}>
                 <span className={`size-8 shrink-0 rounded-lg border-2 inline-flex items-center justify-center ${on ? 'bg-ok border-ok text-white' : 'border-mute'}`}>{on && <Check size={20} />}</span>
-                <span className="min-w-0 flex-1"><span className="block font-medium leading-snug">{product(it.pid).name}</span><span className="num text-xs text-mute">{product(it.pid).sku}</span></span>
+                <Thumb p={product(it.pid)} size={40} /><span className="min-w-0 flex-1"><span className="block font-medium leading-snug">{product(it.pid).name}</span><span className="num text-xs text-mute">{product(it.pid).sku}</span></span>
                 <span className="num text-2xl font-bold">{it.qty}×</span>
               </button>
             )

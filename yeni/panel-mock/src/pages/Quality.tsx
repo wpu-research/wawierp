@@ -98,7 +98,7 @@ export function QualityQueue() {
       <Tabs value={tab} onChange={setTab} items={[{ key: 'next', label: 'Sıradaki', count: queue.length }, { key: 'list', label: 'Liste', count: queue.length }, { key: 'dup', label: 'Mükerrer adayları', count: groups.filter(g => !dupDone[g.key]).length }]} />
       <div className="mt-2">
         {tab === 'next' && (cur ? (
-          <Card title={cur.name} right={<span className="flex gap-1">{kindsOf(cur).map(k => <Badge key={k} tone={KIND[k].tone}>{KIND[k].label}</Badge>)}</span>}>
+          <Card title={<span className="flex items-center gap-2.5"><Thumb p={cur} size={36} />{cur.name}</span>} right={<span className="flex gap-1">{kindsOf(cur).map(k => <Badge key={k} tone={KIND[k].tone}>{KIND[k].label}</Badge>)}</span>}>
             <div className="text-xs text-mute mb-3">{cur.brand} · {cur.cat} · {cur.sku}</div>
             <div className="grid lg:grid-cols-2 gap-4">
               <div className="space-y-2 text-sm">

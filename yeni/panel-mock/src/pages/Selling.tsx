@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
 import { CHANNEL, NOW, PRODUCTS, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
+import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Chan, Empty, HBars, PageHead, Stat, Tabs, sel, td, th } from '../ui'
 
 const DAY = 86400000
@@ -74,7 +75,7 @@ export function ListingWizard() {
             <tbody>{rows.map(p => (
               <tr key={p.id} className="hover:bg-bg">
                 <td className={td}><input type="checkbox" aria-label={p.name + ' seç'} checked={pids.has(p.id)} onChange={() => toggle(pids, p.id, setPids)} /></td>
-                <td className={td}>{p.name}<div className="text-xs text-mute">{p.sku}</div></td><td className={td}>{p.brand}</td>
+                <td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div>{p.name}<div className="text-xs text-mute">{p.sku}</div></div></div></td><td className={td}>{p.brand}</td>
                 <td className={td}>{p.ean ? <span className="num">{p.ean}</span> : <Badge tone="bad">Yok</Badge>}</td>
                 <td className={td}>{p.image ? <Badge tone="ok">Var</Badge> : <Badge tone="bad">Yok</Badge>}</td>
                 <td className={td + ' num text-right'}>{fmtMoney(p.price)}</td><td className={td + ' num text-right'}>{p.listings.length}</td>
@@ -100,7 +101,7 @@ export function ListingWizard() {
           <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Ürün</th>{selA.map(a => <th key={a.id} className={th}><Chan acc={a.id} /></th>)}</tr></thead>
             <tbody>{selP.map(p => (
-              <tr key={p.id}><td className={td}>{p.name}</td>{selA.map(a => { const m = missing(p, a)
+              <tr key={p.id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={28} />{p.name}</div></td>{selA.map(a => { const m = missing(p, a)
                 return <td key={a.id} className={td}>{alreadyOn(p, a) ? <Badge>Zaten var</Badge> : m.length ? <Badge tone="bad" title="Tamamlanmadan gönderilmez">Eksik: {m.join(', ')}</Badge> : <Badge tone="ok">Hazır</Badge>}</td> })}</tr>))}</tbody>
           </table></div>
           <div className="p-3 flex gap-2 justify-between border-t border-line"><Btn onClick={() => next(1)}>Geri</Btn><Btn variant="primary" onClick={() => next(3)}>Önizle</Btn></div>
@@ -255,7 +256,7 @@ export function Replenish() {
             <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>30 gün satış</th><th className={th + ' text-right'}>Günlük hız</th><th className={th + ' text-right'}>Fiziki stok</th><th className={th + ' text-right'}>Yeterlilik</th><th className={th + ' text-right'}>Önerilen</th><th className={th}></th></tr></thead>
               <tbody>{lines.map(l => (
-                <tr key={l.p.id} className="hover:bg-bg"><td className={td}>{l.p.name}<div className="text-xs text-mute">{l.p.brand}</div></td>
+                <tr key={l.p.id} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={l.p} size={32} /><div>{l.p.name}<div className="text-xs text-mute">{l.p.brand}</div></div></div></td>
                   <td className={td + ' num text-right'}>{l.s}</td><td className={td + ' num text-right'}>{l.rate.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}</td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
                   <td className={td + ' text-right'}>{l.days === Infinity ? <span className="text-mute">satış yok</span> : <Badge tone={l.days < 7 ? 'bad' : l.days < 14 ? 'warn' : 'ok'}>{Math.round(l.days)} gün</Badge>}</td>
                   <td className={td + ' num text-right font-medium'}>{l.qty}</td>
@@ -274,7 +275,7 @@ export function Replenish() {
             <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th}>Eksik depo</th><th className={th}>Fazla depo</th><th className={th + ' text-right'}>Önerilen adet</th><th className={th}></th></tr></thead>
               <tbody>{moves.map((m, i) => (
-                <tr key={i} className="hover:bg-bg"><td className={td}>{m.p.name}</td>
+                <tr key={i} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={m.p} size={28} />{m.p.name}</div></td>
                   <td className={td}>{whName(m.low.w)} <Badge tone={m.low.f <= 0 ? 'bad' : 'warn'}>{m.low.f} / min {m.low.min}</Badge></td>
                   <td className={td}>{whName(m.from.w)} <span className="num text-mute">({m.from.f})</span></td><td className={td + ' num text-right font-medium'}>{m.qty}</td>
                   <td className={td}><Btn disabled={!ops} onClick={() => notify(`Transfer taslağı: ${whName(m.from.w)} → ${whName(m.low.w)}, ${m.qty} adet`)}>Transfer taslağı oluştur</Btn></td></tr>))}</tbody>
@@ -288,7 +289,7 @@ export function Replenish() {
             <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Gerçek stok</th><th className={th + ' text-right'}>Kanallara gösterilen</th><th className={th + ' text-right'}>Fark</th></tr></thead>
               <tbody>{lines.map(l => { const sh = Math.max(0, l.st - buf); return (
-                <tr key={l.p.id} className="hover:bg-bg"><td className={td}>{l.p.name}</td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
+                <tr key={l.p.id} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={l.p} size={28} />{l.p.name}</div></td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
                   <td className={td + ' num text-right font-medium'}>{fmtNum(sh)}{sh === 0 && l.st > 0 && <> <Badge tone="warn">kanalda tükendi</Badge></>}</td><td className={td + ' num text-right text-mute'}>−{l.st - sh}</td></tr>) })}</tbody>
             </table></div>
           </Card>
@@ -298,7 +299,7 @@ export function Replenish() {
             <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Stok</th><th className={th + ' text-right'}>30 gün satış</th><th className={th + ' text-right'}>Bağlı değer</th><th className={th}>Öneri</th></tr></thead>
               <tbody>{slow.map(l => (
-                <tr key={l.p.id} className="hover:bg-bg"><td className={td}>{l.p.name}</td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
+                <tr key={l.p.id} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={l.p} size={28} />{l.p.name}</div></td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
                   <td className={td + ' text-right'}>{l.s === 0 ? <Badge tone="bad">Ölü</Badge> : <Badge tone="warn">{l.s} adet</Badge>}</td>
                   <td className={td + ' num text-right'}>{fmtMoney(l.st * l.p.price, 'EUR', 0)}</td>
                   <td className={td}><div className="flex flex-wrap gap-1"><Badge>İndirim</Badge>{l.p.listings.length < 3 && <Badge>Başka kanala aç</Badge>}{l.s === 0 && <Badge>İade et</Badge>}</div></td></tr>))}</tbody>

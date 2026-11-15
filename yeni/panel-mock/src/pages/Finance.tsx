@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowRight, Banknote, CircleCheck, PackageCheck, Tag } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Thumb } from '../Thumb'
 import { COMPANIES, RET, VAT, ago, company, fmtDT, fmtMoney, fmtNum, product, whName, type Order } from '../data'
 import { ROLES, useStore } from '../store'
@@ -13,16 +13,6 @@ export function Returns() {
     <>
       <PageHead title="İadeler" desc="İade, teslim ve para olmak üzere iki eksende ilerler. Her adım stok defterine ve faturaya bağlıdır; kayıt ilk aşamada unutulmaz."
         legacy={['returns (9 görünüm)', 'invoices&view=returns', 'otto_tab=returns', 'sipariş satırı “İade faturası”']} />
-      <ol className="m-0 mb-3 p-0 list-none hidden xl:flex items-center gap-2 rounded-2xl overflow-hidden border border-line bg-card px-4 py-3" aria-label="İade akışı">
-        {([[Tag, 'Müşteri iade etiketini alır', 'Ürün yolda'], [PackageCheck, 'Depo ürünü kontrol eder', 'Stoğa geri yazılır'], [Banknote, 'Muhasebe parayı iade eder', 'İade faturası kesilir'], [CircleCheck, 'Kayıt kapanır', 'Stok ve para tutarlı']] as const).map(([Icon, a, b], i) => (
-          <li key={a} className="contents">
-            {i > 0 && <span className="flow-line flex-1 !min-w-3" aria-hidden />}
-            <div className="flex items-center gap-2.5 min-w-0">
-              <span className={`size-9 shrink-0 rounded-xl grid place-items-center ${i === 3 ? 'bg-ok-soft text-ok' : 'bg-brand-soft text-brand'}`}><Icon size={17} /></span>
-              <div className="leading-tight min-w-0"><div className="text-[13px] font-medium truncate">{a}</div><div className="text-[11px] text-mute truncate">{b} · <span className="num">{rets.filter(o => o.ret === RET[i].key).length}</span> kayıt</div></div>
-            </div>
-          </li>))}
-      </ol>
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-3">
         {RET.map(st => { const list = rets.filter(o => o.ret === st.key); return (
           <section key={st.key} className="bg-card border border-line rounded-2xl flex flex-col min-h-[200px]">
