@@ -3,7 +3,7 @@ import { createServer } from 'node:http'
 import { createReadStream, existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
-import { timingSafeEqual } from 'node:crypto'
+import { createHash, timingSafeEqual } from 'node:crypto'
 import { assistantStatus, handleAssistant, handleContent } from './assistant.mjs'
 
 const home = readFileSync(new URL('./dist/index.html', import.meta.url))
@@ -32,17 +32,34 @@ function sendDeck(req, res, base, f) {
 
 const user = process.env.PANEL_USER || 'wawi'
 const pass = process.env.PANEL_PASSWORD || ''
-const expected = Buffer.from(`${user}:${pass}`)
+// Karşılaştırma iki tarafın özeti üzerinden yapılır: süre, şifrenin uzunluğunu da ele vermez.
+const digest = b => createHash('sha256').update(b).digest()
+const expected = digest(`${user}:${pass}`)
 const ok = h => {
-  if (!pass || !h?.startsWith('Basic ')) return false
-  const got = Buffer.from(h.slice(6), 'base64')
-  return got.length === expected.length && timingSafeEqual(got, expected)
+  const m = /^basic +(\S+)$/i.exec(h || '')
+  return !!pass && !!m && timingSafeEqual(digest(Buffer.from(m[1], 'base64')), expected)
+}
+
+// Tarayıcı güvenlik başlıkları. Sayfalar tek dosyaya gömülü betik ve stil kullandığı için 'unsafe-inline' gerekir;
+// yine de dışarıya veri gönderme (connect/img/form) ve başka sitede çerçeveye alınma kapalıdır.
+const SECURITY = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'no-referrer',
+  'Strict-Transport-Security': 'max-age=31536000',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  'Content-Security-Policy': [
+    "default-src 'self'", "script-src 'self' 'unsafe-inline'", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:", "img-src 'self' data: blob:", "media-src 'self'", "connect-src 'self'",
+    "object-src 'none'", "base-uri 'none'", "form-action 'self'", "frame-ancestors 'none'",
+  ].join('; '),
 }
 
 const json = (res, base, code, body) => res.writeHead(code, { ...base, 'Content-Type': 'application/json; charset=utf-8' }).end(JSON.stringify(body))
 
 createServer(async (req, res) => {
-  const base = { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' }
+  const base = { ...SECURITY, 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' }
   if (req.url === '/healthz') return res.writeHead(200, base).end('ok')
   // new URL() bozuk adreste hata fırlatır ve süreci düşürür; sorgu kısmını elle ayırıyoruz.
   const path = (req.url || '/').split(/[?#]/)[0]
@@ -55,7 +72,9 @@ createServer(async (req, res) => {
     if (req.method === 'GET') return json(res, base, 200, assistantStatus())
     if (req.method !== 'POST') return json(res, base, 405, { message: 'Yöntem desteklenmiyor' })
     try {
-      const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim()
+      // Hız sınırı için istemci adresi: x-forwarded-for listesinin ilk öğesini istemci kendisi yazabilir;
+      // son öğeyi önümüzdeki vekil sunucu (Railway) ekler, o yüzden sonuncusu alınır.
+      const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',').pop().trim()
       const [code, body] = await (path === '/api/content' ? handleContent : handleAssistant)(req, ip)
       return json(res, base, code, body)
     } catch (e) { console.error('assistant route:', e); return json(res, base, 500, { message: 'Asistan beklenmeyen bir hata verdi.' }) }
