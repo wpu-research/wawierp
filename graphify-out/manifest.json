@@ -60,10 +60,10 @@
     "semantic_hash": "327672659adc4e35a7f8462f8b6c71ff"
   },
   "docs/04-kavram-koprusu.md": {
-    "mtime": 1794718986.1276784,
-    "seen": 1794728758.8028738,
-    "ast_hash": "681ef9cb3e9e4c8ddb2932ef4a7e19fd",
-    "semantic_hash": "681ef9cb3e9e4c8ddb2932ef4a7e19fd"
+    "mtime": 1794728759.8484,
+    "seen": 1794730948.252898,
+    "ast_hash": "cdd84123ba198fdbddc0ae5887143934",
+    "semantic_hash": "cdd84123ba198fdbddc0ae5887143934"
   },
   "docs/05-bilgi-mimarisi.md": {
     "mtime": 1794670228.544962,
@@ -168,10 +168,10 @@
     "semantic_hash": "dffd991306fc299b74abc5871e8d3531"
   },
   "yeni/panel-mock/src/pages/Catalog.tsx": {
-    "mtime": 1794715187.798726,
-    "seen": 1794718985.1263223,
-    "ast_hash": "3dc16efbe735a44afde1ebd7504e3d71",
-    "semantic_hash": "3dc16efbe735a44afde1ebd7504e3d71"
+    "mtime": 1794729289.237666,
+    "seen": 1794730948.2528598,
+    "ast_hash": "4d1d50c0a7401bb78934f99fafba7cc5",
+    "semantic_hash": "4d1d50c0a7401bb78934f99fafba7cc5"
   },
   "yeni/panel-mock/src/pages/Channels.tsx": {
     "mtime": 1794685144.9340732,
@@ -276,10 +276,10 @@
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
-    "mtime": 1794726186.2969537,
-    "seen": 1794728758.8029375,
-    "ast_hash": "dfaa71cc60332d98a31dec8d3b5ec1d8",
-    "semantic_hash": "dfaa71cc60332d98a31dec8d3b5ec1d8"
+    "mtime": 1794729395.6212327,
+    "seen": 1794730948.252931,
+    "ast_hash": "5c0356a994c6e6555937ab42698a8b64",
+    "semantic_hash": "5c0356a994c6e6555937ab42698a8b64"
   },
   "yeni/panel-mock/index.html": {
     "mtime": 1794686165.6741936,
@@ -294,10 +294,10 @@
     "semantic_hash": "23aa559fc4781b2fc0541042f5e23901"
   },
   "yeni/panel-mock/assistant.mjs": {
-    "mtime": 1794691556.2495391,
-    "seen": 1794692324.9968345,
-    "ast_hash": "ee1bad32ef5ae422b5039d19237aa736",
-    "semantic_hash": "ee1bad32ef5ae422b5039d19237aa736"
+    "mtime": 1794729281.6168396,
+    "seen": 1794730948.2528353,
+    "ast_hash": "68acebfbaac09dc72dddb52d8507d939",
+    "semantic_hash": "68acebfbaac09dc72dddb52d8507d939"
   },
   "yeni/panel-mock/server.mjs": {
     "mtime": 1794726186.2959535,
@@ -306,10 +306,10 @@
     "semantic_hash": "7653b898c9fe006628fa6b2d63355786"
   },
   "yeni/panel-mock/src/Agent.tsx": {
-    "mtime": 1794714745.8861017,
-    "seen": 1794715034.5510125,
-    "ast_hash": "7752bca442518a6db9b759038314ac6f",
-    "semantic_hash": "7752bca442518a6db9b759038314ac6f"
+    "mtime": 1794729281.6168396,
+    "seen": 1794730948.2528405,
+    "ast_hash": "44b37a7406f5208fe2862bce068354b7",
+    "semantic_hash": "44b37a7406f5208fe2862bce068354b7"
   },
   "yeni/panel-mock/src/landing-main.tsx": {
     "mtime": 1794686165.6741936,
@@ -1126,5 +1126,11 @@
     "seen": 1794728758.8031318,
     "ast_hash": "e063808ac7910a98f12420af3c9598fe",
     "semantic_hash": "e063808ac7910a98f12420af3c9598fe"
+  },
+  "yeni/panel-mock/src/similar.tsx": {
+    "mtime": 1794729242.0677392,
+    "seen": 1794730948.2528794,
+    "ast_hash": "c3b016c32036ace6d63deb661be872c6",
+    "semantic_hash": "c3b016c32036ace6d63deb661be872c6"
   }
 }
