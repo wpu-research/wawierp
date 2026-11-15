@@ -100,3 +100,19 @@ Mobil depo bir web prototipidir; mağazalarda yayımlanmış bir uygulama değil
 - bildirimler panel verisinden hesaplanır: sorun düzelince kendiliğinden kapanır ve "Çözülenler" altında görünür
 
 Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bildirimi, e-posta özeti ve mobil bildirim gerçek sistemde gelecek; mock'ta yoktur.
+
+## Kabuk: sol menü, asistan penceresi, hareket
+
+- **Sol menü** (`src/Sidebar.tsx`): koyu, daraltılabilir (yalnız simge), gruplar açılıp kapanır, "Sık kullanılanlar" yıldızla sabitlenir, menü içinde aranır. Kapalı grubun sorun sayısı başlığında görünür. Tercihler tarayıcıda saklanır.
+- **Asistan** artık sağda tam boy panel değil, sağ altta açılan bir sohbet penceresidir; büyütülüp küçültülür, W düğmesi açıp kapatır (`A`).
+- **Genel bakış** karşılama şeridi, sayan rakamlar, büyüyen grafik çubukları; ekran geçişlerinde kısa belirme. Hareketi azalt tercihi açıksa hareket yoktur.
+
+## Ekip mesajlaşması ve geliştirme panosu
+
+`src/Chat.tsx`:
+
+- **Mesajlar** (`#/messages`, `G` `M`): ortak kanallar (genel, depo-istanbul, pazaryeri, muhasebe, fikir-ve-sorun) ve birebir konuşmalar. Okunmamış sayıları menüde ve listede görünür. Mesaja "katılıyorum" denebilir, ilgili ekrana bağlantı taşıyabilir, `@asistan` ile asistana soru yönlendirilir.
+- Ortak kanaldaki bir mesaj tek tıkla **öneri** ya da **sorun** olarak panoya eklenir.
+- **Geliştirme panosu** (`#/feedback`): ortak kanallardaki konuşmalar konu konu sayılır (kaç kişi, kaç mesaj, örnek alıntılar), her konu için panelde bir çözüm önerilir ve tek tıkla istek açılır. İstekler oylanır; sistem yöneticisi durumu değiştirir (Yeni, İnceleniyor, Planlandı, Yapıldı) ve sonuç kanala geri yazılır.
+- "Asistandan haftalık özet iste" son mesajları asistana verir; asistan tekrar eden sorunları ve çözüm önerilerini çıkarır.
+- **Gizlilik:** birebir mesajlar taranmaz; yalnız ortak kanallar sayılır. Mock'ta konu çıkarımı anahtar kelimeyle yapılır, kişiler rol adlarıdır, veriler tarayıcıda saklanır. Gerçek sistemde mesajlar sunucuda tutulur, anlık iletilir ve taramayı asistan yapar.

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type Anthropic from '@anthropic-ai/sdk'
-import { ArrowUp, Check, ExternalLink, Lock, ShieldCheck, Sparkles, X } from 'lucide-react'
+import { ArrowUp, Check, ExternalLink, Lock, Maximize2, Minimize2, ShieldCheck, Sparkles, X } from 'lucide-react'
 import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
@@ -425,6 +425,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
 
   // Bildirimden gelen istek: panel açılır ve soru kullanıcının yerine gönderilir.
   const sendRef = useRef(send); sendRef.current = send
+  const [wide, setWide] = useState(false)
   useEffect(() => {
     if (!ask) return
     const t = window.setTimeout(() => sendRef.current(ask.text), 500) // bağlantı durumu belli olsun
@@ -449,12 +450,13 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   const scope = [st.companyId ? 'seçili şirket' : 'tüm şirketler', st.whId ? 'seçili depo' : 'tüm depolar'].join(' · ')
 
   return (
-    <aside aria-label="Asistan" hidden={!open} className="fixed inset-y-0 right-0 z-40 w-[400px] max-w-full bg-card border-l border-line flex flex-col shadow-xl xl:shadow-none">
-      <header className="h-14 shrink-0 px-4 flex items-center gap-2 border-b border-line">
-        <span className="size-7 grid place-items-center rounded-lg bg-brand-soft text-brand"><Sparkles size={16} /></span>
-        <div className="min-w-0 flex-1"><div className="text-sm font-semibold leading-tight">Asistan</div><div className="text-[11px] text-mute truncate">{R.label} yetkisiyle · {scope}</div></div>
+    <aside aria-label="Asistan" hidden={!open} className={`chat-pop fixed z-40 bg-card border border-line flex flex-col shadow-2xl shadow-black/25 rounded-2xl overflow-hidden inset-x-2 top-16 bottom-2 sm:inset-auto sm:right-5 sm:bottom-[5.5rem] ${wide ? 'sm:w-[min(720px,calc(100vw-2.5rem))] sm:h-[calc(100dvh-7rem)]' : 'sm:w-[410px] sm:h-[min(640px,calc(100dvh-7rem))]'}`}>
+      <header className="h-14 shrink-0 px-4 flex items-center gap-2 bg-navy text-white">
+        <span className="relative size-8 grid place-items-center rounded-full bg-white/12"><Sparkles size={16} /><span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-[#4fbf4f] ring-2 ring-navy" /></span>
+        <div className="min-w-0 flex-1"><div className="text-sm font-semibold leading-tight">Asistan</div><div className="text-[11px] text-white/60 truncate">{R.label} yetkisiyle · {scope}</div></div>
         {live === 'canli' ? <Badge tone="ok" title="Yanıtlar yapay zekâdan gelir; rakamlar panel verisinden hesaplanır">Yapay zekâ bağlı</Badge> : <Badge tone="warn" title="Sunucuda API anahtarı yok; hazır senaryolar mock veriden hesaplanır">Hazır senaryolar</Badge>}
-        <button onClick={onClose} aria-label="Asistanı kapat" className="border-0 bg-transparent p-1.5 text-ink2 rounded-md hover:bg-bg"><X size={18} /></button>
+        <button onClick={() => setWide(w => !w)} aria-label={wide ? 'Pencereyi küçült' : 'Pencereyi büyüt'} title={wide ? 'Küçült' : 'Büyüt'} className="hidden sm:grid border-0 bg-transparent size-8 place-items-center text-white/70 rounded-md hover:bg-white/12 hover:text-white">{wide ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</button>
+        <button onClick={onClose} aria-label="Asistanı kapat" className="border-0 bg-transparent size-8 grid place-items-center text-white/70 rounded-md hover:bg-white/12 hover:text-white"><X size={18} /></button>
       </header>
 
       <div className="px-4 py-2 border-b border-line flex items-center gap-1.5 text-xs" role="radiogroup" aria-label="Asistanın yetki düzeyi">

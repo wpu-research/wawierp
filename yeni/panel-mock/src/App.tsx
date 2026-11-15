@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, LayoutDashboard, LifeBuoy, ListChecks, Menu, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Undo2, UserRound, Users, Workflow, X, type LucideIcon } from 'lucide-react'
+import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, ChevronRight, LayoutDashboard, LifeBuoy, Lightbulb, ListChecks, Menu, MessagesSquare, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Undo2, UserRound, Users, Workflow, X } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, account, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
 import { sel } from './ui'
 import { Logo } from './logo'
 import Agent from './Agent'
 import Notifications from './Notifications'
+import Sidebar, { type NavGroup } from './Sidebar'
+import { ChatProvider, Feedback, Messages, useChat } from './Chat'
 import Overview from './pages/Overview'
 import Orders from './pages/Orders'
 import Catalog, { Stock } from './pages/Catalog'
@@ -25,9 +27,8 @@ import { MobileDepot } from './pages/Mobile'
 
 const HOME = location.protocol === 'file:' ? 'index.html' : '/'
 
-interface NavItem { key: string; label: string; icon: LucideIcon; draft?: boolean; fresh?: boolean }
-const NAV: { group: string; items: NavItem[] }[] = [
-  { group: '', items: [{ key: 'overview', label: 'Genel bakış', icon: LayoutDashboard }] },
+const NAV: NavGroup[] = [
+  { group: '', items: [{ key: 'overview', label: 'Genel bakış', icon: LayoutDashboard }, { key: 'messages', label: 'Mesajlar', icon: MessagesSquare, fresh: true }, { key: 'feedback', label: 'Geliştirme panosu', icon: Lightbulb, fresh: true }] },
   { group: 'Operasyon', items: [
     { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks, fresh: true }, { key: 'mobile', label: 'Mobil depo', icon: Smartphone, fresh: true }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
     { key: 'returns', label: 'İadeler', icon: RotateCcw }, { key: 'return-form', label: 'Müşteri iade formu', icon: Undo2, fresh: true }, { key: 'support', label: 'Destek', icon: LifeBuoy },
@@ -68,7 +69,10 @@ function useRoute() {
 
 function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchParams; dark: boolean; setDark: (f: (d: boolean) => boolean) => void }) {
   const st = useStore()
+  const chat = useChat()
   const [menu, setMenu] = useState(false)
+  const [mini, setMiniRaw] = useState(() => { try { return localStorage.getItem('wawi-mock-mini') === '1' } catch { return false } })
+  const setMini = (f: (m: boolean) => boolean) => setMiniRaw(m => { const v = f(m); try { localStorage.setItem('wawi-mock-mini', v ? '1' : '0') } catch { /* yalnız bu oturum */ } return v })
   const [agent, setAgent] = useState(false)
   const [find, setFind] = useState(false)
   const [keys, setKeys] = useState(false)
@@ -95,13 +99,19 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
     addEventListener('keydown', f); return () => removeEventListener('keydown', f)
   }, [])
   useEffect(() => setMenu(false), [page])
+  // Mesajlardan ve panodan gelen "asistana sor" istekleri
+  useEffect(() => {
+    const f = (e: Event) => { setAgent(true); setAsk({ text: String((e as CustomEvent).detail), n: Date.now() }) }
+    addEventListener('wawi-ask', f); return () => removeEventListener('wawi-ask', f)
+  }, [])
 
   const R = ROLES[st.role]
-  const allowed = (k: string) => R.nav === 'all' || R.nav.includes(k)
+  const allowed = (k: string) => k === 'messages' || k === 'feedback' || R.nav === 'all' || R.nav.includes(k)
   // Menü rozetleri listelerle aynı veriden ve aynı süzgeç işlevinden hesaplanır.
   const badges = useMemo<Record<string, { n: number; bad?: boolean }>>(() => {
     const ids = new Set(st.accounts.map(a => a.id))
     return {
+      messages: { n: chat.totalUnread },
       orders: { n: st.orders.filter(toShip).length },
       returns: { n: st.orders.filter(o => o.ret && o.ret !== 'cozuldu').length },
       channels: { n: st.accounts.filter(a => a.health !== 'ok').length, bad: true },
@@ -110,10 +120,10 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
       support: { n: st.tickets.filter(t => t.status === 'open').length },
       transfers: { n: st.transfers.filter(t => t.status === 'ulasti').length },
     }
-  }, [st.orders, st.accounts, st.jobs, st.tickets, st.transfers])
+  }, [st.orders, st.accounts, st.jobs, st.tickets, st.transfers, chat.totalUnread])
 
   const view = !allowed(page) ? <NoAccess /> :
-    page === 'overview' ? <Overview /> : page === 'orders' ? <Orders query={query} /> : page === 'catalog' ? <Catalog query={query} /> :
+    page === 'overview' ? <Overview /> : page === 'messages' ? <Messages query={query} /> : page === 'feedback' ? <Feedback /> : page === 'orders' ? <Orders query={query} /> : page === 'catalog' ? <Catalog query={query} /> :
     page === 'stock' ? <Stock /> : page === 'channels' ? <Channels /> : page === 'sync' ? <Sync /> : page === 'returns' ? <Returns /> :
     page === 'finance' ? <Finance /> : page === 'team' ? <Team /> : page === 'audit' ? <AuditLog /> :
     page === 'labels' ? <Labels /> : page === 'transfers' ? <Transfers /> : page === 'support' ? <Support /> : page === 'b2b' ? <B2BPage /> :
@@ -125,46 +135,17 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
 
   if (page === 'mobile' && allowed('mobile')) return <MobileDepot />
 
-  const sidebar = (
-    <nav className="flex flex-col h-full" aria-label="Ana menü">
-      <div className="px-4 h-14 flex items-center justify-between border-b border-line shrink-0">
-        <a href={HOME} className="flex items-center gap-2 no-underline text-ink" title="Ana sayfa">
-          <Logo height={26} />
-          <span className="rounded bg-warn-soft text-warn text-[10px] font-semibold px-1.5 py-0.5">MOCK</span>
-        </a>
-        <button className="md:hidden border-0 bg-transparent p-1.5 text-ink2" aria-label="Menüyü kapat" onClick={() => setMenu(false)}><X size={18} /></button>
-      </div>
-      <div className="px-3 py-2.5 border-b border-line text-xs">
-        <div className="text-mute">Kiracı</div>
-        <div className="font-medium text-sm">İlk kiracı · 12 şirket, 5 depo</div>
-      </div>
-      <div className="flex-1 overflow-y-auto px-2 py-2">
-        {NAV.map(g => { const items = g.items.filter(i => allowed(i.key)); if (!items.length) return null; return (
-          <div key={g.group} className="mb-2">
-            {g.group && <div className="px-2 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-mute">{g.group}</div>}
-            {items.map(i => { const b = badges[i.key], on = page === i.key; return (
-              <a key={i.key} href={`#/${i.key}`} aria-current={on ? 'page' : undefined}
-                className={`flex items-center gap-2.5 rounded-md px-2 h-8 no-underline text-sm ${on ? 'bg-brand-soft text-brand font-medium' : 'text-ink2 hover:bg-bg'}`}>
-                <i.icon size={16} className="shrink-0" /><span className="flex-1 truncate">{i.label}</span>
-                {i.draft && <span className="text-[10px] text-mute">taslak</span>}
-                {i.fresh && !b?.n && <span className="rounded-full bg-violet-soft text-violet text-[10px] font-semibold px-1.5">yeni</span>}
-                {b && b.n > 0 && <span className={`num rounded-full px-1.5 text-[11px] font-medium ${b.bad ? 'bg-bad-soft text-bad' : 'bg-bg text-ink2 border border-line'}`}>{b.n}</span>}
-              </a>
-            ) })}
-          </div>
-        ) })}
-      </div>
-      <div className="px-3 py-2.5 border-t border-line text-[11px] text-mute leading-snug">Mock veri. Sipariş sayıları gerçek 30 günlük dağılımdan; satırlar, müşteriler ve ürünler uydurma.</div>
-    </nav>
-  )
+  const here = NAV.flatMap(g => g.items.map(i => ({ ...i, group: g.group }))).find(i => i.key === page)
+  const side = (onClose?: () => void) => <Sidebar nav={NAV} page={page} badges={badges} allowed={allowed} home={HOME} mini={mini} setMini={setMini} onClose={onClose} />
 
   return (
-    <div className={`min-h-screen md:pl-60 ${agent ? 'xl:pr-[400px]' : ''}`}>
-      <aside className="hidden md:block fixed inset-y-0 left-0 w-60 bg-card border-r border-line">{sidebar}</aside>
-      {menu && <div className="md:hidden fixed inset-0 z-50 flex"><div className="w-64 max-w-[85vw] bg-card border-r border-line">{sidebar}</div><div className="flex-1 bg-black/40" onClick={() => setMenu(false)} /></div>}
+    <div className={`min-h-screen transition-[padding] duration-200 ${mini ? 'md:pl-[68px]' : 'md:pl-64'}`}>
+      <aside className={`hidden md:block fixed inset-y-0 left-0 z-30 transition-[width] duration-200 ${mini ? 'w-[68px]' : 'w-64'}`}>{side()}</aside>
+      {menu && <div className="md:hidden fixed inset-0 z-50 flex"><div className="slide-in w-72 max-w-[85vw]">{side(() => setMenu(false))}</div><div className="flex-1 bg-black/45" onClick={() => setMenu(false)} /></div>}
 
-      <header className="sticky top-0 z-30 bg-card/95 backdrop-blur border-b border-line px-3 md:px-5 min-h-14 py-2 flex flex-wrap items-center gap-2">
+      <header className="sticky top-0 z-20 bg-card/85 backdrop-blur-md border-b border-line px-3 md:px-5 min-h-14 py-2 flex flex-wrap items-center gap-2">
         <button className="md:hidden border border-line rounded-md bg-card p-1.5 text-ink2" aria-label="Menüyü aç" onClick={() => setMenu(true)}><Menu size={18} /></button>
+        {here && <div className="hidden lg:flex items-center gap-1 text-[13px] mr-2 min-w-0">{here.group && <><span className="text-mute">{here.group}</span><ChevronRight size={13} className="text-mute" /></>}<b className="font-semibold truncate">{here.label}</b></div>}
         <label className="flex items-center gap-1.5 text-xs text-mute">Şirket
           <select className={sel} value={st.companyId} onChange={e => st.setCompanyId(e.target.value)}>
             <option value="">Tüm şirketler</option>{COMPANIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -186,13 +167,11 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
         <button onClick={() => setDark(d => !d)} aria-label="Açık / koyu tema" className="border border-line rounded-md bg-card size-8 grid place-items-center text-ink2">{dark ? <Sun size={16} /> : <Moon size={16} />}</button>
       </header>
 
-      <main className="px-3 md:px-5 py-4 max-w-[1500px]">{view}</main>
+      <main key={page} className="page-in px-3 md:px-5 py-4 max-w-[1500px]">{view}</main>
       <Agent open={agent} onClose={() => setAgent(false)} ask={ask} />
-      {!agent && (
-        <button onClick={() => setAgent(true)} aria-label="Asistanı aç" title="Asistan" className="fixed bottom-5 right-5 z-40 size-14 grid place-items-center rounded-2xl border-0 bg-[#3048C8] shadow-lg shadow-black/25 hover:scale-105 transition-transform">
-          <Logo height={38} markOnly />
-        </button>
-      )}
+      <button onClick={() => setAgent(v => !v)} aria-label={agent ? 'Asistanı kapat' : 'Asistanı aç'} aria-expanded={agent} title="Asistan (A)" className={`launcher fixed bottom-5 right-5 z-40 size-14 grid place-items-center rounded-full border-0 bg-[#3048C8] text-white shadow-lg shadow-[#3048C8]/40 hover:scale-105 transition-transform ${agent ? 'max-sm:hidden' : ''}`}>
+        {agent ? <X size={24} /> : <Logo height={38} markOnly />}
+      </button>
       {find && <Palette onClose={() => setFind(false)} allowed={allowed} />}
       {(st.toast || st.undo) && (
         <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg max-w-[92vw]">
@@ -247,7 +226,7 @@ function Palette({ onClose, allowed }: { onClose: () => void; allowed: (k: strin
   )
 }
 
-const GOTO: Record<string, [string, string]> = { h: ['overview', 'Genel bakış'], o: ['orders', 'Siparişler'], t: ['picking', 'Toplama listesi'], i: ['returns', 'İadeler'], k: ['catalog', 'Katalog'], s: ['stock', 'Stok defteri'], r: ['reservations', 'Stok ayırma'], e: ['sync', 'Eşitleme işleri'], u: ['alerts', 'Uyarılar'], f: ['finance', 'Faturalar'] }
+const GOTO: Record<string, [string, string]> = { h: ['overview', 'Genel bakış'], o: ['orders', 'Siparişler'], t: ['picking', 'Toplama listesi'], i: ['returns', 'İadeler'], m: ['messages', 'Mesajlar'], k: ['catalog', 'Katalog'], s: ['stock', 'Stok defteri'], r: ['reservations', 'Stok ayırma'], e: ['sync', 'Eşitleme işleri'], u: ['alerts', 'Uyarılar'], f: ['finance', 'Faturalar'] }
 function Shortcuts({ onClose }: { onClose: () => void }) {
   const K = ({ children }: { children: string }) => <kbd className="rounded border border-line bg-bg px-1.5 py-0.5 text-[11px] font-sans">{children}</kbd>
   return (
@@ -283,4 +262,4 @@ function Root() {
   return <Shell page={page} query={query} dark={dark} setDark={setDark} />
 }
 
-export default function App() { return <StoreProvider><Root /></StoreProvider> }
+export default function App() { return <StoreProvider><ChatProvider><Root /></ChatProvider></StoreProvider> }

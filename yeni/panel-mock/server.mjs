@@ -38,6 +38,6 @@ createServer(async (req, res) => {
   }
   if (path !== '/panel' && path !== '/panel/') return res.writeHead(302, { ...base, Location: '/' }).end()
   if (!pass) return res.writeHead(503, base).end('PANEL_PASSWORD ayarlanmamış')
-  if (!ok(req.headers.authorization)) return res.writeHead(401, { ...base, 'WWW-Authenticate': 'Basic realm="WawiERP mock"' }).end('Giriş gerekli')
+  if (!ok(req.headers.authorization)) return res.writeHead(401, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'WWW-Authenticate': 'Basic realm="WawiERP mock"' }).end('Giriş gerekli')
   res.writeHead(200, { ...base, ...page }).end(panel)
 }).listen(process.env.PORT || 3000, '0.0.0.0')

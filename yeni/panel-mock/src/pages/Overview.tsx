@@ -1,11 +1,14 @@
 import { useMemo } from 'react'
-import { AlertTriangle, ArrowRight } from 'lucide-react'
+import { AlertTriangle, ArrowRight, ListChecks, MessagesSquare, Sparkles, Tag } from 'lucide-react'
 import { CHANNEL, NOW, WAREHOUSES, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, overdue, stockState, toShip, ago, type ChannelType } from '../data'
-import { useStore } from '../store'
+import { ROLES, useStore } from '../store'
+import { askAssistant, useChat } from '../Chat'
 import { Badge, Bars, Card, HBars, PageHead, Stat } from '../ui'
 
 export default function Overview() {
-  const { orders, products, accounts, jobs, whId } = useStore()
+  const { orders, products, accounts, jobs, whId, role } = useStore()
+  const chat = useChat()
+  const hour = new Date(NOW).getHours()
   const m = useMemo(() => {
     const today = dayKey(NOW)
     const days = new Map<string, number>()
@@ -34,6 +37,19 @@ export default function Overview() {
     <>
       <PageHead title="Genel bakış" desc="Bütün sayılar aşağıdaki listelerle aynı kaynaktan hesaplanır; bir kutuya tıklayınca açılan liste aynı sayıyı gösterir."
         legacy={['overview', 'order-summary', 'overview-orders']} />
+      <div className="hero-band relative overflow-hidden rounded-2xl bg-navy text-white px-5 py-4 mb-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <div className="relative min-w-0 flex-1 basis-72">
+          <div className="flex items-center gap-2 text-xs text-white/60"><span className="relative flex size-2"><span className="pulse absolute inset-0 rounded-full bg-[#4fbf4f]" /><span className="relative size-2 rounded-full bg-[#4fbf4f]" /></span>Canlı · {new Date(NOW).toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+          <div className="font-display text-[22px] font-semibold leading-tight mt-1">{hour < 12 ? 'Günaydın' : hour < 18 ? 'İyi günler' : 'İyi akşamlar'}, {ROLES[role].user}</div>
+          <p className="m-0 mt-1 text-[14px] text-white/75">Bugün <b className="text-white num">{fmtNum(m.todayN)}</b> sipariş geldi; <b className="text-white num">{fmtNum(m.toShip)}</b> sipariş gönderilmeyi bekliyor{m.overdue ? <>, <b className="text-gold num">{fmtNum(m.overdue)}</b> tanesi 2 günü aştı</> : ''}.</p>
+        </div>
+        <div className="relative flex flex-wrap gap-2">
+          {ROLES[role].ops && <a href="#/picking" className="hero-btn"><ListChecks size={15} />Toplamaya başla</a>}
+          {ROLES[role].ops && <a href="#/labels" className="hero-btn"><Tag size={15} />Etiketler</a>}
+          <a href="#/messages" className="hero-btn"><MessagesSquare size={15} />Mesajlar{chat.totalUnread > 0 && <span className="num rounded-full bg-gold text-navy text-[11px] font-bold px-1.5">{chat.totalUnread}</span>}</a>
+          <button onClick={() => askAssistant('Bugünün durumunu özetle ve önce neyi yapmam gerektiğini söyle.')} className="hero-btn hero-btn-gold"><Sparkles size={15} />Asistana sor</button>
+        </div>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
         <Stat label="Bugün gelen sipariş" value={fmtNum(m.todayN)} hint={fmtMoney(m.todayEur, 'EUR', 0)} href="#/orders?view=all" />
         <Stat label="Gönderilecek" value={fmtNum(m.toShip)} hint="Ödemesi tamam, açık" href="#/orders?view=toship" />

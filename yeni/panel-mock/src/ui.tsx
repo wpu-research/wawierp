@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { CHANNEL, account, fmtNum } from './data'
 
@@ -18,21 +18,34 @@ export function Btn({ variant = 'outline', className = '', ...p }: ButtonHTMLAtt
 
 export function Card({ title, right, children, className = '', pad = true }: { title?: ReactNode; right?: ReactNode; children: ReactNode; className?: string; pad?: boolean }) {
   return (
-    <section className={`bg-card border border-line rounded-xl ${className}`}>
+    <section className={`bg-card border border-line rounded-2xl shadow-[0_1px_2px_rgba(20,20,19,.04)] ${className}`}>
       {title && <header className="flex items-center justify-between gap-2 px-4 pt-3 pb-2"><h2 className="m-0 text-sm font-semibold">{title}</h2>{right}</header>}
       <div className={pad ? 'px-4 pb-4' + (title ? '' : ' pt-4') : ''}>{children}</div>
     </section>
   )
 }
 
+/* Sayı, ekrana gelince sıfırdan değerine doğru sayar; değer değişince yeni değere kayar. */
+function CountUp({ text }: { text: string }) {
+  const to = Number(text.replace(/\./g, ''))
+  const [v, setV] = useState(() => (matchMedia('(prefers-reduced-motion: reduce)').matches ? to : 0))
+  useEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { setV(to); return }
+    let raf = 0; const from = v, t0 = performance.now()
+    const step = (t: number) => { const k = Math.min(1, (t - t0) / 650), e = 1 - Math.pow(1 - k, 3); setV(Math.round(from + (to - from) * e)); if (k < 1) raf = requestAnimationFrame(step) }
+    raf = requestAnimationFrame(step); return () => cancelAnimationFrame(raf)
+  }, [to]) // eslint-disable-line react-hooks/exhaustive-deps
+  return <>{fmtNum(v)}</>
+}
+
 export function Stat({ label, value, hint, tone, href }: { label: string; value: ReactNode; hint?: ReactNode; tone?: 'bad' | 'warn' | 'ok'; href?: string }) {
   const color = tone === 'bad' ? 'text-bad' : tone === 'warn' ? 'text-warn' : tone === 'ok' ? 'text-ok' : 'text-ink'
   const body = <>
-    <div className="text-xs text-mute">{label}</div>
-    <div className={`num text-2xl font-semibold leading-tight mt-0.5 ${color}`}>{value}</div>
+    <div className="text-xs text-mute flex items-center gap-1.5">{tone && <span className={`size-1.5 rounded-full ${tone === 'bad' ? 'bg-bad' : tone === 'warn' ? 'bg-warn' : 'bg-ok'}`} />}{label}</div>
+    <div className={`num font-display text-[26px] font-semibold leading-tight mt-0.5 ${color}`}>{typeof value === 'string' && /^\d[\d.]*$/.test(value) ? <CountUp text={value} /> : value}</div>
     {hint && <div className="text-xs text-ink2 mt-0.5">{hint}</div>}
   </>
-  const cls = 'block bg-card border border-line rounded-xl px-4 py-3 no-underline text-inherit'
+  const cls = 'lift block bg-card border border-line rounded-xl px-4 py-3 no-underline text-inherit'
   return href ? <a href={href} className={cls + ' hover:border-brand'}>{body}</a> : <div className={cls}>{body}</div>
 }
 
@@ -41,7 +54,7 @@ export function PageHead({ title, desc, legacy, actions }: { title: string; desc
     <div className="mb-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="m-0 text-xl font-semibold tracking-tight">{title}</h1>
+          <h1 className="m-0 font-display text-[22px] font-semibold tracking-tight">{title}</h1>
           {desc && <p className="m-0 mt-0.5 text-ink2 max-w-[75ch]">{desc}</p>}
         </div>
         {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
@@ -120,9 +133,9 @@ export function Bars({ data, height = 120, fmt = fmtNum }: { data: { label: stri
   return (
     <div>
       <div className="flex items-end gap-[3px]" style={{ height }}>
-        {data.map(d => (
-          <div key={d.label} title={`${d.label}: ${fmt(d.value)}`} className="flex-1 min-w-0 rounded-t-sm hover:opacity-70"
-            style={{ height: `${Math.max(2, (d.value / max) * 100)}%`, background: d.mark ? 'var(--violet)' : 'var(--brand)' }} />
+        {data.map((d, i) => (
+          <div key={d.label} title={`${d.label}: ${fmt(d.value)}`} className="bar-in flex-1 min-w-0 rounded-t-[3px] hover:opacity-70"
+            style={{ height: `${Math.max(2, (d.value / max) * 100)}%`, background: d.mark ? 'var(--violet)' : 'var(--brand)', animationDelay: `${i * 14}ms` }} />
         ))}
       </div>
       <div className="flex justify-between text-[11px] text-mute mt-1 num"><span>{data[0]?.label}</span><span>{data[data.length - 1]?.label}</span></div>
