@@ -1,4 +1,4 @@
-// Ana sayfa (/) herkese açık; panel (/panel) ve sunum (/sunum/) şifreli. PANEL_PASSWORD yoksa ikisi de gösterilmez.
+// Ana sayfa (/) ve sunum (/sunum/) herkese açık; panel (/panel) şifreli. PANEL_PASSWORD yoksa panel gösterilmez.
 import { createServer } from 'node:http'
 import { createReadStream, existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -62,9 +62,9 @@ createServer(async (req, res) => {
   }
   const slide = path === '/sunum' ? null : deck.get(path === '/sunum/' ? '/sunum/index.html' : path)
   if (path === '/sunum' && deck.size) return res.writeHead(302, { ...base, Location: '/sunum/' }).end()
-  if (!slide && path !== '/panel' && path !== '/panel/') return res.writeHead(302, { ...base, Location: '/' }).end()
+  if (slide) return sendDeck(req, res, base, slide)
+  if (path !== '/panel' && path !== '/panel/') return res.writeHead(302, { ...base, Location: '/' }).end()
   if (!pass) return res.writeHead(503, base).end('PANEL_PASSWORD ayarlanmamış')
   if (!ok(req.headers.authorization)) return res.writeHead(401, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'WWW-Authenticate': 'Basic realm="WawiERP mock"' }).end('Giriş gerekli')
-  if (slide) return sendDeck(req, res, base, slide)
   res.writeHead(200, { ...base, ...page }).end(panel)
 }).listen(process.env.PORT || 3000, '0.0.0.0')

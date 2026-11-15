@@ -127,7 +127,7 @@ Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bil
 
 ## Yenilikler sunumu (/sunum)
 
-Canlıda `/sunum/` adresi, yenilikler sunumunu ve tanıtım videosunu panelle aynı kullanıcı adı ve şifrenin arkasında sunar. Sunum eski panelin sorunlarını ve iç rakamları içerdiği için herkese açık değildir.
+Canlıda `/sunum/` adresi, yenilikler sunumunu ve tanıtım videosunu **şifresiz**, herkese açık sunar (15.11.2026 kararı). Panel (`/panel`) ve asistan ucu şifreli kalır. Sunum herkese açık olduğu için içine müşteri adı, kişisel veri ya da gizli rakam konmaz.
 
 - Dosyalar `sunum/` klasöründedir (`index.html`, `img/`, video, kapak). Bu klasör, depodaki üst `sunum/` klasörünün **kopyasıdır**; Railway yalnız `yeni/panel-mock` klasörünü gördüğü için kopya gerekir.
 - Sunumu ya da videoyu değiştirince `sunum/yayina-kopyala.sh` çalıştırılır, sonra commitlenip gönderilir.
