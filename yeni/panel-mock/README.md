@@ -124,3 +124,11 @@ Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bil
 - Hareketler yalnız `transform` ve `opacity` kullanır, kısa sürer, "hareketi azalt" tercihinde kapanır.
 - Gerçek sistemde aynı kutuya küçük boyutlu (ör. 96 piksel, WebP), geç yüklenen ürün fotoğrafı gelir; liste başına yalnız görünen satırların görseli indirilir.
 - **Bütün ekranlarda:** başlığın yanında ekranın simgesi; 26 ekranın başında o işin dört adımda nasıl aktığını gösteren şerit (`src/flows.tsx`, geniş ekranda görünür, ✕ ile gizlenir, "Nasıl çalışır?" ile geri gelir); tablolarda satırların sırayla belirmesi; çekmecelerin kayarak açılması; boş listelerde küçük bir çizim; çubukların büyüyerek dolması.
+
+## Yenilikler sunumu (/sunum)
+
+Canlıda `/sunum/` adresi, yenilikler sunumunu ve tanıtım videosunu panelle aynı kullanıcı adı ve şifrenin arkasında sunar. Sunum eski panelin sorunlarını ve iç rakamları içerdiği için herkese açık değildir.
+
+- Dosyalar `sunum/` klasöründedir (`index.html`, `img/`, video, kapak). Bu klasör, depodaki üst `sunum/` klasörünün **kopyasıdır**; Railway yalnız `yeni/panel-mock` klasörünü gördüğü için kopya gerekir.
+- Sunumu ya da videoyu değiştirince `sunum/yayina-kopyala.sh` çalıştırılır, sonra commitlenip gönderilir.
+- Sunucu yalnız açılışta listelediği dosyaları verir; video ileri geri sarılabilsin diye parça isteğini (Range) destekler.
