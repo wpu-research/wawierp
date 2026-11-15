@@ -125,6 +125,17 @@ Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bil
 - Gerçek sistemde aynı kutuya küçük boyutlu (ör. 96 piksel, WebP), geç yüklenen ürün fotoğrafı gelir; liste başına yalnız görünen satırların görseli indirilir.
 - **Bütün ekranlarda:** başlığın yanında ekranın simgesi; 26 ekranın başında o işin dört adımda nasıl aktığını gösteren şerit (`src/flows.tsx`, geniş ekranda görünür, ✕ ile gizlenir, "Nasıl çalışır?" ile geri gelir); tablolarda satırların sırayla belirmesi; çekmecelerin kayarak açılması; boş listelerde küçük bir çizim; çubukların büyüyerek dolması.
 
+## Benzer ürün önerisi
+
+Bir ürüne, stoktaki **diğer markalardan** en yakın ürünleri gösterir (`src/similar.tsx`).
+
+- **Ürün sayfasında:** Katalog'da ürün çekmecesinde "Benzer ürünler · diğer markalar" bölümü; satıra basınca o ürün açılır. "Asistana sor" aynı soruyu asistana gönderir.
+- **Asistanda:** `find_similar_products` aracı (`assistant.mjs` tanımlar, `Agent.tsx` çalıştırır). Yanıtın altında fotoğraflı liste çıkar. Anahtar yokken "benzer", "muadil", "alternatif" kelimeleriyle hazır senaryo çalışır.
+- **Nasıl hesaplanır:** aynı kategori şart; ürün türü, ortak özellikler (koku ailesi, malzeme, bağlantı tipi gibi) ve fiyat yakınlığı puanlanır. Yalnız stokta olanlar listelenir.
+- **Özellik yoksa:** yalnız kategori ve fiyata bakılır; liste "yalnız kategori ve fiyat" notuyla gelir.
+- **Gerçek sistemde:** özellikler ürün kartından gelir; eksik olanları asistan ürün metninden önerir, kullanıcı onaylar. Müşteriye açık sitede asistan yalnız satışa açık ürünü ve satış fiyatını görür; maliyet ve alış fiyatını görmez.
+- Adres: `#/catalog?p=<ürün kimliği>` ürün çekmecesini doğrudan açar.
+
 ## Yenilikler sunumu (/sunum)
 
 Canlıda `/sunum/` adresi, yenilikler sunumunu ve tanıtım videosunu **şifresiz**, herkese açık sunar (15.11.2026 kararı). Panel (`/panel`) ve asistan ucu şifreli kalır. Sunum herkese açık olduğu için içine müşteri adı, kişisel veri ya da gizli rakam konmaz.

@@ -4,6 +4,7 @@ import { ArrowUp, Check, ExternalLink, Lock, Maximize2, Minimize2, ShieldCheck, 
 import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
+import { SimilarList, findProduct, inStock, similarTo } from './similar'
 
 /* Asistan paneli. Sunucuda API anahtarı tanımlıysa (server.mjs + assistant.mjs) gerçek yapay zekâya bağlanır:
    model araç çağırır, araçlar burada mock verinin üzerinde çalışır, sonuç modele geri gider.
@@ -19,17 +20,17 @@ type Src = { label: string; href: string }
 type ActKind = 'labels' | 'ship' | 'retry' | 'reply' | 'rule' | 'plan'
 type Step = { kind: 'labels' | 'ship' | 'retry'; ids: string[]; label: string }
 interface Act { kind: ActKind; title: string; lines: string[]; ids: string[]; payload?: string; steps?: Step[]; auto?: boolean; state: 'bekliyor' | 'uygulandi' | 'vazgecildi' }
-interface Msg { id: number; from: 'user' | 'agent'; body: ReactNode; sources?: Src[]; act?: Act }
+interface Msg { id: number; from: 'user' | 'agent'; body: ReactNode; extra?: ReactNode; sources?: Src[]; act?: Act }
 type Mode = 'yanit' | 'onay' | 'oto'
 type ApiMsg = Anthropic.Beta.BetaMessageParam
 type Block = Anthropic.Beta.BetaContentBlock
-type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[] }
+type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[]; view?: ReactNode }
 const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
 // Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
 const API = location.origin + '/api/assistant'
 const CAP = 25 // tek seferde en fazla bu kadar kayda işlem önerilir
 
-const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta risk var mı?', 'Hangi ürünler bitmek üzere?', 'Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
+const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta risk var mı?', 'Hangi ürünler bitmek üzere?', 'Amber Wood ürününe benzer, diğer markalardan ne var?', 'Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
 
 const norm = (s: string) => s.toLocaleLowerCase('tr-TR')
 const plural = (n: number, w: string) => `${fmtNum(n)} ${w}`
@@ -188,6 +189,23 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
           odeme_bekleyen_siparis: bekleyen.length, odeme_bekleyen_tutar_eur: Math.round(bekleyen.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0)),
         } }
       }
+      case 'find_similar_products': {
+        const p = findProduct(String(input.query ?? ''), st.products)
+        if (!p) return { error: true, data: { hata: 'Bu ad ya da SKU ile ürün bulunamadı. Kullanıcıdan ürün adını ya da SKU\'yu isteyin.' } }
+        const other = input.other_brands_only !== false
+        const list = similarTo(p, st.products, { otherBrands: other, limit: int(input.limit, 5, 10) })
+        return {
+          src: [{ label: p.name, href: `#/catalog?p=${p.id}` }],
+          view: list.length ? <SimilarList key={p.id} items={list} /> : undefined,
+          data: {
+            urun: { ad: p.name, marka: p.brand, sku: p.sku, kategori: p.cat, fiyat_eur: p.price, stok: inStock(p) },
+            kapsam: other ? 'yalnız diğer markalar, yalnız stokta olanlar' : 'tüm markalar, yalnız stokta olanlar',
+            not: list.some(x => x.kaba) ? 'Bu ürünün özellikleri girilmemiş; eşleşme yalnız kategori ve fiyata göre, kaba.' : 'Benzerlik ürün türü ve özelliklerinden (koku ailesi, malzeme, bağlantı tipi gibi) hesaplandı.',
+            panelde_gosterildi: list.length > 0,
+            benzerler: list.map(x => ({ ad: x.p.name, marka: x.p.brand, sku: x.p.sku, stok: x.stok, fiyat_eur: x.p.price, ortak_ozellikler: x.ortak })),
+          },
+        }
+      }
       case 'open_screen': {
         const page = String(input.page)
         if (!SCREEN[page]) return { error: true, data: { hata: 'Bilinmeyen ekran' } }
@@ -235,6 +253,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     notes.current = []
     api.current.push({ role: 'user', content: note + t })
     const sources = new Map<string, Src>()
+    const views: ReactNode[] = []
     try {
       for (let turn = 0; turn < 8; turn++) {
         const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode } }) })
@@ -248,6 +267,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
           if (b.type !== 'tool_use') continue
           const out = runTool(b.name, (b.input ?? {}) as Record<string, unknown>)
           if (out.act) acts.push(out.act)
+          if (out.view) views.push(out.view)
           for (const s of out.src ?? []) sources.set(s.href, s)
           results.push({ type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(out.data), ...(out.error ? { is_error: true } : {}) })
         }
@@ -255,7 +275,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         const text = said || (acts.length ? 'Taslağı hazırladım; onayınızı bekliyor.' : '')
         if (res.stop_reason === 'refusal') push({ from: 'agent', body: <p className="m-0">Bu isteği yanıtlayamıyorum.</p> })
         else if (acts.length) acts.forEach((act, i) => push({ from: 'agent', body: <div className="whitespace-pre-wrap">{i === 0 ? text : 'Bir taslak daha:'}</div>, act, sources: done && i === acts.length - 1 && sources.size ? [...sources.values()] : undefined }))
-        else if (done && text) push({ from: 'agent', body: <div className="whitespace-pre-wrap">{text}</div>, sources: sources.size ? [...sources.values()].slice(0, 4) : undefined })
+        else if (done && text) push({ from: 'agent', body: <div className="whitespace-pre-wrap">{text}</div>, extra: views.length ? <div className="space-y-2">{views}</div> : undefined, sources: sources.size ? [...sources.values()].slice(0, 4) : undefined })
         if (done) return
         api.current.push({ role: 'user', content: results })
       }
@@ -272,6 +292,19 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const has = (...k: string[]) => k.some(x => q.includes(x))
     const draft = (a: Omit<Act, 'state'>): Act | undefined => (mode === 'yanit' ? undefined : auto({ ...a, state: 'bekliyor' }))
     const noDraft = mode === 'yanit' ? <p className="m-0 mt-2 text-mute">İşlem önerisi kapalı: “Yalnız yanıtla” modundasınız.</p> : null
+
+    if (has('benzer', 'muadil', 'alternatif')) {
+      const p = findProduct(qRaw, st.products)
+      if (!p) return { body: <p className="m-0">Hangi ürünün benzerlerini arayayım? Ürün adını ya da SKU'yu yazın; örneğin “Amber Wood ürününe benzerleri göster”.</p>, sources: [{ label: 'Katalog', href: '#/catalog' }] }
+      const list = similarTo(p, st.products, { otherBrands: !has('aynı marka', 'tüm marka'), limit: 5 })
+      if (!list.length) return { body: <p className="m-0"><b>{p.name}</b> ({p.brand}) için stokta, başka markadan benzer ürün bulamadım.</p>, sources: [{ label: p.name, href: `#/catalog?p=${p.id}` }] }
+      return {
+        body: <><p className="m-0"><b>{p.name}</b> ({p.brand}) ürününe en yakın, stokta olan {plural(list.length, 'ürün')} buldum; hepsi başka markadan.</p>
+          <p className="m-0 mt-1.5 text-mute">{list[0].kaba ? 'Bu ürünün özellikleri girilmemiş; yalnız kategori ve fiyata baktım.' : 'Ürün türüne, ortak özelliklere ve fiyata baktım.'}</p></>,
+        extra: <SimilarList items={list} />,
+        sources: [{ label: p.name, href: `#/catalog?p=${p.id}` }],
+      }
+    }
 
     // korumalı işlemler: para, fiyat, toplu silme
     if (has('iade et', 'para iade', 'geri öde', 'fiyat', 'kaldır', 'iptal et') || /(^|\s)sil/.test(q)) return {
@@ -480,6 +513,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         ) : (
           <div key={m.id} className="text-sm">
             <div className="rounded-2xl rounded-bl-md bg-bg border border-line px-3 py-2.5">{m.body}</div>
+            {m.extra && <div className="mt-2">{m.extra}</div>}
             {m.sources && <div className="mt-1.5 flex flex-wrap gap-1.5">{m.sources.map(s => <a key={s.href + s.label} href={s.href} className="inline-flex items-center gap-1 rounded-full border border-line bg-card px-2 py-0.5 text-xs text-ink2 no-underline hover:border-brand hover:text-brand"><ExternalLink size={11} />{s.label}</a>)}</div>}
             {m.act && (
               <div className={`mt-2 rounded-xl border px-3 py-2.5 ${m.act.state === 'bekliyor' ? 'border-brand bg-brand-soft/40' : 'border-line bg-card'}`}>

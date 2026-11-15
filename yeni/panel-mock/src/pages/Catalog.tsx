@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ImageOff, Search } from 'lucide-react'
+import { ImageOff, Search, Sparkles } from 'lucide-react'
 import { LISTING_FLOW, MOVE, MOVES0, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtNum, product, stockState, whName, account, type ListingStatus, type MoveType, type Product, type WhId } from '../data'
 import { useStore } from '../store'
 import { Thumb } from '../Thumb'
+import { SimilarList, similarTo } from '../similar'
+import { askAssistant } from '../Chat'
 import { Badge, Card, Chan, Drawer, Empty, PageHead, Pager, Stat, Tabs, sel, td, th, type Tone } from '../ui'
 
 const LTONE: Record<ListingStatus, Tone> = { havuzda: 'neutral', hazirlaniyor: 'warn', onizleme: 'info', gonderildi: 'violet', aktif: 'ok', sorunlu: 'bad', kaldirildi: 'neutral' }
@@ -21,7 +23,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
   const [view, setView] = useState<View>('all')
   const [q, setQ] = useState('')
   const [openId, setOpenId] = useState<string | null>(null)
-  useEffect(() => { const v = query.get('view') as View | null; if (v) setView(v) }, [query])
+  useEffect(() => { const v = query.get('view') as View | null; if (v) setView(v); const p = query.get('p'); if (p) setOpenId(p) }, [query])
 
   const rowsOf = (p: Product) => (Object.entries(p.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).filter(([w]) => !whId || w === whId)
   const has = (p: Product, ...st: string[]) => rowsOf(p).some(([, s]) => st.includes(stockState(s.fiziki)))
@@ -32,6 +34,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
   const s = q.trim().toLowerCase()
   const rows = products.filter(p => F[view](p) && (!s || [p.name, p.sku, p.ean ?? '', p.brand].some(x => x.toLowerCase().includes(s))))
   const open = openId ? product(openId) : null
+  const similar = useMemo(() => (open ? similarTo(open, products, { limit: 4 }) : []), [open, products])
 
   return (
     <>
@@ -101,6 +104,14 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
                 {open.listings.map(l => <li key={l.acc} className="px-3 py-2 flex items-center justify-between gap-2"><Chan acc={l.acc} /><span className="flex items-center gap-2 shrink-0"><span className="num text-ink2">{fmtMoney(l.price, account(l.acc).cur)}</span>{listingBadge(l.status, l.reason)}</span></li>)}
               </ul>
             )}
+          </div>
+          <div>
+            <div className="mb-1.5 flex items-center justify-between gap-2">
+              <h3 className="m-0 text-xs font-semibold text-mute uppercase tracking-wide">Benzer ürünler · diğer markalar</h3>
+              <button onClick={() => askAssistant(`${open.name} ürününe benzer, stokta olan diğer markaların ürünlerini göster`)} className="inline-flex items-center gap-1 text-xs font-medium text-brand hover:underline"><Sparkles size={12} />Asistana sor</button>
+            </div>
+            {similar.length === 0 ? <p className="m-0 text-mute">Stokta, başka markadan benzer ürün yok.</p> : <SimilarList items={similar} onPick={setOpenId} />}
+            <p className="m-0 mt-1.5 text-xs text-mute">Yalnız stokta olanlar. Benzerlik ürün türü, ortak özellikler ve fiyattan hesaplanır; özelliği girilmemiş üründe yalnız kategori ve fiyata bakılır.</p>
           </div>
           <div>
             <h3 className="m-0 mb-1.5 text-xs font-semibold text-mute uppercase tracking-wide">Son stok hareketleri</h3>
