@@ -100,7 +100,8 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   }
   // "Kendiliğinden" düzeyinde yalnız en düşük riskli iş (başarısız eşitlemeyi yeniden deneme) onaysız uygulanır.
   const auto = (a: Act): Act => {
-    if (mode !== 'oto' || a.kind !== 'retry' || !R.ops) return a
+    // Konuşmada müşteri metni okunduysa (get_open_tickets) enjeksiyon riski nedeniyle her yazma işlemi onay ister.
+    if (mode !== 'oto' || a.kind !== 'retry' || !R.ops || readCustomer.current) return a
     exec('retry', a.ids)
     return { ...a, state: 'uygulandi', auto: true }
   }
@@ -108,7 +109,8 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   // ---- gerçek yapay zekâ bağlantısı ----
   const [live, setLive] = useState<'bilinmiyor' | 'canli' | 'mock'>('bilinmiyor')
   const api = useRef<ApiMsg[]>([])   // modele giden konuşma (araç çağrıları ve sonuçlarıyla)
-  const notes = useRef<string[]>([]) // onay / vazgeçme bilgisi bir sonraki mesajla modele iletilir
+  const notes = useRef<string[]>([]) // onay / vazgeçme bilgisi her istekte ayrı `context.panel` alanıyla iletilir (son 5)
+  const readCustomer = useRef(false) // bu konuşmada müşteri metni okuyan araç çalıştı mı (metin geçmişte kaldığı için sonraki turlarda da geçerli)
   useEffect(() => {
     if (location.protocol === 'file:') { setLive('mock'); return }
     let off = false
@@ -249,20 +251,20 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
 
   async function runLive(t: string) {
     const mark = api.current.length
-    const note = notes.current.length ? `[Panel notu: ${notes.current.join(' ')}]\n` : ''
-    notes.current = []
-    api.current.push({ role: 'user', content: note + t })
+    api.current.push({ role: 'user', content: t })
     const sources = new Map<string, Src>()
     const views: ReactNode[] = []
     try {
       for (let turn = 0; turn < 8; turn++) {
-        const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode } }) })
+        const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel: notes.current.slice(-5) } }) })
         const res = (await r.json().catch(() => ({}))) as { content?: Block[]; stop_reason?: string | null; message?: string }
         if (!r.ok || !res.content) throw new Error(res.message || `Sunucu yanıt vermedi (${r.status})`)
         api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
         const said = res.content.flatMap(b => (b.type === 'text' ? [b.text] : [])).join('\n').trim()
         const results: Anthropic.Beta.BetaToolResultBlockParam[] = []
         const acts: Act[] = []
+        // Müşteri metni okuyan araç aynı yanıttaki yazma taslaklarından sonra gelse bile onay zorunlu olsun.
+        if (res.content.some(b => b.type === 'tool_use' && b.name === 'get_open_tickets')) readCustomer.current = true
         for (const b of res.content) {
           if (b.type !== 'tool_use') continue
           const out = runTool(b.name, (b.input ?? {}) as Record<string, unknown>)
@@ -519,7 +521,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
               <div className={`mt-2 rounded-xl border px-3 py-2.5 ${m.act.state === 'bekliyor' ? 'border-brand bg-brand-soft/40' : 'border-line bg-card'}`}>
                 <div className="flex items-center gap-1.5 text-xs font-semibold text-ink2"><ShieldCheck size={13} />{m.act.state === 'bekliyor' ? 'Onayınızı bekliyor' : m.act.state === 'uygulandi' ? (m.act.auto ? 'Kendiliğinden uygulandı' : 'Uygulandı') : 'Vazgeçildi'}</div>
                 <div className="mt-1 font-medium">{m.act.title}</div>
-                <ul className="m-0 mt-1 pl-4 text-ink2 text-[13px]">{m.act.lines.map(l => <li key={l}>{l}</li>)}</ul>
+                <ul className="m-0 mt-1 pl-4 text-ink2 text-[13px]">{m.act.lines.map(l => <li key={l} className="whitespace-pre-wrap break-words">{l}</li>)}</ul>
                 {m.act.state === 'bekliyor' ? (
                   <div className="mt-2.5 flex gap-2"><Btn variant="primary" onClick={() => decide(m.id, true)}><Check size={14} />Onayla</Btn><Btn onClick={() => decide(m.id, false)}>Vazgeç</Btn></div>
                 ) : m.act.state === 'uygulandi' ? (

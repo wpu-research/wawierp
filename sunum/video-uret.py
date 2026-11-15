@@ -4,7 +4,7 @@
 3) Sesleri sahne başlangıçlarına yerleştirip videoyla birleştirir.
 4) Videoyu, kapak görselini ve her sahneden bir ekran görüntüsünü (img/) sunum klasörüne yazar.
 Ara dosyalar VIDEO_OUT ile verilen klasöre (yoksa sunum/video) yazılır."""
-import json, os, shutil, subprocess, sys, time, wave
+import json, os, secrets, shutil, subprocess, sys, time, wave
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -12,7 +12,7 @@ SP = Path(__file__).parent
 OUT = Path(os.environ.get('VIDEO_OUT') or SP / 'video'); OUT.mkdir(parents=True, exist_ok=True)
 APP = Path('/home/wpu/Desktop/Urunler/WaviERP/yeni/panel-mock')
 VOICE = Path.home() / '.local/share/piper/voices/tr_TR-dfki-medium.onnx'
-PORT, PW = 3919, 'video-deneme-sifresi'
+PORT, PW = 3919, secrets.token_urlsafe(16)  # yerel geçici sunucu için her çalıştırmada rastgele
 BASE = f'http://127.0.0.1:{PORT}'
 W, H = 1280, 720
 

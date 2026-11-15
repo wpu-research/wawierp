@@ -51,7 +51,8 @@ Sunucu ayarları (Railway değişkenleri):
 | `ANTHROPIC_API_KEY` | Yapay zekâ anahtarı; yoksa hazır senaryolar çalışır | yok |
 | `ASSISTANT_MODEL` | Kullanılacak model | `claude-opus-5-5` |
 | `ASSISTANT_PER_MINUTE` | Adres başına dakikalık istek sınırı | 20 |
-| `ASSISTANT_PER_DAY` | Günlük toplam istek sınırı | 400 |
+| `ASSISTANT_PER_DAY` | Günlük toplam istek sınırı | 100 |
+| `ASSISTANT_MAX_BODY_KB` | İstek gövdesi üst sınırı (KB) | 300 |
 | `ASSISTANT_FALLBACKS` | `off` yapılırsa yedek modele geçiş kapanır | açık |
 
 Asistan ucu panelle aynı şifrenin arkasındadır. Mock'ta rol bilgisi tarayıcıdan gelir; gerçek sistemde oturumdan okunacak ve araçlar sunucuda çalışacak.

@@ -155,3 +155,18 @@ Bu belgede şifre, anahtar, müşteri adı ya da kişisel veri yoktur. "Doğrula
 - Canlı panel: yaklaşık 15 kimliksiz istek (durum kodları, başlıklar, yol denemeleri, TLS). Şifre denemesi ve yük testi yapılmadı.
 - Eski sistem: ana sayfaya bir başlık isteği, `robots.txt` ve `security.txt` için birer istek, HTTP yönlendirme denetimi, TLS el sıkışması ve DNS sorguları. Başka hiçbir adrese dokunulmadı.
 - Bu belge sızma testi değildir; "sorun bulunmadı" yalnız denenen şeyler için geçerlidir. Hukuki maddeler hatırlatma düzeyindedir.
+
+---
+
+## Ek: ikinci düzeltme turu (2026-11-15)
+
+Kod değişti, **commit ve push yapılmadı** (push canlıya yayınlar). `npx tsc --noEmit` ve `npm run build` geçti. Arayüz davranışı tarayıcıda ve gerçek modelle denenmedi.
+
+| # | Durum | Ne yapıldı |
+|---|---|---|
+| A7 | ◐ kısmen | Günlük sınır 400 → 100 (`ASSISTANT_PER_DAY`). Gövde sınırı `ASSISTANT_MAX_BODY_KB` ile ayarlanır oldu ama varsayılan **300 KB kaldı**: gövde her istekte tüm konuşmayı taşıdığı için 100 KB birkaç turda dolabilir (koddan hesap; gerçek modelle ölçülmedi). Sınır aşımında artık bağlantı kopması yerine 413 dönüyor. Yerelde 413 ve 429 denendi |
+| A10 | ✔ kodlandı | Onay kartı satırları tam metni satır sonlarıyla gösteriyor. Konuşmada `get_open_tickets` çalıştıysa "Kendiliğinden" düzeyi hiçbir işi onaysız uygulamıyor (konuşma boyunca). Gerçek modelle enjeksiyon denemesi hâlâ yapılmadı |
+| A11 | ✔ kodlandı | `[Panel notu: …]` öneki kalktı; panel durumu `context.panel` alanıyla gidiyor, sunucu ayrı sistem istemi bloğuna koyuyor. `context` hâlâ tarayıcıdan geliyor (A9 ile aynı sınır) |
+| A15 | ✔ düzeltildi | `sunum/video-uret.py` şifreyi her çalıştırmada rastgele üretiyor. Betik çalıştırılmadı |
+
+Dokunulmayanlar: A1 (şifre yenileme, sahibi), A12, A13, A14, A16, B ve C bölümleri.
