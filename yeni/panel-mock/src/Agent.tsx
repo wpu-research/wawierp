@@ -28,6 +28,7 @@ type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[]; view?: 
 const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
 // Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
 const API = location.origin + '/api/assistant'
+const NOTE_KIND: Record<ActKind, string> = { labels: 'Kargo etiketi oluşturma', ship: 'Kargoya verme', retry: 'Eşitlemeyi yeniden deneme', reply: 'Destek yanıtı', rule: 'Otomasyon kuralı', plan: 'Gün kapatma planı' }
 const CAP = 25 // tek seferde en fazla bu kadar kayda işlem önerilir
 
 const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta risk var mı?', 'Hangi ürünler bitmek üzere?', 'Amber Wood ürününe benzer, diğer markalardan ne var?', 'Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
@@ -251,12 +252,13 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
 
   async function runLive(t: string) {
     const mark = api.current.length
+    const panel = notes.current.splice(0).slice(-5) // notlar yalnız bu soruyla bir kez gider; eski onay yeni sanılmasın
     api.current.push({ role: 'user', content: t })
     const sources = new Map<string, Src>()
     const views: ReactNode[] = []
     try {
       for (let turn = 0; turn < 8; turn++) {
-        const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel: notes.current.slice(-5) } }) })
+        const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel } }) })
         const res = (await r.json().catch(() => ({}))) as { content?: Block[]; stop_reason?: string | null; message?: string }
         if (!r.ok || !res.content) throw new Error(res.message || `Sunucu yanıt vermedi (${r.status})`)
         api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
@@ -284,6 +286,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       push({ from: 'agent', body: <p className="m-0">Bu iş beklediğimden uzun sürdü; isteği daha küçük parçalara bölebilir misiniz?</p> })
     } catch (e) {
       api.current.length = mark // yarım kalan turu geri al ki sonraki istek geçerli kalsın
+      notes.current.unshift(...panel) // gönderilemeyen notlar sonraki soruya kalsın
       push({ from: 'agent', body: <p className="m-0 text-bad">{e instanceof Error ? e.message : 'Asistana ulaşılamadı.'}</p> })
     } finally { setBusy(false) }
   }
@@ -478,7 +481,8 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       else if (a.kind === 'rule') st.notify('Kural yalnız öneri modunda başlatıldı (mock)')
       else exec(a.kind, a.ids, a.payload)
     }
-    notes.current.push(`“${a.title}” taslağı ${ok ? 'kullanıcı tarafından onaylandı ve uygulandı.' : 'kullanıcı tarafından reddedildi; uygulanmadı.'}`)
+    // Nota taslağın başlığı yazılmaz: başlığı model üretir ve müşteri metninden etkilenmiş olabilir; not ise güvenilen bölüme gider.
+    notes.current.push(`${NOTE_KIND[a.kind]} taslağı (${a.kind === 'plan' ? `${(a.steps ?? []).length} adım` : `${a.ids.length} kayıt`}) ${ok ? 'kullanıcı tarafından onaylandı ve uygulandı.' : 'kullanıcı tarafından reddedildi; uygulanmadı.'}`)
     setMsgs(ms => ms.map(x => (x.id === id ? { ...x, act: { ...a, state: ok ? 'uygulandi' : 'vazgecildi' } } : x)))
   }
 

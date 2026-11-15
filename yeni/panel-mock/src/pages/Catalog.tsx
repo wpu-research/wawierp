@@ -34,6 +34,8 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
   const s = q.trim().toLowerCase()
   const rows = products.filter(p => F[view](p) && (!s || [p.name, p.sku, p.ean ?? '', p.brand].some(x => x.toLowerCase().includes(s))))
   const open = openId ? product(openId) : null
+  // Adresteki ürün kimliği kapatınca silinir; yoksa aynı bağlantıya yeniden basmak pencereyi açmaz.
+  const closeDrawer = () => { setOpenId(null); if (location.hash.includes('?p=')) history.replaceState(null, '', '#/catalog') }
   const similar = useMemo(() => (open ? similarTo(open, products, { limit: 4 }) : []), [open, products])
 
   return (
@@ -83,7 +85,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
         </div>
       </Card>
 
-      <Drawer open={!!open} onClose={() => setOpenId(null)} title={open?.name} sub={open && <span className="num">{open.sku} · {open.ean ?? 'EAN eksik'} · {open.brand}</span>}>
+      <Drawer open={!!open} onClose={closeDrawer} title={open?.name} sub={open && <span className="num">{open.sku} · {open.ean ?? 'EAN eksik'} · {open.brand}</span>}>
         {open && <>
           <div>
             <h3 className="m-0 mb-1.5 text-xs font-semibold text-mute uppercase tracking-wide">Stok hesapları</h3>
