@@ -26,6 +26,13 @@
       "output_tokens": 0,
       "files": 35,
       "note": "kararlar 0006-0007, sunumlar, mock panel kodu (AST)"
+    },
+    {
+      "date": "2026-11-15T03:27:19.650250+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 36,
+      "note": "bildirim merkezi: Notifications.tsx (AST) + README b\u00f6l\u00fcm\u00fc (elle)"
     }
   ],
   "total_input_tokens": 776442,

@@ -60,10 +60,10 @@
     "semantic_hash": "327672659adc4e35a7f8462f8b6c71ff"
   },
   "docs/04-kavram-koprusu.md": {
-    "mtime": 1794669375.5453727,
-    "seen": 1794670977.1282074,
-    "ast_hash": "5830fa1d1a6c228ac4fb1e7c83a97bf4",
-    "semantic_hash": "5830fa1d1a6c228ac4fb1e7c83a97bf4"
+    "mtime": 1794713236.4069192,
+    "seen": 1794713238.9322267,
+    "ast_hash": "8e9b258d0c8cdd6693e3991b9363e730",
+    "semantic_hash": "8e9b258d0c8cdd6693e3991b9363e730"
   },
   "docs/05-bilgi-mimarisi.md": {
     "mtime": 1794670228.544962,
@@ -132,10 +132,10 @@
     "semantic_hash": "73d45744ebcba53fd9f3e16573d987f8"
   },
   "yeni/panel-mock/src/App.tsx": {
-    "mtime": 1794691556.2485392,
-    "seen": 1794692324.9968405,
-    "ast_hash": "001e413b86c8f000946f16dbcf4df125",
-    "semantic_hash": "001e413b86c8f000946f16dbcf4df125"
+    "mtime": 1794693458.589132,
+    "seen": 1794713238.932169,
+    "ast_hash": "5685aae2c16bb83eeb0cf630091d6d24",
+    "semantic_hash": "5685aae2c16bb83eeb0cf630091d6d24"
   },
   "yeni/panel-mock/src/data.ts": {
     "mtime": 1794685144.9340732,
@@ -276,10 +276,10 @@
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
-    "mtime": 1794692053.954454,
-    "seen": 1794692324.9969008,
-    "ast_hash": "a28423d7fb918cdb0666d37356e2ef22",
-    "semantic_hash": "a28423d7fb918cdb0666d37356e2ef22"
+    "mtime": 1794701535.849117,
+    "seen": 1794713238.932273,
+    "ast_hash": "ba353784420b704bab83606a001ab574",
+    "semantic_hash": "ba353784420b704bab83606a001ab574"
   },
   "yeni/panel-mock/index.html": {
     "mtime": 1794686165.6741936,
@@ -306,10 +306,10 @@
     "semantic_hash": "26f6b621227b47d7806dd06923e56da5"
   },
   "yeni/panel-mock/src/Agent.tsx": {
-    "mtime": 1794691470.689624,
-    "seen": 1794692324.9968393,
-    "ast_hash": "bd93a278e2682e2e291dd37d3e11bf56",
-    "semantic_hash": "bd93a278e2682e2e291dd37d3e11bf56"
+    "mtime": 1794693458.590132,
+    "seen": 1794713238.9321666,
+    "ast_hash": "bf25c42db5733b6e8f3215faacd598a0",
+    "semantic_hash": "bf25c42db5733b6e8f3215faacd598a0"
   },
   "yeni/panel-mock/src/landing-main.tsx": {
     "mtime": 1794686165.6741936,
@@ -330,10 +330,10 @@
     "semantic_hash": "24ac223f170a7048d1dcbf733c5cab7b"
   },
   "yeni/panel-mock/src/pages/Landing.tsx": {
-    "mtime": 1794690747.531915,
-    "seen": 1794692324.9968517,
-    "ast_hash": "e3ec3cadd69f617b9766001a03dd62cc",
-    "semantic_hash": "e3ec3cadd69f617b9766001a03dd62cc"
+    "mtime": 1794701535.849117,
+    "seen": 1794713238.9321938,
+    "ast_hash": "d73f4b4743d250701146f4d90e8b5a66",
+    "semantic_hash": "d73f4b4743d250701146f4d90e8b5a66"
   },
   "yeni/panel-mock/src/pages/Mobile.tsx": {
     "mtime": 1794691397.5774078,
@@ -682,5 +682,17 @@
     "seen": 1794692324.9969385,
     "ast_hash": "a94fd737cbe2b14bf9edcc557ccafc74",
     "semantic_hash": "a94fd737cbe2b14bf9edcc557ccafc74"
+  },
+  "yeni/panel-mock/src/Notifications.tsx": {
+    "mtime": 1794693704.7012606,
+    "seen": 1794713238.9321716,
+    "ast_hash": "2311d3c606e14d146577aa871b38922f",
+    "semantic_hash": "2311d3c606e14d146577aa871b38922f"
+  },
+  "kararlar/0008-izleme-ve-pilot.md": {
+    "mtime": 1794692512.8613443,
+    "seen": 1794713238.9322615,
+    "ast_hash": "b121fc35b859e2d441e60f34c11c76e4",
+    "semantic_hash": "b121fc35b859e2d441e60f34c11c76e4"
   }
 }
