@@ -13,7 +13,7 @@ Bu belgede şifre, anahtar, müşteri adı ya da kişisel veri yoktur. "Doğrula
 ## 1. Özet: en önemli beş bulgu
 
 1. **Panel şifresi açığa çıktı ve hâlâ aynı (A, yüksek).** Şifre daha önce bir sohbete açık yazıldı. Tek ve ortak şifre olduğu için kimin girdiği ayırt edilemez. Bugün değiştirilmeli.
-2. **Panelde yanlış şifre denemesine sınır yok (A, yüksek).** Biri otomatik araçla sınırsız deneme yapabilir. Şifre uzun ve rastgele olursa pratikte kırılmaz; kısa ya da tahmin edilebilirse kırılır. Aynı şifre asistanı da açtığı için, ele geçiren kişi yapay zekâ faturasını da şişirebilir (günde kabaca birkaç yüz dolara kadar).
+2. **Panelde yanlış şifre denemesine sınır yoktu (A, yüksek; inceleme günü düzeltildi).** Biri otomatik araçla sınırsız deneme yapabilir. Şifre uzun ve rastgele olursa pratikte kırılmaz; kısa ya da tahmin edilebilirse kırılır. Aynı şifre asistanı da açtığı için, ele geçiren kişi yapay zekâ faturasını da şişirebilir (günde kabaca birkaç yüz dolara kadar).
 3. **Eski sistemde müşteri bilgisi yetkisiz ekranda da tarayıcıya gidiyor (B, yüksek).** "Müşteri bilgileri" kapalı görünse de veri sayfanın içinde duruyor; gizleme yalnız görsel. Kısıtlama sunucuda yapılmalı. (Önceki incelemede gözlendi.)
 4. **Eski sistemin altyapısı bakımsız (B, yüksek, düzeltmesi ucuz).** Güvenlik desteği bitmiş PHP 8.1 kullanılıyor ve sürümünü dışarıya söylüyor; HSTS yok; alan adında SPF/DMARC yok, yani isteyen "wawib2b.com" adına sahte e-posta gönderebilir.
 5. **Yeni sistemde en büyük tasarım riski kiracı ayrımı (C, kritik).** Seçilen araç (Prisma) satır düzeyi güvenliği kendiliğinden uygulamaz. Tek bir unutulmuş ayar bir müşterinin verisini diğerine gösterir. Bu, ilk sprintte otomatik testle kanıtlanmadan başka hiçbir özellik yazılmamalı.
@@ -31,7 +31,7 @@ Bu belgede şifre, anahtar, müşteri adı ya da kişisel veri yoktur. "Doğrula
 | # | Bulgu | Önem | Nasıl doğrulandı | Ne değiştirilmeli |
 |---|---|---|---|---|
 | A1 | Panel şifresi bir sohbete açık yazıldı, değiştirilmedi | Yüksek | Bilinen bulgu (sahibinin beyanı); şifre bu incelemede kullanılmadı | Railway'de `PANEL_PASSWORD` bugün yenilensin: en az 20 karakter, rastgele |
-| A2 | Yanlış şifre denemesinde sınır ya da kilit yok | Yüksek | Kod: `server.mjs` `ok()` yalnız karşılaştırır, sayaç yok; yerelde art arda yanlış denemelerin hepsi 401 | Adres başına "10 dakikada 20 yanlış → geçici 429" sınırı. Davranış değiştirdiği için yapılmadı, onay bekliyor |
+| A2 | Yanlış şifre denemesinde sınır ya da kilit yok | Yüksek | Kod: `server.mjs` `ok()` yalnız karşılaştırır, sayaç yok; yerelde art arda yanlış denemelerin hepsi 401 | ✔ düzeltildi (sahibinin onayıyla, aynı gün): aynı adresten 10 dakikada 20 yanlış denemeden sonra o adres süre dolana kadar 429 alır. Yerelde denendi. Sayaç bellekte; Railway tüm kullanıcıları tek adresle iletiyorsa kilit herkesi etkiler, bu canlıda **doğrulanmadı** |
 | A3 | Tek ortak şifre: kişi ayrımı, kayıt, tek kişiyi çıkarma yok; Basic auth'ta çıkış da yok | Orta | Kod: tek `PANEL_USER`/`PANEL_PASSWORD` çifti | Taslak için kabul edilebilir; şifre kişi başı paylaşılmasın, işi biten için değiştirilsin. Gerçek sistemde kişisel hesap + iki adımlı doğrulama (C3) |
 | A4 | Güvenlik başlıkları eksikti: CSP, HSTS, X-Frame-Options, Referrer-Policy yoktu | Orta | Canlı başlıklar (2026-11-15): yalnız `nosniff`, `no-store`, `noindex` vardı | ✔ düzeltildi: `server.mjs` `SECURITY`. Yerelde ana sayfa, sunum ve panel tarayıcıda açıldı; engellenen kaynak yok |
 | A5 | Hız sınırı sahte adresle atlatılabiliyordu | Orta | Kod: `x-forwarded-for` listesinin **ilk** öğesi alınıyordu; bunu istemci kendisi yazabilir | ✔ düzeltildi: listenin son öğesi (vekil sunucunun eklediği) alınıyor. Railway'in bu başlığı nasıl kurduğu canlıda **doğrulanmadı**; günlük toplam sınır her durumda geçerli |
@@ -101,7 +101,7 @@ Bu belgede şifre, anahtar, müşteri adı ya da kişisel veri yoktur. "Doğrula
 
 | Saldırı | Bugün ne olur | Ne değişmeli |
 |---|---|---|
-| **Şifre deneme** | Taslak panel: sınırsız deneme yapılabilir, kayıt tutulmaz (A2). Eski sistem: sınır olup olmadığı bilinmiyor (B6). | Panel: uzun rastgele şifre + deneme sınırı. Eski sistem: sınır hazırlık ortamında doğrulansın. Yeni sistem: kilit + iki adımlı doğrulama (C3). |
+| **Şifre deneme** | Taslak panel: inceleme sırasında sınırsız deneme yapılabiliyordu; artık 10 dakikada 20 yanlıştan sonra adres kilitlenir, ama kayıt tutulmaz (A2). Eski sistem: sınır olup olmadığı bilinmiyor (B6). | Panel: uzun rastgele şifre + deneme sınırı. Eski sistem: sınır hazırlık ortamında doğrulansın. Yeni sistem: kilit + iki adımlı doğrulama (C3). |
 | **Veri sızdırma** | Taslakta gerçek müşteri verisi yok; sızabilecek tek gerçek veri 30 günlük sipariş ve ciro özeti (A13). Eski sistemde her panel kullanıcısı müşteri bilgisini sayfa içinden okuyabilir (B1). | Eski sistem: sunucuda kısıtlama. Yeni sistem: RLS testi (C1), alan düzeyinde maskeleme, dışa aktarım kaydı (C10). |
 | **Hesap ele geçirme** | Taslak: şifreyi bilen herkes "tek kullanıcı"dır; fark edilmez, tek kişi çıkarılamaz (A1, A3). Eski sistem: PIN paylaşılıyorsa kimin yaptığı bilinemez (B5). | Şifre yenilensin. Yeni sistemde kişisel hesap, oturumları uzaktan kapatma, giriş bildirimi. |
 | **Asistanı kandırma** | Müşteri mesajına gizlenmiş talimat modele ulaşır; model taslak hazırlayabilir ama kullanıcı onaylamadan hiçbir şey olmaz, taslakta gerçek işlem de yok (A10). Para, fiyat, iptal ve silme aracı hiç yok. Gerçek modelle denenmedi. | Onay ekranı tam metni göstersin; onay sunucuda doğrulansın; müşteri metni okunan turda onaysız iş olmasın (C5). |
@@ -131,7 +131,7 @@ Bu belgede şifre, anahtar, müşteri adı ya da kişisel veri yoktur. "Doğrula
 4. ✔ Güvenlik başlıkları, sabit süreli şifre karşılaştırması ve hız sınırı adres düzeltmesi yapıldı (`yeni/panel-mock/server.mjs`).
 
 ### Kısa vade (pilot öncesi)
-5. Panele yanlış şifre deneme sınırı (A2) — onay bekliyor.
+5. ✔ Panele yanlış şifre deneme sınırı eklendi (A2).
 6. Asistan sınırları düşürülsün: günlük istek, gövde boyutu (A7) — sayılar sahibinin kararı.
 7. Asistan gerçek modelle istem enjeksiyonu denemesinden geçirilsin (A10); panel notu yapılandırılsın (A11).
 8. Eski sistem, barındırma sağlayıcısıyla: PHP yükseltmesi, sürüm başlıklarının kapatılması, HSTS, SPF/DMARC, CAA (B2, B3, B4, B11). Bunlar akışa, stoğa ve ürün kartlarına dokunmaz; yine de PHP yükseltmesi önce hazırlık ortamında denenmeli.
