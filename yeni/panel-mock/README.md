@@ -126,6 +126,17 @@ Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bil
 - Gerçek sistemde aynı kutuya küçük boyutlu (ör. 96 piksel, WebP), geç yüklenen ürün fotoğrafı gelir; liste başına yalnız görünen satırların görseli indirilir.
 - **Bütün ekranlarda:** başlığın yanında ekranın simgesi; 26 ekranın başında o işin dört adımda nasıl aktığını gösteren şerit (`src/flows.tsx`, geniş ekranda görünür, ✕ ile gizlenir, "Nasıl çalışır?" ile geri gelir); tablolarda satırların sırayla belirmesi; çekmecelerin kayarak açılması; boş listelerde küçük bir çizim; çubukların büyüyerek dolması.
 
+## Rakip teklifleri (aynı ürün, aynı platform)
+
+Bir ürünü aynı pazaryerinde satan diğer satıcıları ve bizim sıramızı gösterir (`src/rivals.tsx`).
+
+- **Ürün sayfasında:** Katalog'da ürün çekmecesinde "Rakipler · aynı ürün, aynı platform" bölümü. Platform başına satıcı, fiyat, kargo, toplam, teslim süresi, satıcı puanı; bizim satırlar vurgulu. Rozet sırayı söyler: "En ucuz sizsiniz" ya da "3. sıra · x pahalı".
+- **Asistanda:** `get_competitor_offers` aracı; yanıtın altında aynı liste çıkar. Anahtar yokken "rakip", "kaça satıyor" kelimeleriyle hazır senaryo çalışır. Asistan fiyatı değiştiremez; "Fiyat ve kârlılık" ekranını önerir.
+- **Sıralama:** müşterinin ödediği toplam tutara (fiyat + kargo) göre.
+- **Eşleştirme:** barkodla (EAN). Barkodu eksik üründe ya da aktif pazaryeri ilanı olmayan üründe liste boş kalır ve nedeni yazılır.
+- **Taslakta veri örnektir:** satıcı adları uydurmadır; teklifler ürün ve platforma göre hep aynı çıkacak biçimde üretilir.
+- **Gerçek sistemde:** teklifler pazaryerinin kendi arayüzünden çekilir. Her platform bunu vermez ya da sınırlar; platform platform netleştirilmeli (karar bekliyor).
+
 ## Benzer ürün önerisi
 
 Bir ürüne, stoktaki **diğer markalardan** en yakın ürünleri gösterir (`src/similar.tsx`).

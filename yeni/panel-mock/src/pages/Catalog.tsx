@@ -4,6 +4,7 @@ import { LISTING_FLOW, MOVE, MOVES0, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtN
 import { useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { SimilarList, similarTo } from '../similar'
+import { RivalList, rivalsOf } from '../rivals'
 import { askAssistant } from '../Chat'
 import { Badge, Card, Chan, Drawer, Empty, PageHead, Pager, Stat, Tabs, sel, td, th, type Tone } from '../ui'
 
@@ -36,6 +37,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
   const open = openId ? product(openId) : null
   // Adresteki ürün kimliği kapatınca silinir; yoksa aynı bağlantıya yeniden basmak pencereyi açmaz.
   const closeDrawer = () => { setOpenId(null); if (location.hash.includes('?p=')) history.replaceState(null, '', '#/catalog') }
+  const rivals = useMemo(() => (open ? rivalsOf(open) : null), [open])
   const similar = useMemo(() => (open ? similarTo(open, products, { limit: 4 }) : []), [open, products])
 
   return (
@@ -106,6 +108,14 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
                 {open.listings.map(l => <li key={l.acc} className="px-3 py-2 flex items-center justify-between gap-2"><Chan acc={l.acc} /><span className="flex items-center gap-2 shrink-0"><span className="num text-ink2">{fmtMoney(l.price, account(l.acc).cur)}</span>{listingBadge(l.status, l.reason)}</span></li>)}
               </ul>
             )}
+          </div>
+          <div>
+            <div className="mb-1.5 flex items-center justify-between gap-2">
+              <h3 className="m-0 text-xs font-semibold text-mute uppercase tracking-wide">Rakipler · aynı ürün, aynı platform</h3>
+              <button onClick={() => askAssistant(`${open.name} ürününü rakipler aynı platformlarda kaça satıyor?`)} className="inline-flex items-center gap-1 text-xs font-medium text-brand hover:underline"><Sparkles size={12} />Asistana sor</button>
+            </div>
+            {rivals && <RivalList r={rivals} />}
+            <p className="m-0 mt-1.5 text-xs text-mute">Aynı barkodu satan diğer satıcılar; sıra müşterinin ödediği toplam tutara göre. Taslakta örnek veri; gerçek sistemde pazaryerinden çekilir.</p>
           </div>
           <div>
             <div className="mb-1.5 flex items-center justify-between gap-2">

@@ -5,6 +5,7 @@ import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasI
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
 import { SimilarList, findProduct, inStock, similarTo } from './similar'
+import { RivalList, rivalsOf } from './rivals'
 
 /* Asistan paneli. Sunucuda API anahtarı tanımlıysa (server.mjs + assistant.mjs) gerçek yapay zekâya bağlanır:
    model araç çağırır, araçlar burada mock verinin üzerinde çalışır, sonuç modele geri gider.
@@ -31,7 +32,7 @@ const API = location.origin + '/api/assistant'
 const NOTE_KIND: Record<ActKind, string> = { labels: 'Kargo etiketi oluşturma', ship: 'Kargoya verme', retry: 'Eşitlemeyi yeniden deneme', reply: 'Destek yanıtı', rule: 'Otomasyon kuralı', plan: 'Gün kapatma planı' }
 const CAP = 25 // tek seferde en fazla bu kadar kayda işlem önerilir
 
-const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta risk var mı?', 'Hangi ürünler bitmek üzere?', 'Amber Wood ürününe benzer, diğer markalardan ne var?', 'Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
+const SUGGEST = ['Günü kapat: etiket, sevk ve eşitlemeleri hazırla', 'Stokta risk var mı?', 'Hangi ürünler bitmek üzere?', 'Amber Wood ürününü rakipler aynı platformlarda kaça satıyor?', 'Amber Wood ürününe benzer, diğer markalardan ne var?', 'Dün hangi kanaldan kaç sipariş geldi?', 'Geciken siparişler hangileri?', 'Ödenmiş siparişlerin etiketlerini hazırla', 'Kanallarda sorun var mı?', 'Veri kalitesi ne durumda?', 'Bekleyen müşteri sorusuna yanıt taslağı yaz', 'Ödeme gelince etiketi otomatik oluştur']
 
 const norm = (s: string) => s.toLocaleLowerCase('tr-TR')
 const plural = (n: number, w: string) => `${fmtNum(n)} ${w}`
@@ -192,6 +193,22 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
           odeme_bekleyen_siparis: bekleyen.length, odeme_bekleyen_tutar_eur: Math.round(bekleyen.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0)),
         } }
       }
+      case 'get_competitor_offers': {
+        const p = findProduct(String(input.query ?? ''), st.products)
+        if (!p) return { error: true, data: { hata: 'Bu ad ya da SKU ile ürün bulunamadı. Kullanıcıdan ürün adını ya da SKU\'yu isteyin.' } }
+        const r = rivalsOf(p)
+        const src = [{ label: p.name, href: `#/catalog?p=${p.id}` }, { label: 'Fiyat ve kârlılık', href: '#/prices' }]
+        if (!r.ean) return { src, data: { urun: p.name, sonuc: 'Ürünün barkodu (EAN) eksik; rakip teklifleri barkodla eşleştiği için bulunamaz. Önce EAN girilmeli.' } }
+        if (!r.pazarlar.length) return { src, data: { urun: p.name, sonuc: 'Ürünün pazaryerinde aktif ilanı yok; karşılaştırılacak teklif yok.' } }
+        return {
+          src, view: <RivalList key={'r' + p.id} r={r} />,
+          data: {
+            urun: { ad: p.name, marka: p.brand, sku: p.sku }, not: 'Sıralama müşterinin ödediği toplam tutara (fiyat + kargo) göre. Teklifler taslakta örnek veridir.', panelde_gosterildi: true,
+            platformlar: r.pazarlar.map(m => ({ platform: m.label, para_birimi: m.cur, satici_sayisi: m.teklifler.length, bizim_sira: m.sira, en_ucuz_toplam: m.enUcuz, en_ucuzdan_fark: m.fark,
+              teklifler: m.teklifler.slice(0, 6).map(o => ({ satici: o.biz ? `biz (${o.satici})` : o.satici, fiyat: o.fiyat, kargo: o.kargo, toplam: o.toplam, teslim_gun: o.teslim, puan: o.puan })) })),
+          },
+        }
+      }
       case 'find_similar_products': {
         const p = findProduct(String(input.query ?? ''), st.products)
         if (!p) return { error: true, data: { hata: 'Bu ad ya da SKU ile ürün bulunamadı. Kullanıcıdan ürün adını ya da SKU\'yu isteyin.' } }
@@ -297,6 +314,19 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const has = (...k: string[]) => k.some(x => q.includes(x))
     const draft = (a: Omit<Act, 'state'>): Act | undefined => (mode === 'yanit' ? undefined : auto({ ...a, state: 'bekliyor' }))
     const noDraft = mode === 'yanit' ? <p className="m-0 mt-2 text-mute">İşlem önerisi kapalı: “Yalnız yanıtla” modundasınız.</p> : null
+
+    if (has('rakip', 'buy box', 'kaça satıyor', 'kaça satılıyor')) {
+      const p = findProduct(qRaw, st.products)
+      if (!p) return { body: <p className="m-0">Hangi ürünün rakip fiyatlarına bakayım? Ürün adını ya da SKU'yu yazın; örneğin “Amber Wood ürününü rakipler kaça satıyor?”.</p>, sources: [{ label: 'Katalog', href: '#/catalog' }] }
+      const r = rivalsOf(p), src = [{ label: p.name, href: `#/catalog?p=${p.id}` }, { label: 'Fiyat ve kârlılık', href: '#/prices' }]
+      if (!r.ean || !r.pazarlar.length) return { body: <RivalList r={r} />, sources: src }
+      const ilk = r.pazarlar.filter(m => m.sira === 1).length, pahali = r.pazarlar.filter(m => m.sira > 1)
+      return {
+        body: <><p className="m-0"><b>{p.name}</b> {plural(r.pazarlar.length, 'platformda')} satışta. {ilk ? `${fmtNum(ilk)} platformda en ucuz sizsiniz.` : 'Hiçbir platformda en ucuz değilsiniz.'}{pahali.length ? ` En büyük fark ${pahali[0].label}'da: en ucuz teklifin ${fmtMoney(pahali[0].fark, pahali[0].cur)} üstündesiniz.` : ''}</p>
+          <p className="m-0 mt-1.5 text-mute">Müşterinin ödediği toplam tutara (fiyat + kargo) göre sıraladım. Fiyatı ben değiştiremem; “Fiyat ve kârlılık” ekranından ayarlanır.</p></>,
+        extra: <RivalList r={r} />, sources: src,
+      }
+    }
 
     if (has('benzer', 'muadil', 'alternatif')) {
       const p = findProduct(qRaw, st.products)
