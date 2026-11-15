@@ -60,10 +60,10 @@
     "semantic_hash": "327672659adc4e35a7f8462f8b6c71ff"
   },
   "docs/04-kavram-koprusu.md": {
-    "mtime": 1794713236.4069192,
-    "seen": 1794713238.9322267,
-    "ast_hash": "8e9b258d0c8cdd6693e3991b9363e730",
-    "semantic_hash": "8e9b258d0c8cdd6693e3991b9363e730"
+    "mtime": 1794713239.8528411,
+    "seen": 1794715034.5510592,
+    "ast_hash": "7840531f85b9489acb85d16b54cbef06",
+    "semantic_hash": "7840531f85b9489acb85d16b54cbef06"
   },
   "docs/05-bilgi-mimarisi.md": {
     "mtime": 1794670228.544962,
@@ -132,10 +132,10 @@
     "semantic_hash": "73d45744ebcba53fd9f3e16573d987f8"
   },
   "yeni/panel-mock/src/App.tsx": {
-    "mtime": 1794693458.589132,
-    "seen": 1794713238.932169,
-    "ast_hash": "5685aae2c16bb83eeb0cf630091d6d24",
-    "semantic_hash": "5685aae2c16bb83eeb0cf630091d6d24"
+    "mtime": 1794714708.2041948,
+    "seen": 1794715034.5510137,
+    "ast_hash": "f993c47456f54c30b9c538711f1f75c0",
+    "semantic_hash": "f993c47456f54c30b9c538711f1f75c0"
   },
   "yeni/panel-mock/src/data.ts": {
     "mtime": 1794685144.9340732,
@@ -198,10 +198,10 @@
     "semantic_hash": "0841b8c4f07e5998ff9d3136e90b2f19"
   },
   "yeni/panel-mock/src/pages/Overview.tsx": {
-    "mtime": 1794685144.9350731,
-    "seen": 1794692324.996855,
-    "ast_hash": "9424a35d6cc17c51db36cdc6c2cc440c",
-    "semantic_hash": "9424a35d6cc17c51db36cdc6c2cc440c"
+    "mtime": 1794714745.8871017,
+    "seen": 1794715034.5510395,
+    "ast_hash": "450240c2d5ac0818db7e18fa7da97247",
+    "semantic_hash": "450240c2d5ac0818db7e18fa7da97247"
   },
   "yeni/panel-mock/src/store.tsx": {
     "mtime": 1794691772.1412897,
@@ -210,10 +210,10 @@
     "semantic_hash": "8697c407b2976d52aa0325db96a4ef7a"
   },
   "yeni/panel-mock/src/ui.tsx": {
-    "mtime": 1794686165.6731937,
-    "seen": 1794692324.9968617,
-    "ast_hash": "090aa0e6f3c3aaff68c5933e5b2f8206",
-    "semantic_hash": "090aa0e6f3c3aaff68c5933e5b2f8206"
+    "mtime": 1794714745.8871017,
+    "seen": 1794715034.5510492,
+    "ast_hash": "0ae31257ecfde204b4d97c6c59265585",
+    "semantic_hash": "0ae31257ecfde204b4d97c6c59265585"
   },
   "yeni/panel-mock/tsconfig.json": {
     "mtime": 1794685144.9350731,
@@ -276,10 +276,10 @@
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
-    "mtime": 1794701535.849117,
-    "seen": 1794713238.932273,
-    "ast_hash": "ba353784420b704bab83606a001ab574",
-    "semantic_hash": "ba353784420b704bab83606a001ab574"
+    "mtime": 1794714920.0801387,
+    "seen": 1794715034.5510926,
+    "ast_hash": "22567fc1c1608e4bd7e1d37667d43eff",
+    "semantic_hash": "22567fc1c1608e4bd7e1d37667d43eff"
   },
   "yeni/panel-mock/index.html": {
     "mtime": 1794686165.6741936,
@@ -300,16 +300,16 @@
     "semantic_hash": "ee1bad32ef5ae422b5039d19237aa736"
   },
   "yeni/panel-mock/server.mjs": {
-    "mtime": 1794691556.2495391,
-    "seen": 1794692324.996838,
-    "ast_hash": "26f6b621227b47d7806dd06923e56da5",
-    "semantic_hash": "26f6b621227b47d7806dd06923e56da5"
+    "mtime": 1794714920.0791388,
+    "seen": 1794715034.5510108,
+    "ast_hash": "40e855e8b182a57d3999b1561851cba2",
+    "semantic_hash": "40e855e8b182a57d3999b1561851cba2"
   },
   "yeni/panel-mock/src/Agent.tsx": {
-    "mtime": 1794693458.590132,
-    "seen": 1794713238.9321666,
-    "ast_hash": "bf25c42db5733b6e8f3215faacd598a0",
-    "semantic_hash": "bf25c42db5733b6e8f3215faacd598a0"
+    "mtime": 1794714745.8861017,
+    "seen": 1794715034.5510125,
+    "ast_hash": "7752bca442518a6db9b759038314ac6f",
+    "semantic_hash": "7752bca442518a6db9b759038314ac6f"
   },
   "yeni/panel-mock/src/landing-main.tsx": {
     "mtime": 1794686165.6741936,
@@ -694,5 +694,17 @@
     "seen": 1794713238.9322615,
     "ast_hash": "b121fc35b859e2d441e60f34c11c76e4",
     "semantic_hash": "b121fc35b859e2d441e60f34c11c76e4"
+  },
+  "yeni/panel-mock/src/Chat.tsx": {
+    "mtime": 1794714837.126485,
+    "seen": 1794715034.5510151,
+    "ast_hash": "30774081e9f5bcaec2747b4cd952afef",
+    "semantic_hash": "30774081e9f5bcaec2747b4cd952afef"
+  },
+  "yeni/panel-mock/src/Sidebar.tsx": {
+    "mtime": 1794714668.5903528,
+    "seen": 1794715034.5510182,
+    "ast_hash": "5b4dd360dd1e4f66739d318889c1294c",
+    "semantic_hash": "5b4dd360dd1e4f66739d318889c1294c"
   }
 }
