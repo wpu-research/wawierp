@@ -61,6 +61,13 @@
       "output_tokens": 0,
       "files": 42,
       "note": "benzer \u00fcr\u00fcn \u00f6nerisi: similar.tsx, Agent.tsx, Catalog.tsx, assistant.mjs (AST) + README b\u00f6l\u00fcm\u00fc (elle)"
+    },
+    {
+      "date": "2026-11-15T20:09:38.244116+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 43,
+      "note": "rakip teklifleri (rivals.tsx), g\u00fcvenlik d\u00fczeltmeleri (server.mjs, Agent.tsx) AST + g\u00fcvenlik raporu ve README kavramlar\u0131 (elle)"
     }
   ],
   "total_input_tokens": 776442,
