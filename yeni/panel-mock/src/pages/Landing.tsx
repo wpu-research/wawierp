@@ -14,7 +14,7 @@ function Mark({ name, size = 22 }: { name: string; size?: number }) {
   const src = MARKS[name.toLowerCase().replace(/[^a-z0-9]/g, '')]
   return (
     <span aria-hidden="true" className="inline-grid place-items-center rounded-md bg-white border border-black/10 shrink-0 text-[#454e80] font-semibold" style={{ width: size, height: size, fontSize: size * 0.42 }}>
-      {src ? <img src={src} alt="" style={{ width: size * 0.68, height: size * 0.68 }} /> : name.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 2)}
+      {src ? <img src={src} alt="" style={{ width: size * 0.8, height: size * 0.8 }} /> : name.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 2)}
     </span>
   )
 }
@@ -506,7 +506,7 @@ function Preview() {
       <div className="rounded-t-2xl border border-b-0 border-white/15 bg-card text-ink shadow-[0_-30px_120px_-30px_rgba(48,72,200,0.7)] overflow-hidden text-left">
         <div className="flex items-center gap-1.5 px-4 h-9 border-b border-line bg-bg">
           <span className="size-2.5 rounded-full bg-[#ee6a5f]" /><span className="size-2.5 rounded-full bg-[#f5bd4f]" /><span className="size-2.5 rounded-full bg-[#61c454]" />
-          <span className="ml-3 text-xs text-mute">WawiERP · Genel bakış</span>
+          <span className="ml-3 text-xs text-mute">WawiERP · Genel bakış</span><span className="ml-auto text-[11px] text-mute">Örnek veriler · temsili tutarlar</span>
         </div>
         <div className="grid md:grid-cols-[150px_1fr]">
           <aside className="hidden md:block border-r border-line p-3 space-y-1 text-[13px] text-ink2">
@@ -519,7 +519,7 @@ function Preview() {
                 <div key={l} className="rounded-xl border border-line px-3 py-2.5 min-w-0"><div className="text-[11px] text-mute truncate">{l}</div><div className="num font-display text-2xl font-semibold leading-tight">{v}</div><div className="text-[11px] text-ink2 truncate">{h}</div></div>))}
             </div>
             <div className="rounded-xl border border-line p-3">
-              <div className="text-xs font-semibold mb-2 flex justify-between"><span>Günlük sipariş · son 30 gün</span><span className="font-normal text-mute">Örnek veriler · temsili tutarlar</span></div>
+              <div className="text-xs font-semibold mb-2">Günlük sipariş · son 30 gün</div>
               <div className="flex items-end gap-[3px] h-20">{BARS.map((b, i) => <span key={i} className="flex-1 rounded-t-sm" style={{ height: `${Math.max(4, (b / max) * 100)}%`, background: i === BARS.length - 1 ? 'var(--gold-deep)' : 'var(--brand)' }} />)}</div>
             </div>
             <ul className="m-0 p-0 list-none rounded-xl border border-line divide-y divide-line text-[13px]">

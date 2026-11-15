@@ -17,7 +17,9 @@ Yığın: Vite + React + TypeScript + Tailwind (`kararlar/0004`). shadcn/ui bile
 ## Canlı (Railway)
 
 https://panel-production-80dcabfa.up.railway.app — proje `wawierp-panel-mock`, servis `panel`.
-Şifreli (Basic auth): kullanıcı `PANEL_USER`, şifre `PANEL_PASSWORD` Railway değişkenlerinde. Şifre depoya yazılmaz.
+`/` ana sayfa herkese açık (`dist/index.html`); `/panel` şifreli (`dist/panel.html`, Basic auth: `PANEL_USER` / `PANEL_PASSWORD` Railway değişkenlerinde, depoya yazılmaz).
+İki sayfa ayrı derlenir; ana sayfa paketi `src/data*.ts` içe aktarmaz, yani panel verisi açık sayfaya sızmaz. Bunu bozmayın.
+Kanal logoları `src/assets/marks/` altında, canlı sitenin `channel-marks` klasöründen.
 Servis GitHub deposuna bağlı (`wpu-research/wawierp`, dal `main`, kök `yeni/panel-mock`): `main`'e push yeniden yayınlar.
 `/` herkese açık tanıtım sayfası; `/panel` şifreli panel (içinde `#/overview` ve diğer ekranlar). İki sayfa ayrı derlenir ki ana sayfa paketi panel verisini içermesin.
 Geliştirme sunucusunda (`npm run dev`) panel `/panel.html` adresindedir.
