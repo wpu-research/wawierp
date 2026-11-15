@@ -60,10 +60,10 @@
     "semantic_hash": "327672659adc4e35a7f8462f8b6c71ff"
   },
   "docs/04-kavram-koprusu.md": {
-    "mtime": 1794715035.5219162,
-    "seen": 1794718985.1263485,
-    "ast_hash": "331af7c6852cbc75d18a9f8dc619ef28",
-    "semantic_hash": "331af7c6852cbc75d18a9f8dc619ef28"
+    "mtime": 1794718986.1276784,
+    "seen": 1794728758.8028738,
+    "ast_hash": "681ef9cb3e9e4c8ddb2932ef4a7e19fd",
+    "semantic_hash": "681ef9cb3e9e4c8ddb2932ef4a7e19fd"
   },
   "docs/05-bilgi-mimarisi.md": {
     "mtime": 1794670228.544962,
@@ -276,10 +276,10 @@
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
-    "mtime": 1794717896.7324703,
-    "seen": 1794718985.1263785,
-    "ast_hash": "b3202880348dc1c10dc09234c92e1e13",
-    "semantic_hash": "b3202880348dc1c10dc09234c92e1e13"
+    "mtime": 1794726186.2969537,
+    "seen": 1794728758.8029375,
+    "ast_hash": "dfaa71cc60332d98a31dec8d3b5ec1d8",
+    "semantic_hash": "dfaa71cc60332d98a31dec8d3b5ec1d8"
   },
   "yeni/panel-mock/index.html": {
     "mtime": 1794686165.6741936,
@@ -288,10 +288,10 @@
     "semantic_hash": "dc1baff8bc3c3c9eb164d9fb106b2795"
   },
   "sunum/video-uret.py": {
-    "mtime": 1794689920.3226223,
-    "seen": 1794692324.9968317,
-    "ast_hash": "75474701c15475ad12a5124b15ab168c",
-    "semantic_hash": "75474701c15475ad12a5124b15ab168c"
+    "mtime": 1794719407.5291743,
+    "seen": 1794728758.8027773,
+    "ast_hash": "23aa559fc4781b2fc0541042f5e23901",
+    "semantic_hash": "23aa559fc4781b2fc0541042f5e23901"
   },
   "yeni/panel-mock/assistant.mjs": {
     "mtime": 1794691556.2495391,
@@ -300,10 +300,10 @@
     "semantic_hash": "ee1bad32ef5ae422b5039d19237aa736"
   },
   "yeni/panel-mock/server.mjs": {
-    "mtime": 1794714920.0791388,
-    "seen": 1794715034.5510108,
-    "ast_hash": "40e855e8b182a57d3999b1561851cba2",
-    "semantic_hash": "40e855e8b182a57d3999b1561851cba2"
+    "mtime": 1794726186.2959535,
+    "seen": 1794728758.802794,
+    "ast_hash": "7653b898c9fe006628fa6b2d63355786",
+    "semantic_hash": "7653b898c9fe006628fa6b2d63355786"
   },
   "yeni/panel-mock/src/Agent.tsx": {
     "mtime": 1794714745.8861017,
@@ -408,10 +408,10 @@
     "semantic_hash": "20a99badda1a0b9bb6fd26ffa945f1a6"
   },
   "sunum/wawierp-yenilikler.html": {
-    "mtime": 1794690038.9605331,
-    "seen": 1794692324.9969,
-    "ast_hash": "e0164fa9149b28584742cab880e776db",
-    "semantic_hash": "e0164fa9149b28584742cab880e776db"
+    "mtime": 1794719120.5213323,
+    "seen": 1794728758.8029342,
+    "ast_hash": "ed0aa44ae326c196b0752a20a1a9ea7d",
+    "semantic_hash": "ed0aa44ae326c196b0752a20a1a9ea7d"
   },
   "yeni/panel-mock/panel.html": {
     "mtime": 1794686165.6741936,
@@ -420,100 +420,100 @@
     "semantic_hash": "9aa7d781de02f048e2a5e9a8c1c564f9"
   },
   "sunum/img/arama.jpg": {
-    "mtime": 1794689952.9574685,
-    "seen": 1794692324.9969032,
-    "ast_hash": "62c6e8d76cefdbae5f24c80bd0e3d607",
-    "semantic_hash": "62c6e8d76cefdbae5f24c80bd0e3d607"
+    "mtime": 1794719363.1412823,
+    "seen": 1794728758.8029475,
+    "ast_hash": "b801ae5124505ff9b769a3e736420aae",
+    "semantic_hash": "b801ae5124505ff9b769a3e736420aae"
   },
   "sunum/img/asistan1.jpg": {
-    "mtime": 1794689953.1004636,
-    "seen": 1794692324.9969037,
-    "ast_hash": "fb734cdb4668c2a66aafe2a98a186a7e",
-    "semantic_hash": "fb734cdb4668c2a66aafe2a98a186a7e"
+    "mtime": 1794719363.2902787,
+    "seen": 1794728758.8029494,
+    "ast_hash": "87c649fa0795362e1a360c5193d68465",
+    "semantic_hash": "87c649fa0795362e1a360c5193d68465"
   },
   "sunum/img/asistan2.jpg": {
-    "mtime": 1794689953.2574582,
-    "seen": 1794692324.9969044,
-    "ast_hash": "482c31695b172878e965f93df4867cea",
-    "semantic_hash": "482c31695b172878e965f93df4867cea"
+    "mtime": 1794719363.4552746,
+    "seen": 1794728758.8029509,
+    "ast_hash": "a70c8c85e5f02c48c653f88163dbf5ee",
+    "semantic_hash": "a70c8c85e5f02c48c653f88163dbf5ee"
   },
   "sunum/img/finans.jpg": {
-    "mtime": 1794689952.7614756,
-    "seen": 1794692324.9969056,
-    "ast_hash": "320d02cb734842596a5ee0848097f66f",
-    "semantic_hash": "320d02cb734842596a5ee0848097f66f"
+    "mtime": 1794719362.5782964,
+    "seen": 1794728758.8029544,
+    "ast_hash": "34fab17df18cb2b9f7f2c39a2f262d13",
+    "semantic_hash": "34fab17df18cb2b9f7f2c39a2f262d13"
   },
   "sunum/img/fiyat.jpg": {
-    "mtime": 1794689952.2244942,
-    "seen": 1794692324.9969063,
-    "ast_hash": "eb023c27f1d0052a9ac1dafe0837c454",
-    "semantic_hash": "eb023c27f1d0052a9ac1dafe0837c454"
+    "mtime": 1794719361.675319,
+    "seen": 1794728758.802956,
+    "ast_hash": "5bf84515253ac55d0aa67a0954b54a42",
+    "semantic_hash": "5bf84515253ac55d0aa67a0954b54a42"
   },
   "sunum/img/genel.jpg": {
-    "mtime": 1794689951.5015197,
-    "seen": 1794692324.9969072,
-    "ast_hash": "918a97b7e4a4c32f4b2e29514520afbd",
-    "semantic_hash": "918a97b7e4a4c32f4b2e29514520afbd"
+    "mtime": 1794719360.627345,
+    "seen": 1794728758.802965,
+    "ast_hash": "4e32ba0bf2513e3aa103cb4a8f839244",
+    "semantic_hash": "4e32ba0bf2513e3aa103cb4a8f839244"
   },
   "sunum/img/kalite.jpg": {
-    "mtime": 1794689951.9885025,
-    "seen": 1794692324.9969077,
-    "ast_hash": "dcf938accca9e2f59711725d988abe51",
-    "semantic_hash": "dcf938accca9e2f59711725d988abe51"
+    "mtime": 1794719361.4013257,
+    "seen": 1794728758.8029683,
+    "ast_hash": "fe45684ddc5e5671c980cce2cb4cbb7e",
+    "semantic_hash": "fe45684ddc5e5671c980cce2cb4cbb7e"
   },
   "sunum/img/kanal.jpg": {
-    "mtime": 1794689951.8725066,
-    "seen": 1794692324.9969084,
-    "ast_hash": "d25bc495dcb13712a6cf7c3ca69a3973",
-    "semantic_hash": "d25bc495dcb13712a6cf7c3ca69a3973"
+    "mtime": 1794719361.2403297,
+    "seen": 1794728758.8029697,
+    "ast_hash": "f43c1a182d2ccda9bf836b820056edd7",
+    "semantic_hash": "f43c1a182d2ccda9bf836b820056edd7"
   },
   "sunum/img/kural.jpg": {
-    "mtime": 1794689952.3944883,
-    "seen": 1794692324.9969096,
-    "ast_hash": "c9eda4ba174d2715cbebf69d4df5791f",
-    "semantic_hash": "c9eda4ba174d2715cbebf69d4df5791f"
+    "mtime": 1794719361.8203154,
+    "seen": 1794728758.8029726,
+    "ast_hash": "6a4292b0a9eb6e1bef1915b15d67e1e1",
+    "semantic_hash": "6a4292b0a9eb6e1bef1915b15d67e1e1"
   },
   "sunum/img/listeleme.jpg": {
-    "mtime": 1794689952.0944989,
-    "seen": 1794692324.9969103,
-    "ast_hash": "b30ce6d32c9ca85bc450ca5daaca0ea1",
-    "semantic_hash": "b30ce6d32c9ca85bc450ca5daaca0ea1"
+    "mtime": 1794719361.5243227,
+    "seen": 1794728758.8029742,
+    "ast_hash": "337cac15b225f0e32520ed4deb47c195",
+    "semantic_hash": "337cac15b225f0e32520ed4deb47c195"
   },
   "sunum/img/platform.jpg": {
-    "mtime": 1794689952.8704717,
-    "seen": 1794692324.996911,
-    "ast_hash": "364ebc93375fb898d0722d3ea4e8c2c3",
-    "semantic_hash": "364ebc93375fb898d0722d3ea4e8c2c3"
+    "mtime": 1794719362.7482922,
+    "seen": 1794728758.8029807,
+    "ast_hash": "ccfb62dbf019d1c2a3dae9d6356e607e",
+    "semantic_hash": "ccfb62dbf019d1c2a3dae9d6356e607e"
   },
   "sunum/img/siparis.jpg": {
-    "mtime": 1794689951.603516,
-    "seen": 1794692324.9969118,
-    "ast_hash": "d81137b6848d7788de6f84cc0041f1de",
-    "semantic_hash": "d81137b6848d7788de6f84cc0041f1de"
+    "mtime": 1794719360.8123405,
+    "seen": 1794728758.8029819,
+    "ast_hash": "6324e6ec168e91dd92b61731e2a9f196",
+    "semantic_hash": "6324e6ec168e91dd92b61731e2a9f196"
   },
   "sunum/img/toplama.jpg": {
-    "mtime": 1794689951.7435112,
-    "seen": 1794692324.9969127,
-    "ast_hash": "6a07e5e6b869d6979706add42a774791",
-    "semantic_hash": "6a07e5e6b869d6979706add42a774791"
+    "mtime": 1794719361.0933335,
+    "seen": 1794728758.8029835,
+    "ast_hash": "d89d2f5bb7884a9f9a2784dfeb81723f",
+    "semantic_hash": "d89d2f5bb7884a9f9a2784dfeb81723f"
   },
   "sunum/img/uyari.jpg": {
-    "mtime": 1794689952.5294836,
-    "seen": 1794692324.9969134,
-    "ast_hash": "bf007573a70e3e7960b4bab6ee4cf6ec",
-    "semantic_hash": "bf007573a70e3e7960b4bab6ee4cf6ec"
+    "mtime": 1794719362.0063107,
+    "seen": 1794728758.802985,
+    "ast_hash": "87889e1b1e712aa347b3542c66fbf6d6",
+    "semantic_hash": "87889e1b1e712aa347b3542c66fbf6d6"
   },
   "sunum/img/vardiya.jpg": {
-    "mtime": 1794689952.6484795,
-    "seen": 1794692324.9969141,
-    "ast_hash": "fafdd56b7e653e19af94c991adc6ec34",
-    "semantic_hash": "fafdd56b7e653e19af94c991adc6ec34"
+    "mtime": 1794719362.3963008,
+    "seen": 1794728758.8029864,
+    "ast_hash": "ca1dc152a222092e79a8676d80837bc6",
+    "semantic_hash": "ca1dc152a222092e79a8676d80837bc6"
   },
   "sunum/wawierp-tanitim-kapak.jpg": {
-    "mtime": 1794689920.4226186,
-    "seen": 1794692324.9969149,
-    "ast_hash": "4db9406bb4c57d33c25cb350596bfe8c",
-    "semantic_hash": "4db9406bb4c57d33c25cb350596bfe8c"
+    "mtime": 1794719363.7462673,
+    "seen": 1794728758.802988,
+    "ast_hash": "1743007ba692aad625d5d6d68d381cd2",
+    "semantic_hash": "1743007ba692aad625d5d6d68d381cd2"
   },
   "yeni/panel-mock/src/assets/marks/aliexpress.svg": {
     "mtime": 1794686236.4571872,
@@ -678,10 +678,10 @@
     "semantic_hash": "6b270412451d98cb5d90235075a13f58"
   },
   "sunum/wawierp-tanitim.mp4": {
-    "mtime": 1794689953.2724576,
-    "seen": 1794692324.9969385,
-    "ast_hash": "a94fd737cbe2b14bf9edcc557ccafc74",
-    "semantic_hash": "a94fd737cbe2b14bf9edcc557ccafc74"
+    "mtime": 1794719360.4583492,
+    "seen": 1794728758.8031304,
+    "ast_hash": "e063808ac7910a98f12420af3c9598fe",
+    "semantic_hash": "e063808ac7910a98f12420af3c9598fe"
   },
   "yeni/panel-mock/src/Notifications.tsx": {
     "mtime": 1794693704.7012606,
@@ -940,5 +940,191 @@
     "seen": 1794718985.1264539,
     "ast_hash": "ab778659a2197445a104368afc6c8807",
     "semantic_hash": "ab778659a2197445a104368afc6c8807"
+  },
+  "sunum/yayina-kopyala.sh": {
+    "mtime": 1794719580.1158648,
+    "seen": 1794728758.802783,
+    "ast_hash": "d872d6e6cf67cfc16dc2a294422d2e3d",
+    "semantic_hash": "d872d6e6cf67cfc16dc2a294422d2e3d"
+  },
+  "yeni/panel-mock/sunum/index.html": {
+    "mtime": 1794719580.1318643,
+    "seen": 1794728758.8029435,
+    "ast_hash": "ed0aa44ae326c196b0752a20a1a9ea7d",
+    "semantic_hash": "ed0aa44ae326c196b0752a20a1a9ea7d"
+  },
+  "sunum/img/acilis.jpg": {
+    "mtime": 1794719360.5503469,
+    "seen": 1794728758.8029456,
+    "ast_hash": "054b268119334b68cf7b00506bd572f6",
+    "semantic_hash": "054b268119334b68cf7b00506bd572f6"
+  },
+  "sunum/img/bildirim.jpg": {
+    "mtime": 1794719407.4181771,
+    "seen": 1794728758.8029528,
+    "ast_hash": "8cc842a468a441d798edd48c41050857",
+    "semantic_hash": "8cc842a468a441d798edd48c41050857"
+  },
+  "sunum/img/iade.jpg": {
+    "mtime": 1794719360.946337,
+    "seen": 1794728758.8029666,
+    "ast_hash": "bec35e84e09c581fc972871df40501f3",
+    "semantic_hash": "bec35e84e09c581fc972871df40501f3"
+  },
+  "sunum/img/kapanis.jpg": {
+    "mtime": 1794719363.6552694,
+    "seen": 1794728758.8029711,
+    "ast_hash": "3216f9be522a7911687f2ddbd461cd46",
+    "semantic_hash": "3216f9be522a7911687f2ddbd461cd46"
+  },
+  "sunum/img/menu.jpg": {
+    "mtime": 1794719407.2961802,
+    "seen": 1794728758.8029757,
+    "ast_hash": "1635ac7e98fe49d140a3bdc0c7b41b53",
+    "semantic_hash": "1635ac7e98fe49d140a3bdc0c7b41b53"
+  },
+  "sunum/img/mesaj.jpg": {
+    "mtime": 1794719362.8372898,
+    "seen": 1794728758.8029776,
+    "ast_hash": "033eb63fc7e06c784848889bcf719b6a",
+    "semantic_hash": "033eb63fc7e06c784848889bcf719b6a"
+  },
+  "sunum/img/pano.jpg": {
+    "mtime": 1794719362.9672866,
+    "seen": 1794728758.802979,
+    "ast_hash": "733b1e41d9233a2c88e5ebdea977f8dd",
+    "semantic_hash": "733b1e41d9233a2c88e5ebdea977f8dd"
+  },
+  "yeni/panel-mock/sunum/img/arama.jpg": {
+    "mtime": 1794719580.148864,
+    "seen": 1794728758.8030982,
+    "ast_hash": "b801ae5124505ff9b769a3e736420aae",
+    "semantic_hash": "b801ae5124505ff9b769a3e736420aae"
+  },
+  "yeni/panel-mock/sunum/img/asistan1.jpg": {
+    "mtime": 1794719580.150864,
+    "seen": 1794728758.8030996,
+    "ast_hash": "87c649fa0795362e1a360c5193d68465",
+    "semantic_hash": "87c649fa0795362e1a360c5193d68465"
+  },
+  "yeni/panel-mock/sunum/img/asistan2.jpg": {
+    "mtime": 1794719580.153864,
+    "seen": 1794728758.8031013,
+    "ast_hash": "a70c8c85e5f02c48c653f88163dbf5ee",
+    "semantic_hash": "a70c8c85e5f02c48c653f88163dbf5ee"
+  },
+  "yeni/panel-mock/sunum/img/bildirim.jpg": {
+    "mtime": 1794719580.1568637,
+    "seen": 1794728758.8031025,
+    "ast_hash": "8cc842a468a441d798edd48c41050857",
+    "semantic_hash": "8cc842a468a441d798edd48c41050857"
+  },
+  "yeni/panel-mock/sunum/img/finans.jpg": {
+    "mtime": 1794719580.1598637,
+    "seen": 1794728758.8031037,
+    "ast_hash": "34fab17df18cb2b9f7f2c39a2f262d13",
+    "semantic_hash": "34fab17df18cb2b9f7f2c39a2f262d13"
+  },
+  "yeni/panel-mock/sunum/img/fiyat.jpg": {
+    "mtime": 1794719580.1628637,
+    "seen": 1794728758.803108,
+    "ast_hash": "5bf84515253ac55d0aa67a0954b54a42",
+    "semantic_hash": "5bf84515253ac55d0aa67a0954b54a42"
+  },
+  "yeni/panel-mock/sunum/img/genel.jpg": {
+    "mtime": 1794719580.1668634,
+    "seen": 1794728758.8031096,
+    "ast_hash": "4e32ba0bf2513e3aa103cb4a8f839244",
+    "semantic_hash": "4e32ba0bf2513e3aa103cb4a8f839244"
+  },
+  "yeni/panel-mock/sunum/img/iade.jpg": {
+    "mtime": 1794719580.1688635,
+    "seen": 1794728758.8031108,
+    "ast_hash": "bec35e84e09c581fc972871df40501f3",
+    "semantic_hash": "bec35e84e09c581fc972871df40501f3"
+  },
+  "yeni/panel-mock/sunum/img/kalite.jpg": {
+    "mtime": 1794719580.1718633,
+    "seen": 1794728758.8031125,
+    "ast_hash": "fe45684ddc5e5671c980cce2cb4cbb7e",
+    "semantic_hash": "fe45684ddc5e5671c980cce2cb4cbb7e"
+  },
+  "yeni/panel-mock/sunum/img/kanal.jpg": {
+    "mtime": 1794719580.1748633,
+    "seen": 1794728758.8031137,
+    "ast_hash": "f43c1a182d2ccda9bf836b820056edd7",
+    "semantic_hash": "f43c1a182d2ccda9bf836b820056edd7"
+  },
+  "yeni/panel-mock/sunum/img/kural.jpg": {
+    "mtime": 1794719580.1788633,
+    "seen": 1794728758.803115,
+    "ast_hash": "6a4292b0a9eb6e1bef1915b15d67e1e1",
+    "semantic_hash": "6a4292b0a9eb6e1bef1915b15d67e1e1"
+  },
+  "yeni/panel-mock/sunum/img/listeleme.jpg": {
+    "mtime": 1794719580.1808631,
+    "seen": 1794728758.8031166,
+    "ast_hash": "337cac15b225f0e32520ed4deb47c195",
+    "semantic_hash": "337cac15b225f0e32520ed4deb47c195"
+  },
+  "yeni/panel-mock/sunum/img/menu.jpg": {
+    "mtime": 1794719580.182863,
+    "seen": 1794728758.8031178,
+    "ast_hash": "1635ac7e98fe49d140a3bdc0c7b41b53",
+    "semantic_hash": "1635ac7e98fe49d140a3bdc0c7b41b53"
+  },
+  "yeni/panel-mock/sunum/img/mesaj.jpg": {
+    "mtime": 1794719580.186863,
+    "seen": 1794728758.8031192,
+    "ast_hash": "033eb63fc7e06c784848889bcf719b6a",
+    "semantic_hash": "033eb63fc7e06c784848889bcf719b6a"
+  },
+  "yeni/panel-mock/sunum/img/pano.jpg": {
+    "mtime": 1794719580.1918628,
+    "seen": 1794728758.8031204,
+    "ast_hash": "733b1e41d9233a2c88e5ebdea977f8dd",
+    "semantic_hash": "733b1e41d9233a2c88e5ebdea977f8dd"
+  },
+  "yeni/panel-mock/sunum/img/platform.jpg": {
+    "mtime": 1794719580.1968627,
+    "seen": 1794728758.8031218,
+    "ast_hash": "ccfb62dbf019d1c2a3dae9d6356e607e",
+    "semantic_hash": "ccfb62dbf019d1c2a3dae9d6356e607e"
+  },
+  "yeni/panel-mock/sunum/img/siparis.jpg": {
+    "mtime": 1794719580.2008626,
+    "seen": 1794728758.8031232,
+    "ast_hash": "6324e6ec168e91dd92b61731e2a9f196",
+    "semantic_hash": "6324e6ec168e91dd92b61731e2a9f196"
+  },
+  "yeni/panel-mock/sunum/img/toplama.jpg": {
+    "mtime": 1794719580.2038627,
+    "seen": 1794728758.8031244,
+    "ast_hash": "d89d2f5bb7884a9f9a2784dfeb81723f",
+    "semantic_hash": "d89d2f5bb7884a9f9a2784dfeb81723f"
+  },
+  "yeni/panel-mock/sunum/img/uyari.jpg": {
+    "mtime": 1794719580.2088625,
+    "seen": 1794728758.803126,
+    "ast_hash": "87889e1b1e712aa347b3542c66fbf6d6",
+    "semantic_hash": "87889e1b1e712aa347b3542c66fbf6d6"
+  },
+  "yeni/panel-mock/sunum/img/vardiya.jpg": {
+    "mtime": 1794719580.2158623,
+    "seen": 1794728758.8031273,
+    "ast_hash": "ca1dc152a222092e79a8676d80837bc6",
+    "semantic_hash": "ca1dc152a222092e79a8676d80837bc6"
+  },
+  "yeni/panel-mock/sunum/wawierp-tanitim-kapak.jpg": {
+    "mtime": 1794719580.1428642,
+    "seen": 1794728758.8031287,
+    "ast_hash": "1743007ba692aad625d5d6d68d381cd2",
+    "semantic_hash": "1743007ba692aad625d5d6d68d381cd2"
+  },
+  "yeni/panel-mock/sunum/wawierp-tanitim.mp4": {
+    "mtime": 1794719580.1428642,
+    "seen": 1794728758.8031318,
+    "ast_hash": "e063808ac7910a98f12420af3c9598fe",
+    "semantic_hash": "e063808ac7910a98f12420af3c9598fe"
   }
 }
