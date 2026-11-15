@@ -97,6 +97,7 @@ footer{color:var(--mute);font-size:13px;margin-top:24px}
     <tr><td>Haber verme</td><td class="old">Sorunu görmek için ekrana girmek gerekiyor</td><td>Bildirim merkezi: yapılacaklar, sorunlar, olanlar</td></tr>
     <tr><td>Ekip içi yazışma</td><td class="old">Panel dışında</td><td>Ortak kanallar ve birebir mesajlar panelin içinde</td></tr>
     <tr><td>Geri bildirim</td><td class="old">Kayıt altında değil</td><td>Konuşmalardan beslenen geliştirme panosu</td></tr>
+    <tr><td>Muadil ürün bulma</td><td class="old">Elle aranıyor; stokta olup olmadığına ayrıca bakmak gerekiyor</td><td>Ürün çekmecesinde ve asistanda, stoktaki diğer markalardan benzer ürünler</td></tr>
     <tr><td>Ürün görseli</td><td class="old">Listelerde çoğunlukla yok</td><td>Ürün adı geçen her listede fotoğraf</td></tr>
   </table>
 </section>
@@ -188,6 +189,11 @@ footer{color:var(--mute);font-size:13px;margin-top:24px}
     <ul><li>Ortak kanallardaki konuşmalar konu konu sayılır: kaç kişi, kaç mesaj, örnek alıntı</li><li>Her konu için panelde bir çözüm önerilir; tek tıkla istek açılır</li><li>İstekler oylanır; karar verilince sonuç kanala geri yazılır</li><li>Birebir mesajlar taranmaz</li></ul>
     <p class="why">Yanıt verdiği istek: ekibin yazdıkları sistemi geliştirmek için kullanılsın.</p></div></div>
 
+  <div class="feat"><div class="shot"><img src="img/benzer.jpg" alt="Asistan, seçilen ürüne benzer ürünleri fotoğraflı listeliyor" loading="lazy"></div><div>
+    <span class="tag t3">Ürün</span><h3>Benzer ürün önerisi</h3>
+    <ul><li>Katalogda ürün çekmecesinde "Benzer ürünler · diğer markalar" bölümü; satıra basınca o ürün açılır</li><li>"Asistana sor" düğmesi ya da asistana yazılan soru aynı listeyi fotoğraflı verir: marka, stok, fiyat ve neden benzediği</li><li>Aynı kategori şart; ürün türü, ortak özellikler ve fiyat yakınlığına bakılır; yalnız stokta olanlar gelir</li></ul>
+    <p class="why">Örnek veride özelliği girilmemiş üründe yalnız kategori ve fiyata bakılır; özellikler örnektir, gerçek ürün bilgisi girilince öneri gerçeğe döner.</p></div></div>
+
   <div class="feat"><div class="shot"><img src="img/arama.jpg" alt="Her yerden arama" loading="lazy"></div><div>
     <span class="tag t1">Kolaylık</span><h3>Her yerden arama</h3>
     <ul><li>Ctrl K ile açılır</li><li>Ekran adı, hazır görünüm, sipariş numarası ya da ürün</li><li>Ok tuşlarıyla gez, Enter ile aç</li></ul></div></div>
@@ -226,6 +232,7 @@ footer{color:var(--mute);font-size:13px;margin-top:24px}
     <tr><td>Açık tanıtım sayfası ve şifreli panel</td><td><span class="st ok">Yayında</span></td><td>Bu sayfadaki bütün ekranlar yayında.</td></tr>
     <tr><td>Bildirim merkezi</td><td><span class="st ok">Çalışıyor</span></td><td>Panel verisinden hesaplanır. Tarayıcı bildirimi, e-posta özeti ve mobil bildirim yok.</td></tr>
     <tr><td>Ekip mesajlaşması ve geliştirme panosu</td><td><span class="st mid">Taslak</span></td><td>Mesajlar tarayıcıda saklanır, başka kullanıcıya gitmez. Konu çıkarımı anahtar kelimeyle; gerçek sistemde asistan yapacak.</td></tr>
+    <tr><td>Benzer ürün önerisi</td><td><span class="st mid">Taslak</span></td><td>Taslak; özellikler örnek veri. Hesap tarayıcıda, panel verisinden yapılır; gerçek ürün özellikleri ve stok gelince doğruluğu sınanacak.</td></tr>
     <tr><td>Ürün fotoğrafları</td><td><span class="st mid">Örnek</span></td><td>Ürün türünü gösteren açık lisanslı fotoğraflar; gerçek ürünlerin fotoğrafı değil.</td></tr>
     <tr><td>Gerçek sunucu ve veritabanı</td><td><span class="st no">Yok</span></td><td>Teknoloji kararları verildi; geliştirme eski kaynak kodun gelmesini bekliyor.</td></tr>
     <tr><td>Pazaryeri bağlantıları</td><td><span class="st no">Yok</span></td><td>Taslakta gönderilen hiçbir ilan ya da etiket gerçek değil.</td></tr>
@@ -241,12 +248,14 @@ footer{color:var(--mute);font-size:13px;margin-top:24px}
       <li>Asistanın iş hazırlama ve onay akışını canlıda denemek</li>
       <li>Mesajlaşmayı gerçek sunucuya bağlamak: kalıcı kayıt, anlık iletim</li>
       <li>Geliştirme panosunda konu çıkarımını asistana vermek</li>
+      <li>Benzer ürün önerisini gerçek ürün özellikleri ve stokla denemek</li>
       <li>Eski kaynak kod gelince iş kurallarını çıkarmak</li></ol></div>
     <div><h3>Sizden</h3><ol class="q">
       <li>Eski kaynak kodu ve veritabanı yapısı</li>
       <li>Birebir mesajların taranmaması kararının onayı</li>
       <li>Gerçek komisyon oranları ve KDV kuralları</li>
-      <li>Hangi rol neyi görmeli: ekip için rol listesi</li></ol></div>
+      <li>Hangi rol neyi görmeli: ekip için rol listesi</li>
+      <li>Benzerlikte hangi ürün özelliklerinin sayılacağı</li></ol></div>
   </div>
 </section>
 

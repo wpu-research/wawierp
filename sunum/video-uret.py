@@ -72,14 +72,23 @@ def s_search(p):
     p.keyboard.type('iade', delay=220); time.sleep(2.2); p.keyboard.press('Enter')
 def s_agent_q(p):
     go('#/orders')(p); time.sleep(1.0); p.click('button[aria-label="Asistanı aç"]'); time.sleep(2.0)
-    p.click('aside[aria-label="Asistan"] button:has-text("Dün hangi kanaldan")')
+    ta = p.locator('aside[aria-label="Asistan"] textarea'); ta.click()  # öneri düğmeleri değişti; soruyu yazarak sor
+    p.keyboard.type('Dün hangi kanaldan kaç sipariş geldi?', delay=45); p.keyboard.press('Enter')
 def s_agent_act(p):
     ta = p.locator('aside[aria-label="Asistan"] textarea'); ta.click()
     p.keyboard.type('Ödenmiş siparişlerin etiketlerini hazırla', delay=45); time.sleep(0.5); p.keyboard.press('Enter'); time.sleep(4.5)
     p.locator('aside[aria-label="Asistan"] button:has-text("Onayla")').last.click(); time.sleep(3.0)
     p.click('aside[aria-label="Asistan"] a[href="#/audit"]')
+def s_similar(p):
+    t0 = time.time(); wait = lambda f: time.sleep(max(0, f * CUR[0] - (time.time() - t0)))
+    p.click('aside[aria-label="Asistan"] button[aria-label="Asistanı kapat"]'); time.sleep(0.5)  # önceki sahneden açık kalan asistanı kapat
+    go('#/catalog?p=p6')(p); time.sleep(2.2)
+    p.locator('h3:has-text("Benzer ürünler")').scroll_into_view_if_needed(); wait(0.5)
+    p.click('button:has-text("Asistana sor")'); wait(0.95)  # asistan açık kalır; kapanış sahnesi kapatır
 def s_close(p):
     p.click('aside[aria-label="Asistan"] button[aria-label="Asistanı kapat"]'); go('#/overview')(p)
+
+CUR = [0.0]  # çalışan sahnenin ses süresi (saniye); zamana bağlı sahneler kullanır
 
 SCENES = [
     ('acilis', s_landing, "Vavi e-re-pe'nin yeni tasarımına hoş geldiniz. Bu videoda yeni panelde neler değiştiğini birlikte gezeceğiz. Gördükleriniz bir tasarım taslağıdır; veriler örnektir."),
@@ -103,6 +112,7 @@ SCENES = [
     ('arama', s_search, "Kontrol ve K tuşlarıyla, her yerden arama açılır. Ekran adı, sipariş numarası ya da ürün yazmanız yeterlidir."),
     ('asistan1', s_agent_q, "Sağ alttaki düğme, asistanı bir sohbet penceresi olarak açar. Bir soru sorduğunuzda yanıtı panel verisinden hesaplar ve dayandığı ekranları, yanıtın altında düğme olarak gösterir."),
     ('asistan2', s_agent_act, "Bir iş istediğinizde önce taslak hazırlar. Siz onaylamadan hiçbir şeyi değiştirmez. Onayladığınız işlem, denetim kaydına yazılır."),
+    ('benzer', s_similar, "Katalogda bir ürünün çekmecesini açınca, altında benzer ürünler görünür. Yalnız başka markaların, stokta olan ürünleri gelir; ürün türüne, ortak özelliklere ve fiyata bakılır. Asistana sor düğmesi aynı listeyi fotoğraflarıyla yanıtın altına koyar."),
     ('kapanis', s_close, "Hepsi tek panelde. Daha hızlı, daha tutarlı ve otomasyona hazır. İzlediğiniz için teşekkürler."),
 ]
 
@@ -128,7 +138,7 @@ def record(durs):
             page.goto(BASE + '/', wait_until='networkidle')
             for (key, fn, _), d in zip(SCENES, durs):
                 ts = time.time(); starts.append(ts - t0 + 0.45)
-                fn(page)
+                CUR[0] = d; fn(page)
                 left = d + 1.0 - (time.time() - ts)
                 if left > 0: time.sleep(left)
             time.sleep(1.2)
@@ -158,7 +168,7 @@ if __name__ == '__main__':
     # Sunum klasörüne: video, kapak ve her sahneden bir kare (sahnenin son üçte birinden)
     shutil.copy(out, SP / 'wawierp-tanitim.mp4'); (SP / 'img').mkdir(exist_ok=True)
     grab = lambda t, dst, w: subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', f'{t:.2f}', '-i', str(out), '-frames:v', '1', '-vf', f'scale={w}:-2', '-q:v', '5', str(dst)], check=True)
-    AT = {'menu': 0.13, 'bildirim': 0.4}  # bu sahnelerde anlatılan şey sahnenin başında ekrandadır
+    AT = {'menu': 0.13, 'bildirim': 0.4, 'benzer': 0.82}  # bu sahnelerde anlatılan şey sahnenin başında ekrandadır
     for (k, _, _), st, d in zip(SCENES, starts, durs): grab(st + d * AT.get(k, 0.78), SP / 'img' / f'{k}.jpg', 1100)
     grab(starts[1] + durs[1] * 0.8, SP / 'wawierp-tanitim-kapak.jpg', 1280)
     print('kareler', len(SCENES), 'toplam süre', round(starts[-1] + durs[-1], 1), 'sn')
