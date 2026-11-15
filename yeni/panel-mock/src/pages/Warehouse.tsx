@@ -3,6 +3,7 @@ import { ScanBarcode, WifiOff } from 'lucide-react'
 import dist from '../dist30.json'
 import { MOVES0, WAREHOUSES, fmtNum, product, toShip, whName, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
+import { Thumb } from '../Thumb'
 import { Badge, Bars, Btn, Card, Empty, PageHead, Stat, td, th, sel, type Tone } from '../ui'
 
 const binCmp = (a: string, b: string) => a.localeCompare(b, 'tr', { numeric: true })
@@ -24,6 +25,7 @@ function PhonePreview({ lines, ticked, onScan }: { lines: Line[]; ticked: Set<st
           <div className="mt-2 rounded-xl bg-card border border-line p-3 text-center">
             <div className="text-[11px] text-mute">Rafa git</div>
             <div className="num text-3xl font-bold text-brand leading-tight">{cur.bin}</div>
+            <div className="mt-2 flex justify-center"><Thumb p={p} size={64} /></div>
             <div className="mt-2 text-sm font-medium leading-snug">{p.name}</div>
             <div className="text-[11px] text-mute num">{p.sku}</div>
             <div className="mt-2 text-[11px] text-mute">Al</div>
@@ -109,7 +111,7 @@ export function Picking() {
                   <td className={td}><input type="checkbox" checked={on} onChange={() => toggle(l.pid)} aria-label={`${p.name} toplandı`} /></td>
                   <td className={td + ' num'}>{i + 1}</td>
                   <td className={td + ' num font-medium'}>{l.bin}</td>
-                  <td className={td + (on ? ' line-through' : '')}>{p.name}</td>
+                  <td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} className={on ? 'opacity-50' : ''} /><span className={on ? 'line-through text-mute' : ''}>{p.name}</span></div></td>
                   <td className={td + ' num text-mute'}>{p.sku}</td>
                   <td className={td + ' num text-right font-medium'}>{l.qty}</td>
                   <td className={td + ' num text-right'}>{l.orders}</td>
@@ -176,7 +178,7 @@ export function Counting() {
             <tbody>{shown.map(r => { const p = product(r.pid), [tone, label] = REASON[r.reason], d = done[r.key]; return (
               <tr key={r.key} className={d !== undefined ? 'bg-ok-soft/40' : 'hover:bg-bg'}>
                 <td className={td}><Badge tone={tone}>{label}</Badge></td>
-                <td className={td}>{p.name}<div className="text-xs text-mute num">{p.sku}</div></td>
+                <td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div>{p.name}<div className="text-xs text-mute num">{p.sku}</div></div></div></td>
                 <td className={td}>{whName(r.wh)} <span className="num text-ink2">· {r.bin}</span></td>
                 <td className={td + ' num text-right'}>{r.sys === null ? <span className="text-mute">sayılmadı</span> : r.sys}</td>
                 <td className={td}><input type="number" inputMode="numeric" min={0} className={sel + ' w-20 num'} aria-label={`${p.name} sayılan adet`} disabled={d !== undefined || !canWrite}

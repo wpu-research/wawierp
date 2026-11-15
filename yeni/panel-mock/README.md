@@ -116,3 +116,10 @@ Okundu, erteleme ve sahiplenme bilgisi bu tarayıcıda saklanır. Tarayıcı bil
 - **Geliştirme panosu** (`#/feedback`): ortak kanallardaki konuşmalar konu konu sayılır (kaç kişi, kaç mesaj, örnek alıntılar), her konu için panelde bir çözüm önerilir ve tek tıkla istek açılır. İstekler oylanır; sistem yöneticisi durumu değiştirir (Yeni, İnceleniyor, Planlandı, Yapıldı) ve sonuç kanala geri yazılır.
 - "Asistandan haftalık özet iste" son mesajları asistana verir; asistan tekrar eden sorunları ve çözüm önerilerini çıkarır.
 - **Gizlilik:** birebir mesajlar taranmaz; yalnız ortak kanallar sayılır. Mock'ta konu çıkarımı anahtar kelimeyle yapılır, kişiler rol adlarıdır, veriler tarayıcıda saklanır. Gerçek sistemde mesajlar sunucuda tutulur, anlık iletilir ve taramayı asistan yapar.
+
+## Ürün görselleri ve yol gösteren hareket
+
+- `src/Thumb.tsx`: sipariş, iade, katalog, stok defteri, toplama, sayım, stok ayırma ve veri kalitesi listelerinde ürün görseli. Mock'ta görsel, kategoriye göre çizilmiş satır içi bir SVG'dir (ağ isteği yok). Görseli olmayan ürün kırmızı kesik çizgili kutuyla görünür. Siparişte birden çok kalem varsa ilk görselin köşesinde "+n" yazar.
+- İadeler ekranının üstünde dört adımlı akış şeridi (etiket, depo kontrolü, para iadesi, kapanış); bir iade ilerletilince kartı yeni sütunda kısa bir vurguyla belirir.
+- Hareketler yalnız `transform` ve `opacity` kullanır, kısa sürer, "hareketi azalt" tercihinde kapanır.
+- Gerçek sistemde aynı kutuya küçük boyutlu (ör. 96 piksel, WebP), geç yüklenen ürün fotoğrafı gelir; liste başına yalnız görünen satırların görseli indirilir.

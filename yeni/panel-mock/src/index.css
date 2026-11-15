@@ -89,3 +89,10 @@ tbody tr { transition: background .12s; }
 @keyframes msg-in { from { opacity: 0; transform: translateY(4px); } }
 @keyframes ring { 70%, 100% { box-shadow: 0 0 0 16px rgba(48,72,200,0); } }
 @media (prefers-reduced-motion: reduce) { .page-in, .bar-in, .chat-pop, .slide-in, .msg-in, .launcher::after { animation: none; } .lift:hover, .hero-btn:hover { transform: none; } }
+
+/* ---------- ürün görseli ve kart hareketi ---------- */
+.thumb { transition: transform .18s; }
+tr:hover .thumb, li:hover > div > .thumb, a:hover .thumb { transform: scale(1.08) rotate(-3deg); }
+.card-in { animation: card-in .45s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes card-in { from { opacity: 0; transform: translateY(8px) scale(.97); box-shadow: 0 0 0 2px var(--brand); } 60% { box-shadow: 0 0 0 2px var(--brand); } to { box-shadow: 0 0 0 0 transparent; } }
+@media (prefers-reduced-motion: reduce) { .card-in { animation: none; } tr:hover .thumb, li:hover > div > .thumb, a:hover .thumb { transform: none; } }

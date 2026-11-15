@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ImageOff, Search } from 'lucide-react'
 import { LISTING_FLOW, MOVE, MOVES0, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtNum, product, stockState, whName, account, type ListingStatus, type MoveType, type Product, type WhId } from '../data'
 import { useStore } from '../store'
+import { Thumb } from '../Thumb'
 import { Badge, Card, Chan, Drawer, Empty, PageHead, Pager, Stat, Tabs, sel, td, th, type Tone } from '../ui'
 
 const LTONE: Record<ListingStatus, Tone> = { havuzda: 'neutral', hazirlaniyor: 'warn', onizleme: 'info', gonderildi: 'violet', aktif: 'ok', sorunlu: 'bad', kaldirildi: 'neutral' }
@@ -59,7 +60,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
                   <tr key={p.id} className="hover:bg-bg cursor-pointer" onClick={() => setOpenId(p.id)}>
                     <td className={td}>
                       <div className="flex items-center gap-2.5">
-                        <span className="size-9 rounded-md bg-bg border border-line grid place-items-center text-mute shrink-0 text-xs font-semibold">{p.image ? p.brand.slice(0, 2).toUpperCase() : <ImageOff size={15} className="text-bad" />}</span>
+                        <Thumb p={p} size={40} />
                         <div className="min-w-0"><div className="font-medium truncate max-w-[280px]">{p.name}</div><div className="text-xs text-mute">{p.brand} · {p.cat}</div></div>
                       </div>
                     </td>
@@ -161,7 +162,7 @@ export function Stock() {
             <tbody>{rows.slice((page - 1) * SIZE, page * SIZE).map(m => { const p = product(m.pid), d = m.after - m.before; return (
               <tr key={m.id} className="hover:bg-bg">
                 <td className={td + ' num whitespace-nowrap'}>{fmtDT(m.t)}</td>
-                <td className={td}><div className="truncate max-w-[260px]">{p.name}</div><div className="text-xs text-mute num">{p.sku}</div></td>
+                <td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div className="min-w-0"><div className="truncate max-w-[240px]">{p.name}</div><div className="text-xs text-mute num">{p.sku}</div></div></div></td>
                 <td className={td + ' whitespace-nowrap'}>{whName(m.wh)}</td>
                 <td className={td}><Badge tone={m.type === 'satis' ? 'info' : m.type === 'duzeltme' ? 'warn' : 'neutral'}>{MOVE[m.type]}</Badge></td>
                 <td className={td + ' text-right num text-mute'}>{m.before}</td>

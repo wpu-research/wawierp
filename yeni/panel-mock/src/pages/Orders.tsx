@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Bookmark, Check, Eye, FileText, Lock, Search, Tag, Truck, X } from 'lucide-react'
 import { CHANNEL, NOW, OSTATUS, SUPPLY, account, ago, company, dropWaiting, fmtDT, fmtMoney, hasIssue, isOpen, mask, overdue, product, toShip, whName, type ChannelType, type OStatus, type Order } from '../data'
 import { ROLES, useStore } from '../store'
+import { Thumb, ThumbStack } from '../Thumb'
 import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Pager, Tabs, sel, td, th, type Tone } from '../ui'
 
 type View = 'all' | 'toship' | 'overdue' | 'drop' | 'issue' | 'shipped' | 'closed'
@@ -93,7 +94,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
               {pageRows.map(o => (
                 <tr key={o.id} className="hover:bg-bg cursor-pointer" onClick={() => setOpenId(o.id)}>
                   <td className={td} onClick={e => e.stopPropagation()}><input type="checkbox" aria-label={`${o.no} seç`} checked={picked.has(o.id)} onChange={() => toggle(o.id)} /></td>
-                  <td className={td + ' whitespace-nowrap'}><div className="font-medium num">{o.no}</div><div className="text-xs text-mute num">{fmtDT(o.t)}</div></td>
+                  <td className={td + ' whitespace-nowrap'}><div className="flex items-center gap-2.5"><ThumbStack items={o.items.map(i => product(i.pid))} /><div><div className="font-medium num">{o.no}</div><div className="text-xs text-mute num">{fmtDT(o.t)}</div></div></div></td>
                   <td className={td + ' whitespace-nowrap'}><Chan acc={o.acc} /></td>
                   <td className={td + ' whitespace-nowrap'}><div>{company(o.company).name}</div><div className="text-xs text-mute">{whName(o.wh)}</div></td>
                   <td className={td + ' whitespace-nowrap'}><div>{mask(o.cust.name)}</div><div className="text-xs text-mute">{o.cust.city}, {o.cust.country}</div></td>
@@ -168,8 +169,9 @@ function OrderDrawer({ o, onClose }: { o: Order | null; onClose: () => void }) {
         <h3 className="m-0 mb-1.5 text-xs font-semibold text-mute uppercase tracking-wide">Kalemler</h3>
         <ul className="m-0 p-0 list-none border border-line rounded-lg divide-y divide-line">
           {o.items.map((it, i) => { const p = product(it.pid); return (
-            <li key={i} className="px-3 py-2 flex justify-between gap-3">
-              <div className="min-w-0"><div className="truncate">{p.name}</div><div className="text-xs text-mute num">{p.sku} · raf {p.stock[o.wh]?.bin ?? '—'}</div></div>
+            <li key={i} className="px-3 py-2 flex items-center justify-between gap-3">
+              <Thumb p={p} size={40} />
+              <div className="min-w-0 flex-1"><div className="truncate">{p.name}</div><div className="text-xs text-mute num">{p.sku} · raf {p.stock[o.wh]?.bin ?? '—'}</div></div>
               <div className="text-right num whitespace-nowrap">{it.qty} × {fmtMoney(it.price, o.cur)}</div>
             </li>
           ) })}

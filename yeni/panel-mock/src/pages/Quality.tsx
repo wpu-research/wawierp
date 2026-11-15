@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, ImagePlus, Keyboard, RefreshCw, SkipForward, Sparkles } from 'lucide-react'
 import { NOW, fmtNum, type Product } from '../data'
 import { ROLES, useStore } from '../store'
+import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone } from '../ui'
 
 const inputCls = 'h-8 rounded-md border border-line bg-card px-2 text-sm w-full'
@@ -133,7 +134,7 @@ export function QualityQueue() {
               <option value="all">Tüm sorunlar</option>{(Object.keys(KIND) as Kind[]).map(k => <option key={k} value={k}>{KIND[k].label}</option>)}</select></div>
             <div className="overflow-x-auto"><table className="w-full border-collapse text-sm"><thead><tr><th className={th}>Ürün</th><th className={th}>Sorun</th><th className={th + ' text-right'}>30 gün satış</th></tr></thead><tbody>
               {queue.filter(p => filter === 'all' || kindsOf(p).includes(filter)).map(p => (
-                <tr key={p.id}><td className={td}>{p.name}<div className="text-xs text-mute">{p.brand} · {p.sku}</div></td>
+                <tr key={p.id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div>{p.name}<div className="text-xs text-mute">{p.brand} · {p.sku}</div></div></div></td>
                   <td className={td}><span className="flex flex-wrap gap-1">{kindsOf(p).map(k => <Badge key={k} tone={KIND[k].tone}>{KIND[k].label}</Badge>)}</span></td>
                   <td className={td + ' num text-right'}>{fmtNum(sales.get(p.id) ?? 0)}</td></tr>))}
             </tbody></table></div>
