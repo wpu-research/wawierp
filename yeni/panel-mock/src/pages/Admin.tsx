@@ -8,7 +8,7 @@ const MODS = ['Siparişler', 'Kargo', 'Katalog', 'Stok', 'Kanallar', 'Finans', '
 // t = tam, g = görüntüle, - = yok. Öneri; sahibi onaylamadı.
 const MATRIX: [string, string][] = [
   ['Sistem yöneticisi', 'ttttttttt'], ['Depo sorumlusu', 'ttttg--tg'], ['Depo çalışanı', 'gtgt---t-'],
-  ['Wawi operasyon', 'tgttt--t-'], ['Ürün giriş operatörü', '--tg-----'], ['Kategori sorumlusu', '--tg-----'], ['Muhasebe (öneri)', 'g----t-tt'],
+  ['Wawi operasyon', 'tgttt--t-'], ['Ürün giriş operatörü', '--tg-----'], ['Kategori sorumlusu', '--tg-----'], ['Muhasebe (öneri)', 'g----t-tg'],
 ]
 
 export function Team() {

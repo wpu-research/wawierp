@@ -226,9 +226,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       // Para iadesini (iade faturası dahil) yalnız finans yetkisi kapatır; depo ürünü teslim aldığını işaretler.
       if (o.ret === 'cozuldu') return
       if (o.ret === 'odeme' && !ROLES[role].finance) return say('Para iadesini yalnız muhasebe onaylayabilir')
-      keep('İade aşaması')
+      // Kontrol bitince (geldi → odeme) fiziki siparişin kalemleri depoya geri yazılır; deftere düzeltme hareketi eklenir (kararlar/0010).
+      const back: Delta[] = o.ret === 'geldi' && o.supply === 'fiziki' ? o.items.map(it => ({ pid: it.pid, wh: o.wh, qty: it.qty, type: 'duzeltme' as const, ref: 'İade · ' + o.no })) : []
+      keep('İade aşaması', back); if (back.length) applyStock(back, ROLES[role].user)
       patch([id], x => ({ ...x, ret: NEXT[x.ret ?? 'bekleniyor'] }))
-      log('İade', `İade aşaması ilerletildi → ${NEXT[o.ret ?? 'bekleniyor']}`, 'sipariş ' + o.no)
+      log('İade', `İade aşaması ilerletildi → ${NEXT[o.ret ?? 'bekleniyor']}${back.length ? '; stok defterine ' + back.length + ' düzeltme yazıldı' : ''}`, 'sipariş ' + o.no)
     },
     syncNow: accId => {
       keep('Elle eşitleme')

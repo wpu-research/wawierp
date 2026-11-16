@@ -182,7 +182,7 @@ export function Alerts() {
     return {
       today: orders.filter(o => dayKey(o.t) === today).length, yest: orders.filter(o => dayKey(o.t) === yest).length,
       ship: orders.filter(toShip).length, late: orders.filter(overdue).length, issue: orders.filter(hasIssue).length,
-      ret: orders.filter(o => o.ret && o.ret !== 'cozuldu').length, failed: jobs.filter(j => j.status === 'basarisiz').length,
+      ret: orders.filter(o => o.ret && o.ret !== 'cozuldu').length, failed: jobs.filter(j => j.status === 'basarisiz' || j.status === 'kismi').length,
       bad: accounts.filter(a => a.health !== 'ok'),
     }
   }, [orders, jobs, accounts])

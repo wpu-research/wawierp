@@ -53,7 +53,7 @@ Sunucu ayarları (Railway değişkenleri):
 | `PANEL_USER` | Panel kullanıcı adı | `wawi` |
 | `PANEL_PASSWORD` | Panel şifresi; yoksa `/panel` ve `/api/*` kapalı (503) | yok |
 | `ANTHROPIC_API_KEY` | Yapay zekâ anahtarı (`ANTHROPIC_AUTH_TOKEN` de kabul edilir); yoksa hazır senaryolar çalışır | yok |
-| `ASSISTANT_MODEL` | Kullanılacak model | `claude-opus-5-5` |
+| `ASSISTANT_MODEL` | Kullanılacak model (zor işler için `claude-opus-5-5` seçilebilir; `kararlar/0010`) | `claude-sonnet-5-5` |
 | `ASSISTANT_PER_MINUTE` | Adres başına dakikalık istek sınırı | 20 |
 | `ASSISTANT_PER_DAY` | Günlük toplam istek sınırı (İstanbul gününe göre; yalnız geçerli istekler sayılır; ilan metni ucunun kotası ayrıdır) | 100 |
 | `ASSISTANT_MAX_BODY_KB` | İstek gövdesi üst sınırı (KB) | 300 |

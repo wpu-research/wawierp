@@ -28,31 +28,36 @@ import { MobileDepot } from './pages/Mobile'
 const HOME = location.protocol === 'file:' ? 'index.html' : '/'
 
 const NAV: NavGroup[] = [
-  { group: '', items: [{ key: 'overview', label: 'Genel bakış', icon: LayoutDashboard }, { key: 'messages', label: 'Mesajlar', icon: MessagesSquare, fresh: true }, { key: 'feedback', label: 'Geliştirme panosu', icon: Lightbulb, fresh: true }] },
-  { group: 'Operasyon', items: [
-    { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks, fresh: true }, { key: 'mobile', label: 'Mobil depo', icon: Smartphone, fresh: true }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
-    { key: 'returns', label: 'İadeler', icon: RotateCcw }, { key: 'return-form', label: 'Müşteri iade formu', icon: Undo2, fresh: true }, { key: 'support', label: 'Destek', icon: LifeBuoy },
+  { group: '', items: [{ key: 'overview', label: 'Genel bakış', icon: LayoutDashboard }, { key: 'messages', label: 'Mesajlar', icon: MessagesSquare }] },
+  { group: 'Günlük iş', items: [
+    { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks }, { key: 'mobile', label: 'Mobil depo', icon: Smartphone }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
+    { key: 'returns', label: 'İadeler', icon: RotateCcw }, { key: 'support', label: 'Destek', icon: LifeBuoy },
   ] },
   { group: 'Ürün ve stok', items: [
-    { key: 'catalog', label: 'Katalog', icon: Package }, { key: 'quality', label: 'Veri kalitesi', icon: ScanSearch, fresh: true }, { key: 'content', label: 'Ürün metni ve çeviri', icon: Languages, fresh: true },
-    { key: 'stock', label: 'Stok defteri', icon: Boxes }, { key: 'reservations', label: 'Stok ayırma', icon: ShieldCheck, fresh: true }, { key: 'counting', label: 'Sayım planı', icon: ClipboardCheck, fresh: true }, { key: 'replenish', label: 'Tedarik önerileri', icon: PackagePlus, fresh: true },
+    { key: 'catalog', label: 'Katalog', icon: Package }, { key: 'quality', label: 'Veri kalitesi', icon: ScanSearch }, { key: 'content', label: 'Ürün metni ve çeviri', icon: Languages },
+    { key: 'stock', label: 'Stok defteri', icon: Boxes }, { key: 'reservations', label: 'Stok ayırma', icon: ShieldCheck }, { key: 'counting', label: 'Sayım planı', icon: ClipboardCheck }, { key: 'replenish', label: 'Tedarik önerileri', icon: PackagePlus },
     { key: 'transfers', label: 'Depo transferi', icon: Truck },
   ] },
   { group: 'Satış kanalları', items: [
-    { key: 'channels', label: 'Kanallar', icon: Store }, { key: 'listing', label: 'Toplu listeleme', icon: Send, fresh: true }, { key: 'prices', label: 'Fiyat ve kârlılık', icon: BadgePercent, fresh: true }, { key: 'sync', label: 'Eşitleme işleri', icon: RefreshCw },
+    { key: 'channels', label: 'Kanallar', icon: Store }, { key: 'listing', label: 'Toplu listeleme', icon: Send }, { key: 'prices', label: 'Fiyat kuralları', icon: BadgePercent }, { key: 'sync', label: 'Eşitleme işleri', icon: RefreshCw },
+  ] },
+  { group: 'Para', items: [
+    { key: 'finance', label: 'Faturalar ve KDV', icon: FileText }, { key: 'bank', label: 'Banka mutabakatı', icon: Landmark }, { key: 'accounting', label: 'Muhasebe aktarımı', icon: FileSpreadsheet },
+    { key: 'profit', label: 'Kanal ve şirket kârı', icon: TrendingUp }, { key: 'b2b', label: 'Cari ve B2B portal', icon: Building2 },
   ] },
   { group: 'Otomasyon', items: [
-    { key: 'rules', label: 'Kurallar', icon: Workflow, fresh: true }, { key: 'alerts', label: 'Uyarılar ve özet', icon: BellRing, fresh: true }, { key: 'shifts', label: 'Vardiya önerisi', icon: CalendarClock, fresh: true },
+    { key: 'rules', label: 'Kurallar', icon: Workflow }, { key: 'alerts', label: 'Uyarılar ve özet', icon: BellRing }, { key: 'shifts', label: 'Vardiya önerisi', icon: CalendarClock },
   ] },
-  { group: 'Finans', items: [
-    { key: 'finance', label: 'Faturalar ve KDV', icon: FileText }, { key: 'bank', label: 'Banka mutabakatı', icon: Landmark, fresh: true }, { key: 'accounting', label: 'Muhasebe aktarımı', icon: FileSpreadsheet, fresh: true },
-    { key: 'profit', label: 'Kârlılık', icon: TrendingUp, fresh: true }, { key: 'b2b', label: 'Cari ve B2B portal', icon: Building2 }, { key: 'portal', label: 'Müşteri portalı önizleme', icon: UserRound, fresh: true },
+  { group: 'Müşteri görünümü (önizleme)', items: [
+    { key: 'return-form', label: 'Müşteri iade formu', icon: Undo2 }, { key: 'portal', label: 'Müşteri portalı', icon: UserRound },
   ] },
-  { group: 'Platform', items: [
-    { key: 'onboarding', label: 'Kurulum sihirbazı', icon: Rocket, fresh: true }, { key: 'developers', label: 'API ve bildirim uçları', icon: Code2, fresh: true },
-    { key: 'billing', label: 'Kullanım ve abonelik', icon: CreditCard, fresh: true }, { key: 'status', label: 'Durum sayfası', icon: Activity, fresh: true },
+  { group: 'Yönetim', items: [
+    { key: 'team', label: 'Ekip ve yetki', icon: Users }, { key: 'audit', label: 'Denetim kaydı', icon: ScrollText }, { key: 'feedback', label: 'Geliştirme panosu', icon: Lightbulb },
   ] },
-  { group: 'Yönetim', items: [{ key: 'team', label: 'Ekip ve yetki', icon: Users }, { key: 'audit', label: 'Denetim kaydı', icon: ScrollText }] },
+  { group: 'Platform (dış müşteri için, ertelendi)', items: [
+    { key: 'onboarding', label: 'Kurulum sihirbazı', icon: Rocket }, { key: 'developers', label: 'API ve bildirim uçları', icon: Code2 },
+    { key: 'billing', label: 'Kullanım ve abonelik', icon: CreditCard }, { key: 'status', label: 'Durum sayfası', icon: Activity },
+  ] },
 ]
 const VIEWS: { label: string; href: string; page: string }[] = [
   { label: 'Gönderilecek siparişler', href: '#/orders?view=toship', page: 'orders' }, { label: '2 günü aşan siparişler', href: '#/orders?view=overdue', page: 'orders' },

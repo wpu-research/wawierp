@@ -55,7 +55,7 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
       const unc = st.products.reduce((s, p) => s + Object.entries(p.stock).filter(([wh, r]) => r && (!st.whId || wh === st.whId) && r.fiziki === null).length, 0)
       add(unc > 0 && { id: 'sayim-yok', kind: 'yap', n: unc, week: true, t: NOW - 30 * H, title: `${fmtNum(unc)} depo kaydı hiç sayılmadı`, detail: 'Sayılmamış ürün sıfır stok sayılmaz; kanallara açılamaz.', href: '#/counting', cta: 'Sayım planı' })
 
-      const failed = st.jobs.filter(j => j.status === 'basarisiz' && (j.acc === null || ids.has(j.acc)))
+      const failed = st.jobs.filter(j => (j.status === 'basarisiz' || j.status === 'kismi') && (j.acc === null || ids.has(j.acc)))
       if (failed.length) {
         const first = failed[0].acc ? account(failed[0].acc).name : 'Sistem'
         add({ id: 'esitleme', kind: 'olmadi', n: failed.length, t: Math.max(...failed.map(j => j.last)), title: failed.length === 1 ? `${first}: eşitleme başarısız` : `${first} ve ${fmtNum(failed.length - 1)} iş daha eşitlenemedi`, detail: failed[0].msg ?? failed[0].kind, href: '#/sync', cta: 'Eşitleme işleri', ask: 'Kanallarda sorun var mı?' })

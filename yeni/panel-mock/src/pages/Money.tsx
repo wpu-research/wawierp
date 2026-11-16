@@ -221,7 +221,7 @@ export function Profit() {
 
   return (
     <Gate>
-      <PageHead title="Kârlılık" desc="Son 30 gün, EUR siparişler (iptal ve iade hariç). Ürün alış maliyeti örnek veride yok; bu yüzden gösterilen rakam ürün maliyetinden önceki katkıdır: ciro − KDV − komisyon − kargo. Oran, KDV hariç ciroya göredir." />
+      <PageHead title="Kanal ve şirket kârı" desc="Son 30 gün, EUR siparişler (iptal ve iade hariç). Ürün alış maliyeti örnek veride yok; bu yüzden gösterilen rakam ürün maliyetinden önceki katkıdır: ciro − KDV − komisyon − kargo. Oran, KDV hariç ciroya göredir." />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         <Stat label="Sipariş" value={fmtNum(list.length)} hint="EUR · 30 gün" />
         <Stat label="Ciro" value={fmtMoney(tot.rev, 'EUR', 0)} hint={`KDV dahil · KDV ${fmtMoney(tot.vat, 'EUR', 0)}`} />

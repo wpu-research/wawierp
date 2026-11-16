@@ -4,7 +4,7 @@
 // Gerçek sistemde araçlar sunucuda, kullanıcının oturumundan gelen yetkiyle çalışacak.
 import Anthropic from '@anthropic-ai/sdk'
 
-const MODEL = process.env.ASSISTANT_MODEL || 'claude-opus-5-5'
+const MODEL = process.env.ASSISTANT_MODEL || 'claude-sonnet-5-5'
 const hasKey = !!(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN)
 // Zaman aşımı 90 sn, en çok 1 yeniden deneme: yönlendirici bağlantıyı bizden önce keser, biz de boşuna sürüp maliyet yazmayalım.
 const client = hasKey ? new Anthropic({ timeout: 90_000, maxRetries: 1 }) : null

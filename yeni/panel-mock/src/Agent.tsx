@@ -26,6 +26,11 @@ type Mode = 'yanit' | 'onay' | 'oto'
 type ApiMsg = Anthropic.Beta.BetaMessageParam
 type Block = Anthropic.Beta.BetaContentBlock
 type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[]; view?: ReactNode }
+// Müşterinin mesajında yazdığı e-posta, telefon, IBAN ve uzun numaralar yapay zekâya gitmeden maskelenir (kararlar/0010).
+export const maskPII = (t: string | null) => t && t
+  .replace(/\b[A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){3,7}(?: ?[A-Z0-9]{1,4})?\b/g, '[IBAN]')
+  .replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '[e-posta]')
+  .replace(/\+?\d[\d ()/.-]{7,}\d/g, '[numara]')
 const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
 // Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
 const API = location.origin + '/api/assistant'
@@ -56,7 +61,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     if (!open || greeted.current) return
     greeted.current = true
     const ids = new Set(st.accounts.map(a => a.id))
-    const failed = st.jobs.filter(j => j.status === 'basarisiz' && (j.acc === null || ids.has(j.acc))).length
+    const failed = st.jobs.filter(j => (j.status === 'basarisiz' || j.status === 'kismi') && (j.acc === null || ids.has(j.acc))).length
     const late = st.orders.filter(overdue).length, risk = stockRisks().eksi.length, waiting = st.tickets.filter(t => t.status === 'open').length
     const items = [failed && `${fmtNum(failed)} eşitleme işi başarısız`, late && `${fmtNum(late)} sipariş 2 günü aştı`, risk && `${fmtNum(risk)} üründe satılabilir stok eksiye düştü`, waiting && `${fmtNum(waiting)} müşteri sorusu yanıt bekliyor`].filter(Boolean) as string[]
     if (!items.length) return
@@ -179,7 +184,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       case 'get_open_tickets': {
         if (!sees('support')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) destek konuşmalarını görmez.` } }
         const open = st.tickets.filter(t => t.status === 'open').sort((a, b) => a.t - b.t)
-        return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: [...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null })) } }
+        return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: maskPII([...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null) })) } }
       }
       case 'get_stock_risks': {
         if (!sees('stock')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) stok ekranını görmez.` } }
@@ -194,7 +199,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         const m = new Map<ChannelType, { siparis: number; siparis_eur: number; ciro_eur: number }>()
         for (const o of revenueOrders(st.orders)) { const t = account(o.acc).type, x = m.get(t) ?? { siparis: 0, siparis_eur: 0, ciro_eur: 0 }; x.siparis++; if (o.cur === 'EUR') { x.siparis_eur++; x.ciro_eur += o.total }; m.set(t, x) }
         const bekleyen = st.orders.filter(o => o.pay === 'bekliyor')
-        return { src: [{ label: 'Kârlılık', href: '#/profit' }, { label: 'Banka mutabakatı', href: '#/bank' }], data: {
+        return { src: [{ label: 'Kanal ve şirket kârı', href: '#/profit' }, { label: 'Banka mutabakatı', href: '#/bank' }], data: {
           donem: 'son 30 gün; iptal ve iade siparişler dışarıda; yalnız EUR siparişler ciroya dahil', kanallar: [...m.entries()].map(([t, x]) => ({ kanal: CHANNEL[t].label, siparis: x.siparis, ciro_eur: Math.round(x.ciro_eur), ortalama_sepet_eur: x.siparis_eur ? Math.round(x.ciro_eur / x.siparis_eur) : 0 })).sort((a, b) => b.ciro_eur - a.ciro_eur),
           odeme_bekleyen_siparis: bekleyen.length, odeme_bekleyen_tutar_eur: Math.round(bekleyen.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0)),
         } }
@@ -203,7 +208,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         const p = findProduct(String(input.query ?? ''), st.products)
         if (!p) return { error: true, data: { hata: 'Bu ad ya da SKU ile ürün bulunamadı. Kullanıcıdan ürün adını ya da SKU\'yu isteyin.' } }
         const r = rivalsOf(p)
-        const src = [{ label: p.name, href: `#/catalog?p=${p.id}` }, { label: 'Fiyat ve kârlılık', href: '#/prices' }]
+        const src = [{ label: p.name, href: `#/catalog?p=${p.id}` }, { label: 'Fiyat kuralları', href: '#/prices' }]
         if (!r.ean) return { src, data: { urun: p.name, sonuc: 'Ürünün barkodu (EAN) eksik; rakip teklifleri barkodla eşleştiği için bulunamaz. Önce EAN girilmeli.' } }
         if (!r.pazarlar.length) return { src, data: { urun: p.name, sonuc: 'Ürünün pazaryerinde aktif ilanı yok; karşılaştırılacak teklif yok.' } }
         return {
@@ -336,7 +341,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     if (has('rakip', 'buy box', 'kaça satıyor', 'kaça satılıyor')) {
       const p = findProduct(qRaw, st.products)
       if (!p) return { body: <p className="m-0">Hangi ürünün rakip fiyatlarına bakayım? Ürün adını ya da SKU'yu yazın; örneğin “Amber Wood ürününü rakipler kaça satıyor?”.</p>, sources: [{ label: 'Katalog', href: '#/catalog' }] }
-      const r = rivalsOf(p), src = [{ label: p.name, href: `#/catalog?p=${p.id}` }, { label: 'Fiyat ve kârlılık', href: '#/prices' }]
+      const r = rivalsOf(p), src = [{ label: p.name, href: `#/catalog?p=${p.id}` }, { label: 'Fiyat kuralları', href: '#/prices' }]
       if (!r.ean || !r.pazarlar.length) return { body: <RivalList r={r} />, sources: src }
       const ilk = r.pazarlar.filter(m => m.sira === 1).length, pahali = r.pazarlar.filter(m => m.sira > 1)
       return {
