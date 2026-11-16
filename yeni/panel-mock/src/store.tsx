@@ -134,6 +134,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       say(`${t.no}: ${next.label}`)
     },
     replyTicket: (id, text, v) => {
+      if (allTickets.find(x => x.id === id)?.status === 'closed') return say('Bu konuşma kapatılmış; yanıt gönderilmedi')
       keep('Destek yanıtı'); via.current = v
       setTickets(ts => ts.map(x => (x.id !== id ? x : { ...x, status: 'waiting', unread: false, t: NOW, msgs: [...x.msgs, { from: 'biz', text, t: NOW, user: ROLES[role].user }] })))
       log('Destek', 'Müşteriye yanıt gönderildi', 'konuşma ' + (allTickets.find(x => x.id === id)?.subject ?? id)); via.current = undefined
@@ -218,13 +219,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       log('Sipariş', `Sorun giderildi olarak işaretlendi: ${o.issue}`, 'sipariş ' + o.no); say('Sorun kapatıldı')
     },
     reveal: o => {
-      setRevealed(s => new Set(s).add(o.id))
+      setRevealed(s => new Set(s).add(role + '|' + o.id)) // açma rol başınadır: yönetici açınca depo rolünde veri açık kalmaz
       log('Kişisel veri', ROLES[role].pii === 'tam' ? 'Müşteri ad, adres ve iletişim bilgisi görüntülendi' : 'Müşteri teslimat adresi görüntülendi', 'sipariş ' + o.no)
     },
     advanceReturn: id => {
       const o = allOrders.find(x => x.id === id)!
       // Para iadesini (iade faturası dahil) yalnız finans yetkisi kapatır; depo ürünü teslim aldığını işaretler.
       if (o.ret === 'cozuldu') return
+      if (o.ret === 'geldi' && !ROLES[role].ops) return say('Ürün kontrolü ve stoğa dönüş depo (operasyon) yetkisiyle yapılır')
       if (o.ret === 'odeme' && !ROLES[role].finance) return say('Para iadesini yalnız muhasebe onaylayabilir')
       // Kontrol bitince (geldi → odeme) fiziki siparişin kalemleri depoya geri yazılır; deftere düzeltme hareketi eklenir (kararlar/0010).
       const back: Delta[] = o.ret === 'geldi' && o.supply === 'fiziki' ? o.items.map(it => ({ pid: it.pid, wh: o.wh, qty: it.qty, type: 'duzeltme' as const, ref: 'İade · ' + o.no })) : []
@@ -240,6 +242,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       say('Eşitleme kuyruğa alındı')
     },
     retryJob: (id, v) => {
+      if (!jobs.some(x => x.id === id && (x.status === 'basarisiz' || x.status === 'kismi'))) return say('Bu iş artık başarısız değil; yeniden denenmedi')
       keep('Eşitlemeyi yeniden deneme'); via.current = v
       const j0 = jobs.find(x => x.id === id)
       setJobs(j => j.map(x => (x.id === id ? { ...x, status: 'sirada', tries: 0, next: NOW, msg: 'Yeniden deneme kuyruğa alındı' } : x)))

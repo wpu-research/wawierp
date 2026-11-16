@@ -50,6 +50,8 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   const sees = (k: string) => R.nav === 'all' || R.nav.includes(k)
   const [mode, setMode] = useState<Mode>('onay')
   const [msgs, setMsgs] = useState<Msg[]>([])
+  // Rol değişince önceki rolün tutarları ve konuşması modelin bağlamında ve ekranda kalmasın.
+  useEffect(() => { api.current.length = 0; setMsgs([]) }, [st.role]) // eslint-disable-line react-hooks/exhaustive-deps
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const seq = useRef(1)
@@ -248,7 +250,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       case 'propose_action': {
         const kind = String(input.kind), summary = String(input.summary ?? '').slice(0, 140)
         if (mode === 'yanit') return { error: true, data: { hata: 'Kullanıcı "Yalnız yanıtla" düzeyini seçti; taslak hazırlanamaz. Kullanıcıya düzeyi "Hazırla, onayla" yapabileceğini söyle.' } }
-        if (kind === 'reply_ticket' && !sees('support')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) destek yanıtı gönderemez.` } }
+        if (kind === 'reply_ticket' && (!sees('support') || !R.ops)) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) destek yanıtı gönderemez.` } }
         const needOps = kind !== 'reply_ticket'
         if (needOps && !R.ops) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) bu işlemi yapamaz; asistan da onun adına yapamaz.` } }
         const made = (a: Omit<Act, 'state'>, extra: object = {}): ToolOut => { const act = auto({ ...a, state: 'bekliyor' }); return { act, data: { durum: act.auto ? 'Kullanıcı “Kendiliğinden” düzeyini seçtiği için bu düşük riskli işlem onay beklemeden uygulandı ve denetim kaydına yazıldı.' : 'Taslak hazır, kullanıcının onayını bekliyor. İşlem henüz yapılmadı.', kabul_edilen: a.ids.length || undefined, ...extra } } }
@@ -530,10 +532,10 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const a = m.act
     // Taslak hazırlandıktan sonra rol değişmiş olabilir: onay anında yetki yeniden denetlenir.
     if (ok && a.kind !== 'reply' && !R.ops) { st.notify(`Rolünüz (${R.label}) bu işlemi onaylayamaz`); return }
-    if (ok && a.kind === 'reply' && !sees('support')) { st.notify(`Rolünüz (${R.label}) destek yanıtı gönderemez`); return }
+    if (ok && a.kind === 'reply' && (!sees('support') || !R.ops)) { st.notify(`Rolünüz (${R.label}) destek yanıtı gönderemez`); return }
     if (ok && a.kind === 'retry' && !sees('sync')) { st.notify(`Rolünüz (${R.label}) eşitleme işini yeniden deneyemez`); return }
     if (ok) {
-      if (a.kind === 'plan') (a.steps ?? []).forEach(s => exec(s.kind, s.ids))
+      if (a.kind === 'plan') (a.steps ?? []).forEach(s => { if (s.kind === 'retry' && !sees('sync')) return; exec(s.kind, s.ids) })
       else if (a.kind === 'rule') st.notify('Kural yalnız öneri modunda başlatıldı (örnek)')
       else exec(a.kind, a.ids, a.payload)
     }

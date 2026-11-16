@@ -142,7 +142,7 @@ function stepOf(o: Order) {
 function OrderDrawer({ o, onClose }: { o: Order | null; onClose: () => void }) {
   const { role, revealed, reveal, createLabels, ship, issueInvoices, resolveIssue } = useStore()
   if (!o) return null
-  const R = ROLES[role], shown = revealed.has(o.id), step = stepOf(o), a = account(o.acc)
+  const R = ROLES[role], shown = revealed.has(role + '|' + o.id), step = stepOf(o), a = account(o.acc)
   const cancelled = o.status === 'iptal'
   return (
     <Drawer open title={<span className="num">{o.no}</span>} sub={<>{CHANNEL[a.type].label} · {a.name} · {fmtDT(o.t)} ({ago(o.t, NOW)})</>} onClose={onClose}

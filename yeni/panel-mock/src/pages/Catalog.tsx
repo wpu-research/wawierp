@@ -24,7 +24,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
   const [view, setView] = useState<View>('all')
   const [q, setQ] = useState('')
   const [openId, setOpenId] = useState<string | null>(null)
-  useEffect(() => { const v = query.get('view') as View | null; if (v) setView(v); const p = query.get('p'); if (p) setOpenId(p) }, [query])
+  useEffect(() => { const v = query.get('view') as View | null; if (v && ['all', 'ean', 'gorsel', 'kritik', 'negatif', 'sayim'].includes(v)) setView(v); const p = query.get('p'); if (p) setOpenId(p) }, [query])
 
   const rowsOf = (p: Product) => (Object.entries(p.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).filter(([w]) => !whId || w === whId)
   const has = (p: Product, ...st: string[]) => rowsOf(p).some(([, s]) => st.includes(stockState(s.fiziki)))

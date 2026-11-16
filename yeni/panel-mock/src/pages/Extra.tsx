@@ -195,7 +195,7 @@ export function Support() {
   const cur = tickets.find(t => t.id === selId) ?? rows[0] ?? null
   useEffect(() => { if (cur) readTicket(cur.id); setText('') }, [cur?.id])
   const o = cur ? allOrders.find(x => x.id === cur.orderId) : undefined
-  const can = role !== 'depo'
+  const can = ROLES[role].ops // müşteriye yanıt yazmak ve konuşmayı kapatmak operasyon yetkisidir (kararlar/0010 madde 3)
   return (
     <>
       <PageHead title="Destek" desc="Bütün pazaryeri ve mağaza mesajları tek gelen kutusunda. Her satırda durum rozeti vardır; konuşma siparişe bağlıdır."
@@ -338,7 +338,7 @@ export function B2BPage() {
               </ul>
             )}
             {can && (
-              <form className="mt-2 flex flex-wrap gap-2 items-end" onSubmit={e => { e.preventDefault(); const v = Number(amt.replace(',', '.')); if (v > 0) { addPayment(open.id, v, ref.trim() || 'Elle tahsilat'); setAmt(''); setRef('') } }}>
+              <form className="mt-2 flex flex-wrap gap-2 items-end" onSubmit={e => { e.preventDefault(); const v = Number(amt.trim().replace(/\./g, '').replace(',', '.')); if (Number.isFinite(v) && v > 0 && v < 1e9) { addPayment(open.id, v, ref.trim() || 'Elle tahsilat'); setAmt(''); setRef('') } }}>
                 <label className="text-xs text-mute flex-1 min-w-[110px]">Tutar ({open.cur})<input className={inp + ' mt-0.5'} inputMode="decimal" value={amt} onChange={e => setAmt(e.target.value)} required /></label>
                 <label className="text-xs text-mute flex-[2] min-w-[140px]">Referans<input className={inp + ' mt-0.5'} value={ref} onChange={e => setRef(e.target.value)} placeholder="ör. SEPA 14.11" /></label>
                 <Btn variant="primary" type="submit"><Plus size={14} />Tahsilat ekle</Btn>

@@ -396,4 +396,4 @@ export const ago = (t: number, now = NOW) => {
   const m = Math.max(0, Math.round((now - t) / 60_000))
   return m < 60 ? `${m} dk önce` : m < 48 * 60 ? `${Math.round(m / 60)} sa önce` : `${Math.round(m / 1440)} gün önce`
 }
-export const mask = (s: string) => s.split(' ').map(w => w[0] + '•••').join(' ')
+export const mask = (s: string) => s.split(' ').filter(Boolean).map(w => w[0] + '•••').join(' ')
