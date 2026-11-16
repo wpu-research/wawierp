@@ -4,7 +4,7 @@ import { CHANNEL, COMPANIES, NOW, OSTATUS, WAREHOUSES, account, ago, canLabel, c
 import { CARRIERS, TFLOW, TK, b2bTotals, carrierOf, type TStatus, type TkStatus } from '../data2'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
-import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone } from '../ui'
+import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone, rowProps } from '../ui'
 
 const inp = 'h-8 rounded-md border border-line bg-card px-2 text-sm w-full'
 const h3 = 'm-0 mb-1.5 text-xs font-semibold text-mute uppercase tracking-wide'
@@ -128,7 +128,7 @@ export function Transfers() {
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Transfer</th><th className={th}>Güzergâh</th><th className={th}>Taşıma</th><th className={th + ' text-right'}>Kalem</th><th className={th + ' text-right'}>Adet</th><th className={th}>Tahmini varış</th><th className={th}>Durum</th></tr></thead>
             <tbody>{transfers.map(t => { const late = t.eta < NOW && !['kabul', 'iptal', 'ulasti'].includes(t.status); return (
-              <tr key={t.id} className="hover:bg-bg cursor-pointer" onClick={() => setOpenId(t.id)}>
+              <tr key={t.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => setOpenId(t.id))}>
                 <td className={td + ' whitespace-nowrap'}><div className="font-medium num">{t.no}</div><div className="text-xs text-mute num">{fmtDT(t.created)}</div></td>
                 <td className={td + ' whitespace-nowrap'}>{whName(t.from)} <ArrowRight size={13} className="inline text-mute" /> {whName(t.to)}</td>
                 <td className={td + ' whitespace-nowrap'}>{t.mode}<span className="text-mute"> · {t.carrier}</span></td>
@@ -286,7 +286,7 @@ export function B2BPage() {
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Cari</th><th className={th}>Satıcı şirket</th><th className={th + ' text-right'}>Lokasyon</th><th className={th + ' text-right'}>Portal kullanıcısı</th><th className={th + ' text-right'}>Faturalanan</th><th className={th + ' text-right'}>Tahsil edilen</th><th className={th + ' text-right'}>Bakiye</th></tr></thead>
               <tbody>{b2b.map(c => { const t = b2bTotals(c); return (
-                <tr key={c.id} className="hover:bg-bg cursor-pointer" onClick={() => { setOpenId(c.id); setAmt(''); setRef('') }}>
+                <tr key={c.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => { setOpenId(c.id); setAmt(''); setRef('') })}>
                   <td className={td}><div className="font-medium">{c.name}</div><div className="text-xs text-mute num">{c.code} · {c.country}</div></td>
                   <td className={td + ' whitespace-nowrap'}>{compName(c.company)}</td>
                   <td className={td + ' text-right num'}>{c.locations.length}</td><td className={td + ' text-right num'}>{c.users.length}</td>

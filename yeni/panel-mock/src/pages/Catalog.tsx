@@ -6,7 +6,7 @@ import { Thumb } from '../Thumb'
 import { SimilarList, similarTo } from '../similar'
 import { RivalList, rivalsOf } from '../rivals'
 import { askAssistant } from '../Chat'
-import { Badge, Card, Chan, Drawer, Empty, PageHead, Pager, Stat, Tabs, sel, td, th, type Tone } from '../ui'
+import { Badge, Card, Chan, Drawer, Empty, PageHead, Pager, Stat, Tabs, sel, td, th, type Tone, rowProps } from '../ui'
 
 const LTONE: Record<ListingStatus, Tone> = { havuzda: 'neutral', hazirlaniyor: 'warn', onizleme: 'info', gonderildi: 'violet', aktif: 'ok', sorunlu: 'bad', kaldirildi: 'neutral' }
 export const listingBadge = (s: ListingStatus, reason?: string) => <Badge tone={LTONE[s]} title={reason}>{LISTING_FLOW.find(l => l.key === s)!.label}{reason ? ` · ${reason}` : ''}</Badge>
@@ -64,7 +64,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
               {rows.map(p => {
                 const sr = rowsOf(p), act = p.listings.filter(l => l.status === 'aktif').length, bad = p.listings.filter(l => l.status === 'sorunlu').length
                 return (
-                  <tr key={p.id} className="hover:bg-bg cursor-pointer" onClick={() => setOpenId(p.id)}>
+                  <tr key={p.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => setOpenId(p.id))}>
                     <td className={td}>
                       <div className="flex items-center gap-2.5">
                         <Thumb p={p} size={40} />

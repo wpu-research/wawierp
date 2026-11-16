@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { PRODUCTS, WAREHOUSES, ago, fmtNum, reservedMap, whName, type Order, type Product, type WhId } from '../data'
 import { Thumb } from '../Thumb'
 import { ROLES, useStore } from '../store'
-import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Stat, Tabs, sel, td, th } from '../ui'
+import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Stat, Tabs, sel, td, th, rowProps } from '../ui'
 
 interface Row { key: string; p: Product; wh: WhId; bin: string; fiziki: number | null; ayrilan: number; sat: number | null; min: number; tedarikci: number; orders: { o: Order; qty: number }[] }
 type SortKey = 'name' | 'sku' | 'wh' | 'bin' | 'fiziki' | 'ayrilan' | 'sat' | 'show' | 'n'
@@ -181,7 +181,7 @@ export function Reservations() {
             <thead><tr>{head('name', 'Ürün')}{head('sku', 'SKU')}{head('wh', 'Depo')}{head('bin', 'Raf')}{head('fiziki', 'Fiziki', true)}{head('ayrilan', 'Ayrılan', true)}{head('sat', 'Satılabilir', true)}{head('show', 'Kanallara gösterilen', true)}{head('n', 'Bekleyen sipariş', true)}</tr></thead>
             <tbody>
               {rows.map(r => (
-                <tr key={r.key} tabIndex={0} className="cursor-pointer hover:bg-bg focus:bg-bg" onClick={() => setOpenKey(r.key)} onKeyDown={e => e.key === 'Enter' && setOpenKey(r.key)}>
+                <tr key={r.key} className="cursor-pointer hover:bg-bg focus:bg-bg" {...rowProps(() => setOpenKey(r.key))}>
                   <td className={td + ' font-medium min-w-[200px]'}><div className="flex items-center gap-2.5"><Thumb p={r.p} size={32} />{r.p.name}</div></td><td className={td + ' num text-ink2'}>{r.p.sku}</td><td className={td}>{whName(r.wh)}</td><td className={td + ' num text-ink2'}>{r.bin}</td>
                   <td className={td + ' num text-right'}>{r.fiziki === null ? <Badge>Sayım yok</Badge> : fmtNum(r.fiziki)}</td>
                   <td className={td + ' num text-right'}>{fmtNum(r.ayrilan)}</td><td className={td + ' text-right'}><Sat v={r.sat} /></td>

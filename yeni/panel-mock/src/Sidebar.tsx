@@ -41,7 +41,7 @@ export default function Sidebar({ nav, page, badges, allowed, home, mini, setMin
       {!slim && <button onClick={() => pin(i.key)} aria-label={star ? `${i.label}: sabitlemeyi kaldır` : `${i.label}: sık kullanılanlara sabitle`} title={star ? 'Sabitlemeyi kaldır' : 'Sık kullanılanlara sabitle'}
         className={`absolute right-1.5 top-1.5 size-6 grid place-items-center rounded-md border-0 bg-navy opacity-0 group-hover/nav:opacity-100 focus-visible:opacity-100 ${star ? 'text-gold' : 'text-white/60 hover:text-white'}`}><Star size={13} fill={star ? 'currentColor' : 'none'} /></button>}
     </div>) }
-  const head = (t: string) => !slim && <div className="px-2.5 pt-3 pb-1 text-[10.5px] font-semibold uppercase tracking-[.08em] text-white/38">{t}</div>
+  const head = (t: string) => !slim && <div className="px-2.5 pt-3 pb-1 text-[10.5px] font-semibold uppercase tracking-[.08em] text-white/60">{t}</div>
 
   return (
     <nav className="flex flex-col h-full bg-navy text-white" aria-label="Ana menü">

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { RefreshCw, RotateCw } from 'lucide-react'
 import { CHANNEL, JOB, LISTING_FLOW, PRODUCTS, account, ago, company, fmtDT, fmtMoney, fmtNum, revenueOrders, whName, type Health, type JobStatus, type ListingStatus } from '../data'
 import { ROLES, useStore } from '../store'
-import { Badge, Btn, Card, Drawer, Empty, PageHead, Tabs, td, th, type Tone } from '../ui'
+import { Badge, Btn, Card, Drawer, Empty, PageHead, Tabs, td, th, type Tone, rowProps } from '../ui'
 import { listingBadge } from './Catalog'
 
 const HT: Record<Health, [Tone, string]> = { ok: ['ok', 'Güncel'], partial: ['warn', 'Kısmi'], failed: ['bad', 'Başarısız'], stale: ['bad', 'Bayat'] }
@@ -44,7 +44,7 @@ export default function Channels() {
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Kanal · hesap</th><th className={th}>Şirket · depo</th><th className={th + ' text-right'}>Sipariş 30 g</th><th className={th + ' text-right'}>Ciro 30 g</th><th className={th + ' text-right'}>Aktif ilan</th><th className={th + ' text-right'}>Sorunlu</th><th className={th}>Eşitleme</th></tr></thead>
             <tbody>{accounts.map(a => { const s = stats.get(a.id)!, [tone, label] = HT[a.health]; return (
-              <tr key={a.id} className="hover:bg-bg cursor-pointer" onClick={() => setOpenId(a.id)}>
+              <tr key={a.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => setOpenId(a.id))}>
                 <td className={td}><span className="inline-flex items-center gap-2"><span className="size-2.5 rounded-full" style={{ background: CHANNEL[a.type].color }} /><b className="font-medium">{CHANNEL[a.type].label}</b><span className="text-ink2">{a.name}</span></span></td>
                 <td className={td}>{company(a.company).name}<span className="text-mute"> · {whName(a.wh)}</span></td>
                 <td className={td + ' text-right num'}>{fmtNum(s.n)}</td>

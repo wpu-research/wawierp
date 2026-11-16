@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, ArrowRight, Bell, BellOff, CheckCheck, CircleCheck, Clock, ListTodo, MoreHorizontal, Settings2, Sparkles, UserCheck, X } from 'lucide-react'
 import { NOW, reservedMap, reservedQty, account, ago, dayKey, fmtNum, hasIssue, isOpen, overdue, toShip, type Order } from './data'
 import { ROLES, useStore } from './store'
+import { useDialog } from './ui'
 
 /* Bildirim merkezi. Panel kendiliğinden üç şey söyler:
    - "oldu"    : bilgi; bir şey yapmak gerekmez
@@ -33,7 +34,7 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
   const [menu, setMenu] = useState<string | null>(null)
   const [conf, setConf] = useState(false)
   const [resolved, setResolved] = useState<{ id: string; title: string }[]>([])
-  const box = useRef<HTMLDivElement>(null)
+  const box = useRef<HTMLDivElement>(null), dlg = useRef<HTMLDivElement>(null)
   const put = (f: (s: Saved) => Saved) => setSaved(s => { const n = f(s); try { localStorage.setItem(KEY, JSON.stringify(n)) } catch { /* özel pencere */ } return n })
 
   // ---- bildirimler: o anki kapsamdaki (şirket, depo, rol) veriden hesaplanır ----
@@ -114,6 +115,7 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
   const count = (k: Tab) => live.filter(n => k === 'hepsi' || n.kind === k).length
   const read = (n: Note) => put(s => (s.read.includes(sig(n)) ? s : { ...s, read: [...s.read.filter(x => !x.startsWith(n.id + '|')), sig(n)] }))
 
+  useDialog(open, () => setOpen(() => false), dlg)
   useEffect(() => {
     if (!open) return
     const out = (e: MouseEvent) => { if (box.current && !box.current.contains(e.target as Node)) setOpen(() => false) }
@@ -125,14 +127,14 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
   const row = (n: Note) => {
     const S = STYLE[n.kind], isNew = !saved.read.includes(sig(n)), owner = saved.owned[n.id]
     return (
-      <li key={n.id} className={`relative px-3 py-2.5 flex gap-2.5 ${isNew ? 'bg-brand-soft/35' : ''}`} onMouseEnter={() => isNew && read(n)}>
+      <li key={n.id} className={`relative px-3 py-2.5 flex gap-2.5 ${isNew ? 'bg-brand-soft/35' : ''}`} onMouseEnter={() => isNew && read(n)} onFocus={() => isNew && read(n)}>
         <span className={`size-8 rounded-full grid place-items-center shrink-0 ${S.cls}`}><S.icon size={15} /></span>
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-2"><p className={`m-0 flex-1 text-[13.5px] leading-snug ${isNew ? 'font-semibold' : 'font-medium'}`}>{n.title}</p>{isNew && <span className="mt-1.5 size-2 rounded-full bg-brand shrink-0" aria-label="Okunmadı" />}</div>
           {n.detail && <p className="m-0 mt-0.5 text-xs text-ink2 text-pretty">{n.detail}</p>}
           <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs">
-            <a href={n.href} onClick={() => { read(n); setOpen(() => false) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 text-ink no-underline hover:border-brand">{n.cta}<ArrowRight size={11} /></a>
-            {n.ask && <button onClick={() => { read(n); setOpen(() => false); onAsk(n.ask!) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 text-brand hover:border-brand"><Sparkles size={11} />Asistana hazırlat</button>}
+            <a href={n.href} onClick={() => { read(n); setOpen(() => false) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 pointer-coarse:h-10 text-ink no-underline hover:border-brand">{n.cta}<ArrowRight size={11} /></a>
+            {n.ask && <button onClick={() => { read(n); setOpen(() => false); onAsk(n.ask!) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 pointer-coarse:h-10 text-brand hover:border-brand"><Sparkles size={11} />Asistana hazırlat</button>}
             {owner && <span className="inline-flex items-center gap-1 text-ok"><UserCheck size={12} />{owner} ilgileniyor</span>}
             <span className="ml-auto text-mute whitespace-nowrap">{ago(n.t)}</span>
             {n.kind !== 'oldu' && <button onClick={() => setMenu(m => (m === n.id ? null : n.id))} aria-label="Diğer seçenekler" aria-expanded={menu === n.id} className="border-0 bg-transparent p-0.5 text-mute hover:text-ink rounded"><MoreHorizontal size={15} /></button>}
@@ -157,7 +159,7 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
         {unread.length > 0 && !saved.quiet && <span className="num absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-bad text-white text-[11px] font-semibold grid place-items-center">{unread.length}</span>}
       </button>
       {open && (
-        <div role="dialog" aria-label="Bildirimler" style={{ top: box.current ? box.current.getBoundingClientRect().bottom + 8 : 56 }} className="fixed z-50 inset-x-2 sm:left-auto sm:right-3 sm:w-[420px] rounded-2xl border border-line bg-card shadow-2xl overflow-hidden">
+        <div ref={dlg} role="dialog" aria-modal="false" aria-label="Bildirimler" style={{ top: box.current ? box.current.getBoundingClientRect().bottom + 8 : 56 }} className="fixed z-50 inset-x-2 sm:left-auto sm:right-3 sm:w-[420px] rounded-2xl border border-line bg-card shadow-2xl overflow-hidden">
           <div className="flex items-center gap-2 px-3 h-11 border-b border-line">
             <b className="text-sm font-semibold flex-1">Bildirimler</b>
             <button onClick={() => put(s => ({ ...s, read: live.map(sig) }))} disabled={!unread.length} className="inline-flex items-center gap-1 border-0 bg-transparent text-xs text-brand disabled:text-mute"><CheckCheck size={13} />Tümünü okundu say</button>

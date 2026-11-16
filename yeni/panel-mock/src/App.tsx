@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, ChevronRight, LayoutDashboard, LifeBuoy, Lightbulb, ListChecks, Menu, MessagesSquare, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Undo2, UserRound, Users, Workflow, X } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, account, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
-import { PageIcon, sel } from './ui'
+import { PageIcon, sel, useDialog } from './ui'
 import { Logo } from './logo'
 import Agent from './Agent'
 import Notifications from './Notifications'
@@ -76,6 +76,12 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   const [agent, setAgent] = useState(false)
   const [find, setFind] = useState(false)
   const [keys, setKeys] = useState(false)
+  // Tek harfli kısayollar (WCAG 2.1.4) kapatılabilir: ekran okuyucu ya da ses komutu kullananlar yanlışlıkla tetiklemesin.
+  const [single, setSingle] = useState(() => { try { return localStorage.getItem('wawi-single-keys') !== 'off' } catch { return true } })
+  const singleRef = useRef(single); singleRef.current = single
+  const putSingle = (v: boolean) => { setSingle(v); try { localStorage.setItem('wawi-single-keys', v ? 'on' : 'off') } catch { /* özel pencere */ } }
+  const menuRef = useRef<HTMLDivElement>(null)
+  useDialog(menu, () => setMenu(false), menuRef)
   const [bell, setBell] = useState(false)
   const [ask, setAsk] = useState<{ text: string; n: number } | null>(null)
   const undoRef = useRef(st.undoLast); undoRef.current = st.undoLast
@@ -91,6 +97,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
       if (mod || e.altKey) return
       if (e.key === '?') { setKeys(v => !v); return }
       if (k === 'escape') { setKeys(false); return }
+      if (!singleRef.current) return
       if (Date.now() - g < 1500 && GOTO[k]) { location.hash = '#/' + GOTO[k][0]; g = 0; return }
       if (k === 'g') { g = Date.now(); return }
       if (k === 'a') setAgent(v => !v)
@@ -141,10 +148,10 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   return (
     <div className={`min-h-screen transition-[padding] duration-200 ${mini ? 'md:pl-[68px]' : 'md:pl-64'}`}>
       <aside className={`hidden md:block fixed inset-y-0 left-0 z-30 transition-[width] duration-200 ${mini ? 'w-[68px]' : 'w-64'}`}>{side()}</aside>
-      {menu && <div className="md:hidden fixed inset-0 z-50 flex"><div className="slide-in w-72 max-w-[85vw]">{side(() => setMenu(false))}</div><div className="flex-1 bg-black/45" onClick={() => setMenu(false)} /></div>}
+      {menu && <div ref={menuRef} role="dialog" aria-modal="true" aria-label="Menü" className="md:hidden fixed inset-0 z-50 flex"><div className="slide-in w-72 max-w-[85vw]">{side(() => setMenu(false))}</div><div className="flex-1 bg-black/45" onClick={() => setMenu(false)} /></div>}
 
       <header className="sticky top-0 z-20 bg-card/85 backdrop-blur-md border-b border-line px-3 md:px-5 min-h-14 py-2 flex flex-wrap items-center gap-2">
-        <button className="md:hidden border border-line rounded-md bg-card p-1.5 text-ink2" aria-label="Menüyü aç" onClick={() => setMenu(true)}><Menu size={18} /></button>
+        <button className="md:hidden border border-line rounded-md bg-card p-1.5 text-ink2" aria-label="Menüyü aç" aria-expanded={menu} onClick={() => setMenu(true)}><Menu size={18} /></button>
         {here && <div className="hidden lg:flex items-center gap-1 text-[13px] mr-2 min-w-0">{here.group && <><span className="text-mute">{here.group}</span><ChevronRight size={13} className="text-mute" /></>}<b className="font-semibold truncate">{here.label}</b></div>}
         <label className="flex items-center gap-1.5 text-xs text-mute">Şirket
           <select className={sel} value={st.companyId} onChange={e => st.setCompanyId(e.target.value)}>
@@ -173,13 +180,13 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
         {agent ? <X size={24} /> : <Logo height={38} markOnly />}
       </button>
       {find && <Palette onClose={() => setFind(false)} allowed={allowed} />}
-      {(st.toast || st.undo) && (
-        <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg max-w-[92vw]">
+      <div role="status" aria-live="polite">{(st.toast || st.undo) && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg max-w-[92vw]">
           <span className="truncate">{st.toast ?? `Son işlem: ${st.undo!.label}`}</span>
-          {st.undo && <button onClick={st.undoLast} className="shrink-0 inline-flex items-center gap-1 rounded-md border border-bg/40 bg-transparent text-bg px-2 h-7 text-xs font-semibold hover:bg-bg/15"><Undo2 size={13} />Geri al</button>}
+          {st.undo && <button onClick={st.undoLast} className="shrink-0 inline-flex items-center gap-1 rounded-md border border-bg/40 bg-transparent text-bg px-2 h-7 pointer-coarse:h-11 text-xs font-semibold hover:bg-bg/15"><Undo2 size={13} />Geri al</button>}
         </div>
-      )}
-      {keys && <Shortcuts onClose={() => setKeys(false)} />}
+      )}</div>
+      {keys && <Shortcuts onClose={() => setKeys(false)} single={single} onSingle={putSingle} />}
     </div>
   )
 }
@@ -189,7 +196,8 @@ function Palette({ onClose, allowed }: { onClose: () => void; allowed: (k: strin
   const st = useStore()
   const [q, setQ] = useState('')
   const [at, setAt] = useState(0)
-  const box = useRef<HTMLInputElement>(null)
+  const box = useRef<HTMLInputElement>(null), dlg = useRef<HTMLDivElement>(null)
+  useDialog(true, onClose, dlg)
   useEffect(() => { box.current?.focus() }, [])
   const rows = useMemo(() => {
     const n = q.trim().toLocaleLowerCase('tr-TR'), hit = (s: string) => s.toLocaleLowerCase('tr-TR').includes(n)
@@ -206,7 +214,7 @@ function Palette({ onClose, allowed }: { onClose: () => void; allowed: (k: strin
   const go = (href: string) => { location.hash = href; onClose() }
   return (
     <div className="fixed inset-0 z-[60] bg-black/40 flex items-start justify-center pt-[12vh] px-3" onClick={onClose}>
-      <div role="dialog" aria-label="Arama" className="w-full max-w-xl rounded-2xl bg-card border border-line shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div ref={dlg} role="dialog" aria-modal="true" aria-label="Arama" className="w-full max-w-xl rounded-2xl bg-card border border-line shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="flex items-center gap-2 px-4 border-b border-line">
           <Search size={16} className="text-mute shrink-0" />
           <input ref={box} value={q} onChange={e => setQ(e.target.value)} placeholder="Ekran, sipariş numarası ya da ürün ara" aria-label="Ara" className="flex-1 h-12 bg-transparent border-0 outline-none text-[15px]"
@@ -227,11 +235,13 @@ function Palette({ onClose, allowed }: { onClose: () => void; allowed: (k: strin
 }
 
 const GOTO: Record<string, [string, string]> = { h: ['overview', 'Genel bakış'], o: ['orders', 'Siparişler'], t: ['picking', 'Toplama listesi'], i: ['returns', 'İadeler'], m: ['messages', 'Mesajlar'], k: ['catalog', 'Katalog'], s: ['stock', 'Stok defteri'], r: ['reservations', 'Stok ayırma'], e: ['sync', 'Eşitleme işleri'], u: ['alerts', 'Uyarılar'], f: ['finance', 'Faturalar'] }
-function Shortcuts({ onClose }: { onClose: () => void }) {
+function Shortcuts({ onClose, single, onSingle }: { onClose: () => void; single: boolean; onSingle: (v: boolean) => void }) {
+  const dlg = useRef<HTMLDivElement>(null)
+  useDialog(true, onClose, dlg)
   const K = ({ children }: { children: string }) => <kbd className="rounded border border-line bg-bg px-1.5 py-0.5 text-[11px] font-sans">{children}</kbd>
   return (
     <div className="fixed inset-0 z-[60] bg-black/40 grid place-items-center px-3" onClick={onClose}>
-      <div role="dialog" aria-label="Klavye kısayolları" className="w-full max-w-md rounded-2xl bg-card border border-line shadow-2xl p-5" onClick={e => e.stopPropagation()}>
+      <div ref={dlg} role="dialog" aria-modal="true" aria-label="Klavye kısayolları" className="w-full max-w-md rounded-2xl bg-card border border-line shadow-2xl p-5" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between"><h2 className="m-0 text-base font-semibold">Klavye kısayolları</h2><button onClick={onClose} aria-label="Kapat" className="border-0 bg-transparent p-1 text-ink2"><X size={18} /></button></div>
         <dl className="m-0 mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm items-center">
           <dt><K>Ctrl</K> <K>K</K></dt><dd className="m-0">Her yerden arama</dd>
@@ -241,7 +251,8 @@ function Shortcuts({ onClose }: { onClose: () => void }) {
           <dt><K>?</K></dt><dd className="m-0">Bu listeyi göster</dd>
           {Object.entries(GOTO).map(([k, [, l]]) => <div key={k} className="contents"><dt><K>G</K> <K>{k.toUpperCase()}</K></dt><dd className="m-0">{l}</dd></div>)}
         </dl>
-        <p className="m-0 mt-3 text-xs text-mute">Bir yazı alanındayken harf kısayolları çalışmaz.</p>
+        <label className="mt-3 flex items-center gap-2 text-sm"><input type="checkbox" checked={single} onChange={e => onSingle(e.target.checked)} /> Tek harfli kısayolları kullan (A, B, G + harf)</label>
+        <p className="m-0 mt-1 text-xs text-mute">Ctrl K, Ctrl Z ve ? her zaman çalışır. Bir yazı alanındayken harf kısayolları çalışmaz.</p>
       </div>
     </div>
   )

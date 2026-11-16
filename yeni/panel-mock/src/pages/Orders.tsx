@@ -3,7 +3,7 @@ import { Bookmark, Check, Eye, FileText, Lock, Search, Tag, Truck, X } from 'luc
 import { CHANNEL, NOW, OSTATUS, SUPPLY, account, ago, canInvoice, canLabel, canShip, company, dropWaiting, fmtDT, fmtMoney, hasIssue, isOpen, mask, overdue, product, toShip, whName, type ChannelType, type OStatus, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb, ThumbStack } from '../Thumb'
-import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Pager, Tabs, sel, td, th, type Tone } from '../ui'
+import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Pager, Tabs, sel, td, th, type Tone, rowProps } from '../ui'
 
 type View = 'all' | 'toship' | 'overdue' | 'drop' | 'issue' | 'shipped' | 'closed'
 const VIEWS: { key: View; label: string; f: (o: Order) => boolean; tone?: Tone }[] = [
@@ -93,7 +93,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
             </tr></thead>
             <tbody>
               {pageRows.map(o => (
-                <tr key={o.id} className="hover:bg-bg cursor-pointer" onClick={() => setOpenId(o.id)}>
+                <tr key={o.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => setOpenId(o.id))}>
                   <td className={td} onClick={e => e.stopPropagation()}><input type="checkbox" aria-label={`${o.no} seç`} checked={picked.has(o.id)} onChange={() => toggle(o.id)} /></td>
                   <td className={td + ' whitespace-nowrap'}><div className="flex items-center gap-2.5"><ThumbStack items={o.items.map(i => product(i.pid))} /><div><div className="font-medium num">{o.no}</div><div className="text-xs text-mute num">{fmtDT(o.t)}</div></div></div></td>
                   <td className={td + ' whitespace-nowrap'}><Chan acc={o.acc} /></td>

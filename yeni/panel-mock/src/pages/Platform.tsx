@@ -3,7 +3,7 @@ import { Check, CircleDot, Copy, RefreshCw, X } from 'lucide-react'
 import { CHANNEL, JOB, NOW, VAT, ago, fmtDT, fmtMoney, fmtNum, type ChannelType, type Country, type Cur, type Health, type JobStatus } from '../data'
 import { COMPANIES, WAREHOUSES } from '../data'
 import { ROLES, useStore, type Role } from '../store'
-import { Badge, Btn, Card, Drawer, PageHead, Stat, td, th, sel, type Tone } from '../ui'
+import { Badge, Btn, Card, Drawer, PageHead, Stat, td, th, sel, type Tone, rowProps } from '../ui'
 
 const inp = 'h-8 rounded-md border border-line bg-card px-2 text-sm w-full min-w-0'
 const DAY = 86_400_000
@@ -195,7 +195,7 @@ export function Developers() {
         <Card title="Bildirim uçları (webhook)" pad={false} right={<Ex />}>
           <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Adres</th><th className={th}>Olaylar</th><th className={th}>Durum</th><th className={th}>Son teslim</th><th className={th + ' text-right'}>Başarı</th></tr></thead>
-            <tbody>{HOOKS.map(h => <tr key={h.id} className="hover:bg-bg cursor-pointer" onClick={() => setHook(h.id)}>
+            <tbody>{HOOKS.map(h => <tr key={h.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => setHook(h.id))}>
               <td className={td}><code>{h.url}</code></td>
               <td className={td}><span className="flex flex-wrap gap-1">{h.events.map(e => <Badge key={e}>{e}</Badge>)}</span></td>
               <td className={td}>{h.on ? <Badge tone="ok">Açık</Badge> : <Badge tone="neutral">Kapalı</Badge>}</td>

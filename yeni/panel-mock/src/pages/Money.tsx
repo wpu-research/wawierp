@@ -2,7 +2,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowDown, ArrowUp, Upload } from 'lucide-react'
 import { CHANNEL, COMM, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, type ChannelType, type Cur, type Order } from '../data'
 import { ROLES, useStore } from '../store'
-import { Badge, Btn, Card, Drawer, Empty, HBars, PageHead, Stat, sel, td, th } from '../ui'
+import { Badge, Btn, Card, Drawer, Empty, HBars, PageHead, Stat, sel, td, th, rowProps } from '../ui'
 
 const D = 864e5
 const pct = (v: number) => (v * 100).toLocaleString('tr-TR', { maximumFractionDigits: 1 }) + '%'
@@ -86,7 +86,7 @@ export function BankMatch() {
           <Card pad={false}><div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Tarih</th><th className={th}>Referans</th><th className={th + ' text-right'}>Tutar</th><th className={th}>Durum</th><th className={th + ' text-right'}>Güven</th></tr></thead>
             <tbody>{lines.map(l => (
-              <tr key={l.id} onClick={() => setSid(l.id)} className={`cursor-pointer hover:bg-bg ${sel0?.id === l.id ? 'bg-bg' : ''}`}>
+              <tr key={l.id} {...rowProps(() => setSid(l.id))} className={`cursor-pointer hover:bg-bg ${sel0?.id === l.id ? 'bg-bg' : ''}`}>
                 <td className={td + ' num whitespace-nowrap'}><button className="border-0 bg-transparent p-0 text-inherit cursor-pointer" onClick={() => setSid(l.id)} aria-label={`${l.id} satırını seç`}>{dShort(l.t)}</button></td>
                 <td className={td}>{l.ref}</td><td className={td + ' num text-right whitespace-nowrap'}>{fmtMoney(l.amount, l.cur)}</td>
                 <td className={td}>{badge(l)}</td><td className={td + ' num text-right'}>{conf(l) ? `%${Math.min(99, conf(l))}` : '—'}</td>
