@@ -40,6 +40,8 @@ const plural = (n: number, w: string) => `${fmtNum(n)} ${w}`
 export default function Agent({ open, onClose, ask }: { open: boolean; onClose: () => void; ask?: { text: string; n: number } | null }) {
   const st = useStore()
   const R = ROLES[st.role]
+  // Asistan, kullanıcının menüde göremediği ekranın verisini de vermez (rol sınırı arayüzle aynıdır).
+  const sees = (k: string) => R.nav === 'all' || R.nav.includes(k)
   const [mode, setMode] = useState<Mode>('onay')
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [text, setText] = useState('')
@@ -153,6 +155,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         return { src: [{ label: view.startsWith('label') ? 'Kargo etiketleri' : 'Siparişler', href: hrefView }], data: { toplam: l.length, kanal_dagilimi: byChannel(l), satirlar: l.slice(0, int(input.limit, 25, 50)).map(row) } }
       }
       case 'get_channel_health':
+        if (!sees('channels') && !sees('sync')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) kanal sağlığı ekranını görmez.` } }
         return { src: [{ label: 'Kanallar', href: '#/channels' }, { label: 'Eşitleme işleri', href: '#/sync' }], data: {
           hesap_sayisi: st.accounts.length,
           sorunlu_hesaplar: st.accounts.filter(a => a.health !== 'ok').map(a => ({ hesap: a.name, kanal: CHANNEL[a.type].label, durum: a.health, not: a.note ?? null, son_esitleme_saat_once: hours(a.lastSync) })),
@@ -173,6 +176,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         return { src: [{ label: 'İadeler', href: '#/returns' }], data: { toplam: rets.length, asamalar: RET.map(r => ({ asama: r.label, adet: rets.filter(o => o.ret === r.key).length })) } }
       }
       case 'get_open_tickets': {
+        if (!sees('support')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) destek konuşmalarını görmez.` } }
         const open = st.tickets.filter(t => t.status === 'open').sort((a, b) => a.t - b.t)
         return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: [...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null })) } }
       }
@@ -235,6 +239,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       case 'propose_action': {
         const kind = String(input.kind), summary = String(input.summary ?? '').slice(0, 140)
         if (mode === 'yanit') return { error: true, data: { hata: 'Kullanıcı "Yalnız yanıtla" düzeyini seçti; taslak hazırlanamaz. Kullanıcıya düzeyi "Hazırla, onayla" yapabileceğini söyle.' } }
+        if (kind === 'reply_ticket' && !sees('support')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) destek yanıtı gönderemez.` } }
         const needOps = kind !== 'reply_ticket'
         if (needOps && !R.ops) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) bu işlemi yapamaz; asistan da onun adına yapamaz.` } }
         const made = (a: Omit<Act, 'state'>, extra: object = {}): ToolOut => { const act = auto({ ...a, state: 'bekliyor' }); return { act, data: { durum: act.auto ? 'Kullanıcı “Kendiliğinden” düzeyini seçtiği için bu düşük riskli işlem onay beklemeden uygulandı ve denetim kaydına yazıldı.' : 'Taslak hazır, kullanıcının onayını bekliyor. İşlem henüz yapılmadı.', kabul_edilen: a.ids.length || undefined, ...extra } } }
@@ -518,7 +523,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     if (ok && a.kind !== 'reply' && !R.ops) { st.notify(`Rolünüz (${R.label}) bu işlemi onaylayamaz`); return }
     if (ok) {
       if (a.kind === 'plan') (a.steps ?? []).forEach(s => exec(s.kind, s.ids))
-      else if (a.kind === 'rule') st.notify('Kural yalnız öneri modunda başlatıldı (mock)')
+      else if (a.kind === 'rule') st.notify('Kural yalnız öneri modunda başlatıldı (örnek)')
       else exec(a.kind, a.ids, a.payload)
     }
     // Nota taslağın başlığı yazılmaz: başlığı model üretir ve müşteri metninden etkilenmiş olabilir; not ise güvenilen bölüme gider.

@@ -65,7 +65,7 @@ export function QualityQueue() {
   const total = products.filter(p => kindsOf(p).length).length
 
   const canSave = !!cur && canEdit && (!cur.ean ? eanOk(form.ean) : true) && (!cur.image ? form.img : true)
-  const save = () => { if (!cur || !canSave) return; setFixed(s => new Set(s).add(cur.id)); notify(`${cur.name} düzeltildi (mock; kayıt tarayıcıda tutulur)`) }
+  const save = () => { if (!cur || !canSave) return; setFixed(s => new Set(s).add(cur.id)); notify(`${cur.name} düzeltildi (örnek veri; kayıt yalnız bu tarayıcıda tutulur)`) }
   const skip = () => { if (cur) setSkipped(s => [...s.filter(x => x !== cur.id), cur.id]) }
   const h = useRef({ save, skip, tab }); h.current = { save, skip, tab }
   useEffect(() => {
@@ -150,7 +150,7 @@ export function QualityQueue() {
                 <Card key={g.key} title={g.why} right={st ? <Badge tone={st === 'merged' ? 'ok' : 'neutral'}>{st === 'merged' ? 'Birleştirme talebi' : 'Farklı ürün'}</Badge> : <Badge tone="warn">Karar bekliyor</Badge>}>
                   <ul className="m-0 pl-4 text-sm space-y-0.5">{g.items.map(p => <li key={p.id}>{p.name} <span className="text-mute">· {p.sku}{p.ean ? ` · ${p.ean}` : ''}</span></li>)}</ul>
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <Btn disabled={!canEdit || !!st} onClick={() => { if (window.confirm('Birleştirme gerçek sistemde geri alınamaz ve yönetici onayı ister. Bu mock\'ta yalnızca talep olarak işaretlenir. Devam edilsin mi?')) { setDupDone(d => ({ ...d, [g.key]: 'merged' })); notify('Birleştirme talebi yöneticiye iletildi (mock)') } }}>Birleştir</Btn>
+                    <Btn disabled={!canEdit || !!st} onClick={() => { if (window.confirm('Birleştirme gerçek sistemde geri alınamaz ve yönetici onayı ister. Bu taslakta yalnızca talep olarak işaretlenir. Devam edilsin mi?')) { setDupDone(d => ({ ...d, [g.key]: 'merged' })); notify('Birleştirme talebi yöneticiye iletildi (mock)') } }}>Birleştir</Btn>
                     <Btn variant="ghost" disabled={!canEdit || !!st} onClick={() => { setDupDone(d => ({ ...d, [g.key]: 'diff' })); notify('Farklı ürün olarak işaretlendi') }}>Farklı ürün</Btn>
                   </div>
                 </Card>)
@@ -243,7 +243,7 @@ export function ContentStudio() {
       <Card title="Çeviri" right={<Badge tone="violet">örnek</Badge>} className="mt-3">
         <div className="flex gap-1 mb-2" role="group" aria-label="Dil">{LANGS.map(l => <Btn key={l} variant={l === lang ? 'primary' : 'outline'} onClick={() => setLang(l)} aria-pressed={l === lang}>{l}</Btn>)}</div>
         {lang === 'TR' || ai ? <p className="m-0 text-sm">{title}</p> : tr ? <p className="m-0 text-sm"><b>{p.brand} {tr}</b></p>
-          : <p className="m-0 text-sm text-mute">gerçek sistemde yapay zekâ çevirir; bu mock'ta örnek gösterilir. (Sabit çeviri yalnızca {Object.keys(TR_SAMPLES).length} ürün için var.)</p>}
+          : <p className="m-0 text-sm text-mute">gerçek sistemde yapay zekâ çevirir; bu taslakta örnek gösterilir. (Sabit çeviri yalnızca {Object.keys(TR_SAMPLES).length} ürün için var.)</p>}
       </Card>
       <Card title="Son kabul edilen taslaklar" className="mt-3" pad={false}>
         {acc.length === 0 ? <Empty>Henüz taslak kabul edilmedi.</Empty> : <div className="overflow-x-auto"><table className="w-full border-collapse text-sm"><thead><tr><th className={th}>#</th><th className={th}>Kanal</th><th className={th}>Başlık</th><th className={th}>Şablon</th><th className={th + ' text-right'}>Karakter</th></tr></thead><tbody>

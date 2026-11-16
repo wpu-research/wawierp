@@ -1,7 +1,7 @@
 # WawiERP yeni panel — mock
 
 Yeniden tasarım ilkelerini (`docs/03` §5, `docs/05` §7, `docs/11`) ekranda gösteren tıklanabilir taslak.
-Arka uç yok; veri `src/data.ts` içinde üretilir.
+Veritabanı ve pazaryeri bağlantısı yok; veri `src/data.ts`, `src/data2.ts` ve `src/dist30.json` içinde üretilir. `server.mjs` (statik sunum, şifre kapısı) ve `assistant.mjs` (asistan ucu) vardır. Taslak panel gerçek sistemin davranış şartnamesidir (`kararlar/0009`).
 
 ```
 npm install
@@ -10,7 +10,7 @@ npm run build    # dist/index.html (açık ana sayfa) ve dist/panel.html (panel)
 npm start        # server.mjs: / açık, /panel şifreli (PANEL_PASSWORD gerekir)
 ```
 
-Veri: sipariş sayıları ve mağaza dağılımı `raw/siparis-dagilimi-30gun.json`'daki gerçek 30 günlük toplamlardan;
+Veri: sipariş sayıları ve mağaza dağılımı `src/dist30.json`'daki (`raw/siparis-dagilimi-30gun.json`'ın kopyası) gerçek 30 günlük toplamlardan;
 sipariş satırları, müşteriler, ürünler ve stoklar uydurma. Şirket–hesap eşlemesinin bir kısmı varsayım.
 Yığın: Vite + React + TypeScript + Tailwind (`kararlar/0004`). shadcn/ui bileşenleri henüz eklenmedi; `src/ui.tsx` geçici.
 
@@ -21,7 +21,7 @@ https://panel-production-80dcabfa.up.railway.app — proje `wawierp-panel-mock`,
 İki sayfa ayrı derlenir; ana sayfa paketi `src/data*.ts` içe aktarmaz, yani panel verisi açık sayfaya sızmaz. Bunu bozmayın.
 Kanal logoları `src/assets/marks/` altında, canlı sitenin `channel-marks` klasöründen.
 Servis GitHub deposuna bağlı (`wpu-research/wawierp`, dal `main`, kök `yeni/panel-mock`): `main`'e push yeniden yayınlar.
-`/` herkese açık tanıtım sayfası; `/panel` şifreli panel (içinde `#/overview` ve diğer ekranlar). İki sayfa ayrı derlenir ki ana sayfa paketi panel verisini içermesin.
+`/healthz` şifresiz ve her zaman 200 döner (Railway sağlık denetimi). Sunucu `SIGTERM` alınca süren istekleri bitirip kapanır.
 Geliştirme sunucusunda (`npm run dev`) panel `/panel.html` adresindedir.
 
 ## Asistan
@@ -39,7 +39,8 @@ Sağ alt köşedeki **W** düğmesi asistan panelini açar (`src/Agent.tsx`). İ
 - tek seferde en fazla 25 kayda işlem önerilir
 - asistan, kendisine yazan rolün yetkisinden fazlasını yapamaz; yetki onay anında yeniden denetlenir
 - para iadesi, fiyat değişikliği, iptal ve toplu silme için araç yoktur
-- müşteri adı ve iletişim bilgisi asistana verilmez; müşteri mesajları veri olarak okunur, talimat olarak değil
+- müşteri adı, adresi ve iletişim bilgisi asistana verilmez; ancak destek konuşmalarının mesaj metni (`get_open_tickets`) olduğu gibi gider (içinde müşterinin yazdığı kişisel bilgi olabilir; maskeleme açık iştir, `kararlar/0009`). Mesajlar veri olarak okunur, talimat olarak değil
+- asistan, kullanıcının menüde göremediği ekranın verisini (destek, kanal sağlığı) vermez
 - "Kendiliğinden" düzeyinde yalnız başarısız eşitlemeyi yeniden deneme onaysız uygulanır; diğer her iş onay bekler
 - her asistan işlemi denetim kaydına "asistan aracılığıyla" notuyla yazılır
 - panel açıldığında asistan, sormadan fark ettiklerini bildirir; "Günü kapat" çok adımlı bir plan hazırlar
@@ -48,14 +49,17 @@ Sunucu ayarları (Railway değişkenleri):
 
 | Değişken | Anlamı | Varsayılan |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Yapay zekâ anahtarı; yoksa hazır senaryolar çalışır | yok |
+| `PORT` | Sunucu portu | 3000 |
+| `PANEL_USER` | Panel kullanıcı adı | `wawi` |
+| `PANEL_PASSWORD` | Panel şifresi; yoksa `/panel` ve `/api/*` kapalı (503) | yok |
+| `ANTHROPIC_API_KEY` | Yapay zekâ anahtarı (`ANTHROPIC_AUTH_TOKEN` de kabul edilir); yoksa hazır senaryolar çalışır | yok |
 | `ASSISTANT_MODEL` | Kullanılacak model | `claude-opus-5-5` |
 | `ASSISTANT_PER_MINUTE` | Adres başına dakikalık istek sınırı | 20 |
-| `ASSISTANT_PER_DAY` | Günlük toplam istek sınırı | 100 |
+| `ASSISTANT_PER_DAY` | Günlük toplam istek sınırı (İstanbul gününe göre; yalnız geçerli istekler sayılır; ilan metni ucunun kotası ayrıdır) | 100 |
 | `ASSISTANT_MAX_BODY_KB` | İstek gövdesi üst sınırı (KB) | 300 |
 | `ASSISTANT_FALLBACKS` | `off` yapılırsa yedek modele geçiş kapanır | açık |
 
-Asistan ucu panelle aynı şifrenin arkasındadır. Mock'ta rol bilgisi tarayıcıdan gelir; gerçek sistemde oturumdan okunacak ve araçlar sunucuda çalışacak.
+Asistan ucu panelle aynı şifrenin arkasındadır; yalnız `application/json` gövdesi ve aynı `Origin` ile POST kabul eder (başka sitenin açık oturumu kullanıp maliyet yazdırmasını önler). Yapay zekâ çağrısı 90 sn'de zaman aşımına uğrar, istemci koparsa iptal edilir. Mock'ta rol bilgisi tarayıcıdan gelir; gerçek sistemde oturumdan okunacak ve araçlar sunucuda çalışacak.
 
 ## Yeni ekranlar
 
@@ -153,5 +157,5 @@ Bir ürüne, stoktaki **diğer markalardan** en yakın ürünleri gösterir (`sr
 Canlıda `/sunum/` adresi, yenilikler sunumunu ve tanıtım videosunu **şifresiz**, herkese açık sunar (15.11.2026 kararı). Panel (`/panel`) ve asistan ucu şifreli kalır. Sunum herkese açık olduğu için içine müşteri adı, kişisel veri ya da gizli rakam konmaz.
 
 - Dosyalar `sunum/` klasöründedir (`index.html`, `img/`, video, kapak). Bu klasör, depodaki üst `sunum/` klasörünün **kopyasıdır**; Railway yalnız `yeni/panel-mock` klasörünü gördüğü için kopya gerekir.
-- Sunumu ya da videoyu değiştirince `sunum/yayina-kopyala.sh` çalıştırılır, sonra commitlenip gönderilir.
+- Sunumu ya da videoyu değiştirince depo kökündeki `sunum/yayina-kopyala.sh` çalıştırılır (önce geçici klasöre kopyalar ve doğrular, sonra yerine koyar), sonra commitlenip gönderilir.
 - Sunucu yalnız açılışta listelediği dosyaları verir; video ileri geri sarılabilsin diye parça isteğini (Range) destekler.

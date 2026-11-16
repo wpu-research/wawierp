@@ -113,12 +113,12 @@ export function ListingWizard() {
           </div>
           <Card title="Stok kaynağı"><Badge tone="info">Otomatik: fiziki, yoksa drop</Badge><p className="m-0 mt-2 text-sm text-ink2">Her ilan için önce depodaki fiziki stok kullanılır; fiziki stok yoksa tedarikçi (drop) stoğuna düşülür.</p></Card>
           {done && (
-            <Card title="Sonuç (simülasyon)"><p className="m-0 text-sm"><b className="num">{done.q}</b> ilan kuyruğa alındı, <b className="num">{done.skipped.length}</b> ilan atlandı. Mock ekran: hiçbir ilan gerçekte yayınlanmadı.</p>
+            <Card title="Sonuç (simülasyon)"><p className="m-0 text-sm"><b className="num">{done.q}</b> ilan kuyruğa alındı, <b className="num">{done.skipped.length}</b> ilan atlandı. Taslak ekran: hiçbir ilan gerçekte yayınlanmadı.</p>
               <ul className="m-0 mt-2 pl-5 text-sm text-ink2 max-h-48 overflow-y-auto">{done.skipped.map((s, i) => <li key={i}>{s.p} → {s.a}: {s.why}</li>)}</ul></Card>)}
           <div className="flex gap-2 justify-between"><Btn onClick={() => next(2)}>Geri</Btn>
             <Btn variant="primary" disabled={!ops || !ready.length || !!done} title={ops ? undefined : 'Bu rolün yetkisi yok'} onClick={() => {
               setDone({ q: ready.length, skipped: skipped.map(c => ({ p: c.p.name, a: CHANNEL[c.a.type].label + ' · ' + c.a.name, why: c.dup ? 'zaten açık' : 'eksik: ' + c.m.join(', ') })) })
-              notify(`${ready.length} ilan kuyruğa alındı (mock, gerçek yayın yok)`)
+              notify(`${ready.length} ilan kuyruğa alındı (örnek, gerçek yayın yok)`)
             }}>Gönder</Btn></div>
         </div>
       )}

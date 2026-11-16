@@ -221,7 +221,7 @@ export function Shifts() {
 
   return (
     <>
-      <PageHead title="Vardiya önerisi" desc="Gerçek sipariş saatlerine bakarak hangi saatte kaç kişi gerektiğini gösterir. Bütün sayılar dosyadaki gerçek dağılımdan hesaplanır." />
+      <PageHead title="Vardiya önerisi" desc="Gerçek sipariş saatlerine bakarak hangi saatte kaç kişi gerektiğini gösterir. Bütün sayılar siparişlerin gerçek saat dağılımından hesaplanır." />
       <p className="text-xs text-mute mt-0 mb-3">Veri aralığı: <span className="num">{dist.window}</span> ({nDays} gün, {fmtNum(total)} sipariş). Haftanın günü ortalamaları her gün için yalnızca 4–5 haftaya dayanır, küçük farklar tesadüf olabilir.</p>
       <div className="grid gap-4 lg:grid-cols-2 mb-4">
         <Card title="Saate göre sipariş (30 gün toplamı)" right={<Badge tone="violet">en yoğun 3 saat</Badge>}>
@@ -250,7 +250,7 @@ export function Shifts() {
           </div>
         </div>
       </Card>
-      <Card pad={false} title="Kaç toplayıcı gerekir?" right={<Badge tone="warn" title="Slider ile değişir">örnek varsayım</Badge>}>
+      <Card pad={false} title="Kaç toplayıcı gerekir?" right={<Badge tone="warn" title="Kaydırıcıyla değişir">örnek varsayım</Badge>}>
         <div className="px-4 pb-3 flex flex-wrap items-center gap-3 text-sm">
           <label htmlFor="rate">Bir kişi saatte kaç sipariş hazırlar</label>
           <input id="rate" type="range" min={4} max={30} value={rate} onChange={e => setRate(+e.target.value)} aria-label="Bir kişi saatte kaç sipariş hazırlar" />

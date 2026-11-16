@@ -17,7 +17,7 @@ export function Team() {
       <PageHead title="Ekip ve yetki" desc="Her çalışanın kendi hesabı vardır; yetki rol, depo kapsamı ve modülden oluşur. Müşteri verisi ayrı bir izindir."
         legacy={['team', 'pin-permissions']} />
       <div className="grid xl:grid-cols-5 gap-3">
-        <Card pad={false} title={`Çalışanlar (${STAFF.length} · mock)`} className="xl:col-span-2">
+        <Card pad={false} title={`Çalışanlar (${STAFF.length} · örnek)`} className="xl:col-span-2">
           <ul className="m-0 p-0 list-none divide-y divide-line border-t border-line">
             {STAFF.map(s => (
               <li key={s.id} className="px-4 py-2.5 flex items-center gap-3">

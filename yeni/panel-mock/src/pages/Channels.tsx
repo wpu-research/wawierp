@@ -28,7 +28,7 @@ export default function Channels() {
     <>
       <PageHead title="Kanallar" desc="Her pazaryeri ve mağaza aynı bağdaştırıcı arayüzünü kullanır: aynı ilan akışı, aynı sipariş çekme, aynı sağlık göstergesi. Yeni kanal yeni sayfa değil, yeni eklentidir."
         legacy={['send-ebay', 'ebay-pool', 'send-kaufland', 'metro', 'shopify-pool', 'send-shopify', 'ozon-pool', 'send-ozon', 'tr-market', 'tr-market-products', 'company-home (OTTO, Amazon sekmeleri)', 'channel-worklist', 'mixoutlet-payments']} />
-      <Card title="İlan akışı · bütün kanallar" className="mb-4" right={<span className="text-xs text-mute num">{fmtNum(flowTotal)} ilan (mock)</span>}>
+      <Card title="İlan akışı · bütün kanallar" className="mb-4" right={<span className="text-xs text-mute num">{fmtNum(flowTotal)} ilan (örnek)</span>}>
         <div className="flex h-3 rounded overflow-hidden bg-bg">{flow.map(f => f.n > 0 && <span key={f.key} title={`${f.label}: ${f.n}`} style={{ width: `${(f.n / flowTotal) * 100}%`, background: FLOW_COLOR[f.key] }} />)}</div>
         <div className="mt-2.5 grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-2">
           {flow.map((f, i) => (
@@ -71,7 +71,7 @@ export default function Channels() {
           </div>
           <div>
             <h3 className="m-0 mb-1.5 text-xs font-semibold text-mute uppercase tracking-wide">İlanlar ({openListings.length})</h3>
-            {openListings.length === 0 ? <p className="m-0 text-mute">Mock katalogda bu hesaba bağlı ilan yok.</p> : (
+            {openListings.length === 0 ? <p className="m-0 text-mute">Örnek katalogda bu hesaba bağlı ilan yok.</p> : (
               <ul className="m-0 p-0 list-none border border-line rounded-lg divide-y divide-line">
                 {openListings.map(({ p, l }) => <li key={p.id} className="px-3 py-2 flex items-center justify-between gap-2"><div className="min-w-0"><div className="truncate">{p.name}</div><div className="text-xs text-mute num">{p.sku} · {fmtMoney(l.price, open.cur)}</div></div><span className="shrink-0">{listingBadge(l.status, l.reason)}</span></li>)}
               </ul>

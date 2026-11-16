@@ -29,6 +29,7 @@ const STYLE: Record<Kind, { icon: typeof Bell; cls: string; label: string }> = {
 export default function Notifications({ open, setOpen, onAsk }: { open: boolean; setOpen: (f: (o: boolean) => boolean) => void; onAsk: (text: string) => void }) {
   const st = useStore()
   const R = ROLES[st.role]
+  const canSee = (href: string) => R.nav === 'all' || R.nav.includes(href.replace(/^#\//, '').split('?')[0])
   const [tab, setTab] = useState<Tab>('hepsi')
   const [saved, setSaved] = useState<Saved>(load)
   const [menu, setMenu] = useState<string | null>(null)
@@ -50,8 +51,8 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
       const lab = o.filter(x => toShip(x) && x.supply === 'fiziki' && x.label === 'yok' && !x.issue)
       add(lab.length > 0 && { id: 'etiket-bekleyen', kind: 'yap', n: lab.length, t: NOW - 35 * 60_000, title: `${fmtNum(lab.length)} sipariş etiket bekliyor`, detail: 'Ödemesi tamam, stoğu var, adresi eksiksiz.', href: '#/labels', cta: 'Etiketlere git', ask: 'Ödenmiş siparişlerin etiketlerini hazırla' })
       const came = o.filter(x => x.ret === 'geldi')
-      add(came.length > 0 && { id: 'iade-kontrol', kind: 'yap', n: came.length, t: NOW - 3 * H, title: `${fmtNum(came.length)} iade ürünü geldi, kontrol bekliyor`, detail: 'Kontrol edilince stoğa döner ve ödeme adımı açılır.', href: '#/returns', cta: 'İadeleri aç' })
-      const unc = st.products.reduce((s, p) => s + Object.values(p.stock).filter(r => r && r.fiziki === null).length, 0)
+      add(came.length > 0 && { id: 'iade-kontrol', kind: 'yap', n: came.length, t: NOW - 3 * H, title: `${fmtNum(came.length)} iade ürünü geldi, kontrol bekliyor`, detail: 'Kontrol edilince para iadesi adımı açılır.', href: '#/returns', cta: 'İadeleri aç' })
+      const unc = st.products.reduce((s, p) => s + Object.entries(p.stock).filter(([wh, r]) => r && (!st.whId || wh === st.whId) && r.fiziki === null).length, 0)
       add(unc > 0 && { id: 'sayim-yok', kind: 'yap', n: unc, week: true, t: NOW - 30 * H, title: `${fmtNum(unc)} depo kaydı hiç sayılmadı`, detail: 'Sayılmamış ürün sıfır stok sayılmaz; kanallara açılamaz.', href: '#/counting', cta: 'Sayım planı' })
 
       const failed = st.jobs.filter(j => j.status === 'basarisiz' && (j.acc === null || ids.has(j.acc)))
@@ -133,7 +134,7 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
           <div className="flex items-start gap-2"><p className={`m-0 flex-1 text-[13.5px] leading-snug ${isNew ? 'font-semibold' : 'font-medium'}`}>{n.title}</p>{isNew && <span className="mt-1.5 size-2 rounded-full bg-brand shrink-0" aria-label="Okunmadı" />}</div>
           {n.detail && <p className="m-0 mt-0.5 text-xs text-ink2 text-pretty">{n.detail}</p>}
           <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs">
-            <a href={n.href} onClick={() => { read(n); setOpen(() => false) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 pointer-coarse:h-10 text-ink no-underline hover:border-brand">{n.cta}<ArrowRight size={11} /></a>
+            {canSee(n.href) ? <a href={n.href} onClick={() => { read(n); setOpen(() => false) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 pointer-coarse:h-10 text-ink no-underline hover:border-brand">{n.cta}<ArrowRight size={11} /></a> : <span className="text-xs text-mute">Bu rolde ekran kapalı</span>}
             {n.ask && <button onClick={() => { read(n); setOpen(() => false); onAsk(n.ask!) }} className="inline-flex items-center gap-1 rounded-md border border-line bg-card px-2 h-6 pointer-coarse:h-10 text-brand hover:border-brand"><Sparkles size={11} />Asistana hazırlat</button>}
             {owner && <span className="inline-flex items-center gap-1 text-ok"><UserCheck size={12} />{owner} ilgileniyor</span>}
             <span className="ml-auto text-mute whitespace-nowrap">{ago(n.t)}</span>

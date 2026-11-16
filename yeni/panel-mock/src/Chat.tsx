@@ -197,11 +197,11 @@ export function Messages({ query }: { query: URLSearchParams }) {
                 )}
               </div>
               {m.from !== BOT && (
-                <div className="absolute -top-3 right-2 hidden group-hover:flex group-focus-within:flex items-center rounded-lg border border-line bg-card shadow-sm overflow-hidden">
+                <div className="absolute -top-3 right-2 flex opacity-0 group-hover:opacity-100 focus-within:opacity-100 pointer-coarse:opacity-100 items-center rounded-lg border border-line bg-card shadow-sm overflow-hidden">
                   <button onClick={() => c.like(m.id)} title="Katılıyorum" aria-label="Katılıyorum" className="border-0 bg-transparent size-7 grid place-items-center text-ink2 hover:bg-bg"><ThumbsUp size={13} /></button>
                   {!dm && !m.flag && <button onClick={() => c.flag(m.id, 'oneri')} title="Öneri olarak panoya ekle" aria-label="Öneri olarak panoya ekle" className="border-0 bg-transparent size-7 grid place-items-center text-ink2 hover:bg-bg"><Lightbulb size={13} /></button>}
                   {!dm && !m.flag && <button onClick={() => c.flag(m.id, 'sorun')} title="Sorun olarak panoya ekle" aria-label="Sorun olarak panoya ekle" className="border-0 bg-transparent size-7 grid place-items-center text-ink2 hover:bg-bg"><Bug size={13} /></button>}
-                  <button onClick={() => askAssistant(`Ekipten şu mesaj geldi: "${m.text}" Bununla ilgili panelde ne yapabiliriz?`)} title="Asistana sor" aria-label="Asistana sor" className="border-0 bg-transparent size-7 grid place-items-center text-brand hover:bg-bg"><Sparkles size={13} /></button>
+                  {!dm && <button onClick={() => askAssistant(`Ekipten şu mesaj geldi: "${m.text}" Bununla ilgili panelde ne yapabiliriz?`)} title="Asistana sor" aria-label="Asistana sor" className="border-0 bg-transparent size-7 grid place-items-center text-brand hover:bg-bg"><Sparkles size={13} /></button>}
                 </div>
               )}
             </div>) })}

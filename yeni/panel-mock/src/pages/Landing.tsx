@@ -42,9 +42,9 @@ const FEATURES: { icon: typeof Boxes; title: string; text: string; span?: string
   { icon: Layers, title: 'Ortak ürün kataloğu', text: 'SKU, barkod (EAN) ve mükerrer kart birleştirme. Bir ürün, bütün depolarda ve kanallarda tek kart.', span: 'md:col-span-2' },
   { icon: Warehouse, title: 'Çoklu depo ve şirket', text: 'Depo, şirket, kanal ve hesap aynı hiyerarşide. Transfer, yoldaki sevkiyat ve mal kabul.' },
   { icon: ShoppingCart, title: 'Birleşik sipariş havuzu', text: 'Bütün mağazaların siparişleri tek listede; tarih, durum, depo, şirket ve tedarik kaynağına göre süzülür.' },
-  { icon: Truck, title: 'Toplama, paketleme, kargo', text: 'Toplama listesi, etiket, toplu PDF ve takip numarası. Takip bilgisi kanala kendiliğinden gider.', span: 'md:col-span-2' },
-  { icon: FileText, title: 'Fatura ve ön muhasebe', text: 'Doğru tüzel kişilik adına belge, ülkeye göre KDV, EUR ve USD ayrı takip, tahsilat ve kanal cirosu.' },
-  { icon: Users, title: 'B2B müşteri portalı', text: 'Toptan müşteriniz kendi stoğunu, faturasını ve cari bakiyesini kendi girişinden görür.' },
+  { icon: Truck, title: 'Toplama, paketleme, kargo', text: 'Toplama listesi, etiket, toplu PDF ve takip numarası. Takip bilgisi, siz kargoya verdiğinizde kanala gönderilir.', span: 'md:col-span-2' },
+  { icon: FileText, title: 'Fatura ve ön muhasebe', text: 'Doğru tüzel kişilik adına belge, ülkeye göre KDV, EUR, TRY ve USD ayrı takip, tahsilat ve kanal cirosu.' },
+  { icon: Users, title: 'B2B müşteri portalı', text: 'Toptan müşteriniz stok durumunu (var, az, yok), faturasını ve cari bakiyesini kendi girişinden görür.' },
   { icon: ShieldCheck, title: 'Ekip, yetki, denetim izi', text: 'Depo ve bölüm bazında erişim. Kim, neyi, ne zaman yaptı kaydı.' },
 ]
 
@@ -70,12 +70,12 @@ const BEFORE: [string, string, typeof Boxes][] = [
   ['Aynı sipariş listesi beş ayrı ekranda', 'Tek sipariş listesi, hazır görünümler', ShoppingCart],
   ['Menüdeki sayı ile liste birbirini tutmuyor', 'Rozet ve liste aynı hesaptan gelir', BarChart3],
   ['Takılan eşitleme ancak ekrana girince görülür', 'Kanal sağlığı ve uyarılar tek yerde', Activity],
-  ['Etiket, fatura ve takip elle tetiklenir', 'Kurallar önerir, onayınızla çalışır', Workflow],
+  ['Etiket, fatura ve takip elle tetiklenir', 'Kurallar önerir; onayınızla ya da kendi seçeceğiniz sınırlar içinde çalışır; para ve fiyat işleri hep sorar', Workflow],
 ]
 const WHO: [string, string, typeof Boxes][] = [
   ['Depo bazlı satıcılar', 'Sayım, raflama, transfer, sipariş hazırlama ve kargoyu tek operasyonun parçaları olarak yönetin.', Warehouse],
   ['Dropshipping ekipleri', 'Tedarikçi ürünlerini, drop miktarlarını ve tedarikçiye giden siparişleri fiziki stoktan ayrı izleyin.', Truck],
-  ['Çok kanallı ve B2B işletmeler', 'Birden çok şirketi ve mağazayı yönetin; toptan müşterinize kendi stoğunu ve belgelerini gösterin.', Users],
+  ['Çok kanallı ve B2B işletmeler', 'Birden çok şirketi ve mağazayı yönetin; toptan müşterinize stok durumunu ve belgelerini gösterin.', Users],
 ]
 const FAQ: [string, string][] = [
   ['Fiziki, sanal ve drop stok birlikte kullanılabilir mi?', 'Evet. Aynı katalogda ayrı stok türleri olarak yönetilirler. Bir satış hesabında hangi kaynağın kullanılacağı bağlantıya ve ürünün stok kurallarına bağlıdır; sayımlar birbirine karışmaz.'],
@@ -170,7 +170,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
             <button onClick={() => document.getElementById('kanallar')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center justify-center rounded-full px-5 h-11 text-[15px] font-semibold border border-white/25 bg-transparent text-white hover:bg-white/10">Kanalları keşfet</button>
           </div>
           <dl className="m-0 mt-10 mx-auto max-w-[760px] grid grid-cols-2 sm:grid-cols-4 gap-px rounded-2xl overflow-hidden border border-white/10 bg-white/10">
-            {([[onN, '', 'bağlı kanal'], [3, '', 'stok modeli'], [5, '', 'adımda teslimat'], [10, '', 'dil']] as const).map(([n, sx, l]) => (
+            {([[onN, '', 'kanal ve entegrasyon hedefi'], [3, '', 'stok modeli'], [5, '', 'adımda teslimat'], [10, '', 'dil']] as const).map(([n, sx, l]) => (
               <div key={l} className="bg-navy/80 px-3 py-4"><dd className="m-0 font-display text-3xl md:text-4xl font-semibold text-white"><Count to={n} suffix={sx} /></dd><dt className="text-[13px] text-white/60 mt-0.5">{l}</dt></div>))}
           </dl>
         </div>
@@ -469,7 +469,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
           <div><h3 className={`${kicker} text-mute m-0`}>Diller</h3><ul className="m-0 mt-3 p-0 list-none grid grid-cols-2 gap-y-1.5 text-sm text-ink2">{LANGS.map(l => <li key={l} className="inline-flex items-center gap-1.5"><Globe2 size={12} className="text-mute" />{l}</li>)}</ul></div>
           <div><h3 className={`${kicker} text-mute m-0`}>Yasal</h3><ul className="m-0 mt-3 p-0 list-none space-y-1.5 text-sm text-ink2">{['Impressum', 'Datenschutz / Gizlilik', 'KVKK aydınlatma metni', 'Fiyatlandırma'].map(l => <li key={l} className="flex items-center gap-2">{l}<span className="rounded-full bg-warn-soft text-warn text-[10px] font-semibold px-2 py-0.5">eklenecek</span></li>)}</ul></div>
         </div>
-        <div className="border-t border-line"><div className={`${wrap} py-4 flex flex-wrap justify-between gap-2 text-xs text-mute`}><span>© 2026 WawiERP</span><span>Tasarım önerisi · mock. Yalnız Türkçe çizildi; diğer diller gerçek sitede. Kanal adları ve logoları sahiplerinin markalarıdır.</span></div></div>
+        <div className="border-t border-line"><div className={`${wrap} py-4 flex flex-wrap justify-between gap-2 text-xs text-mute`}><span>© 2026 WawiERP</span><span>Tasarım önerisi. Yalnız Türkçe çizildi; diğer diller gerçek sitede. Kanal adları ve logoları sahiplerinin markalarıdır.</span></div></div>
       </footer>
     </div>
   )
@@ -497,7 +497,7 @@ function Preview() {
       </div>
       <div className="float-b hidden md:flex absolute -right-6 top-44 z-10 items-center gap-2.5 rounded-2xl bg-white text-navy px-3.5 py-2.5 shadow-2xl text-sm">
         <span className="size-8 rounded-full bg-[#fff4d8] text-[#9a6500] grid place-items-center"><Boxes size={15} /></span>
-        <span><b className="block font-semibold leading-tight">Stok defteri −1</b><span className="text-[#454e80] text-xs">Almanya · raf A-3-2</span></span>
+        <span><b className="block font-semibold leading-tight">Stok defteri: sevkte −1</b><span className="text-[#454e80] text-xs">Almanya · raf A-3-2</span></span>
       </div>
       <div className="float-a hidden lg:flex absolute -left-14 bottom-16 z-10 items-center gap-2.5 rounded-2xl bg-white text-navy px-3.5 py-2.5 shadow-2xl text-sm">
         <span className="size-8 rounded-full bg-[#e6e2fa] text-[#6250d6] grid place-items-center"><Sparkles size={15} /></span>

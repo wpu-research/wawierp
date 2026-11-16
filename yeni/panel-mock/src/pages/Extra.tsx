@@ -39,7 +39,7 @@ export function Labels() {
             <span className="text-xs text-mute">{tab === 'hata' ? 'Neden adres ya da taşıyıcı hatasıdır; düzeltilip yeniden denenir.' : 'Taşıyıcı teslim aldığında takip no kanala gönderilir.'}</span>
             {can && rows.length > 0 && (tab === 'hata'
               ? <Btn onClick={() => { const ids = rows.filter(canLabel).map(o => o.id); if (!ids.length) return notify('Yeniden denenebilecek sipariş yok (sorunu giderilmemiş siparişlere etiket verilmez)'); if (window.confirm(`${ids.length} sipariş için etiket yeniden denenecek${ids.length < rows.length ? ` (${rows.length - ids.length} sipariş sorunlu olduğu için atlanır)` : ''}. Devam edilsin mi?`)) createLabels(ids) }}><RotateCw size={14} />Tümünü yeniden dene ({rows.length})</Btn>
-              : <span className="flex gap-2"><Btn onClick={() => notify(`${rows.length} etiket tek PDF olarak hazırlandı (mock)`)}><Download size={14} />Toplu PDF</Btn><Btn variant="primary" onClick={() => { if (window.confirm(`Bu listedeki ${rows.length} siparişin tamamı kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) ship(rows.map(o => o.id)) }}><Truck size={14} />Tümünü kargoya ver ({rows.length})</Btn></span>)}
+              : <span className="flex gap-2"><Btn onClick={() => notify(`${rows.length} etiket tek PDF olarak hazırlandı (örnek)`)}><Download size={14} />Toplu PDF</Btn><Btn variant="primary" onClick={() => { if (window.confirm(`Bu listedeki ${rows.length} siparişin tamamı kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) ship(rows.map(o => o.id)) }}><Truck size={14} />Tümünü kargoya ver ({rows.length})</Btn></span>)}
           </div>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
@@ -297,7 +297,7 @@ export function B2BPage() {
             </table>
             {b2b.length === 0 && <Empty>Bu şirkete bağlı cari yok.</Empty>}
           </div>
-          <p className="m-0 px-3 py-2 text-xs text-mute border-t border-line">Mock: 8 örnek cari (gerçek panelde 48). Adlar uydurmadır.</p>
+          <p className="m-0 px-3 py-2 text-xs text-mute border-t border-line">8 örnek cari (gerçek panelde 48). Adlar uydurmadır.</p>
         </Card>
       ) : (
         <Card pad={false} className="mt-2">

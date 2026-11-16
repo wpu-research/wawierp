@@ -55,7 +55,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
             <Search size={15} className="absolute left-2.5 top-2 text-mute" />
             <input value={q} onChange={e => setQ(e.target.value)} placeholder="Ürün adı, SKU, EAN ya da marka" aria-label="Katalogda ara" className="w-full h-8 rounded-md border border-line bg-card pl-8 pr-2 text-sm" />
           </label>
-          <span className="text-xs text-mute ml-auto">Mock: {PRODUCTS.length} örnek kart · gerçek katalog ≈232.500</span>
+          <span className="text-xs text-mute ml-auto">{PRODUCTS.length} örnek kart · gerçek katalog ≈232.500</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
