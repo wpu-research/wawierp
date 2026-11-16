@@ -39,7 +39,7 @@ WawiERP, depo + pazaryeri + sipariş + ön muhasebe işlerini tek panelde toplay
 Ürünü hazırla → Kaynağı seç → Kanala gönder → Siparişi hazırla → Müşteriye ulaş
 
 ### Entegrasyonlar (72+ kart; site "mevcut" ile "kurulum talebi"ni açıkça ayırıyor)
-- **Mevcut (19):** Amazon, eBay, Kaufland, METRO, OTTO, Trendyol, n11, Ozon, DealClub, idealo, Stockist24, Shopify, JTL-Shop, Wawi Store API, JTL-Wawi, Billbee, Asterbuy, XML/CSV, DHL, PostNL
+- **Mevcut (20):** Amazon, eBay, Kaufland, METRO, OTTO, Trendyol, n11, Ozon, DealClub, idealo, Stockist24, Shopify, JTL-Shop, Wawi Store API, JTL-Wawi, Billbee, Asterbuy, XML/CSV, DHL, PostNL
 - **Kurulum talebi (≈50):** Etsy, Walmart, Allegro, bol, Cdiscount, Fnac Darty, Rakuten, AliExpress, Temu, TikTok Shop, SHEIN, OnBuy, Mercado Libre, Shopee, Lazada, Flipkart, noon, Hepsiburada, ÇiçekSepeti, Pazarama, eMAG, CDON, Fyndiq, Takealot, JD.com, Tmall, Taobao, Target Plus, Wayfair, Zalando, Back Market, Vinted Pro, ManoMano, Decathlon, Magento, WooCommerce, Shopware, PrestaShop, BigCommerce, Wix, Squarespace, OpenCart, Ecwid, ikas, Ticimax, IdeaSoft, T-Soft, DPD, UPS, FedEx, GLS, Hermes
 
 Yani gerçek entegrasyon çekirdeği Almanya ağırlıklı (Kaufland, METRO, OTTO, idealo, JTL, Billbee, DHL) + Türkiye (Trendyol, n11). "72+" sayısının büyük kısmı istek listesi.

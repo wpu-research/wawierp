@@ -58,7 +58,7 @@ Kayıtlar Cognee'nin varsayılan veri kümesine **`[wavierp]` etiketiyle** yazı
 
 | Kategori | Ne yazılır | Örnek |
 |---|---|---|
-| `project` | Sistem gerçekleri, kararlar, kısıtlar | "Gerçek entegrasyon çekirdeği 19 kanal; kalan ~50 kart istek listesi" |
+| `project` | Sistem gerçekleri, kararlar, kısıtlar | "Gerçek entegrasyon çekirdeği 20 kanal; kalan ~50 kart istek listesi" |
 | `user` | Sahibin tercihleri, öncelikleri | "Önce hafıza+beyin, sonra yeniden tasarım" |
 | `agent` | Çalışma dersleri, tuzaklar | "Siteye arka arkaya istek atınca origin 525 dönüyor" |
 
@@ -104,7 +104,7 @@ Oturum döngüsü:
 |---|---|---|
 | 0 | Hafıza + beyin kurulumu | Bu belge, ilk grafik, ilk Cognee kayıtları ✅ |
 | 1 | Eski sistemi içeri al (kod, şema, ekranlar) | `legacy/` grafiği: modül–tablo–entegrasyon haritası |
-| 2 | Alan modeli çıkar | Varlık ve akış düğümleri, `kararlar/0001` alan sınırları |
+| 2 | Alan modeli çıkar | Varlık ve akış düğümleri, `docs/06-alan-modeli.md` alan sınırları |
 | 3 | Hedef mimari | Karar kayıtları: dil/çerçeve, veritabanı, çok kiracılılık, entegrasyon katmanı |
 | 4 | Geçiş planı | Eski→yeni eşleme kenarları, risk düğümleri |
 | 5 | Uygulama | `yeni/` kodu grafikte; eski grafikle karşılaştırma |

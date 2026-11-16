@@ -1,6 +1,6 @@
 # WawiERP — Yeniden Tasarım Girdileri (birleşik)
 
-Tarih: 2026-11-14 · A–G belgelerinin sentezi: `docs/panel/07`, `05`, `06`, `07-api-yuzeyi`, `08`, `09`, `10`, ayrıca `03`. Karar değildir; karar için girdidir (`kararlar/` boş, yalnız sahibi karar verirse yazılır).
+Tarih: 2026-11-14 · A–G belgelerinin sentezi: `docs/panel/07`, `05`, `06`, `07-api-yuzeyi`, `08`, `09`, `10`, ayrıca `03`. Karar değildir; karar için girdidir (kararlar `kararlar/` altında, 0001–0010; yalnız sahibi karar verirse yazılır).
 
 ## 1. Önceliklendirilmiş sorun listesi (etki × sıklık)
 Puan: Etki (1–3) × Sıklık (1–3). Kanıt düzeyi: **G** görüldü, **Ç** çıkarım.

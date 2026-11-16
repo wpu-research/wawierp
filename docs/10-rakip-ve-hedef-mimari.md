@@ -50,7 +50,7 @@ Tarih: 2026-11-14. Bu belge karar değildir; karar için girdidir. Fiyatlar KDV 
 ### Pickware
 - Fiyat (resmi): ERP Starter 119/99, Advanced 349/299, Professional 699/599 €/ay (aylık/yıllık), sipariş aşımı 0,15–0,20 €; WMS cihaz başına 229/199 €; "birden çok konum" yalnız Professional ve Enterprise: [Pickware fiyatlar](https://www.pickware.com/en/pricing).
 - Mimari: Shopware 6 içinde yerel ERP, ayrıca Shopify uygulaması; REST API: [Pickware geliştirici](https://developer.pickware.com/shopware-erp/latest/developer-guide/rest-api/overview.html).
-- Güçlü: shop ile aynı veritabanı, senkron sorunu yok. Zayıf: Shopware/Shopify'a bağlı; bizim 22 pazaryeri hesabı ve 19 mağaza için merkezi hub değil.
+- Güçlü: shop ile aynı veritabanı, senkron sorunu yok. Zayıf: Shopware/Shopify'a bağlı; bizim 24 pazaryeri hesabı ve 19 mağaza için merkezi hub değil.
 
 ### Base (BaseLinker)
 - Fiyat (resmi): Freemium 0 $; Business 99 $/ay (1.000 sipariş dahil, ek sipariş 0,49 $); Enterprise 5.000+ sipariş veya 300 bin $ GMV için teklif; bağlı hesap sınırı yok: [Base fiyatlar](https://base.com/en-US/pricing/).

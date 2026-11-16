@@ -7,7 +7,7 @@ Tarih: 2026-11-14 · Kaynak: canlı panelde sistem yöneticisi oturumuyla **yaln
 |---|---|
 | Depo | 5 (Istanbul, Almanya, Hollanda, Mega B, Technowelt Almanya) |
 | Şirket (tüzel kişilik) | 12 |
-| Pazaryeri hesabı | 22 (eBay 8, Kaufland 6, Amazon 3, METRO 2, OTTO, Dealclub, Trendyol, N11, Ozon) |
+| Pazaryeri hesabı | 24 (eBay 8, Kaufland 6, Amazon 3, METRO 2, OTTO, Dealclub, Trendyol, N11, Ozon) |
 | Mağaza / satış platformu | 19 (Shopify 9, webshop 7, JTL-Shop, JTL-Wawi, XML-Import) |
 | Katalog kartı | ≈232.500 |
 | Depo ürün kaydı | ≈151.000 |
