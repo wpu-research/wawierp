@@ -314,7 +314,7 @@ export const reservedQty = (res: ReturnType<typeof reservedMap>, pid: string, wh
 export const canLabel = (o: Order) => isOpen(o) && o.pay === 'odendi' && !o.issue && o.supply === 'fiziki' && o.label !== 'hazir'
 export const canShip = (o: Order) => o.label === 'hazir' && o.status === 'hazirlaniyor' && o.pay === 'odendi' && !o.issue
 /** Kesin fatura: iptal edilmemiş, ödemesi gelmiş, henüz kesinleşmemiş sipariş. */
-export const canInvoice = (o: Order) => o.invoice !== 'kesin' && o.status !== 'iptal' && o.pay !== 'bekliyor'
+export const canInvoice = (o: Order) => o.invoice !== 'kesin' && o.status !== 'iptal' && o.status !== 'iade' && o.pay !== 'bekliyor'
 export const overdue = (o: Order) => toShip(o) && o.supply === 'fiziki' && NOW - o.t > 48 * H
 export const dropWaiting = (o: Order) => isOpen(o) && o.supply !== 'fiziki'
 export const hasIssue = (o: Order) => isOpen(o) && (!!o.issue || o.label === 'hata')

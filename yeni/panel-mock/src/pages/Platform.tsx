@@ -176,7 +176,7 @@ export function Developers() {
               <button aria-label="Kutuyu kapat" onClick={() => setShown(null)} className="border-0 bg-transparent text-ink2"><X size={16} /></button></div>
             <div className="flex flex-wrap items-center gap-2 mt-1"><code className="break-all">{shown}</code>
               <Btn variant="ghost" aria-label="Anahtarı kopyala" onClick={() => notify('Kopyalandı (örnek)')}><Copy size={14} /></Btn></div>
-            <p className="m-0 mt-1 text-xs text-ink2">Gerçek sistemde tam anahtar yalnız bir kez gösterilir ve veritabanında sadece özeti (hash) saklanır. Bu anahtar sahtedir.</p>
+            <p className="m-0 mt-1 text-xs text-ink2">Gerçek sistemde tam anahtar yalnız bir kez gösterilir ve veritabanında sadece özeti (hash) saklanır. Bu anahtar örnektir, hiçbir yerde geçerli değildir.</p>
           </div>}
           <div className="flex flex-wrap items-end gap-2 mb-3">
             <Lbl t="Anahtar adı"><input className={inp + ' w-48'} value={name} onChange={e => setName(e.target.value)} placeholder="Örn. Raporlama" /></Lbl>

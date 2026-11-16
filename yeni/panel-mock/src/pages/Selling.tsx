@@ -220,7 +220,7 @@ export function PriceRules() {
 // ---------- 3. Tedarik ve stok önerileri ----------
 type RTab = 'order' | 'transfer' | 'buffer' | 'slow'
 export function Replenish() {
-  const { products, orders, role, notify } = useStore()
+  const { products, allOrders, role, notify } = useStore()
   const ops = ROLES[role].ops
   const [tab, setTab] = useState<RTab>('order')
   const [cover, setCover] = useState(30)
@@ -228,9 +228,10 @@ export function Replenish() {
   const [buf, setBuf] = useState(2)
   const sold = useMemo(() => {
     const m = new Map<string, number>()
-    for (const o of recent(orders).filter(isRevenue)) for (const i of o.items) m.set(i.pid, (m.get(i.pid) ?? 0) + i.qty)
+    // Stok depoda ortaktır: satış hızı da şirket süzgeciyle daraltılmadan, yalnız bizim depodan çıkan (fiziki) siparişlerle hesaplanır.
+    for (const o of recent(allOrders).filter(o => isRevenue(o) && o.supply === 'fiziki')) for (const i of o.items) m.set(i.pid, (m.get(i.pid) ?? 0) + i.qty)
     return m
-  }, [orders])
+  }, [allOrders])
   const lines = useMemo(() => products.map(p => {
     const s = sold.get(p.id) ?? 0, rate = s / 30, st = phys(p), days = rate > 0 ? st / rate : Infinity
     return { p, s, rate, st, days, qty: Math.max(0, Math.ceil(rate * cover - st)) }

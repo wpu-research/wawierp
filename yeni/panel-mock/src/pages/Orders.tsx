@@ -18,6 +18,8 @@ const VIEWS: { key: View; label: string; f: (o: Order) => boolean; tone?: Tone }
 const STONE: Record<OStatus, Tone> = { yeni: 'info', hazirlaniyor: 'warn', kargoda: 'violet', tamamlandi: 'ok', iptal: 'neutral', iade: 'bad' }
 const SIZE = 25
 
+const LBL = { yok: 'yok', hazir: 'hazır', hata: 'hatalı' } as const
+const INV = { yok: 'yok', taslak: 'taslak', kesin: 'kesin' } as const
 export default function Orders({ query }: { query: URLSearchParams }) {
   const { orders, role, notify, createLabels, ship, issueInvoices, views, saveView, removeView } = useStore()
   const [naming, setNaming] = useState<string | null>(null)
@@ -82,7 +84,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
               <Btn variant="primary" onClick={() => { const ids = selOrders.filter(canShip).map(o => o.id); if (ids.length > 1 && !window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesi kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) return; ship(ids); setPicked(new Set()) }} disabled={!selOrders.some(canShip)}><Truck size={14} />Kargoya ver</Btn>
             </span>
           )}
-          {picked.size > 0 && !R.ops && R.finance && <Btn className="ml-auto" onClick={() => { const ids = invoicable(sel_); if (!ids.length) return notify('Seçilenlerin hiçbiri kesinleştirilemez (zaten kesin, iptal ya da ödemesi bekleniyor)'); if (!window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesinin faturası kesinleşecek; ${picked.size - ids.length ? `${picked.size - ids.length} tanesi atlanacak (zaten kesin, iptal ya da ödemesi bekleniyor). ` : ''}Kesin fatura geri alınamaz; iptali iade faturasıyla olur. Devam edilsin mi?`)) return; issueInvoices(ids); setPicked(new Set()) }}><FileText size={14} />Fatura kes ({picked.size})</Btn>}
+          {picked.size > 0 && R.finance && <Btn className="ml-auto" onClick={() => { const ids = invoicable(sel_); if (!ids.length) return notify('Seçilenlerin hiçbiri kesinleştirilemez (zaten kesin, iptal ya da ödemesi bekleniyor)'); if (!window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesinin faturası kesinleşecek; ${picked.size - ids.length ? `${picked.size - ids.length} tanesi atlanacak (zaten kesin, iptal ya da ödemesi bekleniyor). ` : ''}Kesin fatura geri alınamaz; iptali iade faturasıyla olur. Devam edilsin mi?`)) return; issueInvoices(ids); setPicked(new Set()) }}><FileText size={14} />Fatura kes ({picked.size})</Btn>}
         </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
@@ -111,9 +113,9 @@ export default function Orders({ query }: { query: URLSearchParams }) {
                   </td>
                   <td className={td}>
                     <span className="inline-flex gap-1.5 text-mute">
-                      <span title={`Etiket: ${o.label}`}><Tag size={15} className={o.label === 'hazir' ? 'text-ok' : o.label === 'hata' ? 'text-bad' : ''} /></span>
-                      <span title={`Fatura: ${o.invoice}`}><FileText size={15} className={o.invoice === 'kesin' ? 'text-ok' : o.invoice === 'taslak' ? 'text-warn' : ''} /></span>
-                      <span title={o.tracking ? `${o.tracking.carrier} ${o.tracking.no}` : 'Takip yok'}><Truck size={15} className={o.tracking ? 'text-ok' : ''} /></span>
+                      <span title={`Etiket: ${LBL[o.label]}`}><Tag size={15} className={o.label === 'hazir' ? 'text-ok' : o.label === 'hata' ? 'text-bad' : ''} aria-hidden /><span className="sr-only">Etiket {LBL[o.label]}</span></span>
+                      <span title={`Fatura: ${INV[o.invoice]}`}><FileText size={15} className={o.invoice === 'kesin' ? 'text-ok' : o.invoice === 'taslak' ? 'text-warn' : ''} aria-hidden /><span className="sr-only">Fatura {INV[o.invoice]}</span></span>
+                      <span title={o.tracking ? `${o.tracking.carrier} ${o.tracking.no}` : 'Takip yok'}><Truck size={15} className={o.tracking ? 'text-ok' : ''} aria-hidden /><span className="sr-only">{o.tracking ? `Takip ${o.tracking.carrier}` : 'Takip yok'}</span></span>
                     </span>
                   </td>
                 </tr>

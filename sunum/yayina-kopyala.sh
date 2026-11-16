@@ -12,12 +12,13 @@ mkdir -p "$GECICI/img"
 cp wawierp-yenilikler.html "$GECICI/index.html"
 cp wawierp-tanitim.mp4 wawierp-tanitim-kapak.jpg "$GECICI/"
 # Sunucu yalnız .html, .jpg ve .mp4 sunar; sunumda başka türde ya da tırnaklı bir görsel adı varsa dur.
-if grep -oE 'img/[A-Za-z0-9._-]+' wawierp-yenilikler.html | grep -vE '\.jpg$' | grep -q .; then
+BAD=$(grep -oE 'img/[A-Za-z0-9._-]+' wawierp-yenilikler.html | grep -vE '\.jpg$' || true)
+if [ -n "$BAD" ]; then
   echo "HATA: sunumda .jpg dışında görsel var (sunucu yalnız html, jpg ve mp4 sunar):" >&2
   grep -oE 'img/[A-Za-z0-9._-]+' wawierp-yenilikler.html | grep -vE '\.jpg$' | sort -u >&2
   exit 1
 fi
-grep -oE 'img/[A-Za-z0-9._-]+\.jpg' wawierp-yenilikler.html | sort -u | while read -r f; do
+{ grep -oE 'img/[A-Za-z0-9._-]+\.jpg' wawierp-yenilikler.html || true; } | sort -u | while read -r f; do
   [ -f "$f" ] || { echo "HATA: görsel bulunamadı: $f" >&2; exit 1; }
   cp "$f" "$GECICI/$f"
 done

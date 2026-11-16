@@ -116,19 +116,18 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
   const count = (k: Tab) => live.filter(n => k === 'hepsi' || n.kind === k).length
   const read = (n: Note) => put(s => (s.read.includes(sig(n)) ? s : { ...s, read: [...s.read.filter(x => !x.startsWith(n.id + '|')), sig(n)] }))
 
-  useDialog(open, () => setOpen(() => false), dlg)
+  useDialog(open, () => setOpen(() => false), dlg, false) // açılır pencere: Tab dışarı çıkabilir, Esc kapatır
   useEffect(() => {
     if (!open) return
     const out = (e: MouseEvent) => { if (box.current && !box.current.contains(e.target as Node)) setOpen(() => false) }
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(() => false) }
-    document.addEventListener('mousedown', out); document.addEventListener('keydown', esc)
-    return () => { document.removeEventListener('mousedown', out); document.removeEventListener('keydown', esc) }
+    document.addEventListener('mousedown', out)
+    return () => document.removeEventListener('mousedown', out)
   }, [open, setOpen])
 
   const row = (n: Note) => {
     const S = STYLE[n.kind], isNew = !saved.read.includes(sig(n)), owner = saved.owned[n.id]
     return (
-      <li key={n.id} className={`relative px-3 py-2.5 flex gap-2.5 ${isNew ? 'bg-brand-soft/35' : ''}`} onMouseEnter={() => isNew && read(n)} onFocus={() => isNew && read(n)}>
+      <li key={n.id} className={`relative px-3 py-2.5 flex gap-2.5 ${isNew ? 'bg-brand-soft/35' : ''}`} onMouseEnter={() => isNew && read(n)}>
         <span className={`size-8 rounded-full grid place-items-center shrink-0 ${S.cls}`}><S.icon size={15} /></span>
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-2"><p className={`m-0 flex-1 text-[13.5px] leading-snug ${isNew ? 'font-semibold' : 'font-medium'}`}>{n.title}</p>{isNew && <span className="mt-1.5 size-2 rounded-full bg-brand shrink-0" aria-label="Okunmadı" />}</div>

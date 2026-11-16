@@ -149,7 +149,8 @@ export function Counting() {
       if (reason) out.push({ key: p.id + w, pid: p.id, wh: w, bin: s.bin, sys: s.fiziki, reason, moves })
     }
     return out.sort((a, b) => REASON[a.reason][2] - REASON[b.reason][2] || b.moves - a.moves || binCmp(a.bin, b.bin))
-  }, [products, whId])
+  // Satırlar oturum boyunca (ve depo değişene dek) sabit kalır: kaydedilen satır 'fark' sonucuyla görünür kalsın, kaybolmasın.
+  }, [whId]) // eslint-disable-line react-hooks/exhaustive-deps
   const n = (r: Reason) => rows.filter(x => x.reason === r).length
   const shown = rows.slice(0, 40)
   const canWrite = ROLES[role].ops

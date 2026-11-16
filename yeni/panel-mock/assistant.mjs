@@ -64,18 +64,20 @@ const istDay = now => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Istan
 function limiter(perMinute, perDay) {
   const perIp = new Map(); let day = { key: '', n: 0 }
   return {
+    // check yeri hemen ayırır (aynı anda gelen istekler sınırı delmesin); geçersiz istek refund ile hakkı geri alır.
     check(ip) {
       const now = Date.now(), key = istDay(now)
       if (day.key !== key) day = { key, n: 0 }
-      if ((perIp.get(ip) || []).filter(t => now - t < 60_000).length >= perMinute) return 'Çok hızlı istek gönderildi; bir dakika sonra yeniden deneyin.'
+      const hits = (perIp.get(ip) || []).filter(t => now - t < 60_000)
+      if (hits.length >= perMinute) return 'Çok hızlı istek gönderildi; bir dakika sonra yeniden deneyin.'
       if (day.n >= perDay) return 'Günlük kullanım sınırı doldu.'
+      hits.push(now); perIp.set(ip, hits); day.n++
+      // Kayıt şişerse yalnız süresi dolanlar silinir; toptan silmek sayaçları sıfırlama yolu olurdu.
+      if (perIp.size > 5000) for (const [k, v] of perIp) if (!v.some(t => now - t < 60_000)) perIp.delete(k)
       return null
     },
-    charge(ip) {
-      const now = Date.now(), hits = (perIp.get(ip) || []).filter(t => now - t < 60_000)
-      hits.push(now); perIp.set(ip, hits); day.n++
-      if (perIp.size > 5000) perIp.clear()
-    },
+    refund(ip) { const h = perIp.get(ip); if (h?.length) { h.pop(); day.n = Math.max(0, day.n - 1) } },
+    charge() {},
   }
 }
 const askLimit = limiter(PER_MINUTE, PER_DAY), contentLimit = limiter(PER_MINUTE, PER_DAY)
@@ -102,9 +104,9 @@ export async function handleContent(req, ip) {
   const limited = contentLimit.check(ip)
   if (limited) return [429, { message: limited }]
   let body
-  try { body = JSON.parse(await readBody(req)) } catch (e) { return [e.status || 400, { message: e.status ? e.message : 'Geçersiz istek.' }] }
+  try { body = JSON.parse(await readBody(req)) } catch (e) { contentLimit.refund(ip); return [e.status || 400, { message: e.status ? e.message : 'Geçersiz istek.' }] }
   const p = body?.product || {}
-  if (!p.name || !body?.channel) return [400, { message: 'Geçersiz istek.' }]
+  if (!p.name || !body?.channel) { contentLimit.refund(ip); return [400, { message: 'Geçersiz istek.' }] }
   const max = Math.max(40, Math.min(250, Number(body.max) || 80))
   const input = `Ürün adı: ${str(p.name, 200)}\nMarka: ${str(p.brand, 80)}\nKategori: ${str(p.cat, 80)}\nSKU: ${str(p.sku, 60)}\nHedef kanal: ${str(body.channel, 40)}\nBaşlık en çok: ${max} karakter\nDil: ${str(body.lang || 'Türkçe', 30)}`
   contentLimit.charge(ip)
@@ -134,9 +136,10 @@ export async function handleAssistant(req, ip) {
   const limited = askLimit.check(ip)
   if (limited) return [429, { message: limited }]
   let body
-  try { body = JSON.parse(await readBody(req)) } catch (e) { return [e.status || 400, { message: e.status ? e.message : 'Geçersiz istek.' }] }
+  try { body = JSON.parse(await readBody(req)) } catch (e) { askLimit.refund(ip); return [e.status || 400, { message: e.status ? e.message : 'Geçersiz istek.' }] }
   const messages = body?.messages
   if (!Array.isArray(messages) || !messages.length || messages.length > MAX_MESSAGES || messages.some(m => (m?.role !== 'user' && m?.role !== 'assistant') || m.content == null)) {
+    askLimit.refund(ip)
     return [400, { message: messages?.length > MAX_MESSAGES ? 'Konuşma çok uzadı; asistanı yeniden başlatın.' : 'Geçersiz istek.' }]
   }
   const c = body.context || {}

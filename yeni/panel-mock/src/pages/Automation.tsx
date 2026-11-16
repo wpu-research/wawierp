@@ -89,7 +89,7 @@ function Builder({ onAdd, onClose }: { onAdd: (r: Rule) => void; onClose: () => 
       <div className="mt-3 flex flex-wrap items-end gap-3">
         <div className="text-sm"><div className="text-xs text-mute">Onay düzeyi</div><Badge tone="neutral">Yalnız öner</Badge></div>
         <label className="text-sm"><span className="block text-xs text-mute">Tek seferde en fazla</span><input type="number" min={1} max={500} value={f.limit} onChange={e => setF({ ...f, limit: Math.max(1, Number(e.target.value) || 1) })} className={sel + ' w-24 num'} /></label>
-        <Btn variant="primary" onClick={() => onAdd(R('rn' + f.limit + f.event.length + f.action.length, 'Sistem sağlığı', `${f.event} → ${f.action}`, f.event, f.cond, f.action, 'oner', f.limit, 'kayıt', 'henüz çalışmadı', { custom: true }))}>Kuralı ekle</Btn>
+        <Btn variant="primary" onClick={() => onAdd(R('rn' + f.limit + f.event.length + f.action.length, 'Sistem sağlığı', `${f.event} → ${f.action}`, f.event, f.cond, f.action, 'oner', f.limit, 'kayıt', 'henüz çalışmadı', { custom: true, money: /etiket|ilan/i.test(f.action) }))}>Kuralı ekle</Btn>
       </div>
       <p className="m-0 mt-2 text-xs text-mute">Yeni kurallar her zaman "Yalnız öner" ile başlar; güvenle çalıştığını gördükten sonra düzeyi yükseltebilirsiniz.</p>
     </Card>
@@ -150,7 +150,7 @@ export function Rules() {
           )
         })}
       </div>
-      <p className="mt-3 text-xs text-mute">Çalışma sayıları örnektir; bu ekran sahte veriyle çalışır.</p>
+      <p className="mt-3 text-xs text-mute">Çalışma sayıları örnektir; bu ekran örnek veriyle çalışır.</p>
       <Drawer open={!!open} onClose={() => setOpenId(null)} title={open?.name} sub={open?.area}
         footer={open && <><Btn disabled={ro} onClick={() => { upd(open.id, { on: !open.on }); notify(`"${open.name}" ${open.on ? 'kapatıldı' : 'açıldı'}`) }}>{open.on ? 'Kuralı kapat' : 'Kuralı aç'}</Btn><Btn variant="ghost" onClick={() => setOpenId(null)}>Kapat</Btn></>}>
         {open && <>

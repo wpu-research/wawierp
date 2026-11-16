@@ -204,6 +204,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     // Sayım: sayılan adet fiziki stoğa yazılır ve deftere "Sayım" hareketi eklenir. Hiç sayılmamış kayıt ilk sayımla açılır.
     countStock: (pid, wh, qty, ref = 'Sayım') => {
       const p = PRODUCTS.find(x => x.id === pid); if (!p || !Number.isInteger(qty) || qty < 0) return null
+      setUndo(null) // sayım geri alınamaz; önceki işlemin geri alma kaydı defterle çelişmesin
       const r = p.stock[wh] ?? (p.stock[wh] = { fiziki: null, sanal: 0, drop: 0, tedarikci: 0, min: 5, bin: '—' })
       const before = r.fiziki ?? 0, first = r.fiziki === null; r.fiziki = qty
       setMoves(m => [{ id: 'mx' + Date.now() + pid + wh, t: NOW, pid, wh, type: 'sayim', before, after: qty, user: ROLES[role].user, ref: first ? ref + ' · ilk sayım' : ref }, ...m]); setStockVer(v => v + 1)
@@ -212,6 +213,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     },
     resolveIssue: id => {
       const o = allOrders.find(x => x.id === id); if (!o?.issue) return
+      if (!ROLES[role].ops) return say('Siparişin sorununu yalnız operasyon yetkisi kapatabilir')
       keep('Sorunu giderme'); patch([id], x => ({ ...x, issue: undefined }))
       log('Sipariş', `Sorun giderildi olarak işaretlendi: ${o.issue}`, 'sipariş ' + o.no); say('Sorun kapatıldı')
     },
@@ -222,6 +224,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     advanceReturn: id => {
       const o = allOrders.find(x => x.id === id)!
       // Para iadesini (iade faturası dahil) yalnız finans yetkisi kapatır; depo ürünü teslim aldığını işaretler.
+      if (o.ret === 'cozuldu') return
       if (o.ret === 'odeme' && !ROLES[role].finance) return say('Para iadesini yalnız muhasebe onaylayabilir')
       keep('İade aşaması')
       patch([id], x => ({ ...x, ret: NEXT[x.ret ?? 'bekleniyor'] }))

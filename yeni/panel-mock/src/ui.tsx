@@ -20,24 +20,27 @@ export const rowProps = (fn: () => void) => ({
 
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
 /** Pencere (çekmece, arama, menü) açıkken: odak içeri alınır, Tab içeride döner, Esc kapatır, kapanınca odak eski yerine döner. */
-export function useDialog(open: boolean, onClose: () => void, ref: RefObject<HTMLElement | null>) {
+const dialogStack: object[] = []
+export function useDialog(open: boolean, onClose: () => void, ref: RefObject<HTMLElement | null>, trap = true) {
   const close = useRef(onClose); close.current = onClose
   useEffect(() => {
     if (!open) return
+    const me = {}; dialogStack.push(me)
     const prev = document.activeElement as HTMLElement | null, el = ref.current
     if (el && !el.contains(document.activeElement)) (el.querySelector<HTMLElement>('[autofocus],input,textarea') ?? el.querySelector<HTMLElement>(FOCUSABLE) ?? el).focus()
     const key = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.stopPropagation(); close.current(); return }
-      if (e.key !== 'Tab' || !el) return
-      const f = [...el.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(x => x.offsetParent !== null)
+      if (dialogStack[dialogStack.length - 1] !== me) return // iç içe pencerelerde yalnız en üstteki dinler
+      if (e.key === 'Escape') { e.stopImmediatePropagation(); close.current(); return }
+      if (e.key !== 'Tab' || !el || !trap) return
+      const f = [...el.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(x => x.getClientRects().length > 0)
       if (!f.length) { e.preventDefault(); return }
       const first = f[0], last = f[f.length - 1], at = document.activeElement
       if (e.shiftKey && (at === first || !el.contains(at))) { e.preventDefault(); last.focus() }
       else if (!e.shiftKey && (at === last || !el.contains(at))) { e.preventDefault(); first.focus() }
     }
     document.addEventListener('keydown', key, true)
-    return () => { document.removeEventListener('keydown', key, true); if (prev && document.contains(prev)) prev.focus() }
-  }, [open, ref])
+    return () => { document.removeEventListener('keydown', key, true); dialogStack.splice(dialogStack.indexOf(me), 1); if (prev && document.contains(prev)) prev.focus() }
+  }, [open, ref, trap])
 }
 
 export function Btn({ variant = 'outline', className = '', ...p }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'outline' | 'ghost' }) {

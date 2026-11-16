@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ArrowUp, Check, ExternalLink, Lock, Maximize2, Minimize2, ShieldCheck, Sparkles, X } from 'lucide-react'
-import { CHANNEL, NOW, canLabel, canShip, RET, reservedMap, reservedQty, revenueOrders, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
+import { CHANNEL, NOW, canLabel, canShip, RET, reservedMap, reservedQty, revenueOrders, isRevenue, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
 import { SimilarList, findProduct, inStock, similarTo } from './similar'
@@ -130,7 +130,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const hours = (t: number) => Math.round((NOW - t) / 3600_000)
     const row = (o: Order) => ({ id: o.id, no: o.no, kanal: CHANNEL[account(o.acc).type].label, hesap: account(o.acc).name, durum: o.status, odeme: o.pay, etiket: o.label, tedarik: o.supply, bekleme_saat: hours(o.t), sorun: o.issue ?? null, ...(R.finance ? { tutar: o.total, para_birimi: o.cur } : {}) })
     const today = dayKey(NOW), yest = dayKey(NOW - 86400_000)
-    const eur = (l: Order[]) => Math.round(l.filter(o => o.cur === 'EUR' && o.status !== 'iptal' && o.status !== 'iade').reduce((s, o) => s + o.total, 0)) // ciro: iptal ve iade hariç
+    const eur = (l: Order[]) => Math.round(l.filter(o => o.cur === 'EUR' && isRevenue(o)).reduce((s, o) => s + o.total, 0)) // ciro: iptal ve iade hariç
     const ids = new Set(st.accounts.map(a => a.id))
     const badJobs = st.jobs.filter(j => (j.status === 'basarisiz' || j.status === 'kismi') && (j.acc === null || ids.has(j.acc)))
 
@@ -162,8 +162,9 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
           sorunlu_isler: badJobs.map(j => ({ id: j.id, hesap: j.acc ? account(j.acc).name : 'Sistem', tur: j.kind, durum: j.status, deneme: j.tries, mesaj: j.msg ?? null })),
         } }
       case 'get_data_quality': {
+        if (!sees('quality')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) veri kalitesi ekranını görmez.` } }
         const selling = new Map<string, number>()
-        for (const o of st.orders) for (const i of o.items) selling.set(i.pid, (selling.get(i.pid) ?? 0) + i.qty)
+        for (const o of revenueOrders(st.allOrders)) for (const i of o.items) selling.set(i.pid, (selling.get(i.pid) ?? 0) + i.qty)
         const bad = st.products.filter(p => !p.image || !p.ean)
         return { src: [{ label: 'Görseli eksik ürünler', href: '#/catalog?view=gorsel' }, { label: 'Barkodu eksik ürünler', href: '#/catalog?view=ean' }], data: {
           urun_sayisi: st.products.length, gorseli_eksik: st.products.filter(p => !p.image).length, barkodu_eksik: st.products.filter(p => !p.ean).length,
@@ -181,10 +182,12 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: [...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null })) } }
       }
       case 'get_stock_risks': {
+        if (!sees('stock')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) stok ekranını görmez.` } }
         const r = stockRisks()
         return { src: [{ label: 'Stok ayırma', href: '#/reservations' }, { label: 'Sayım planı', href: '#/counting' }], data: { aciklama: 'satilabilir = sayılmış fiziki stok − açık siparişler için ayrılan', eksiye_dusen: r.eksi.length, tukenmek_uzere: r.az.length, hic_sayilmamis_depo_kaydi: r.sayimYok, ayrilan_toplam_adet: r.ayrilanToplam, eksiye_dusenler: r.eksi.slice(0, 8), tukenmek_uzere_olanlar: r.az.slice(0, 8) } }
       }
       case 'get_replenishment':
+        if (!sees('replenish')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) tedarik ekranını görmez.` } }
         return { src: [{ label: 'Tedarik önerileri', href: '#/replenish' }], data: { not: 'Satış hızı son 30 günün siparişlerinden; stok tüm depoların sayılmış fiziki toplamı; satış tüm şirket ve depoların siparişleri, iptal ve iade hariç.', urunler: replenish().slice(0, int(input.limit, 8, 20)) } }
       case 'get_channel_performance': {
         if (!R.finance) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) tutarları göremez.` } }
@@ -484,7 +487,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     if (has('sipariş', 'dün', 'bugün', 'satış', 'ciro')) {
       const today = dayKey(NOW), yest = dayKey(NOW - 86400_000)
       const dT = st.orders.filter(o => dayKey(o.t) === today), dY = st.orders.filter(o => dayKey(o.t) === yest)
-      const eur = (l: Order[]) => l.filter(o => o.cur === 'EUR' && o.status !== 'iptal' && o.status !== 'iade').reduce((s, o) => s + o.total, 0)
+      const eur = (l: Order[]) => l.filter(o => o.cur === 'EUR' && isRevenue(o)).reduce((s, o) => s + o.total, 0)
       return {
         body: <><p className="m-0">Dün {plural(dY.length, 'sipariş')}{R.finance ? `, ${fmtMoney(eur(dY), 'EUR', 0)}` : ''} geldi. Bugün şu ana kadar {fmtNum(dT.length)}{R.finance ? ` (${fmtMoney(eur(dT), 'EUR', 0)})` : ''}.</p>
           <ul className="m-0 mt-2 pl-4">{byChannel(dY).map(l => <li key={l}>{l}</li>)}</ul>
@@ -521,6 +524,8 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const a = m.act
     // Taslak hazırlandıktan sonra rol değişmiş olabilir: onay anında yetki yeniden denetlenir.
     if (ok && a.kind !== 'reply' && !R.ops) { st.notify(`Rolünüz (${R.label}) bu işlemi onaylayamaz`); return }
+    if (ok && a.kind === 'reply' && !sees('support')) { st.notify(`Rolünüz (${R.label}) destek yanıtı gönderemez`); return }
+    if (ok && a.kind === 'retry' && !sees('sync')) { st.notify(`Rolünüz (${R.label}) eşitleme işini yeniden deneyemez`); return }
     if (ok) {
       if (a.kind === 'plan') (a.steps ?? []).forEach(s => exec(s.kind, s.ids))
       else if (a.kind === 'rule') st.notify('Kural yalnız öneri modunda başlatıldı (örnek)')

@@ -47,7 +47,7 @@ export default function Sidebar({ nav, page, badges, allowed, home, mini, setMin
     <nav className="flex flex-col h-full bg-navy text-white" aria-label="Ana menü">
       <div className={`h-14 flex items-center shrink-0 ${slim ? 'justify-center' : 'justify-between px-4'}`}>
         <a href={home} className="flex items-center gap-2 no-underline" title="Ana sayfa">
-          {slim ? <span className="size-9 grid place-items-center rounded-xl bg-[#3048C8]"><Logo height={26} markOnly /></span> : <><Logo height={26} onDark /><span className="rounded bg-gold/20 text-gold text-[10px] font-semibold px-1.5 py-0.5">MOCK</span></>}
+          {slim ? <span className="size-9 grid place-items-center rounded-xl bg-[#3048C8]"><Logo height={26} markOnly /></span> : <><Logo height={26} onDark /><span className="rounded bg-gold/20 text-gold text-[10px] font-semibold px-1.5 py-0.5">TASLAK</span></>}
         </a>
         {onClose && <button className="border-0 bg-transparent p-1.5 text-white/70" aria-label="Menüyü kapat" onClick={onClose}><X size={18} /></button>}
       </div>

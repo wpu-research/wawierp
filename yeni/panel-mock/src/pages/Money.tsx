@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowDown, ArrowUp, Upload } from 'lucide-react'
-import { CHANNEL, COMM, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, type ChannelType, type Cur, type Order } from '../data'
+import { CHANNEL, COMM, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, revenueOrders, type ChannelType, type Cur, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Drawer, Empty, HBars, PageHead, Stat, sel, td, th, rowProps } from '../ui'
 
@@ -127,7 +127,7 @@ export function Accounting() {
   const [per, setPer] = useState<Period>('30')
   const [prep, setPrep] = useState<string>('')
   const [draft, setDraft] = useState<string>('')
-  const inv = useMemo(() => orders.filter(o => o.invoice === 'kesin' && o.status !== 'iade' && o.status !== 'iptal' && inPeriod(o.t, per)), [orders, per])
+  const inv = useMemo(() => orders.filter(o => o.invoice === 'kesin' && isRevenue(o) && inPeriod(o.t, per)), [orders, per])
   const rows = useMemo(() => COMPANIES.flatMap(c => (['EUR', 'TRY', 'USD'] as Cur[]).map(cur => {
     const l = inv.filter(o => o.company === c.id && o.cur === cur), gross = l.reduce((a, o) => a + o.total, 0), rate = VAT[c.country]
     return { c, cur, n: l.length, gross, net: gross / (1 + rate), rate }
@@ -206,7 +206,7 @@ export function Profit() {
   const [by, setBy] = useState<'ch' | 'co'>('ch')
   const [sk, setSk] = useState<SK>('net')
   const [asc, setAsc] = useState(false)
-  const list = useMemo(() => orders.filter(o => o.cur === 'EUR' && o.t >= NOW - 30 * D && o.status !== 'iptal' && o.status !== 'iade'), [orders])
+  const list = useMemo(() => revenueOrders(orders).filter(o => o.cur === 'EUR'), [orders])
   const chRows = useMemo(() => aggregate(list, o => { const t = account(o.acc).type; return [t, CHANNEL[t].label] }), [list])
   const coRows = useMemo(() => aggregate(list, o => [o.company, company(o.company).name]), [list])
   const rows = [...(by === 'ch' ? chRows : coRows)].sort((a, b) => (sk === 'label' ? a.label.localeCompare(b.label, 'tr') : a[sk] - b[sk]) * (asc ? 1 : -1))

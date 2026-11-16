@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, ImagePlus, Keyboard, RefreshCw, SkipForward, Sparkles } from 'lucide-react'
-import { NOW, fmtNum, type Product } from '../data'
+import { NOW, fmtNum, revenueOrders, type Product } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone } from '../ui'
 
 const inputCls = 'h-8 rounded-md border border-line bg-card px-2 text-sm w-full'
+const singleKeysOn = () => { try { return localStorage.getItem('wawi-single-keys') !== 'off' } catch { return true } }
 const DAY30 = 30 * 86400000
 const eanCheck = (d12: string) => String((10 - ([...d12].reduce((a, c, i) => a + Number(c) * (i % 2 ? 3 : 1), 0) % 10)) % 10)
 // Barkod 13 haneli olmalı ve son hane kontrol hanesiyle tutmalı.
@@ -26,7 +27,7 @@ function useSales() {
   const { allOrders } = useStore()
   return useMemo(() => {
     const m = new Map<string, number>()
-    allOrders.filter(o => o.status !== 'iptal' && NOW - o.t <= DAY30).forEach(o => o.items.forEach(i => m.set(i.pid, (m.get(i.pid) ?? 0) + i.qty)))
+    revenueOrders(allOrders).forEach(o => o.items.forEach(i => m.set(i.pid, (m.get(i.pid) ?? 0) + i.qty)))
     return m
   }, [allOrders])
 }
@@ -74,8 +75,8 @@ export function QualityQueue() {
       if (h.current.tab !== 'next' || e.ctrlKey || e.metaKey) return
       if ((e.target as HTMLElement).closest('aside,[role=dialog]')) return // asistan, çekmece ve pencerelerdeki Enter bu kaydı tetiklemesin
       const typing = (e.target as HTMLElement).closest('input,textarea,select')
-      if (e.key === 'Enter' && !(e.target as HTMLElement).closest('button')) { e.preventDefault(); h.current.save() }
-      else if (!typing && e.key.toLowerCase() === 's') h.current.skip()
+      if (e.key === 'Enter' && (typing || e.target === document.body)) { e.preventDefault(); h.current.save() }
+      else if (!typing && e.key.toLowerCase() === 's' && singleKeysOn()) h.current.skip()
     }
     window.addEventListener('keydown', f); return () => window.removeEventListener('keydown', f)
   }, [])

@@ -97,7 +97,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
       if (mod || e.altKey) return
       if (e.key === '?') { setKeys(v => !v); return }
       if (k === 'escape') { setKeys(false); return }
-      if (!singleRef.current) return
+      if (!singleRef.current || document.querySelector('[aria-modal="true"]')) return // pencere açıkken harf kısayolları çalışmaz
       if (Date.now() - g < 1500 && GOTO[k]) { location.hash = '#/' + GOTO[k][0]; g = 0; return }
       if (k === 'g') { g = Date.now(); return }
       if (k === 'a') setAgent(v => !v)

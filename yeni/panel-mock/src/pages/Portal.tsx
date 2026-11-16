@@ -251,7 +251,7 @@ export function ReturnForm() {
             </div>)}
         </Card>
         <Card title="Panelde nasıl görünür" right={<a href="#/returns" className="text-sm text-brand">İadeler sayfasına git</a>}>
-          <p className="m-0 text-sm text-ink2">Gönderilen talep personelin <b>İadeler</b> sayfasında aşama aşama izlenir ({RET.map(r => r.label).join(' → ')}). Kuralı geçen talepler kendiliğinden onaylanır, diğerleri sırada beklemeye alınır.</p>
+          <p className="m-0 text-sm text-ink2">Gönderilen talep personelin <b>İadeler</b> sayfasında aşama aşama izlenir ({RET.map(r => r.label).join(' → ')}). Kurala uyan talepler personele onay önerisiyle gider, diğerleri incelemeye alınır; onayı her zaman personel verir.</p>
           <p className="m-0 mt-1 text-xs text-mute">Açık iade: <span className="num">{fmtNum(allOrders.filter(o => o.ret && o.ret !== 'cozuldu').length)}</span></p>
         </Card>
       </div>

@@ -1,6 +1,6 @@
 import { useMemo, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { Check, ChevronLeft, ChevronRight, ListChecks, Minus, Package, Plus, ScanBarcode, Truck, Wifi, WifiOff } from 'lucide-react'
-import { CHANNEL, WAREHOUSES, account, fmtNum, product, toShip, type Order, type WhId } from '../data'
+import { CHANNEL, WAREHOUSES, account, canLabel, canShip, fmtNum, product, toShip, type Order, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge } from '../ui'
@@ -111,7 +111,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
 
 /* ----------------------------------------------------------------- Paketle */
 function Pack({ batch, act, res, online }: { batch: Order[]; act: Act; res: Res; online: boolean }) {
-  const { role, createLabels, ship } = useStore()
+  const { role, createLabels, ship, notify } = useStore()
   const ops = ROLES[role].ops
   const [i, setI] = useState(0)
   const [ticks, setTicks] = useState<Record<string, boolean>>({})
@@ -149,8 +149,8 @@ function Pack({ batch, act, res, online }: { batch: Order[]; act: Act; res: Res;
           })}
         </div>
       </Panel>
-      <Big v="primary" disabled={!ops || !online || !allTicked || isLabeled(o) || shortItems.length > 0} onClick={() => { act('Etiket ' + o.no, () => createLabels([o.id])); setLblQ(add) }}>Etiketi yazdır</Big>
-      <Big v="ok" disabled={!ops || !online || !isLabeled(o) || isShipped(o) || shortItems.length > 0} onClick={() => { if (!window.confirm(`${o.no} kargoya verilsin mi? Takip numarası kanala gönderilir.`)) return; act('Kargo ' + o.no, () => ship([o.id])); setShipQ(add); setI(x => Math.min(x + 1, batch.length - 1)) }}><Truck size={20} /> Kargoya ver</Big>
+      <Big v="primary" disabled={!ops || !online || !allTicked || isLabeled(o) || shortItems.length > 0} onClick={() => { if (!canLabel(o)) return notify('Bu siparişe etiket verilemez (sorunlu ya da ödeme bekliyor)'); act('Etiket ' + o.no, () => createLabels([o.id])); setLblQ(add) }}>Etiketi yazdır</Big>
+      <Big v="ok" disabled={!ops || !online || !isLabeled(o) || isShipped(o) || shortItems.length > 0} onClick={() => { if (!window.confirm(`${o.no} kargoya verilsin mi? Takip numarası kanala gönderilir.`)) return; if (!canShip(o)) return notify('Bu sipariş kargoya verilemez'); act('Kargo ' + o.no, () => ship([o.id])); setShipQ(add); setI(x => Math.min(x + 1, batch.length - 1)) }}><Truck size={20} /> Kargoya ver</Big>
       {!online && <Note>Çevrimdışıyken etiket ve kargo verilemez; bağlantı gelince devam edin.</Note>}
       {shortItems.length > 0 && <div className="rounded-xl bg-warn-soft text-warn p-3 text-sm"><b>Eksik toplandı:</b> {shortItems.map(it => product(it.pid).name).join(', ')}. Eksik tamamlanmadan bu siparişe etiket verilmez; vardiya sorumlusuna bildirin.</div>}
       {ops && !allTicked && !isLabeled(o) && shortItems.length === 0 && <Note>Etiket için önce tüm ürünleri işaretleyin.</Note>}
@@ -169,7 +169,7 @@ function Count({ wh, act }: { wh: WhId; act: Act }) {
   const { products, countStock } = useStore()
   const shelves = useMemo(() => {
     const m = new Map<string, string[]>()
-    for (const p of products) { const s = p.stock[wh]; if (s) m.set(s.bin, [...(m.get(s.bin) ?? []), p.id]) }
+    for (const p of products) { const s = p.stock[wh]; if (s && s.bin !== '—') m.set(s.bin, [...(m.get(s.bin) ?? []), p.id]) }
     return [...m.entries()].sort((a, b) => binCmp(a[0], b[0]))
   }, [products, wh])
   const [bin, setBin] = useState<string | null>(null)
@@ -205,7 +205,7 @@ function Count({ wh, act }: { wh: WhId; act: Act }) {
           </Panel>
         )
       })}
-      <Big v="primary" disabled={!ready} onClick={() => { const shelf = bin, entries = ids.map(id => [id, Number(cnt[id])] as const); act('Sayım ' + shelf, () => { let d = 0; for (const [id, q] of entries) d += countStock(id, wh, q, 'Mobil sayım') ?? 0; notify(`Raf ${shelf} sayımı stok defterine yazıldı (toplam fark ${d > 0 ? '+' : ''}${d})`) }); setSaved(s => new Set(s).add(bin)); setBin(null) }}>Kaydet</Big>
+      <Big v="primary" disabled={!ready} onClick={() => { const shelf = bin, entries = ids.map(id => [id, Number(cnt[id])] as const); act('Sayım ' + shelf, () => { let d = 0; for (const [id, q] of entries) d += countStock(id, wh, q, 'Mobil sayım') ?? 0; notify(`Raf ${shelf} sayımı stok defterine yazıldı (toplam fark ${d > 0 ? '+' : ''}${d})`) }); setSaved(s => new Set(s).add(bin)); setCnt(c => { const n = { ...c }; ids.forEach(id => delete n[id]); return n }); setBin(null) }}>Kaydet</Big>
       <Note>Kaydedince sayım stok defterine "Sayım" hareketi olarak yazılır. Hiç sayılmamış ürünler ilk sayımla açılır.</Note>
     </div>
   )
@@ -246,7 +246,7 @@ function Recv({ wh, act }: { wh: WhId; act: Act }) {
 /* ------------------------------------------------------------------- Çalışma */
 function Work({ wh, tab, setTab, act, online }: { wh: WhId; tab: Tab; setTab: (t: Tab) => void; act: Act; online: boolean }) {
   const { allOrders } = useStore()
-  const batch = useMemo(() => allOrders.filter(o => o.wh === wh && toShip(o) && o.supply === 'fiziki').sort((a, b) => a.t - b.t).slice(0, 12), []) // eslint-disable-line react-hooks/exhaustive-deps
+  const batch = useMemo(() => allOrders.filter(o => o.wh === wh && toShip(o) && o.supply === 'fiziki' && !o.issue).sort((a, b) => a.t - b.t).slice(0, 12), []) // eslint-disable-line react-hooks/exhaustive-deps
   const lines = useMemo<Line[]>(() => {
     const m = new Map<string, Line>()
     for (const o of batch) for (const it of o.items) {

@@ -98,7 +98,12 @@ const tooMany = (res, base, wait, api = false) => api
 const sameOrigin = req => { const o = req.headers.origin; if (!o) return true; try { return new URL(o).host === req.headers.host } catch { return false } }
 const isJson = req => /^application\/json\b/i.test(req.headers['content-type'] || '')
 
-const server = createServer(async (req, res) => {
+const server = createServer((req, res) => handle(req, res).catch(e => {
+  console.error('istek hatası:', e)
+  if (!res.headersSent) res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' }).end('Sunucu hatası')
+  else res.destroy()
+}))
+async function handle(req, res) {
   const base = { ...SECURITY, 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' }
   // new URL() bozuk adreste hata fırlatır ve süreci düşürür; sorgu kısmını elle ayırıyoruz.
   const path = (req.url || '/').split(/[?#]/)[0]
@@ -129,10 +134,12 @@ const server = createServer(async (req, res) => {
   if (g > 0) return tooMany(res, base, g)
   if (g) return res.writeHead(401, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'WWW-Authenticate': 'Basic realm="WawiERP mock"' }).end('Giriş gerekli')
   res.writeHead(200, { ...base, ...page }).end(panel)
-})
+}
 // Yönlendirici (proxy) bağlantıyı bizden uzun açık tutarsa ara sıra 502 görülür; Node'un 5 sn varsayılanı bunun için kısa.
 server.keepAliveTimeout = 65_000
 server.headersTimeout = 66_000
+// Port kullanımdaysa (EADDRINUSE) sağlıksız ama canlı bir süreç kalmasın: çık, Railway yeniden başlatsın.
+server.on('error', e => { console.error('sunucu hatası:', e); process.exit(1) })
 server.listen(process.env.PORT || 3000, '0.0.0.0')
 // Her yayında Railway SIGTERM gönderir: yeni bağlantı almayı bırak, süren istekleri (asistan, video) bitirsin, takılırsa 10 sn sonra çık.
 let closing = false

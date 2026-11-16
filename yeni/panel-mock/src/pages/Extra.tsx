@@ -14,7 +14,7 @@ export function Labels() {
   const { orders, manual, createLabels, ship, addManual, notify, role, whId } = useStore()
   const can = ROLES[role].ops
   const [tab, setTab] = useState<'hata' | 'hazir' | 'manual' | 'carriers'>('hata')
-  const failed = orders.filter(o => o.label === 'hata' && (o.status === 'yeni' || o.status === 'hazirlaniyor'))
+  const failed = orders.filter(o => o.label === 'hata' && (o.status === 'yeni' || o.status === 'hazirlaniyor') && o.supply === 'fiziki')
   const ready = orders.filter(canShip)
   const [f, setF] = useState({ name: '', city: '', kg: '1', wh: (whId || 'de') as WhId })
 
