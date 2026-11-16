@@ -35,8 +35,8 @@ export default function Sidebar({ nav, page, badges, allowed, home, mini, setMin
         {!slim && <span className="flex-1 truncate">{i.label}</span>}
         {!slim && i.fresh && !b?.n && <span className="size-1.5 rounded-full bg-gold/80 group-hover/nav:opacity-0" title="Yeni ekran" />}
         {b && b.n > 0 && (slim
-          ? <span className={`absolute top-1 right-2 size-2 rounded-full ${b.bad ? 'bg-[#ff7a7a]' : 'bg-gold'}`} />
-          : <span className={`num rounded-full px-1.5 text-[11px] font-semibold group-hover/nav:opacity-0 ${b.bad ? 'bg-[#ff7a7a]/20 text-[#ffb0b0]' : 'bg-white/12 text-white/85'}`}>{b.n}</span>)}
+          ? <span className={`absolute top-1 right-2 size-2 rounded-full ${b.bad ? 'bg-[#ff7a7a]' : 'bg-gold'}`}><span className="sr-only">{b.n} {b.bad ? 'sorunlu' : 'bekliyor'}</span></span>
+          : <span className={`num rounded-full px-1.5 text-[11px] font-semibold group-hover/nav:opacity-0 ${b.bad ? 'bg-[#ff7a7a]/20 text-[#ffb0b0]' : 'bg-white/12 text-white/85'}`}>{b.n}<span className="sr-only"> {b.bad ? 'sorunlu' : 'bekliyor'}</span></span>)}
       </a>
       {!slim && <button onClick={() => pin(i.key)} aria-label={star ? `${i.label}: sabitlemeyi kaldır` : `${i.label}: sık kullanılanlara sabitle`} title={star ? 'Sabitlemeyi kaldır' : 'Sık kullanılanlara sabitle'}
         className={`absolute right-1.5 top-1.5 size-6 grid place-items-center rounded-md border-0 bg-navy opacity-0 group-hover/nav:opacity-100 focus-visible:opacity-100 ${star ? 'text-gold' : 'text-white/60 hover:text-white'}`}><Star size={13} fill={star ? 'currentColor' : 'none'} /></button>}
