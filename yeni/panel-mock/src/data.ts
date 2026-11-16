@@ -306,7 +306,7 @@ export const toShip = (o: Order) => isOpen(o) && o.pay === 'odendi'
     BÜTÜN siparişlerle yapılır, şirket süzgeciyle daraltılmış listeyle değil. */
 export function reservedMap(allOrders: Order[]) {
   const res = new Map<string, { o: Order; qty: number }[]>()
-  for (const o of allOrders) if (isOpen(o) && o.supply === 'fiziki') for (const it of o.items) { const k = it.pid + '|' + o.wh; res.set(k, [...(res.get(k) ?? []), { o, qty: it.qty }]) }
+  for (const o of allOrders) if (isOpen(o) && o.supply === 'fiziki') for (const it of o.items) { const k = it.pid + '|' + o.wh, l = res.get(k); if (l) l.push({ o, qty: it.qty }); else res.set(k, [{ o, qty: it.qty }]) }
   return res
 }
 export const reservedQty = (res: ReturnType<typeof reservedMap>, pid: string, wh: string) => (res.get(pid + '|' + wh) ?? []).reduce((a, x) => a + x.qty, 0)

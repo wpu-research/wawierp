@@ -47,7 +47,7 @@ function PhonePreview({ lines, ticked, onScan }: { lines: Line[]; ticked: Set<st
 
 export function Picking() {
   const { orders, whId, role, createLabels } = useStore()
-  const ready = useMemo(() => orders.filter(o => toShip(o) && o.supply === 'fiziki' && !o.issue).sort((a, b) => a.t - b.t), [orders])
+  const ready = useMemo(() => orders.filter(o => toShip(o) && o.supply === 'fiziki' && !o.issue && o.label !== 'hazir').sort((a, b) => a.t - b.t), [orders])
   const counts = useMemo(() => {
     const m = new Map<WhId, number>()
     for (const o of ready) m.set(o.wh, (m.get(o.wh) ?? 0) + 1)

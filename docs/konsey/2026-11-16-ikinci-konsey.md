@@ -154,3 +154,6 @@ Tur 4 ve 5 sonrası (push `ee7f246`): yeni sürüm yayında (brotli yanıtı gel
 ## 11. Tur 5 (son dar tur)
 İki üye yalnız tur 4 değişikliklerine baktı; yeni ciddi hata çıkmadı. Düzeltilenler: rol değişince sürüp giden asistan isteği artık eski rolün yetkisiyle sonuç yazmıyor (epoch); `Accept-Encoding` içinde `q=0` olan kodlama gönderilmiyor (yerelde denendi); iade stok kaydı yalnız gerçekten yazılan satırı sayıyor; asistan ve menüdeki ekran adları eşleşti; "Negatif" rozeti "Eksi stok" oldu; iade ekranında "İlerlet" düğmesi aşamaya uygun role görünüyor. Bu turdan sonra tur sonuçları küçük/kozmetik düzeye indi.
 
+## 12. Tur 6 (devam): açık listeden temizlik
+Google Fonts bağlantıları ve CSP izinleri kaldırıldı (ziyaretçi adresi Google'a gitmiyor; başlık yazı tipi sistem yazı tipine düşer, yazı tipi dosyası kendi sunucudan verilirse geri eklenir). Hata sınırı eklendi (beklenmeyen ekran hatasında anlaşılır mesaj). Toplama listesi etiketlenmiş siparişi listeden çıkarıyor (sıradaki parti açılıyor). Ayırma haritası doğrusal zamanda hesaplanıyor. Yerelde 37 ekranın hepsi ve üç rol (yönetici, muhasebe, depo) birlikte gezildi: çökme ve konsol hatası yok.
+
