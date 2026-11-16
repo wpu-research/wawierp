@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowDown, ArrowUp, Upload } from 'lucide-react'
-import { CHANNEL, COMM, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, revenueOrders, type ChannelType, type Cur, type Order } from '../data'
+import { CHANNEL, COMM, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, SHIP, isRevenue, revenueOrders, type ChannelType, type Cur, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Drawer, Empty, HBars, PageHead, Stat, sel, td, th, rowProps } from '../ui'
 
@@ -185,7 +185,6 @@ export function Accounting() {
 }
 
 /* ───────────── 3. Kârlılık ───────────── */
-const SHIP: Record<string, number> = { DE: 4.9, NL: 5.5, TR: 7.5 }
 type SK = 'label' | 'n' | 'rev' | 'avg' | 'comm' | 'ship' | 'net' | 'margin'
 interface PRow { key: string; label: string; n: number; rev: number; vat: number; avg: number; comm: number; ship: number; net: number; margin: number }
 

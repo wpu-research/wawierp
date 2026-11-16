@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Check, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
-import { NOW, PRODUCTS, RET, RETURN_RULE, VAT, company, fmtDT, fmtMoney, fmtNum, product, type Order, type Product } from '../data'
+import { EUR_RATE, NOW, PRODUCTS, RET, RETURN_RULE, VAT, company, fmtDT, fmtMoney, fmtNum, product, type Order, type Product } from '../data'
 import { b2bTotals, type B2B } from '../data2'
 import { useStore } from '../store'
 import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -63,6 +63,8 @@ function PriceList({ c, tier, onAdd }: { c: B2B; tier: number; onAdd: (pid: stri
   const [q, setQ] = useState(''), [cat, setCat] = useState(''), [qty, setQty] = useState<Record<string, number>>({})
   const cats = [...new Set(PRODUCTS.map(p => p.cat))]
   const rows = PRODUCTS.filter(p => (!cat || p.cat === cat) && (p.name + p.sku).toLowerCase().includes(q.toLowerCase()))
+  // Ürün fiyatı KDV dahil EUR'dur; B2B listesi KDV hariç ve müşterinin para biriminde gösterilir.
+  const net = (p: Product) => p.price / (1 + VAT[company(c.company).country]) * EUR_RATE[c.cur]
   return (
     <Card pad={false} title={<span className="flex items-center gap-2">Fiyat listem · {c.code} <Badge tone="violet" title="Örnek iskonto kademesi">%{tier} iskonto · örnek</Badge></span>}
       right={<span className="flex flex-wrap gap-2">
@@ -75,8 +77,8 @@ function PriceList({ c, tier, onAdd }: { c: B2B; tier: number; onAdd: (pid: stri
           return (
             <tr key={p.id}>
               <td className={td}><div className="flex items-center gap-3"><Thumb p={p} size={48} /><div><div className="font-medium">{p.name}</div><div className="text-xs text-mute">{p.brand} · {p.sku}</div></div></div></td>
-              <td className={td + ' num text-right text-mute line-through'}>{fmtMoney(p.price)}</td>
-              <td className={td + ' num text-right font-semibold'}>{fmtMoney(p.price * (1 - tier / 100))}</td>
+              <td className={td + ' num text-right text-mute line-through'}>{fmtMoney(net(p), c.cur)}</td>
+              <td className={td + ' num text-right font-semibold'}>{fmtMoney(net(p) * (1 - tier / 100), c.cur)}</td>
               <td className={td}><Badge tone="info">%{tier}</Badge></td>
               <td className={td}><Badge tone={s.tone}>{s.w}</Badge></td>
               <td className={td}><Stepper value={n} label={p.name} onChange={v => setQty(k => ({ ...k, [p.id]: v }))} /></td>
@@ -85,7 +87,7 @@ function PriceList({ c, tier, onAdd }: { c: B2B; tier: number; onAdd: (pid: stri
         })}</tbody></table>
         {rows.length === 0 && <Empty>Aramaya uyan ürün yok.</Empty>}
       </div>
-      <p className="m-0 px-4 py-2 text-xs text-mute">Stok yalnızca Var / Az / Yok olarak gösterilir; kesin adetler müşteriyle paylaşılmaz. Fiyatlar KDV hariçtir ve avro cinsindendir. İskonto kademeleri örnektir.</p>
+      <p className="m-0 px-4 py-2 text-xs text-mute">Stok yalnızca Var / Az / Yok olarak gösterilir; kesin adetler müşteriyle paylaşılmaz. Fiyatlar KDV hariçtir ve {c.cur} cinsindendir (kur ve iskonto kademeleri örnektir).</p>
     </Card>
   )
 }
@@ -120,8 +122,9 @@ function Reorder({ c, onAdd }: { c: B2B; onAdd: (ls: { pid: string; qty: number 
 
 function CartView({ c, tier, cart, setCart, note, setNote, sent, onSend }: { c: B2B; tier: number; cart: Cart; setCart: (f: (k: Cart) => Cart) => void; note: string; setNote: (s: string) => void; sent: string | null; onSend: () => void }) {
   const ids = Object.keys(cart).filter(k => cart[k] > 0)
-  const sub = ids.reduce((a, id) => a + product(id).price * (1 - tier / 100) * cart[id], 0)
-  const rate = VAT[company(c.company).country], vat = sub * rate
+  const rate = VAT[company(c.company).country]
+  const unit = (id: string) => product(id).price / (1 + rate) * (1 - tier / 100) * EUR_RATE[c.cur] // KDV hariç, müşterinin para biriminde
+  const sub = ids.reduce((a, id) => a + unit(id) * cart[id], 0), vat = sub * rate
   return (
     <div className="space-y-3">
       {sent && <Card className="!border-ok"><div className="flex items-start gap-2"><Check className="text-ok shrink-0" size={18} />
@@ -131,18 +134,18 @@ function CartView({ c, tier, cart, setCart, note, setNote, sent, onSend }: { c: 
         {ids.length === 0 ? <Empty>Sepet boş. Fiyat listesinden ürün ekleyin.</Empty> : (
           <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm">
             <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Birim</th><th className={th}>Adet</th><th className={th + ' text-right'}>Tutar</th><th className={th} /></tr></thead>
-            <tbody>{ids.map(id => { const p = product(id), u = p.price * (1 - tier / 100); return (
-              <tr key={id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} />{p.name}</div></td><td className={td + ' num text-right'}>{fmtMoney(u)}</td>
+            <tbody>{ids.map(id => { const p = product(id), u = unit(id); return (
+              <tr key={id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} />{p.name}</div></td><td className={td + ' num text-right'}>{fmtMoney(u, c.cur)}</td>
                 <td className={td}><Stepper value={cart[id]} label={p.name} onChange={v => setCart(k => ({ ...k, [id]: v }))} /></td>
-                <td className={td + ' num text-right'}>{fmtMoney(u * cart[id])}</td>
+                <td className={td + ' num text-right'}>{fmtMoney(u * cart[id], c.cur)}</td>
                 <td className={td}><Btn variant="ghost" aria-label={`${p.name} sepetten çıkar`} onClick={() => setCart(k => { const n = { ...k }; delete n[id]; return n })}><Trash2 size={14} /></Btn></td></tr>) })}</tbody></table></div>)}
       </Card>
       {ids.length > 0 && (
         <Card title="Özet">
           <dl className="m-0 grid max-w-sm grid-cols-2 gap-y-1 text-sm">
-            <dt className="text-ink2">Ara toplam</dt><dd className="num m-0 text-right">{fmtMoney(sub)}</dd>
-            <dt className="text-ink2">KDV (%{Math.round(rate * 100)} · {company(c.company).country})</dt><dd className="num m-0 text-right">{fmtMoney(vat)}</dd>
-            <dt className="font-semibold">Toplam</dt><dd className="num m-0 text-right font-semibold">{fmtMoney(sub + vat)}</dd></dl>
+            <dt className="text-ink2">Ara toplam</dt><dd className="num m-0 text-right">{fmtMoney(sub, c.cur)}</dd>
+            <dt className="text-ink2">KDV (%{Math.round(rate * 100)} · {company(c.company).country})</dt><dd className="num m-0 text-right">{fmtMoney(vat, c.cur)}</dd>
+            <dt className="font-semibold">Toplam</dt><dd className="num m-0 text-right font-semibold">{fmtMoney(sub + vat, c.cur)}</dd></dl>
           <label className="mt-3 block text-sm text-ink2">Sipariş notu
             <textarea className="mt-1 block w-full rounded-md border border-line bg-card p-2 text-sm text-ink" rows={2} value={note} onChange={e => setNote(e.target.value)} placeholder="Teslimat isteği vb." /></label>
           <div className="mt-3"><Btn variant="primary" onClick={onSend}>Sipariş talebi gönder</Btn></div>
@@ -170,7 +173,6 @@ function Docs({ c }: { c: B2B }) {
 
 const REASONS = ['Ürün hasarlı', 'Yanlış ürün', 'Beğenmedim', 'Geç geldi', 'Diğer']
 const STEPS = ['Siparişi bul', 'Ürünleri seç', 'Neden', 'Özet']
-const EUR_RATE = { EUR: 1, TRY: 48, USD: 1.08 }
 
 export function ReturnForm() {
   const { allOrders, notify } = useStore()

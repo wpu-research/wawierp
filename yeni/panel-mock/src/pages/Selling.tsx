@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
-import { CHANNEL, COMM, NOW, PRODUCTS, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
+import { CHANNEL, COMM, NOW, PRODUCTS, SHIP, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Chan, Empty, HBars, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -145,7 +145,7 @@ function Calc({ products, accounts }: { products: Product[]; accounts: Account[]
   const key = p.id + a.id
   const vat = VAT[company(a.company).country]
   const v = (n: string, d: number) => ov[key + n] ?? d
-  const cost = v('c', +estCost(p).toFixed(2)), price = v('p', p.price), ship = v('s', 4.9), vr = v('v', vat * 100) / 100, cm = v('m', COMM[a.type] * 100) / 100
+  const cost = v('c', +estCost(p).toFixed(2)), price = v('p', p.price), ship = v('s', SHIP[WAREHOUSES.find(w => w.id === a.wh)?.country ?? 'DE']), vr = v('v', vat * 100) / 100, cm = v('m', COMM[a.type] * 100) / 100
   const vatAmt = price - price / (1 + vr), comm = price * cm, profit = price - vatAmt - comm - ship - cost
   const fld = (n: string, label: string, val: number, extra?: ReactNode) => (
     <label className="block text-xs text-mute">{label} {extra}<input type="number" step="0.1" value={val} onChange={e => setOv({ ...ov, [key + n]: +e.target.value })} className="mt-0.5 w-full h-8 rounded-md border border-line bg-card px-2 text-sm text-ink num" /></label>)
@@ -160,7 +160,7 @@ function Calc({ products, accounts }: { products: Product[]; accounts: Account[]
         {fld('c', `Alış maliyeti (${a.cur})`, cost, <Example />)}{fld('p', `Satış fiyatı (${a.cur})`, price)}{fld('s', 'Kargo', ship, <Example />)}
         {fld('v', 'KDV %', +(vr * 100).toFixed(1))}{fld('m', 'Komisyon %', +(cm * 100).toFixed(1), <Example t="örnek oran" />)}
       </div>
-      <div className="grid grid-cols-2 gap-3 mt-3"><Stat label="Net kâr" value={f(profit)} tone={profit < 0 ? 'bad' : 'ok'} /><Stat label="Marj" value={pct(price ? profit / price : 0)} tone={profit / price < 0.08 ? 'warn' : 'ok'} /></div>
+      <div className="grid grid-cols-2 gap-3 mt-3"><Stat label="Net kâr" value={f(profit)} tone={profit < 0 ? 'bad' : 'ok'} /><Stat label="Marj (KDV hariç ciroya göre)" value={pct(price - vatAmt ? profit / (price - vatAmt) : 0)} tone={profit / (price - vatAmt) < 0.08 ? 'warn' : 'ok'} /></div>
       <div className="mt-3"><HBars fmt={f} data={[{ label: 'Maliyet', value: cost, color: 'var(--ink2)' }, { label: 'Komisyon', value: comm, color: 'var(--warn)' }, { label: 'Kargo', value: ship, color: 'var(--violet)' }, { label: 'KDV', value: vatAmt, color: 'var(--mute)' }, { label: 'Kâr', value: Math.max(0, profit), color: 'var(--ok)' }]} /></div>
     </Card>
   )
@@ -176,7 +176,7 @@ export function PriceRules() {
       r.n++
       if (o.cur === 'EUR') {
         r.rev += o.total; r.comm += o.total * COMM[a.type]; r.vat += o.total - o.total / (1 + VAT[company(o.company).country]) // KDV, tutarın içinden ayrılır
-        r.cost += o.items.reduce((s, i) => { const p = PRODUCTS.find(x => x.id === i.pid); return s + (p ? estCost(p) * i.qty : 0) }, 0) + 4.9
+        r.cost += o.items.reduce((s, i) => { const p = PRODUCTS.find(x => x.id === i.pid); return s + (p ? estCost(p) * i.qty : 0) }, 0) + SHIP[WAREHOUSES.find(w => w.id === o.wh)?.country ?? 'DE']
       }
       m.set(a.type, r)
     }
@@ -206,7 +206,7 @@ export function PriceRules() {
         <p className="m-0 px-4 pb-2 text-xs text-mute">Yalnız EUR siparişler hesaba katıldı (sipariş adedi tüm para birimleri). Komisyon <Example t="örnek oran" />, maliyet ve kargo <Example /> varsayımdır; KDV ve iadeler gerçek hesapla farklı olabilir.</p>
         <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
           <thead><tr><th className={th}>Kanal</th><th className={th + ' text-right'}>Sipariş</th><th className={th + ' text-right'}>Ciro (EUR)</th><th className={th + ' text-right'}>Tahmini komisyon</th><th className={th + ' text-right'}>Tahmini marj</th></tr></thead>
-          <tbody>{chan.map(([t, r]) => { const mg = r.rev ? (r.rev - r.vat - r.comm - r.cost) / r.rev : null; return (
+          <tbody>{chan.map(([t, r]) => { const mg = r.rev ? (r.rev - r.vat - r.comm - r.cost) / (r.rev - r.vat) : null; return (
             <tr key={t} className="hover:bg-bg"><td className={td}><span className="inline-block size-2 rounded-full mr-1.5" style={{ background: CHANNEL[t].color }} />{CHANNEL[t].label}</td>
               <td className={td + ' num text-right'}>{fmtNum(r.n)}</td><td className={td + ' num text-right'}>{r.rev ? fmtMoney(r.rev, 'EUR', 0) : '–'}</td>
               <td className={td + ' num text-right'}>{r.rev ? fmtMoney(r.comm, 'EUR', 0) : '–'}</td>

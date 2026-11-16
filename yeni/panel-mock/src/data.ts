@@ -53,6 +53,10 @@ export const COMPANIES: { id: string; name: string; country: Country; wh: WhId }
   { id: 'techno', name: 'Technowelt', country: 'DE', wh: 'tw' },
 ]
 export const company = (id: string) => COMPANIES.find(c => c.id === id)!
+/** Örnek kur tablosu (1 EUR kaç birim). Gerçek sistemde kur kaynağı, tarihi ve yuvarlama belgeye yazılır (docs/panel/08). */
+export const EUR_RATE: Record<Cur, number> = { EUR: 1, TRY: 48, USD: 1.08 }
+/** Örnek kargo ücreti (EUR), depo ülkesine göre; kâr hesabı her ekranda bunu kullanır. */
+export const SHIP: Record<string, number> = { DE: 4.9, NL: 5.5, TR: 7.5 }
 export const VAT: Record<Country, number> = { DE: 0.19, NL: 0.21, TR: 0.2 }
 // Örnek komisyon oranları (gerçek sözleşme oranı değil). Tek yerde durur; fiyat ve kârlılık ekranları aynı oranı kullanır.
 export const COMM = { shopify: 0.029, ebay: 0.115, kaufland: 0.105, otto: 0.12, metro: 0.1, amazon: 0.15, webshop: 0.02, trendyol: 0.13, n11: 0.1, ozon: 0.12 } as const
@@ -190,7 +194,7 @@ export const PRODUCTS: Product[] = SEED.map(([name, brand, cat, whs], i) => {
   ACCOUNTS.filter(a => whs.includes(a.wh)).forEach(a => {
     if (R() < 0.55) return
     const status = (['havuzda', 'hazirlaniyor', 'onizleme', 'gonderildi', 'aktif', 'sorunlu', 'kaldirildi'] as const)[wpick([7, 7, 4, 6, 58, 14, 4])]
-    const rate = a.cur === 'TRY' ? 48 : a.cur === 'USD' ? 1.08 : 1
+    const rate = EUR_RATE[a.cur]
     listings.push({ acc: a.id, status, price: Math.round(price * rate * (0.95 + R() * 0.2) * 100) / 100, reason: status === 'sorunlu' ? pick(REASONS) : undefined })
   })
   return {
