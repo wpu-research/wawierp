@@ -135,6 +135,16 @@ Erişilebilirlik ve dil:
 - Yerelde denenenler: sunucu (200/401/403/503, `/healthz?x`, video aralığı, SIGTERM), çekmecede klavye/Esc/odak geri dönüşü, sorunlu siparişte etiket/sevk düğmesinin gizlenmesi, etiket → sevk → geri alma, sayımın deftere yazılması ve satırın kalması.
 - Railway'de gerçek yayın davranışı (Host/Origin, SIGTERM süresi) push sonrası yalnız bölüm 9'daki dört adresle denetlendi.
 
+## 10. Tur 4 (ek tur): vekil kararlar ve yeni açılardan inceleme
+
+Sahibi turların sürmesini ve karar bekleyen konuların önceki kararlara göre verilmesini istedi. Dokuz konu `kararlar/0010` içinde vekil karar olarak yazıldı (menü işe göre gruplandı, asistan varsayılanı Sonnet, iade kontrolünde stoğa dönüş, müşteri mesajı maskeleme, muhasebe müşteri iletişimi yalnız görüntüleme; şifre yenileme sahibine bırakıldı). Altı yeni açıdan konsey: durum makinesi, güvenlik, performans, metin, şartname boşlukları, belge doğruluğu.
+
+Düzeltilenler: panel ve ana sayfa brotli/gzip (771 KB → 243 KB, yerelde denendi); maskPII sağlamlaştırma (büyük/küçük harf ve ayraçlı IBAN, Türkçe harfli e-posta, 2000 karakter sınırı, konu satırı); asistan araç doğrulamaları (kapsam dışı iş kimliği, `Object.hasOwn`); metin (siz hitabı, "Eksi stok", "Kargoya verilecek", hata ve boş durum yönlendirmeleri); rol sınırları (müşteri yanıtı yalnız operasyon, rol değişince asistan sıfırlanır, "Göster" ile açılan veri rol başına, iade kontrolü yalnız operasyon); bayat taslak koruması (kapatılmış konuşmaya yanıt, artık başarısız olmayan işe yeniden deneme); tahsilat girişi; Katalog geçersiz adres çökmesi.
+
+Belgeler: `docs/` ve `kararlar/` içeriği bu turda de değiştirilmedi (yalnız README). Üyenin bulduğu mekanik sayı/yol hataları (örn. `docs/03:10` 22→24, `docs/10:53` 22→24, `docs/01:42` 19→20, `docs/02:61` 19→20, `docs/02:107` `kararlar/0001`→`docs/06-alan-modeli.md`, `docs/11:3` "kararlar boş", `kararlar/0008:9` ≈470→≈461, `kararlar/0003:16` "2.555" kaynaksız, `GORSEL-KAYNAKLARI.md:20` yazar "?") sahibinin onayı için bekliyor. Taslağın şartname boşlukları `docs/panel/08-sartname-bosluklari.md` içinde (öneri).
+
+Tur 4 sonrası açık: Google Fonts'un dışarıdan yüklenmesi (Almanya ziyaretçisi için KVKK/GDPR; yazı tipini kendi sunucudan vermek gerekir); `X-Real-IP` güveni ve IPv6 /64 ile kilit atlatma (Railway davranışı doğrulanmadı); `script-src 'unsafe-inline'`; panel şifresine asgari uzunluk yok; `store` değeri her render'da yeniden oluşuyor ve ayırma haritası üç yerde ayrı hesaplanıyor (gerçek ölçekte yavaşlatır); ürün, ayırma, denetim ve iş listelerinde sayfalama yok; toplama listesi aynı partide donuyor; kurallar ekranının durumu sayfa değişince sıfırlanıyor; ErrorBoundary yok; saat dilimi tutarsızlığı (tarayıcı saati / Berlin); "Kendiliğinden" ile "Otomatik" tek terime indirilmedi.
+
 ## 9. Canlı denetim
 
 Son push `148b1ff`. Yeni sürüm birkaç dakika sonra yayına girdi (`/healthz?x=1` eski sürümde 302, yenide 200 verir; ölçüt bu). Denetim: `/` 200, `/panel` 401, `/sunum/` 200, `/healthz` 200, `/healthz?x=1` 200; şifresiz `/api/assistant` 401. Panel şifresi istenmedi ve girilmedi; giriş yapılmış hâlin canlıda davranışı (CSRF reddi, SIGTERM) bu denetimde denenmedi, yalnız yerelde denendi.
