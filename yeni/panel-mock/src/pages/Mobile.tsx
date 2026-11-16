@@ -42,6 +42,7 @@ const Head = ({ title, right }: { title: string; right?: ReactNode }) => <div cl
 function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
   lines: Line[]; res: Res; setRes: (f: (r: Res) => Res) => void; order: string[]; setOrder: (f: (o: string[]) => string[]) => void; act: Act; goPack: () => void
 }) {
+  const { record } = useStore()
   const [flash, setFlash] = useState(false)
   const [shortOpen, setShortOpen] = useState(false)
   const [found, setFound] = useState('')
@@ -53,7 +54,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
   const line = open ? lines.find(l => l.pid === open) : undefined
   const done = lines.filter(l => res[l.pid]).length
   const mark = (l: Line, k: 'ok' | 'short', n: number) => {
-    act(`Toplama ${l.bin}`, () => { /* gerçek uygulamada stok rezervi / eksik kaydı yazılır */ })
+    act(`Toplama ${l.bin}`, () => { if (k === 'short') record('Depo', `Eksik toplama bildirildi: ${n} / ${l.qty} adet bulundu`, `${product(l.pid).sku} · raf ${l.bin}`) })
     setRes(r => ({ ...r, [l.pid]: { k, n } })); setLast(l.pid); setShortOpen(false); setFound('')
     if (k === 'ok') { setFlash(true); window.setTimeout(() => setFlash(false), 700) }
   }
@@ -109,7 +110,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
 }
 
 /* ----------------------------------------------------------------- Paketle */
-function Pack({ batch, act }: { batch: Order[]; act: Act }) {
+function Pack({ batch, act, res, online }: { batch: Order[]; act: Act; res: Res; online: boolean }) {
   const { role, createLabels, ship } = useStore()
   const ops = ROLES[role].ops
   const [i, setI] = useState(0)
@@ -122,6 +123,8 @@ function Pack({ batch, act }: { batch: Order[]; act: Act }) {
   if (!batch.length) return <Empty>Paketlenecek sipariş yok. Önce Topla sekmesini kullanın.</Empty>
   const o = batch[Math.min(i, batch.length - 1)]
   const allTicked = o.items.every((_, k) => ticks[`${o.id}:${k}`])
+  // Eksik toplanan ürünü olan sipariş paketlenmez: eksik tamamlanmadan etiket ve kargo verilmez.
+  const shortItems = o.items.filter(it => res[it.pid] && res[it.pid].k !== 'ok')
   const add = (s: Set<string>) => new Set(s).add(o.id)
   return (
     <div className="space-y-3">
@@ -146,9 +149,11 @@ function Pack({ batch, act }: { batch: Order[]; act: Act }) {
           })}
         </div>
       </Panel>
-      <Big v="primary" disabled={!ops || !allTicked || isLabeled(o)} onClick={() => { act('Etiket ' + o.no, () => createLabels([o.id])); setLblQ(add) }}>Etiketi yazdır</Big>
-      <Big v="ok" disabled={!ops || !isLabeled(o) || isShipped(o)} onClick={() => { if (!window.confirm(`${o.no} kargoya verilsin mi? Takip numarası kanala gönderilir.`)) return; act('Kargo ' + o.no, () => ship([o.id])); setShipQ(add); setI(x => Math.min(x + 1, batch.length - 1)) }}><Truck size={20} /> Kargoya ver</Big>
-      {ops && !allTicked && !isLabeled(o) && <Note>Etiket için önce tüm ürünleri işaretleyin.</Note>}
+      <Big v="primary" disabled={!ops || !online || !allTicked || isLabeled(o) || shortItems.length > 0} onClick={() => { act('Etiket ' + o.no, () => createLabels([o.id])); setLblQ(add) }}>Etiketi yazdır</Big>
+      <Big v="ok" disabled={!ops || !online || !isLabeled(o) || isShipped(o) || shortItems.length > 0} onClick={() => { if (!window.confirm(`${o.no} kargoya verilsin mi? Takip numarası kanala gönderilir.`)) return; act('Kargo ' + o.no, () => ship([o.id])); setShipQ(add); setI(x => Math.min(x + 1, batch.length - 1)) }}><Truck size={20} /> Kargoya ver</Big>
+      {!online && <Note>Çevrimdışıyken etiket ve kargo verilemez; bağlantı gelince devam edin.</Note>}
+      {shortItems.length > 0 && <div className="rounded-xl bg-warn-soft text-warn p-3 text-sm"><b>Eksik toplandı:</b> {shortItems.map(it => product(it.pid).name).join(', ')}. Eksik tamamlanmadan bu siparişe etiket verilmez; vardiya sorumlusuna bildirin.</div>}
+      {ops && !allTicked && !isLabeled(o) && shortItems.length === 0 && <Note>Etiket için önce tüm ürünleri işaretleyin.</Note>}
       <div className="flex items-center justify-between gap-2">
         <Big className="!w-auto flex-1" disabled={i === 0} onClick={() => setI(i - 1)} aria-label="Önceki"><ChevronLeft size={22} /></Big>
         <span className="num text-sm font-semibold px-2">{Math.min(i, batch.length - 1) + 1} / {batch.length}</span>
@@ -160,10 +165,11 @@ function Pack({ batch, act }: { batch: Order[]; act: Act }) {
 
 /* --------------------------------------------------------------------- Say */
 function Count({ wh, act }: { wh: WhId; act: Act }) {
-  const { products } = useStore()
+  const { notify } = useStore()
+  const { products, countStock } = useStore()
   const shelves = useMemo(() => {
     const m = new Map<string, string[]>()
-    for (const p of products) { const s = p.stock[wh]; if (s && s.fiziki !== null) m.set(s.bin, [...(m.get(s.bin) ?? []), p.id]) }
+    for (const p of products) { const s = p.stock[wh]; if (s) m.set(s.bin, [...(m.get(s.bin) ?? []), p.id]) }
     return [...m.entries()].sort((a, b) => binCmp(a[0], b[0]))
   }, [products, wh])
   const [bin, setBin] = useState<string | null>(null)
@@ -191,18 +197,16 @@ function Count({ wh, act }: { wh: WhId; act: Act }) {
       <Big onClick={() => setBin(null)} className="!min-h-12 !w-auto"><ChevronLeft size={20} /> Raflar</Big>
       <Head title={`Raf ${bin}`} />
       {ids.map(id => {
-        const p = product(id), sys = p.stock[wh]!.fiziki ?? 0, v = cnt[id] ?? '', has = v !== '', diff = (Number(v) || 0) - sys
+        const p = product(id), v = cnt[id] ?? ''
         return (
           <Panel key={id} className="space-y-3">
             <div><div className="font-semibold leading-snug">{p.name}</div><div className="num text-xs text-mute">{p.sku}</div></div>
             <NumField label={`${p.name} sayılan adet`} value={v} onChange={x => setCnt(c => ({ ...c, [id]: x }))} />
-            {has && <div className={`rounded-xl p-3 text-sm flex justify-between ${diff === 0 ? 'bg-ok-soft text-ok' : 'bg-warn-soft text-warn'}`}>
-              <span>Sistemde: <b className="num">{fmtNum(sys)}</b></span><span>Fark: <b className="num">{diff > 0 ? '+' : ''}{diff}</b></span></div>}
           </Panel>
         )
       })}
-      <Big v="primary" disabled={!ready} onClick={() => { act('Sayım ' + bin, () => { /* fark stok defterine yazılır */ }, `Raf ${bin} sayımı kaydedildi`); setSaved(s => new Set(s).add(bin)); setBin(null) }}>Kaydet</Big>
-      <Note>Bu bir demo: gerçek uygulama farkı stok defterine "Sayım" hareketi olarak yazar.</Note>
+      <Big v="primary" disabled={!ready} onClick={() => { const shelf = bin, entries = ids.map(id => [id, Number(cnt[id])] as const); act('Sayım ' + shelf, () => { let d = 0; for (const [id, q] of entries) d += countStock(id, wh, q, 'Mobil sayım') ?? 0; notify(`Raf ${shelf} sayımı stok defterine yazıldı (toplam fark ${d > 0 ? '+' : ''}${d})`) }); setSaved(s => new Set(s).add(bin)); setBin(null) }}>Kaydet</Big>
+      <Note>Kaydedince sayım stok defterine "Sayım" hareketi olarak yazılır. Hiç sayılmamış ürünler ilk sayımla açılır.</Note>
     </div>
   )
 }
@@ -240,7 +244,7 @@ function Recv({ wh, act }: { wh: WhId; act: Act }) {
 }
 
 /* ------------------------------------------------------------------- Çalışma */
-function Work({ wh, tab, setTab, act }: { wh: WhId; tab: Tab; setTab: (t: Tab) => void; act: Act }) {
+function Work({ wh, tab, setTab, act, online }: { wh: WhId; tab: Tab; setTab: (t: Tab) => void; act: Act; online: boolean }) {
   const { allOrders } = useStore()
   const batch = useMemo(() => allOrders.filter(o => o.wh === wh && toShip(o) && o.supply === 'fiziki').sort((a, b) => a.t - b.t).slice(0, 12), []) // eslint-disable-line react-hooks/exhaustive-deps
   const lines = useMemo<Line[]>(() => {
@@ -258,7 +262,7 @@ function Work({ wh, tab, setTab, act }: { wh: WhId; tab: Tab; setTab: (t: Tab) =
     <>
       {tab === 'pick' && <><Pick lines={lines} res={res} setRes={setRes} order={order} setOrder={setOrder} act={act} goPack={() => setTab('pack')} />
         <p className="mt-6 mb-0 text-xs text-mute text-center leading-snug">Web prototipi. Mağazalarda yayımlanmış bir uygulama değildir; kamera ile barkod okuma gerçek uygulamada gelecek.</p></>}
-      {tab === 'pack' && <Pack batch={live} act={act} />}
+      {tab === 'pack' && <Pack batch={live} act={act} res={res} online={online} />}
       {tab === 'count' && <Count wh={wh} act={act} />}
       {tab === 'recv' && <Recv wh={wh} act={act} />}
     </>
@@ -307,7 +311,7 @@ export function MobileDepot() {
           </div>
         </header>
         <main className="flex-1 px-3 py-4">
-          <Work key={wh} wh={wh} tab={tab} setTab={setTab} act={act} />
+          <Work key={wh} wh={wh} tab={tab} setTab={setTab} act={act} online={online} />
         </main>
         {toast && <div role="status" className="absolute inset-x-3 bottom-24 z-20 rounded-xl bg-ink text-bg px-4 py-3 text-sm font-medium text-center shadow-lg">{toast}</div>}
         <nav className="sticky bottom-0 z-10 grid grid-cols-4 bg-card border-t border-line pb-[env(safe-area-inset-bottom)]">

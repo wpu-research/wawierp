@@ -298,6 +298,8 @@ export const nextInvNo = (orders: Order[], companyId: string, plus = 0) =>
 export const isRevenue = (o: Order) => o.status !== 'iptal' && o.status !== 'iade' && o.pay !== 'iade'
 /** Son `days` günün ciro siparişleri (varsayılan 30 gün). */
 export const revenueOrders = (orders: Order[], days = 30) => orders.filter(o => isRevenue(o) && o.t >= NOW - days * 86400_000)
+/** İade kuralı tek yerde: portal ve otomasyon kuralı (r11) aynı eşiği kullanır. Onay her zaman personeldedir (para hareketi). */
+export const RETURN_RULE = { days: 14, eur: 80 }
 export const isOpen = (o: Order) => o.status === 'yeni' || o.status === 'hazirlaniyor'
 export const toShip = (o: Order) => isOpen(o) && o.pay === 'odendi'
 /** Açık siparişler için ayrılan adet (ürün|depo). Stok depoda şirketler arasında ortaktır; bu yüzden hesap her zaman

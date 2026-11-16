@@ -135,7 +135,7 @@ type Reason = 'negatif' | 'hic' | 'kritik' | 'hareket'
 const REASON: Record<Reason, [Tone, string, number]> = { negatif: ['bad', 'Negatif stok', 0], hic: ['warn', 'Hiç sayılmamış', 1], kritik: ['warn', 'Kritik', 2], hareket: ['info', 'Çok hareket eden', 3] }
 
 export function Counting() {
-  const { products, whId, notify, role, moves } = useStore()
+  const { products, whId, notify, role, moves, countStock } = useStore()
   const [vals, setVals] = useState<Record<string, string>>({})
   const [done, setDone] = useState<Record<string, number>>({})
   const rows = useMemo(() => {
@@ -156,9 +156,11 @@ export function Counting() {
   const save = (r: (typeof rows)[number]) => {
     const v = vals[r.key]
     if (v === undefined || v === '' || !Number.isFinite(+v)) return
-    const diff = +v - (r.sys ?? 0)
+    if (!Number.isInteger(+v) || +v < 0) return notify('Sayılan adet 0 ya da daha büyük bir tam sayı olmalı')
+    const diff = countStock(r.pid, r.wh, +v)
+    if (diff === null) return
     setDone(d => ({ ...d, [r.key]: diff }))
-    notify(`${product(r.pid).sku}: fark ${diff > 0 ? '+' : ''}${diff}. Gerçek sistemde bu fark stok defterine yazılır.`)
+    notify(`${product(r.pid).sku}: ${r.sys === null ? 'ilk sayım yazıldı' : `fark ${diff > 0 ? '+' : ''}${diff}`}. Stok defterine Sayım hareketi eklendi.`)
   }
   return (
     <>
@@ -180,7 +182,7 @@ export function Counting() {
                 <td className={td}><Badge tone={tone}>{label}</Badge></td>
                 <td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div>{p.name}<div className="text-xs text-mute num">{p.sku}</div></div></div></td>
                 <td className={td}>{whName(r.wh)} <span className="num text-ink2">· {r.bin}</span></td>
-                <td className={td + ' num text-right'}>{r.sys === null ? <span className="text-mute">sayılmadı</span> : r.sys}</td>
+                <td className={td + ' num text-right'}>{r.sys === null ? <span className="text-mute">sayılmadı</span> : d === undefined ? <span className="text-mute" title="Kör sayım: önce sayın, sonra sistemle karşılaştırılır">gizli</span> : r.sys}</td>
                 <td className={td}><input type="number" inputMode="numeric" min={0} className={sel + ' w-20 num'} aria-label={`${p.name} sayılan adet`} disabled={d !== undefined || !canWrite}
                   value={vals[r.key] ?? ''} onChange={e => setVals(v => ({ ...v, [r.key]: e.target.value }))} /></td>
                 <td className={td}>{d !== undefined
@@ -190,7 +192,7 @@ export function Counting() {
           </table>
           {rows.length === 0 && <Empty>Bu kapsamda sayılacak satır yok.</Empty>}
         </div>
-        <div className="px-4 py-2 text-xs text-mute border-t border-line">Burada kayıt yalnızca tarayıcıda tutulur. Gerçek sistem farkı stok defterine "Sayım" hareketi olarak yazar.{!canWrite && ' Bu rol sayım kaydedemez.'}</div>
+        <div className="px-4 py-2 text-xs text-mute border-t border-line">Sayım stok defterine "Sayım" hareketi olarak yazılır. Sistem adedi, tarafsız sayım için sayım kaydedilene kadar gizlidir.{!canWrite && ' Bu rol sayım kaydedemez.'}</div>
       </Card>
     </>
   )

@@ -25,7 +25,8 @@ interface Ctx {
   createLabels: (ids: string[], via?: string) => void; ship: (ids: string[], via?: string) => void; issueInvoices: (ids: string[]) => void
   transfers: Transfer[]; tickets: Ticket[]; b2b: B2B[]; manual: ManualLabel[]
   advanceTransfer: (id: string) => void; replyTicket: (id: string, text: string, via?: string) => void; closeTicket: (id: string) => void; readTicket: (id: string) => void
-  addPayment: (id: string, amount: number, ref: string) => void; finalizeB2B: (id: string, no: string) => void; addManual: (m: Omit<ManualLabel, 'id' | 't'>) => void; notify: (m: string) => void
+  addPayment: (id: string, amount: number, ref: string) => void; finalizeB2B: (id: string, no: string) => void; addManual: (m: Omit<ManualLabel, 'id' | 't'>) => void; notify: (m: string) => void; record: (cat: string, event: string, obj: string) => void
+  countStock: (pid: string, wh: WhId, qty: number, ref?: string) => number | null
   resolveIssue: (id: string) => void; reveal: (o: Order) => void; advanceReturn: (id: string) => void; syncNow: (accId: string) => void; retryJob: (id: string, via?: string) => void
 }
 const C = createContext<Ctx>(null!)
@@ -108,7 +109,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const manual = useMemo(() => allManual.filter(m => !whId || m.wh === whId), [allManual, whId])
 
   const value: Ctx = {
-    transfers, tickets, b2b, manual, moves, notify: say,
+    transfers, tickets, b2b, manual, moves, notify: say, record: (cat, event, obj) => log(cat, event, obj),
     undo: undo ? { label: undo.label } : null, undoLast,
     views, saveView: v => putViews([...views.filter(x => x.name !== v.name), { ...v, id: 'v' + Date.now() }]), removeView: id => putViews(views.filter(x => x.id !== id)),
     advanceTransfer: id => {
@@ -199,6 +200,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setOrders(os => { const s = new Set(ids), seq = new Map<string, number>(); return os.map(o => { if (!s.has(o.id)) return o; const k = seq.get(o.company) ?? 0; seq.set(o.company, k + 1); return { ...o, invoice: 'kesin' as const, invNo: nextInvNo(os, o.company, k) } }) })
       log('Finans', `Fatura kesinleştirildi (${ids.length})`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')
       say(`${ids.length} fatura kesinleştirildi`)
+    },
+    // Sayım: sayılan adet fiziki stoğa yazılır ve deftere "Sayım" hareketi eklenir. Hiç sayılmamış kayıt ilk sayımla açılır.
+    countStock: (pid, wh, qty, ref = 'Sayım') => {
+      const p = PRODUCTS.find(x => x.id === pid); if (!p || !Number.isInteger(qty) || qty < 0) return null
+      const r = p.stock[wh] ?? (p.stock[wh] = { fiziki: null, sanal: 0, drop: 0, tedarikci: 0, min: 5, bin: '—' })
+      const before = r.fiziki ?? 0, first = r.fiziki === null; r.fiziki = qty
+      setMoves(m => [{ id: 'mx' + Date.now() + pid + wh, t: NOW, pid, wh, type: 'sayim', before, after: qty, user: ROLES[role].user, ref: first ? ref + ' · ilk sayım' : ref }, ...m]); setStockVer(v => v + 1)
+      log('Stok', `Sayım stok defterine yazıldı (${first ? 'ilk sayım' : (qty - before >= 0 ? '+' : '') + (qty - before)})`, `${p.sku} · ${whName(wh)}`)
+      return qty - before
     },
     resolveIssue: id => {
       const o = allOrders.find(x => x.id === id); if (!o?.issue) return

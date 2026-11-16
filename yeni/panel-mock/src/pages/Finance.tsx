@@ -55,16 +55,20 @@ export default function Finance() {
     list.forEach(o => {
       out.push({ no: o.invoice === 'kesin' ? o.invNo ?? 'Numara bekliyor' : 'Taslak', o, kind: 'Satış', status: o.invoice })
       // İade faturası, iptal ettiği satış faturasının numarasına bağlıdır.
-      if (o.status === 'iade' && (o.ret === 'odeme' || o.ret === 'cozuldu')) out.push({ no: o.invNo ? o.invNo.replace('RE-', 'RET-') : 'RET · satış faturası yok', o, kind: 'İade', status: 'kesin' })
+      // Satış faturası yoksa iade faturası da yoktur. İade para iadesi beklerken taslak, çözülünce kesindir (kesinleştirmeyi finans yapar).
+      if (o.status === 'iade' && o.invNo && (o.ret === 'odeme' || o.ret === 'cozuldu')) out.push({ no: o.ret === 'cozuldu' ? o.invNo.replace('RE-', 'RET-') : 'Taslak', o, kind: 'İade', status: o.ret === 'cozuldu' ? 'kesin' : 'taslak' })
     })
     return out.reverse()
   }, [orders])
   useEffect(() => setPage(1), [orders.length, tab])
-  const vat = useMemo(() => COMPANIES.map(c => {
+  // Şirket × para birimi: farklı para birimleri asla toplanmaz.
+  const vat = useMemo(() => COMPANIES.flatMap(c => {
     const rate = VAT[c.country]
     const list = orders.filter(o => o.company === c.id && o.invoice === 'kesin' && o.status !== 'iade' && o.status !== 'iptal' && o.t >= NOW - 30 * 86400_000)
-    const gross = list.reduce((a, o) => a + o.total, 0)
-    return { c, rate, n: list.length, gross, net: gross / (1 + rate), cur: list[0]?.cur ?? 'EUR' as const }
+    return (['EUR', 'TRY', 'USD'] as const).map(cur => {
+      const l = list.filter(o => o.cur === cur), gross = l.reduce((a, o) => a + o.total, 0)
+      return { c, rate, n: l.length, gross, net: gross / (1 + rate), cur }
+    })
   }).filter(r => r.n > 0), [orders])
 
   return (
@@ -101,8 +105,8 @@ export default function Finance() {
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Şirket</th><th className={th}>Ülke</th><th className={th}>Depo</th><th className={th + ' text-right'}>KDV oranı</th><th className={th + ' text-right'}>Fatura</th><th className={th + ' text-right'}>Net</th><th className={th + ' text-right'}>KDV</th><th className={th + ' text-right'}>Brüt</th></tr></thead>
               <tbody>{vat.map(r => (
-                <tr key={r.c.id} className="hover:bg-bg">
-                  <td className={td + ' font-medium'}>{r.c.name}</td><td className={td}>{r.c.country}</td><td className={td}>{whName(r.c.wh)}</td>
+                <tr key={r.c.id + r.cur} className="hover:bg-bg">
+                  <td className={td + ' font-medium'}>{r.c.name} <span className="text-mute">· {r.cur}</span></td><td className={td}>{r.c.country}</td><td className={td}>{whName(r.c.wh)}</td>
                   <td className={td + ' text-right num'}>%{Math.round(r.rate * 100)}</td><td className={td + ' text-right num'}>{fmtNum(r.n)}</td>
                   <td className={td + ' text-right num'}>{fmtMoney(r.net, r.cur)}</td><td className={td + ' text-right num'}>{fmtMoney(r.gross - r.net, r.cur)}</td><td className={td + ' text-right num font-medium'}>{fmtMoney(r.gross, r.cur)}</td>
                 </tr>
@@ -110,7 +114,7 @@ export default function Finance() {
             </table>
             {vat.length === 0 && <Empty>Bu kapsamda kesinleşmiş fatura yok.</Empty>}
           </div>
-          <p className="m-0 px-3 py-2 text-xs text-mute border-t border-line">Mock oranlar: DE %19, NL %21, TR %20 (standart oran). İndirimli oranlar, OSS ve ters yük gerçek vergi motorunda ele alınacak; her şirketin rejimi sahibine sorulacak açık sorudur. Para birimleri toplanmaz.</p>
+          <p className="m-0 px-3 py-2 text-xs text-mute border-t border-line">Örnek oranlar: DE %19, NL %21, TR %20 (standart oran). İndirimli oranlar, OSS ve ters yük gerçek vergi motorunda ele alınacak; her şirketin rejimi sahibine sorulacak açık sorudur. Para birimleri toplanmaz.</p>
         </Card>
       )}
     </>

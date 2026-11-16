@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ArrowRight, Plus, Undo2 } from 'lucide-react'
-import { NOW, ago, dayKey, fmtDT, fmtNum, hasIssue, overdue, toShip } from '../data'
+import { NOW, RETURN_RULE, ago, dayKey, fmtDT, fmtNum, hasIssue, overdue, toShip } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Drawer, PageHead, Stat, sel, td, th, type Tone } from '../ui'
 
@@ -14,17 +14,17 @@ interface Rule { id: string; area: string; name: string; event: string; cond: st
 const R = (id: string, area: string, name: string, event: string, cond: string, action: string, level: Level, limit: number, unit: string, last: string, o: Partial<Rule> = {}): Rule =>
   ({ id, area, name, event, cond, action, level, limit, unit, on: true, last, ...o })
 const RULES0: Rule[] = [
-  R('r1', 'Sipariş ve kargo', 'Depo / kaynak seçimi', 'Ödeme alındı', 'Fiziki stok yetmiyor', 'Siparişi drop tedarikçisine yönlendir', 'sor', 25, 'sipariş', 'son 7 gün: 142 öneri, 139 onay, 3 ret', { undo: true }),
-  R('r2', 'Sipariş ve kargo', 'Kargo seçimi ve etiket', 'Sipariş hazırlanıyor', 'Ülke ve ağırlık belli', 'En uygun kargoyu seç, etiketi oluştur', 'oto', 100, 'etiket', 'son 7 gün: 388 uygulama, 4 geri alma', { undo: true }),
-  R('r3', 'Sipariş ve kargo', 'Sevkte fatura ve takip bildirimi', 'Kargoya verildi', 'Fatura taslağı var', 'Faturayı kes, takip no kanala gönder', 'sor', 50, 'sipariş', 'son 7 gün: 351 öneri, 349 onay, 2 ret', { money: true }),
-  R('r4', 'Sipariş ve kargo', 'Drop siparişini tedarikçiye ilet', 'Drop siparişi ödendi', 'Tedarikçi stoğu var', 'Siparişi tedarikçiye gönder', 'sor', 20, 'sipariş', 'son 7 gün: 96 öneri, 96 onay', { undo: true }),
+  R('r1', 'Sipariş ve kargo', 'Depo / kaynak seçimi', 'Ödeme alındı', 'Fiziki stok yetmiyor', 'Siparişi drop tedarikçisine yönlendir', 'sor', 25, 'sipariş', 'son 7 gün: 142 öneri, 139 onay, 3 ret', { undo: true, money: true }),
+  R('r2', 'Sipariş ve kargo', 'Kargo seçimi ve etiket', 'Sipariş hazırlanıyor', 'Ülke ve ağırlık belli', 'En uygun kargoyu seç, etiketi oluştur (kargo ücreti doğar)', 'sor', 100, 'etiket', 'son 7 gün: 388 öneri, 384 onay, 4 geri alma', { undo: true, money: true }),
+  R('r3', 'Sipariş ve kargo', 'Sevkte takip bildirimi', 'Kargoya verildi', 'Takip no oluştu', 'Takip no kanala gönder; faturayı kesinleştirmeyi öner (kesinleştirme ayrı yetki)', 'sor', 50, 'sipariş', 'son 7 gün: 351 öneri, 349 onay, 2 ret', { money: true }),
+  R('r4', 'Sipariş ve kargo', 'Drop siparişini tedarikçiye ilet', 'Drop siparişi ödendi', 'Tedarikçi stoğu var', 'Siparişi tedarikçiye gönder', 'sor', 20, 'sipariş', 'son 7 gün: 96 öneri, 96 onay', { undo: true, money: true }),
   R('r5', 'Sipariş ve kargo', 'Gecikme yakalama', 'Her saat başı', 'Ödendi, 48 saattir kargoda değil', 'Uyarı oluştur, depoya görev aç', 'oto', 10, 'uyarı', 'son 7 gün: 31 uyarı, 29 çözüldü'),
   R('r6', 'Stok', 'Kanallar arası stok eşitleme', 'Stok değişti', 'Fark %5\'ten büyük', 'Tüm kanallara yeni stoğu yaz', 'oto', 500, 'ürün', 'son 7 gün: 2.140 güncelleme, 12 geri alma', { undo: true }),
   R('r7', 'Stok', 'Güvenlik payı', 'Stok değişti', 'Stok 3 adedin altında', 'Kanallara stoğu 2 eksik göster', 'oner', 200, 'ürün', 'son 7 gün: 64 öneri, 50 onay, 14 ret', { undo: true }),
   R('r8', 'İlan ve fiyat', 'Stok bitince durdur, gelince aç', 'Stok sıfır / yeniden geldi', 'İlan aktif / durdurulmuş', 'İlanı durdur / yeniden aç', 'sor', 40, 'ilan', 'son 7 gün: 57 öneri, 55 onay, 2 ret', { undo: true }),
   R('r9', 'İlan ve fiyat', 'Maliyet değişince fiyat güncelle', 'Tedarikçi maliyeti değişti', 'Marj %12\'nin altına düşüyor', 'Fiyatı güncelle (alt sınır: maliyet + %12)', 'sor', 15, 'ürün', 'son 7 gün: 38 öneri, 31 onay, 7 ret', { money: true, undo: true }),
   R('r10', 'İlan ve fiyat', 'Reddedilen ilanı düzelt, yeniden dene', 'İlan reddedildi', 'Neden: eksik alan / EAN', 'Alanı tamamla, ilanı yeniden gönder', 'oner', 30, 'ilan', 'son 7 gün: 22 öneri, 15 onay, 7 ret'),
-  R('r11', 'İade ve destek', 'Kurala uyan iadeyi onayla', 'İade talebi geldi', '14 gün içinde, tutar 80 € altı', 'İadeyi kabul et, kanala bildir', 'sor', 10, 'iade', 'son 7 gün: 44 öneri, 41 onay, 3 ret', { money: true }),
+  R('r11', 'İade ve destek', 'Kurala uyan iadeyi onayla', 'İade talebi geldi', `${RETURN_RULE.days} gün içinde, tutar ${RETURN_RULE.eur} € altı`, 'İadeyi kabul et, kanala bildir', 'sor', 10, 'iade', 'son 7 gün: 44 öneri, 41 onay, 3 ret', { money: true }),
   R('r12', 'İade ve destek', '"Siparişim nerede" yanıtı', 'Müşteri mesajı geldi', 'Konu: kargo durumu', 'Takip bilgisiyle yanıt taslağı gönder', 'oto', 60, 'mesaj', 'son 7 gün: 173 yanıt, 5 geri alma'),
   R('r13', 'Finans', 'Havale eşleştirme', 'Banka hareketi geldi', 'Tutar ve referans eşleşiyor', 'Ödemeyi siparişe işle', 'sor', 30, 'hareket', 'son 7 gün: 47 öneri, 46 onay, 1 ret', { money: true, undo: true }),
   R('r14', 'Sistem sağlığı', 'Başarısız eşitlemeyi yeniden dene', 'Eşitleme başarısız', 'Deneme sayısı 5\'ten az', '1, 5, 15, 60 dk aralıkla yeniden dene', 'oto', 5, 'deneme', 'son 7 gün: 63 deneme, 51 başarılı'),
@@ -97,7 +97,7 @@ function Builder({ onAdd, onClose }: { onAdd: (r: Rule) => void; onClose: () => 
 }
 
 export function Rules() {
-  const { role, notify } = useStore()
+  const { role, notify, record } = useStore()
   const ro = !ROLES[role].ops
   const [rules, setRules] = useState(RULES0)
   const [openId, setOpenId] = useState<string | null>(null)
@@ -109,7 +109,7 @@ export function Rules() {
     if (level === r.level) return
     if (level === 'oto' && r.money) { notify('Para hareketi veya fiyat değiştiren kural kendiliğinden çalışamaz; en çok "Önce sor" seçilebilir.'); return }
     if (level === 'oto') { setPending({ id: r.id, level }); return }
-    upd(r.id, { level }); notify(`"${r.name}": ${LEVEL[level].label}`)
+    upd(r.id, { level }); record('Kural', `Onay düzeyi değişti: ${LEVEL[r.level].label} → ${LEVEL[level].label}`, r.name); notify(`"${r.name}": ${LEVEL[level].label}`)
   }
   const pr = pending && rules.find(r => r.id === pending.id)
   const LevelSel = ({ r }: { r: Rule }) => (
@@ -122,11 +122,11 @@ export function Rules() {
         actions={<Btn variant="primary" disabled={ro} onClick={() => setBuild(true)}><Plus size={14} />Yeni kural</Btn>} />
       <Strip />
       {ro && <div className="mb-3 rounded-lg border border-line bg-warn-soft text-warn px-3 py-2 text-sm">Bu rolle kurallar yalnız görüntülenir; değiştirmek için operasyon yetkisi gerekir.</div>}
-      {build && <Builder onClose={() => setBuild(false)} onAdd={r => { setRules(rs => [r, ...rs.filter(x => x.id !== r.id)]); setBuild(false); notify('Kural eklendi (Yalnız öner)') }} />}
+      {build && <Builder onClose={() => setBuild(false)} onAdd={r => { if (rules.some(x => x.event === r.event && x.cond === r.cond && x.action === r.action)) return notify('Aynı olay, koşul ve işlemle bir kural zaten var'); setRules(rs => [{ ...r, id: r.id + '-' + Date.now() }, ...rs]); setBuild(false); record('Kural', 'Yeni kural eklendi (Yalnız öner)', r.name); notify('Kural eklendi (Yalnız öner)') }} />}
       {pr && pending && (
         <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-line bg-warn-soft text-warn px-3 py-2 text-sm" role="alert">
           <span className="flex-1 min-w-[220px]">"{pr.name}" kuralı artık onay sormadan, sınır içinde (en çok {pr.limit} {pr.unit}) çalışacak. Emin misiniz?</span>
-          <Btn variant="primary" onClick={() => { upd(pr.id, { level: pending.level }); setPending(null); notify(`"${pr.name}": Kendiliğinden`) }}>Evet, aç</Btn>
+          <Btn variant="primary" onClick={() => { upd(pr.id, { level: pending.level }); record('Kural', 'Kural kendiliğinden çalışacak şekilde açıldı', pr.name); setPending(null); notify(`"${pr.name}": Kendiliğinden`) }}>Evet, aç</Btn>
           <Btn onClick={() => setPending(null)}>Vazgeç</Btn>
         </div>
       )}
@@ -139,7 +139,7 @@ export function Rules() {
                 <th className={th}>Açık</th><th className={th}>Kural</th><th className={th}>Olay → koşul → işlem</th><th className={th}>Onay düzeyi</th><th className={th}>Üst sınır</th><th className={th}>Son çalışma</th></tr></thead>
                 <tbody>{list.map(r => (
                   <tr key={r.id} className={r.on ? '' : 'opacity-60'}>
-                    <td className={td}><Switch on={r.on} disabled={ro} label={`${r.name} kuralını ${r.on ? 'kapat' : 'aç'}`} onChange={v => { upd(r.id, { on: v }); notify(`"${r.name}" ${v ? 'açıldı' : 'kapatıldı'}`) }} /></td>
+                    <td className={td}><Switch on={r.on} disabled={ro} label={`${r.name} kuralını ${r.on ? 'kapat' : 'aç'}`} onChange={v => { upd(r.id, { on: v }); record('Kural', `Kural ${v ? 'açıldı' : 'kapatıldı'}`, r.name); notify(`"${r.name}" ${v ? 'açıldı' : 'kapatıldı'}`) }} /></td>
                     <td className={td + ' min-w-[170px]'}><button className="text-left font-medium text-brand hover:underline bg-transparent border-0 p-0 cursor-pointer" onClick={() => setOpenId(r.id)}>{r.name}</button>
                       <div className="flex gap-1 mt-0.5">{r.money && <Badge tone="violet" title="Para veya fiyat etkiler">para / fiyat</Badge>}{r.custom && <Badge tone="info">yeni</Badge>}</div></td>
                     <td className={td + ' min-w-[260px] text-ink2'}><b className="font-medium text-ink">{r.event}</b> · {r.cond} → {r.action}</td>
@@ -222,7 +222,7 @@ export function Alerts() {
               <div className="text-xs text-ink2 mt-0.5">Öneri: {i.next} <a href={i.href} className="text-brand whitespace-nowrap">Aç <ArrowRight size={12} className="inline" aria-hidden /></a></div>
             </div>
             <div className="flex gap-2"><Btn disabled={seen.has(i.id)} onClick={() => setSeen(add(seen, i.id))}>{seen.has(i.id) ? 'Görüldü' : 'Gördüm'}</Btn>
-              <Btn variant="ghost" onClick={() => { setMuted(add(muted, i.id)); notify('24 saat susturuldu') }}>Sustur (24 saat)</Btn></div>
+              <Btn variant="ghost" onClick={() => { setMuted(add(muted, i.id)); notify('Bu oturum için susturuldu') }}>Sustur (bu oturum)</Btn></div>
           </li>))}
           {shown.length === 0 && <li className="border-t border-line px-4 py-8 text-center text-mute">Şu an açık uyarı yok.</li>}
         </ul>

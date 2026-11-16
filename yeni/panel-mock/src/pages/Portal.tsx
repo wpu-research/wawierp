@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Check, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
-import { NOW, PRODUCTS, RET, VAT, company, fmtDT, fmtMoney, fmtNum, product, type Order, type Product } from '../data'
+import { NOW, PRODUCTS, RET, RETURN_RULE, VAT, company, fmtDT, fmtMoney, fmtNum, product, type Order, type Product } from '../data'
 import { b2bTotals, type B2B } from '../data2'
 import { useStore } from '../store'
 import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -174,7 +174,7 @@ const EUR_RATE = { EUR: 1, TRY: 48, USD: 1.08 }
 
 export function ReturnForm() {
   const { allOrders, notify } = useStore()
-  const eligible = useMemo(() => allOrders.filter(o => o.status === 'kargoda' || o.status === 'tamamlandi').slice(0, 25), [allOrders])
+  const eligible = useMemo(() => allOrders.filter(o => o.status === 'tamamlandi' && !o.ret).slice(0, 25), [allOrders])
   const [step, setStep] = useState(0)
   const [no, setNo] = useState(''), [zip, setZip] = useState(''), [err, setErr] = useState('')
   const [order, setOrder] = useState<Order | null>(null)
@@ -186,13 +186,14 @@ export function ReturnForm() {
     const o = allOrders.find(x => x.no.toLowerCase() === no.trim().toLowerCase())
     // Tek mesaj: numara mı yanlış, posta kodu mu, dışarıdan anlaşılmasın (sipariş numarası denenerek doğrulanamasın).
     if (!o || !zip.trim() || zip.trim() !== o.cust.zip) return setErr('Sipariş numarası ile posta kodu eşleşmiyor. İkisini de sipariş onayı e-postanızdan kontrol edin.')
-    if (o.status !== 'kargoda' && o.status !== 'tamamlandi') return setErr('Bu sipariş henüz iade için uygun değil.')
+    if (o.ret) return setErr('Bu sipariş için zaten bir iade talebi var.')
+    if (o.status !== 'tamamlandi') return setErr('Bu sipariş henüz iade için uygun değil (teslim edildikten sonra iade açılır).')
     setErr(''); setOrder(o); setPick({}); setStep(1)
   }
   const chosen = order ? order.items.filter(i => (pick[i.pid] ?? 0) > 0) : []
   const amount = order ? chosen.reduce((a, i) => a + (i.price * pick[i.pid]) / EUR_RATE[order.cur], 0) : 0
   const days = order ? Math.floor((NOW - order.t) / 86_400_000) : 0
-  const auto = days <= 14 && amount < 50
+  const auto = days <= RETURN_RULE.days && amount < RETURN_RULE.eur
   const next = (to: number) => setStep(to)
 
   return (
@@ -235,8 +236,8 @@ export function ReturnForm() {
               <label className="block text-sm">Neden iade ediyorsunuz?<select className={sel + ' mt-1 block w-full'} value={reason} onChange={e => setReason(e.target.value)}><option value="">Seçin…</option>{REASONS.map(r => <option key={r}>{r}</option>)}</select></label>
               <label className="block text-sm">Not (isteğe bağlı)<textarea className="mt-1 block w-full rounded-md border border-line bg-card p-2 text-sm" rows={2} value={note} onChange={e => setNote(e.target.value)} /></label>
               <div className="rounded-md bg-bg p-2.5 text-sm">
-                <div className="flex items-center gap-2"><Badge tone={auto ? 'ok' : 'warn'}>{auto ? 'Kendiliğinden onaylanır' : 'İncelemeye alınır'}</Badge><span className="text-ink2 num">{days} gün · {fmtMoney(amount)}</span></div>
-                <p className="m-0 mt-1 text-xs text-mute">Kural: 14 gün içinde ve tutar 50 € altında ise kendiliğinden onayla, değilse incelemeye al.</p></div>
+                <div className="flex items-center gap-2"><Badge tone={auto ? 'ok' : 'warn'}>{auto ? 'Hızlı incelemeye alınır' : 'İncelemeye alınır'}</Badge><span className="text-ink2 num">{days} gün · {fmtMoney(amount)}</span></div>
+                <p className="m-0 mt-1 text-xs text-mute">Kural: {RETURN_RULE.days} gün içinde ve tutar {RETURN_RULE.eur} € altındaysa personele onay önerisiyle gider; para iadesini her zaman personel onaylar. Süre bu taslakta sipariş tarihinden sayılır (teslim tarihi tutulmuyor).</p></div>
               <Nav back={() => next(1)} fwd={() => next(3)} ok={!!reason} />
             </div>
           ) : (
