@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowDown, ArrowUp, Upload } from 'lucide-react'
-import { CHANNEL, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, type ChannelType, type Cur, type Order } from '../data'
+import { CHANNEL, COMM, COMPANIES, NOW, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, type ChannelType, type Cur, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Drawer, Empty, HBars, PageHead, Stat, sel, td, th } from '../ui'
 
@@ -185,20 +185,20 @@ export function Accounting() {
 }
 
 /* ───────────── 3. Kârlılık ───────────── */
-const COMM: Record<ChannelType, number> = { shopify: 0.029, ebay: 0.115, kaufland: 0.105, otto: 0.12, metro: 0.09, amazon: 0.15, webshop: 0.019, trendyol: 0.13, n11: 0.1, ozon: 0.11 }
 const SHIP: Record<string, number> = { DE: 4.9, NL: 5.5, TR: 7.5 }
 type SK = 'label' | 'n' | 'rev' | 'avg' | 'comm' | 'ship' | 'net' | 'margin'
-interface PRow { key: string; label: string; n: number; rev: number; avg: number; comm: number; ship: number; net: number; margin: number }
+interface PRow { key: string; label: string; n: number; rev: number; vat: number; avg: number; comm: number; ship: number; net: number; margin: number }
 
 function aggregate(list: Order[], keyOf: (o: Order) => [string, string]): PRow[] {
   const m = new Map<string, PRow>()
   list.forEach(o => {
-    const [key, label] = keyOf(o), r = m.get(key) ?? { key, label, n: 0, rev: 0, avg: 0, comm: 0, ship: 0, net: 0, margin: 0 }
-    r.n++; r.rev += o.total; r.comm += o.total * COMM[account(o.acc).type]
+    const [key, label] = keyOf(o), r = m.get(key) ?? { key, label, n: 0, rev: 0, vat: 0, avg: 0, comm: 0, ship: 0, net: 0, margin: 0 }
+    // Tutar KDV dahildir; KDV devlete gider, katkı sayılmaz. Fiyat ve kârlılık ekranıyla aynı hesap.
+    r.n++; r.rev += o.total; r.vat += o.total - o.total / (1 + VAT[company(o.company).country]); r.comm += o.total * COMM[account(o.acc).type]
     r.ship += SHIP[WAREHOUSES.find(w => w.id === o.wh)?.country ?? 'DE']
     m.set(key, r)
   })
-  return [...m.values()].map(r => ({ ...r, avg: r.rev / r.n, net: r.rev - r.comm - r.ship, margin: (r.rev - r.comm - r.ship) / r.rev }))
+  return [...m.values()].map(r => { const net = r.rev - r.vat - r.comm - r.ship; return { ...r, avg: r.rev / r.n, net, margin: net / (r.rev - r.vat) } })
 }
 
 export function Profit() {
@@ -217,16 +217,16 @@ export function Profit() {
     </th>)
   const top = (f: (r: PRow) => number, low = false) => [...chRows].sort((a, b) => (low ? f(a) - f(b) : f(b) - f(a)))[0]
   const best = top(r => r.rev), worst = top(r => r.margin, true), basket = top(r => r.avg)
-  const tot = chRows.reduce((a, r) => ({ rev: a.rev + r.rev, net: a.net + r.net }), { rev: 0, net: 0 })
+  const tot = chRows.reduce((a, r) => ({ rev: a.rev + r.rev, vat: a.vat + r.vat, net: a.net + r.net }), { rev: 0, vat: 0, net: 0 })
 
   return (
     <Gate>
-      <PageHead title="Kârlılık" desc="Son 30 gün, EUR siparişler (iptal ve iade hariç). Ürün alış maliyeti örnek veride yok; bu yüzden gösterilen rakam ürün maliyetinden önceki katkıdır." />
+      <PageHead title="Kârlılık" desc="Son 30 gün, EUR siparişler (iptal ve iade hariç). Ürün alış maliyeti örnek veride yok; bu yüzden gösterilen rakam ürün maliyetinden önceki katkıdır: ciro − KDV − komisyon − kargo. Oran, KDV hariç ciroya göredir." />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         <Stat label="Sipariş" value={fmtNum(list.length)} hint="EUR · 30 gün" />
-        <Stat label="Ciro" value={fmtMoney(tot.rev, 'EUR', 0)} />
+        <Stat label="Ciro" value={fmtMoney(tot.rev, 'EUR', 0)} hint={`KDV dahil · KDV ${fmtMoney(tot.vat, 'EUR', 0)}`} />
         <Stat label="Tahmini katkı" value={fmtMoney(tot.net, 'EUR', 0)} hint="Ürün maliyetinden önce" tone="ok" />
-        <Stat label="Katkı oranı" value={tot.rev ? pct(tot.net / tot.rev) : '—'} hint="Örnek oranlarla" />
+        <Stat label="Katkı oranı" value={tot.rev ? pct(tot.net / (tot.rev - tot.vat)) : '—'} hint="KDV hariç ciroya göre · örnek oranlarla" />
       </div>
       {list.length === 0 ? <Card><Empty>Son 30 günde EUR sipariş yok.</Empty></Card> : <>
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-3">

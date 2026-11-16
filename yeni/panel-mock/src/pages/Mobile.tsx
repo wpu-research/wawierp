@@ -45,12 +45,16 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
   const [flash, setFlash] = useState(false)
   const [shortOpen, setShortOpen] = useState(false)
   const [found, setFound] = useState('')
+  const [last, setLast] = useState<string | null>(null)
+  // Yanlış dokunuş: son işaretlenen satır geri alınır ve yeniden sıranın başına gelir.
+  const undo = () => { if (!last) return; const pid = last; setRes(r => { const n = { ...r }; delete n[pid]; return n }); setOrder(o => [pid, ...o.filter(x => x !== pid)]); setLast(null); setShortOpen(false) }
+  const undoBtn = last && <Big onClick={undo}>Son satırı geri al</Big>
   const open = order.find(pid => !res[pid])
   const line = open ? lines.find(l => l.pid === open) : undefined
   const done = lines.filter(l => res[l.pid]).length
   const mark = (l: Line, k: 'ok' | 'short', n: number) => {
     act(`Toplama ${l.bin}`, () => { /* gerçek uygulamada stok rezervi / eksik kaydı yazılır */ })
-    setRes(r => ({ ...r, [l.pid]: { k, n } })); setShortOpen(false); setFound('')
+    setRes(r => ({ ...r, [l.pid]: { k, n } })); setLast(l.pid); setShortOpen(false); setFound('')
     if (k === 'ok') { setFlash(true); window.setTimeout(() => setFlash(false), 700) }
   }
   if (!lines.length) return <Empty>Bu depoda toplanacak fiziki sipariş yok.</Empty>
@@ -65,6 +69,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
             <div className="rounded-xl bg-warn-soft text-warn p-3"><div className="num text-3xl font-bold">{shorts.length}</div><div className="text-sm">Eksik bildirilen</div></div>
           </div></Panel>
         {shorts.map(l => <Panel key={l.pid} className="text-sm"><b>{product(l.pid).name}</b><div className="text-ink2 num">Raf {l.bin} · istenen {l.qty}, bulunan {res[l.pid].n}</div></Panel>)}
+        {undoBtn}
         <Big v="primary" onClick={goPack}>Paketlemeye geç <ChevronRight size={20} /></Big>
       </div>
     )
@@ -86,7 +91,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
         </>}
       </div>
       {shortOpen ? (
-        <Panel className="space-y-3"><div className="font-semibold">Kaç adet buldun? <span className="text-mute font-normal">(istenen {line.qty})</span></div>
+        <Panel className="space-y-3"><div className="font-semibold">Kaç adet buldunuz? <span className="text-mute font-normal">(istenen {line.qty})</span></div>
           <NumField label="Bulunan adet" value={found} onChange={setFound} />
           <div className="grid grid-cols-2 gap-2"><Big onClick={() => setShortOpen(false)}>Vazgeç</Big>
             <Big v="primary" onClick={() => mark(line, 'short', Math.min(Number(found) || 0, Math.max(0, line.qty - 1)))}>Eksik kaydet</Big></div></Panel>
@@ -97,6 +102,7 @@ function Pick({ lines, res, setRes, order, setOrder, act, goPack }: {
           <Big onClick={() => setShortOpen(true)}>Eksik bildir</Big>
           <Big disabled={order.filter(x => !res[x]).length < 2} onClick={() => setOrder(o => [...o.filter(x => x !== line.pid), line.pid])}>Atla</Big>
         </div>
+        {undoBtn}
       </>}
     </div>
   )
@@ -113,14 +119,14 @@ function Pack({ batch, act }: { batch: Order[]; act: Act }) {
   const isShipped = (o: Order) => o.status === 'kargoda' || shipQ.has(o.id)
   const isLabeled = (o: Order) => o.label === 'hazir' || lblQ.has(o.id)
   const left = batch.filter(o => !isShipped(o)).length
-  if (!batch.length) return <Empty>Paketlenecek sipariş yok. Önce Topla sekmesini kullan.</Empty>
+  if (!batch.length) return <Empty>Paketlenecek sipariş yok. Önce Topla sekmesini kullanın.</Empty>
   const o = batch[Math.min(i, batch.length - 1)]
   const allTicked = o.items.every((_, k) => ticks[`${o.id}:${k}`])
   const add = (s: Set<string>) => new Set(s).add(o.id)
   return (
     <div className="space-y-3">
       <Head title="Paketle" right={<Badge tone={left ? 'warn' : 'ok'}>{left ? `${left} sipariş kaldı` : 'Hepsi bitti'}</Badge>} />
-      {!ops && <div className="rounded-xl bg-warn-soft text-warn p-3 text-sm">Bu rolde ({ROLES[role].label}) etiket ve kargo işlemi kapalı. Yalnız bakabilirsin.</div>}
+      {!ops && <div className="rounded-xl bg-warn-soft text-warn p-3 text-sm">Bu rolde ({ROLES[role].label}) etiket ve kargo işlemi kapalı. Yalnız bakabilirsiniz.</div>}
       <Panel>
         <div className="flex items-center justify-between gap-2">
           <div><div className="num text-2xl font-bold">{o.no}</div><div className="text-sm text-ink2">{CHANNEL[account(o.acc).type].label}</div></div>
@@ -141,8 +147,8 @@ function Pack({ batch, act }: { batch: Order[]; act: Act }) {
         </div>
       </Panel>
       <Big v="primary" disabled={!ops || !allTicked || isLabeled(o)} onClick={() => { act('Etiket ' + o.no, () => createLabels([o.id])); setLblQ(add) }}>Etiketi yazdır</Big>
-      <Big v="ok" disabled={!ops || !isLabeled(o) || isShipped(o)} onClick={() => { act('Kargo ' + o.no, () => ship([o.id])); setShipQ(add); setI(x => Math.min(x + 1, batch.length - 1)) }}><Truck size={20} /> Kargoya ver</Big>
-      {ops && !allTicked && !isLabeled(o) && <Note>Etiket için önce tüm ürünleri işaretle.</Note>}
+      <Big v="ok" disabled={!ops || !isLabeled(o) || isShipped(o)} onClick={() => { if (!window.confirm(`${o.no} kargoya verilsin mi? Takip numarası kanala gönderilir.`)) return; act('Kargo ' + o.no, () => ship([o.id])); setShipQ(add); setI(x => Math.min(x + 1, batch.length - 1)) }}><Truck size={20} /> Kargoya ver</Big>
+      {ops && !allTicked && !isLabeled(o) && <Note>Etiket için önce tüm ürünleri işaretleyin.</Note>}
       <div className="flex items-center justify-between gap-2">
         <Big className="!w-auto flex-1" disabled={i === 0} onClick={() => setI(i - 1)} aria-label="Önceki"><ChevronLeft size={22} /></Big>
         <span className="num text-sm font-semibold px-2">{Math.min(i, batch.length - 1) + 1} / {batch.length}</span>
@@ -220,7 +226,7 @@ function Recv({ wh, act }: { wh: WhId; act: Act }) {
   )
   return (
     <div className="space-y-3">
-      <Head title="Kabul" right={<Badge tone="violet">örnek</Badge>} /><Note>Örnek bir teslimat. Her satırı okut, gelen adedi gir.</Note>
+      <Head title="Kabul" right={<Badge tone="violet">örnek</Badge>} /><Note>Örnek bir teslimat. Her satırı okutun, gelen adedi girin.</Note>
       {exp.map(e => { const p = product(e.pid), s = g(e.pid); return (
         <Panel key={e.pid} className="space-y-3">
           <div className="flex justify-between gap-3"><div><div className="font-semibold leading-snug">{p.name}</div><div className="num text-xs text-mute">{p.sku}</div></div><div className="num text-xl font-bold shrink-0">{e.exp}×</div></div>

@@ -38,8 +38,8 @@ export function Labels() {
           <div className="p-3 border-b border-line flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs text-mute">{tab === 'hata' ? 'Neden adres ya da taşıyıcı hatasıdır; düzeltilip yeniden denenir.' : 'Taşıyıcı teslim aldığında takip no kanala gönderilir.'}</span>
             {can && rows.length > 0 && (tab === 'hata'
-              ? <Btn onClick={() => createLabels(rows.map(o => o.id))}><RotateCw size={14} />Tümünü yeniden dene</Btn>
-              : <span className="flex gap-2"><Btn onClick={() => notify(`${rows.length} etiket tek PDF olarak hazırlandı (mock)`)}><Download size={14} />Toplu PDF</Btn><Btn variant="primary" onClick={() => ship(rows.map(o => o.id))}><Truck size={14} />Tümünü kargoya ver</Btn></span>)}
+              ? <Btn onClick={() => { if (window.confirm(`${rows.length} sipariş için etiket yeniden denenecek. Devam edilsin mi?`)) createLabels(rows.map(o => o.id)) }}><RotateCw size={14} />Tümünü yeniden dene ({rows.length})</Btn>
+              : <span className="flex gap-2"><Btn onClick={() => notify(`${rows.length} etiket tek PDF olarak hazırlandı (mock)`)}><Download size={14} />Toplu PDF</Btn><Btn variant="primary" onClick={() => { if (window.confirm(`Bu listedeki ${rows.length} siparişin tamamı kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) ship(rows.map(o => o.id)) }}><Truck size={14} />Tümünü kargoya ver ({rows.length})</Btn></span>)}
           </div>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">

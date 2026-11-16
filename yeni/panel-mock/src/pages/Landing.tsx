@@ -39,7 +39,7 @@ const STOCK = [
 ] as const
 
 const FEATURES: { icon: typeof Boxes; title: string; text: string; span?: string }[] = [
-  { icon: Layers, title: 'Ortak ürün kataloğu', text: 'SKU, birden fazla EAN, varyant ve mükerrer kart birleştirme. Bir ürün, bütün depolarda ve kanallarda tek kart.', span: 'md:col-span-2' },
+  { icon: Layers, title: 'Ortak ürün kataloğu', text: 'SKU, barkod (EAN) ve mükerrer kart birleştirme. Bir ürün, bütün depolarda ve kanallarda tek kart.', span: 'md:col-span-2' },
   { icon: Warehouse, title: 'Çoklu depo ve şirket', text: 'Depo, şirket, kanal ve hesap aynı hiyerarşide. Transfer, yoldaki sevkiyat ve mal kabul.' },
   { icon: ShoppingCart, title: 'Birleşik sipariş havuzu', text: 'Bütün mağazaların siparişleri tek listede; tarih, durum, depo, şirket ve tedarik kaynağına göre süzülür.' },
   { icon: Truck, title: 'Toplama, paketleme, kargo', text: 'Toplama listesi, etiket, toplu PDF ve takip numarası. Takip bilgisi kanala kendiliğinden gider.', span: 'md:col-span-2' },
@@ -345,7 +345,7 @@ export default function Landing({ dark, setDark }: { dark: boolean; setDark: (f:
             ))}
             <article className="rounded-3xl bg-navy text-white p-6 md:col-span-3 grid md:grid-cols-[auto_1fr_auto] items-center gap-5">
               <span className="size-11 rounded-2xl bg-white/10 text-gold grid place-items-center"><Smartphone size={20} /></span>
-              <div><h3 className="font-display m-0 text-xl font-semibold">Mobil ve API</h3><p className="m-0 mt-1 text-white/70 text-[15px]">Panel telefonda tarayıcıdan çalışır; barkod akışları dahil. iOS ve Android uygulaması henüz yayında değil, API altyapısı hazır.</p></div>
+              <div><h3 className="font-display m-0 text-xl font-semibold">Mobil ve API</h3><p className="m-0 mt-1 text-white/70 text-[15px]">Panel telefonda tarayıcıdan çalışır; toplama, paketleme ve sayım ekranları telefona göre tasarlandı. Kamerayla barkod okuma, iOS ve Android uygulaması ve API henüz yayında değil.</p></div>
               <span className="inline-flex gap-2 text-xs"><span className="rounded-full bg-white/10 px-3 py-1.5 inline-flex items-center gap-1.5"><ScanBarcode size={13} />Barkod</span><span className="rounded-full bg-white/10 px-3 py-1.5 inline-flex items-center gap-1.5"><KeyRound size={13} />API</span></span>
             </article>
           </div>

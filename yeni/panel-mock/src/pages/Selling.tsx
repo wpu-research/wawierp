@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
-import { CHANNEL, NOW, PRODUCTS, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
+import { CHANNEL, COMM, NOW, PRODUCTS, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Chan, Empty, HBars, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -12,8 +12,6 @@ const NoMoney = () => <Card><Empty>Bu rol için para tutarları gizli. Kâr ve m
 const NoOps = () => <div className="mb-3 rounded-md bg-warn-soft text-warn px-3 py-2 text-sm">Bu rolün işlem yetkisi yok: ekranı inceleyebilirsin ama gönderemez ya da taslak oluşturamazsın.</div>
 const Example = ({ t = 'örnek' }: { t?: string }) => <Badge tone="violet" title="Gösterim amaçlı sabit değer">{t}</Badge>
 
-// Örnek komisyon oranları (gerçek sözleşme oranı değil)
-const COMM: Record<ChannelType, number> = { shopify: 0.029, ebay: 0.115, kaufland: 0.105, otto: 0.12, metro: 0.1, amazon: 0.15, webshop: 0.02, trendyol: 0.13, n11: 0.1, ozon: 0.12 }
 // Örnek tahmini maliyet: fiyatın %50–%66'sı, ürün sırasına göre sabit
 const estCost = (p: Product) => p.price * (0.5 + (PRODUCTS.indexOf(p) % 5) * 0.04)
 const recent = <T extends { t: number }>(os: T[]) => os.filter(o => o.t >= NOW - 30 * DAY)

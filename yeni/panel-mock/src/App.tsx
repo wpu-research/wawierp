@@ -250,7 +250,7 @@ function Shortcuts({ onClose }: { onClose: () => void }) {
 const NoAccess = () => (
   <div className="max-w-md mx-auto mt-16 text-center">
     <h1 className="text-lg font-semibold m-0">Bu rol bu ekranı göremez</h1>
-    <p className="text-ink2">Menüde gizlenir, sunucu da isteği reddeder ve denetim kaydına yazar.</p>
+    <p className="text-ink2">Bu ekran rolünüze kapalıdır. Erişim gerekiyorsa yöneticinizden yetki isteyin.</p>
     <a href="#/overview" className="text-brand">Genel bakışa dön</a>
   </div>
 )

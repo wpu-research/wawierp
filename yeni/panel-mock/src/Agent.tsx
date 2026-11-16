@@ -280,6 +280,13 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         if (!r.ok || !res.content) throw new Error(res.message || `Sunucu yanıt vermedi (${r.status})`)
         api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
         const said = res.content.flatMap(b => (b.type === 'text' ? [b.text] : [])).join('\n').trim()
+        // Yanıt reddedildiyse ya da yarıda kesildiyse içindeki araç çağrıları eksik olabilir: hiçbiri çalıştırılmaz,
+        // taslak üretilmez ve yarım tur konuşmadan çıkarılır.
+        if (res.stop_reason === 'refusal' || res.stop_reason === 'max_tokens' || res.stop_reason === 'pause_turn') {
+          api.current.length = mark; notes.current.unshift(...panel)
+          push({ from: 'agent', body: <p className="m-0">{res.stop_reason === 'refusal' ? 'Bu isteği yanıtlayamıyorum.' : 'Yanıt yarıda kesildi; hiçbir işlem hazırlanmadı. İsteği daha kısa yazıp yeniden deneyin.'}</p> })
+          return
+        }
         const results: Anthropic.Beta.BetaToolResultBlockParam[] = []
         const acts: Act[] = []
         // Müşteri metni okuyan araç aynı yanıttaki yazma taslaklarından sonra gelse bile onay zorunlu olsun.
@@ -294,9 +301,9 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         }
         const done = res.stop_reason !== 'tool_use' || !results.length
         const text = said || (acts.length ? 'Taslağı hazırladım; onayınızı bekliyor.' : '')
-        if (res.stop_reason === 'refusal') push({ from: 'agent', body: <p className="m-0">Bu isteği yanıtlayamıyorum.</p> })
-        else if (acts.length) acts.forEach((act, i) => push({ from: 'agent', body: <div className="whitespace-pre-wrap">{i === 0 ? text : 'Bir taslak daha:'}</div>, act, sources: done && i === acts.length - 1 && sources.size ? [...sources.values()] : undefined }))
+        if (acts.length) acts.forEach((act, i) => push({ from: 'agent', body: <div className="whitespace-pre-wrap">{i === 0 ? text : 'Bir taslak daha:'}</div>, act, sources: done && i === acts.length - 1 && sources.size ? [...sources.values()] : undefined }))
         else if (done && text) push({ from: 'agent', body: <div className="whitespace-pre-wrap">{text}</div>, extra: views.length ? <div className="space-y-2">{views}</div> : undefined, sources: sources.size ? [...sources.values()].slice(0, 4) : undefined })
+        if (done && !text && !acts.length) push({ from: 'agent', body: <p className="m-0">Yanıt alınamadı; yeniden deneyin.</p> })
         if (done) return
         api.current.push({ role: 'user', content: results })
       }
@@ -440,7 +447,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       return {
         body: <><p className="m-0">{plural(st.products.length, 'üründen')} {fmtNum(noImg.length)} tanesinin görseli, {fmtNum(noEan.length)} tanesinin barkodu eksik.</p>
           <p className="m-0 mt-2">Önce satışı olanları düzeltmenizi öneririm: görseli eksik ürünlerin {fmtNum(urgent)} tanesi son 30 günde sipariş almış.</p>
-          <p className="m-0 mt-2 text-mute">Gerçek sistemde tedarikçi kataloğundan görsel ve barkod önerir, siz onaylarsınız. Bu mock'ta öneri üretilmiyor.</p></>,
+          <p className="m-0 mt-2 text-mute">Gerçek sistemde tedarikçi kataloğundan görsel ve barkod önerir, siz onaylarsınız. Bu taslakta öneri üretilmiyor.</p></>,
         sources: [{ label: 'Görseli eksik ürünler', href: '#/catalog?view=gorsel' }, { label: 'Barkodu eksik ürünler', href: '#/catalog?view=ean' }],
       }
     }
@@ -479,7 +486,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       }
     }
 
-    return { body: <><p className="m-0">Bu mock'ta hazır birkaç senaryo var; aşağıdaki örneklerden birini deneyin. Gerçek sistemde asistan, panelde yapabildiğiniz her şeyi aynı yetkilerle yapabilecek.</p></> }
+    return { body: <><p className="m-0">Bu taslakta yalnız hazır örnekleri yanıtlayabiliyorum; aşağıdakilerden birini deneyin. Gerçek sistemde asistan, panelde yapabildiğiniz her şeyi aynı yetkilerle yapabilecek.</p></> }
   }
 
   function send(v: string) {

@@ -54,6 +54,8 @@ export const COMPANIES: { id: string; name: string; country: Country; wh: WhId }
 ]
 export const company = (id: string) => COMPANIES.find(c => c.id === id)!
 export const VAT: Record<Country, number> = { DE: 0.19, NL: 0.21, TR: 0.2 }
+// Örnek komisyon oranları (gerçek sözleşme oranı değil). Tek yerde durur; fiyat ve kârlılık ekranları aynı oranı kullanır.
+export const COMM = { shopify: 0.029, ebay: 0.115, kaufland: 0.105, otto: 0.12, metro: 0.1, amazon: 0.15, webshop: 0.02, trendyol: 0.13, n11: 0.1, ozon: 0.12 } as const
 
 export type ChannelType = 'shopify' | 'ebay' | 'kaufland' | 'otto' | 'metro' | 'amazon' | 'webshop' | 'trendyol' | 'n11' | 'ozon'
 export const CHANNEL: Record<ChannelType, { label: string; color: string }> = {

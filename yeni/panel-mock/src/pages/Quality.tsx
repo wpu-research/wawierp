@@ -208,7 +208,7 @@ export function ContentStudio() {
   const tr = TR_SAMPLES[p.name]?.[lang]
   const rules = (t: string) => [
     { ok: t.length <= rule.max, text: `En çok ${rule.max} karakter (${t.length})` },
-    { ok: !BANNED.some(b => norm(t).includes(b)), text: 'Reklam sözcüğü yok (ucuz, indirim, kampanya…)' },
+    { ok: !BANNED.some(b => norm(t).includes(norm(b))), text: 'Reklam sözcüğü yok (ucuz, indirim, kampanya…)' },
     { ok: t.startsWith(p.brand), text: 'Marka başta' },
     { ok: !/[!?]/.test(t) && t !== t.toUpperCase(), text: 'Ünlem ve tamamı büyük harf yok' },
   ]

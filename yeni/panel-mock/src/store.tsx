@@ -57,6 +57,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // Geri alma: veri değiştiren her işlemden önce durumun kopyası saklanır; 10 saniye içinde geri yüklenebilir.
   type Snap = { orders: typeof allOrders; jobs: typeof jobs; tickets: typeof allTickets; transfers: typeof allTransfers; b2b: typeof allB2b; manual: typeof allManual }
   const [undo, setUndo] = useState<{ label: string; snap: Snap; at: number } | null>(null)
+  // Toplu işlemde yalnız koşulu sağlayan siparişler işlenir; kayıt ve bildirim gerçekte değişen sayıyı yazar.
+  const hit = (ids: string[], ok: (o: Order) => boolean) => ids.filter(id => { const o = allOrders.find(x => x.id === id); return !!o && ok(o) })
   const keep = (label: string) => {
     const at = Date.now()
     setUndo({ label, at, snap: { orders: allOrders, jobs, tickets: allTickets, transfers: allTransfers, b2b: allB2b, manual: allManual } })
@@ -127,21 +129,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       say('Siparişsiz etiket hazır')
     },
     role, setRole, companyId, setCompanyId, whId, setWhId, orders, allOrders, accounts, products, jobs, audit, revealed, toast,
-    createLabels: (ids, v) => {
+    createLabels: (all, v) => {
+      const ids = hit(all, o => o.status === 'yeni' || o.status === 'hazirlaniyor')
+      if (!ids.length) return say('Etiket oluşturulabilecek sipariş yok')
       keep(`${ids.length} sipariş için etiket`); via.current = v
       patch(ids, o => (o.status === 'yeni' || o.status === 'hazirlaniyor' ? { ...o, label: 'hazir', status: 'hazirlaniyor', issue: undefined } : o))
       log('Kargo', `Kargo etiketi oluşturuldu (${ids.length} sipariş)`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')
       via.current = undefined
       say(`${ids.length} sipariş için etiket hazır`)
     },
-    ship: (ids, v) => {
+    ship: (all, v) => {
+      const ids = hit(all, o => o.label === 'hazir' && o.status === 'hazirlaniyor')
+      if (!ids.length) return say('Kargoya verilebilecek sipariş yok')
       keep(`${ids.length} siparişi kargoya verme`); via.current = v
       patch(ids, o => (o.label === 'hazir' && o.status === 'hazirlaniyor' ? { ...o, status: 'kargoda', invoice: 'kesin', tracking: trackingFor(o.wh) } : o))
       log('Kargo', `Kargoya verildi, takip no kanala gönderildi (${ids.length})`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')
       via.current = undefined
       say(`${ids.length} sipariş kargoya verildi`)
     },
-    issueInvoices: ids => {
+    issueInvoices: all => {
+      // İptal edilmiş ya da ödemesi gelmemiş siparişe kesin fatura kesilmez.
+      const ids = hit(all, o => o.invoice !== 'kesin' && o.status !== 'iptal' && o.pay !== 'bekliyor')
+      if (!ids.length) return say('Kesinleştirilebilecek fatura yok')
       keep(`${ids.length} faturayı kesinleştirme`)
       patch(ids, o => (o.invoice !== 'kesin' ? { ...o, invoice: 'kesin' } : o))
       log('Finans', `Fatura kesinleştirildi (${ids.length})`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')

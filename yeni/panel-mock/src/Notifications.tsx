@@ -97,12 +97,16 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
 
   // sorun düzelince: listeden düşen "yap" ve "olmadı" bildirimleri çözülenlere geçer
   const prev = useRef<Map<string, Note>>(new Map())
+  const scope = useRef('')
   useEffect(() => {
     const now = new Map(notes.map(n => [n.id, n]))
+    // Şirket, depo ya da rol değişince listeden düşenler çözülmüş değildir; yalnız görünmüyordur.
+    const key = `${st.companyId}|${st.whId}|${st.role}`
+    if (scope.current !== key) { scope.current = key; prev.current = now; return }
     const gone = [...prev.current.values()].filter(n => n.kind !== 'oldu' && !now.has(n.id))
     if (gone.length) setResolved(r => [...gone.map(n => ({ id: n.id + Date.now(), title: n.title })), ...r].slice(0, 5))
     prev.current = now
-  }, [notes])
+  }, [notes]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const sig = (n: Note) => n.id + '|' + n.n // sayı değişirse bildirim yeniden okunmamış olur
   const live = notes.filter(n => !(saved.snooze[n.id] > Date.now()))

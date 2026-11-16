@@ -78,7 +78,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
             <span className="flex flex-wrap items-center gap-2 ml-auto">
               <span className="text-xs text-ink2 num">{picked.size} seçili</span>
               <Btn onClick={() => { createLabels(selOrders.filter(o => isOpen(o) && o.label !== 'hazir').map(o => o.id)); setPicked(new Set()) }} disabled={!selOrders.some(o => isOpen(o) && o.label !== 'hazir')}><Tag size={14} />Etiket oluştur</Btn>
-              <Btn variant="primary" onClick={() => { ship(selOrders.filter(o => o.label === 'hazir' && o.status === 'hazirlaniyor').map(o => o.id)); setPicked(new Set()) }} disabled={!selOrders.some(o => o.label === 'hazir' && o.status === 'hazirlaniyor')}><Truck size={14} />Kargoya ver</Btn>
+              <Btn variant="primary" onClick={() => { const ids = selOrders.filter(o => o.label === 'hazir' && o.status === 'hazirlaniyor').map(o => o.id); if (ids.length > 1 && !window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesi kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) return; ship(ids); setPicked(new Set()) }} disabled={!selOrders.some(o => o.label === 'hazir' && o.status === 'hazirlaniyor')}><Truck size={14} />Kargoya ver</Btn>
             </span>
           )}
           {picked.size > 0 && !R.ops && R.finance && <Btn className="ml-auto" onClick={() => { issueInvoices(sel_); setPicked(new Set()) }}><FileText size={14} />Fatura kes ({picked.size})</Btn>}
