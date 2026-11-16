@@ -188,6 +188,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
       <div role="status" aria-live="polite">{(st.toast || st.undo) && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-lg bg-ink text-bg px-4 py-2 text-sm shadow-lg max-w-[92vw]">
           <span className="truncate">{st.toast ?? `Son işlem: ${st.undo!.label}`}</span>
+          {st.toast && <button onClick={st.dismissToast} aria-label="Bildirimi kapat" className="shrink-0 grid place-items-center size-7 pointer-coarse:size-11 rounded-md border-0 bg-transparent text-bg hover:bg-bg/15"><X size={14} /></button>}
           {st.undo && <button onClick={st.undoLast} className="shrink-0 inline-flex items-center gap-1 rounded-md border border-bg/40 bg-transparent text-bg px-2 h-7 pointer-coarse:h-11 text-xs font-semibold hover:bg-bg/15"><Undo2 size={13} />Geri al</button>}
         </div>
       )}</div>

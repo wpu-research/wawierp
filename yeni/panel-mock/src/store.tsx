@@ -15,7 +15,7 @@ const VIEW_KEY = 'wawi-mock-views'
 const loadViews = (): SavedView[] => { try { const v = JSON.parse(localStorage.getItem(VIEW_KEY) || '[]'); return Array.isArray(v) ? v : [] } catch { return [] } }
 
 interface Ctx {
-  undo: { label: string } | null; undoLast: () => void
+  undo: { label: string } | null; undoLast: () => void; dismissToast: () => void
   views: SavedView[]; saveView: (v: Omit<SavedView, 'id'>) => void; removeView: (id: string) => void
   role: Role; setRole: (r: Role) => void
   companyId: string; setCompanyId: (s: string) => void
@@ -110,7 +110,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value: Ctx = {
     transfers, tickets, b2b, manual, moves, notify: say, record: (cat, event, obj) => log(cat, event, obj),
-    undo: undo ? { label: undo.label } : null, undoLast,
+    undo: undo ? { label: undo.label } : null, undoLast, dismissToast: () => setToast(null),
     views, saveView: v => putViews([...views.filter(x => x.name !== v.name), { ...v, id: 'v' + Date.now() }]), removeView: id => putViews(views.filter(x => x.id !== id)),
     advanceTransfer: id => {
       const t = allTransfers.find(x => x.id === id)!, i = TFLOW.findIndex(f => f.key === t.status), next = i < 0 ? undefined : TFLOW[i + 1]

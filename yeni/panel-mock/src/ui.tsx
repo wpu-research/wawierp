@@ -130,9 +130,17 @@ export function PageHead({ title, desc, legacy, actions }: { title: string; desc
 
 export function Tabs<T extends string>({ items, value, onChange }: { items: { key: T; label: string; count?: number; tone?: Tone }[]; value: T; onChange: (k: T) => void }) {
   return (
-    <div className="flex gap-1 overflow-x-auto pb-1" role="tablist">
+    // modern-web-guidance `tabs`: seçim odağı izler (oklar, Home, End), yalnız seçili sekme Tab sırasındadır (roving tabindex), düğmeler type=button.
+    <div className="flex gap-1 overflow-x-auto pb-1" role="tablist" onKeyDown={e => {
+      const at = items.findIndex(i => i.key === value); if (at < 0) return
+      const next = e.key === 'ArrowRight' ? (at + 1) % items.length : e.key === 'ArrowLeft' ? (at - 1 + items.length) % items.length : e.key === 'Home' ? 0 : e.key === 'End' ? items.length - 1 : -1
+      if (next < 0) return
+      e.preventDefault(); onChange(items[next].key)
+      const list = e.currentTarget // olay nesnesi asenkron blokta boşalır; kapsayıcıyı şimdi yakala
+      setTimeout(() => list.querySelectorAll<HTMLElement>('[role=tab]')[next]?.focus(), 0)
+    }}>
       {items.map(i => (
-        <button key={i.key} role="tab" aria-selected={value === i.key} onClick={() => onChange(i.key)}
+        <button key={i.key} type="button" role="tab" aria-selected={value === i.key} tabIndex={value === i.key ? 0 : -1} onClick={() => onChange(i.key)}
           className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 h-8 text-sm whitespace-nowrap transition-colors duration-150 ${value === i.key ? 'bg-ink text-bg border-ink font-medium' : 'bg-card border-line text-ink2 hover:bg-bg'}`}>
           {i.label}
           {i.count !== undefined && <span className={`num rounded-full px-1.5 text-xs ${value === i.key ? 'bg-bg/20' : i.tone === 'bad' && i.count > 0 ? 'bg-bad-soft text-bad' : 'bg-bg text-mute'}`}>{fmtNum(i.count)}</span>}
