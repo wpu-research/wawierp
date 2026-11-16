@@ -137,4 +137,4 @@ Erişilebilirlik ve dil:
 
 ## 9. Canlı denetim
 
-(push sonrası doldurulacak)
+Son push `148b1ff`. Yeni sürüm birkaç dakika sonra yayına girdi (`/healthz?x=1` eski sürümde 302, yenide 200 verir; ölçüt bu). Denetim: `/` 200, `/panel` 401, `/sunum/` 200, `/healthz` 200, `/healthz?x=1` 200; şifresiz `/api/assistant` 401. Panel şifresi istenmedi ve girilmedi; giriş yapılmış hâlin canlıda davranışı (CSRF reddi, SIGTERM) bu denetimde denenmedi, yalnız yerelde denendi.
