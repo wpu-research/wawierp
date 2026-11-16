@@ -30,7 +30,7 @@ export type Cur = 'EUR' | 'TRY' | 'USD'
 
 // Depo sayıları gerçek panelin genel bakış ekranından (raw/panel-harita.md).
 export const WAREHOUSES: { id: WhId; name: string; code: string; country: Country; products: number; physical: number; drop: number }[] = [
-  { id: 'ist', name: 'Istanbul', code: 'MAIN', country: 'TR', products: 8985, physical: 13797, drop: 0 },
+  { id: 'ist', name: 'İstanbul', code: 'MAIN', country: 'TR', products: 8985, physical: 13797, drop: 0 },
   { id: 'de', name: 'Almanya', code: 'DE-WH', country: 'DE', products: 122934, physical: 254160, drop: 1801761 },
   { id: 'nl', name: 'Hollanda', code: 'NL-WH', country: 'NL', products: 7926, physical: 12684, drop: 0 },
   { id: 'mega', name: 'Mega B', code: 'DE-MEGA-B', country: 'DE', products: 6651, physical: 13300, drop: 0 },
@@ -328,7 +328,7 @@ export const STAFF: { id: string; ini: string; name: string; role: string; scope
   { id: 'u2', ini: 'DS', name: 'Depo Sorumlusu (DE)', role: 'Depo sorumlusu', scope: 'Almanya, Mega B' },
   { id: 'u3', ini: 'DÇ', name: 'Depo Çalışanı 1', role: 'Depo çalışanı', scope: 'Almanya' },
   { id: 'u4', ini: 'DÇ', name: 'Depo Çalışanı 2', role: 'Depo çalışanı', scope: 'Hollanda' },
-  { id: 'u5', ini: 'DÇ', name: 'Depo Çalışanı 3', role: 'Depo çalışanı', scope: 'Istanbul' },
+  { id: 'u5', ini: 'DÇ', name: 'Depo Çalışanı 3', role: 'Depo çalışanı', scope: 'İstanbul' },
   { id: 'u6', ini: 'WO', name: 'Wawi Operasyon', role: 'Wawi operasyon', scope: 'Tüm depolar' },
   { id: 'u7', ini: 'ÜG', name: 'Ürün Giriş Operatörü', role: 'Ürün giriş operatörü', scope: 'Almanya' },
   { id: 'u8', ini: 'KS', name: 'Kategori Sorumlusu', role: 'Kategori sorumlusu', scope: 'Tüm depolar' },
@@ -376,10 +376,10 @@ export const AUDIT0: Audit[] = [
   { id: 'e1', t: NOW - 0.2 * H, result: 'başarılı', cat: 'Kimlik', event: 'Oturum açıldı (e-posta + iki adım)', user: 'Sistem Yöneticisi', obj: 'oturum' },
   { id: 'e2', t: NOW - 0.7 * H, result: 'başarılı', cat: 'Finans', event: 'Fatura kesinleştirildi', user: 'Muhasebe', obj: 'fatura RE-2026-01716' },
   { id: 'e3', t: NOW - 1.3 * H, result: 'başarılı', cat: 'Stok', event: 'Sayım ile stok ayarlandı (−3)', user: 'Depo Çalışanı 1', obj: 'ürün WW-TO-1056 · Almanya' },
-  { id: 'e4', t: NOW - 2.0 * H, result: 'reddedildi', cat: 'Yetki', event: 'Yetkisiz uç erişimi engellendi', user: 'Ürün Giriş Operatörü', obj: 'finans/faturalar' },
+  { id: 'e4', t: NOW - 2.0 * H, result: 'reddedildi', cat: 'Yetki', event: 'Yetkisiz ekrana giriş denendi engellendi', user: 'Ürün Giriş Operatörü', obj: 'finans/faturalar' },
   { id: 'e5', t: NOW - 2.4 * H, result: 'başarılı', cat: 'Kişisel veri', event: 'Müşteri iletişim bilgisi görüntülendi', user: 'Depo Sorumlusu (DE)', obj: 'sipariş EB-261204' },
   { id: 'e6', t: NOW - 3.2 * H, result: 'hata', cat: 'Kanal', event: 'Sipariş çekme başarısız (3. deneme)', user: 'Sistem', obj: 'OTTO · Technowelt' },
-  { id: 'e7', t: NOW - 5.5 * H, result: 'başarılı', cat: 'Katalog', event: 'Mükerrer kart birleştirildi (3 → 1)', user: 'Kategori Sorumlusu', obj: 'ürün WW-PA-1021' },
+  { id: 'e7', t: NOW - 5.5 * H, result: 'başarılı', cat: 'Katalog', event: 'Aynı ürünün kartları birleştirildi (3 → 1)', user: 'Kategori Sorumlusu', obj: 'ürün WW-PA-1021' },
   { id: 'e8', t: NOW - 6 * H, result: 'başarılı', cat: 'Kargo', event: 'Kargo etiketi çağrıları (gruplanmış)', user: 'Sistem', obj: 'DHL', routine: 742 },
   { id: 'e9', t: NOW - 6 * H, result: 'hata', cat: 'Kargo', event: 'Kargo etiketi hataları (gruplanmış)', user: 'Sistem', obj: 'DHL', routine: 31 },
   { id: 'e10', t: NOW - 9 * H, result: 'başarılı', cat: 'Yönetim', event: 'Rol değiştirildi: Depo çalışanı → Depo sorumlusu', user: 'Sistem Yöneticisi', obj: 'çalışan u2' },

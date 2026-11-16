@@ -81,7 +81,7 @@ export function Labels() {
                 <thead><tr><th className={th}>Zaman</th><th className={th}>Açıklama</th><th className={th}>Şehir</th><th className={th}>Depo</th><th className={th}>Taşıyıcı</th><th className={th + ' text-right'}>Ağırlık</th></tr></thead>
                 <tbody>{manual.map(m => <tr key={m.id}><td className={td + ' num whitespace-nowrap'}>{fmtDT(m.t)}</td><td className={td}>{m.name}</td><td className={td}>{m.city}</td><td className={td}>{whName(m.wh)}</td><td className={td}>{m.carrier}</td><td className={td + ' text-right num'}>{m.kg.toLocaleString('tr-TR')} kg</td></tr>)}</tbody>
               </table>
-              {manual.length === 0 && <Empty>Kayıt yok.</Empty>}
+              {manual.length === 0 && <Empty>Henüz kayıt yok.</Empty>}
             </div>
           </Card>
         </div>

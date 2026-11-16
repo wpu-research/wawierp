@@ -8,7 +8,7 @@ export const carrierOf = (wh: WhId) => (wh === 'nl' ? 'PostNL' : wh === 'ist' ? 
 export const CARRIERS: { name: string; scope: string; state: 'bagli' | 'varsayim' | 'talep'; note: string }[] = [
   { name: 'DHL', scope: 'Almanya · Mega B · Technowelt Almanya', state: 'bagli', note: 'Gidiş ve iade etiketi, takip no kanala otomatik gider' },
   { name: 'PostNL', scope: 'Hollanda', state: 'bagli', note: 'Gidiş etiketi ve takip' },
-  { name: 'Aras', scope: 'Istanbul', state: 'varsayim', note: 'Türkiye taşıyıcısı bilinmiyor; mock varsayımı' },
+  { name: 'Aras', scope: 'İstanbul', state: 'varsayim', note: 'Türkiye taşıyıcısı bilinmiyor; mock varsayımı' },
   { name: 'GLS', scope: '—', state: 'talep', note: 'OTTO siparişlerinde bugün Billbee üzerinden kullanılıyor' },
   { name: 'DPD', scope: '—', state: 'talep', note: 'Kurulum talebi' },
   { name: 'UPS', scope: '—', state: 'talep', note: 'Kurulum talebi' },

@@ -19,7 +19,7 @@ function buildRows(products: Product[], orders: Order[]): Row[] {
 const show = (r: Row, guard: number) => (r.sat === null ? null : Math.max(0, r.sat - guard))
 
 function Sat({ v }: { v: number | null }) {
-  if (v === null) return <Badge title="Sayılmamış; sıfır stok değildir">Sayım yok</Badge>
+  if (v === null) return <Badge title="Sayılmamış; sıfır stok değildir">Hiç sayılmadı</Badge>
   return v < 0 ? <Badge tone="bad">{fmtNum(v)} · eksi</Badge> : <span className={`num font-medium ${v === 0 ? 'text-warn' : ''}`}>{fmtNum(v)}</span>
 }
 const Chip = ({ children }: { children: ReactNode }) => <span className="rounded-full border border-line bg-bg px-3 py-1 text-sm font-medium">{children}</span>
@@ -100,7 +100,7 @@ function Detail({ r, guard }: { r: Row; guard: number }) {
   return (
     <>
       <div className="grid grid-cols-3 gap-2 text-sm">
-        <div><div className="text-xs text-mute">Fiziki</div><div className="num font-medium">{r.fiziki === null ? 'Sayım yok' : fmtNum(r.fiziki)}</div></div>
+        <div><div className="text-xs text-mute">Fiziki</div><div className="num font-medium">{r.fiziki === null ? 'Hiç sayılmadı' : fmtNum(r.fiziki)}</div></div>
         <div><div className="text-xs text-mute">Ayrılan</div><div className="num font-medium">{fmtNum(r.ayrilan)}</div></div>
         <div><div className="text-xs text-mute">Kanallara gösterilen</div><div className="num font-medium">{sh === null ? '—' : fmtNum(sh)}</div></div>
       </div>
@@ -175,15 +175,15 @@ export function Reservations() {
         </Card>
         <Card pad={false}>
           <div className="px-4 pt-3"><Tabs value={view} onChange={setView} items={[
-            { key: 'all', label: 'Tümü', count: cnt('all') }, { key: 'neg', label: 'Eksiye düşen', count: cnt('neg'), tone: 'bad' },
-            { key: 'low', label: 'Tükenmek üzere', count: cnt('low') }, { key: 'nocount', label: 'Sayım yok', count: cnt('nocount') }]} /></div>
+            { key: 'all', label: 'Tümü', count: cnt('all') }, { key: 'neg', label: 'Eksi stok', count: cnt('neg'), tone: 'bad' },
+            { key: 'low', label: 'Tükenmek üzere', count: cnt('low') }, { key: 'nocount', label: 'Hiç sayılmadı', count: cnt('nocount') }]} /></div>
           <div className="overflow-x-auto"><table className="w-full text-sm">
             <thead><tr>{head('name', 'Ürün')}{head('sku', 'SKU')}{head('wh', 'Depo')}{head('bin', 'Raf')}{head('fiziki', 'Fiziki', true)}{head('ayrilan', 'Ayrılan', true)}{head('sat', 'Satılabilir', true)}{head('show', 'Kanallara gösterilen', true)}{head('n', 'Bekleyen sipariş', true)}</tr></thead>
             <tbody>
               {rows.map(r => (
                 <tr key={r.key} className="cursor-pointer hover:bg-bg focus:bg-bg" {...rowProps(() => setOpenKey(r.key))}>
                   <td className={td + ' font-medium min-w-[200px]'}><div className="flex items-center gap-2.5"><Thumb p={r.p} size={32} />{r.p.name}</div></td><td className={td + ' num text-ink2'}>{r.p.sku}</td><td className={td}>{whName(r.wh)}</td><td className={td + ' num text-ink2'}>{r.bin}</td>
-                  <td className={td + ' num text-right'}>{r.fiziki === null ? <Badge>Sayım yok</Badge> : fmtNum(r.fiziki)}</td>
+                  <td className={td + ' num text-right'}>{r.fiziki === null ? <Badge>Hiç sayılmadı</Badge> : fmtNum(r.fiziki)}</td>
                   <td className={td + ' num text-right'}>{fmtNum(r.ayrilan)}</td><td className={td + ' text-right'}><Sat v={r.sat} /></td>
                   <td className={td + ' num text-right'}>{show(r, guard) === null ? '—' : fmtNum(show(r, guard)!)}</td><td className={td + ' num text-right'}>{fmtNum(r.orders.length)}</td>
                 </tr>

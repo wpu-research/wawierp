@@ -122,7 +122,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
               ))}
             </tbody>
           </table>
-          {rows.length === 0 && <Empty>Bu görünümde sipariş yok.</Empty>}
+          {rows.length === 0 && <Empty>Bu görünümde sipariş yok. Süzgeçleri temizleyin ya da başka bir görünüm seçin.</Empty>}
         </div>
         <Pager page={page} size={SIZE} total={rows.length} onPage={setPage} />
       </Card>

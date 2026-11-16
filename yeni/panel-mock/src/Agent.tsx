@@ -10,7 +10,7 @@ import { RivalList, rivalsOf } from './rivals'
 /* Asistan paneli. Sunucuda API anahtarı tanımlıysa (server.mjs + assistant.mjs) gerçek yapay zekâya bağlanır:
    model araç çağırır, araçlar burada mock verinin üzerinde çalışır, sonuç modele geri gider.
    Anahtar yoksa ya da sunucu yoksa (npm run dev, dosyadan açma) hazır senaryolara düşer: yazılanı anahtar
-   kelimelerle eşleştirir, yanıtı mock veriden hesaplar. İki yolda da kurallar aynı:
+   kelimelerle eşleştirir, yanıtı örnek veriden hesaplar. İki yolda da kurallar aynı:
    - her rakam veriden gelir ve dayandığı ekran bağlantısıyla birlikte sunulur
    - veri değiştiren her işlem önce taslak olarak gösterilir, kullanıcı onaylar
    - asistan, kendisine yazan kullanıcının rolünden fazlasını yapamaz
@@ -27,9 +27,10 @@ type ApiMsg = Anthropic.Beta.BetaMessageParam
 type Block = Anthropic.Beta.BetaContentBlock
 type ToolOut = { data: unknown; error?: boolean; act?: Act; src?: Src[]; view?: ReactNode }
 // Müşterinin mesajında yazdığı e-posta, telefon, IBAN ve uzun numaralar yapay zekâya gitmeden maskelenir (kararlar/0010).
-export const maskPII = (t: string | null) => t && t
-  .replace(/\b[A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){3,7}(?: ?[A-Z0-9]{1,4})?\b/g, '[IBAN]')
-  .replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '[e-posta]')
+// Önce 2000 karaktere kırpılır (çok uzun mesajla düzenli ifade yavaşlatılamasın); harf büyüklüğü, ayraç ve Türkçe harfler gözetilir.
+export const maskPII = (t: string | null) => t && t.slice(0, 2000)
+  .replace(/\b[A-Za-z]{2}\d{2}(?:[ .-]?[A-Za-z0-9]{2,4}){3,8}\b/g, '[IBAN]')
+  .replace(/[\p{L}\p{N}._%+-]{1,64}@[\p{L}\p{N}-]{1,63}(?:\.[\p{L}\p{N}-]{1,63})+/gu, '[e-posta]')
   .replace(/\+?\d[\d ()/.-]{7,}\d/g, '[numara]')
 const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
 // Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
@@ -154,7 +155,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       case 'list_orders': {
         const view = String(input.view)
         const f: Record<string, (o: Order) => boolean> = { toship: toShip, overdue, issue: hasIssue, drop: dropWaiting, label_missing: labelable, label_ready: shippable, today: o => dayKey(o.t) === today, yesterday: o => dayKey(o.t) === yest }
-        if (!f[view]) return { error: true, data: { hata: 'Bilinmeyen görünüm' } }
+        if (!Object.hasOwn(f, view)) return { error: true, data: { hata: 'Bilinmeyen görünüm' } }
         const l = st.orders.filter(f[view])
         const hrefView = view === 'toship' || view === 'overdue' || view === 'issue' || view === 'drop' ? `#/orders?view=${view}` : view.startsWith('label') ? '#/labels' : '#/orders'
         return { src: [{ label: view.startsWith('label') ? 'Kargo etiketleri' : 'Siparişler', href: hrefView }], data: { toplam: l.length, kanal_dagilimi: byChannel(l), satirlar: l.slice(0, int(input.limit, 25, 50)).map(row) } }
@@ -184,7 +185,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       case 'get_open_tickets': {
         if (!sees('support')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) destek konuşmalarını görmez.` } }
         const open = st.tickets.filter(t => t.status === 'open').sort((a, b) => a.t - b.t)
-        return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: t.subject, hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: maskPII([...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null) })) } }
+        return { src: [{ label: 'Destek', href: '#/support' }], data: { toplam: open.length, konusmalar: open.slice(0, int(input.limit, 5, 10)).map(t => ({ id: t.id, konu: maskPII(t.subject), hesap: account(t.acc).name, bekleme_saat: hours(t.t), siparis_no: st.allOrders.find(o => o.id === t.orderId)?.no ?? null, son_musteri_mesaji: maskPII([...t.msgs].reverse().find(m => m.from === 'musteri')?.text ?? null) })) } }
       }
       case 'get_stock_risks': {
         if (!sees('stock')) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) stok ekranını görmez.` } }
@@ -239,7 +240,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       }
       case 'open_screen': {
         const page = String(input.page)
-        if (!SCREEN[page]) return { error: true, data: { hata: 'Bilinmeyen ekran' } }
+        if (!Object.hasOwn(SCREEN, page)) return { error: true, data: { hata: 'Bilinmeyen ekran' } }
         if (R.nav !== 'all' && !R.nav.includes(page)) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) bu ekranı göremez.` } }
         location.hash = `#/${page}`
         return { src: [{ label: SCREEN[page], href: `#/${page}` }], data: { acildi: SCREEN[page] } }
@@ -259,7 +260,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
           return made({ kind: kind === 'create_labels' ? 'labels' : 'ship', title: summary || (kind === 'create_labels' ? `${take.length} sipariş için kargo etiketi oluştur` : `${take.length} siparişi kargoya ver`), ids: take.map(o => o.id), lines: [`${take.length} sipariş`, ...byChannel(take), ...(good.length > CAP ? [`Üst sınır ${CAP}: ${good.length - CAP} sipariş bu tura alınmadı`] : [])] }, { reddedilen: want.length - good.length, ust_sinir_nedeniyle_alinmayan: Math.max(0, good.length - CAP) })
         }
         if (kind === 'retry_sync_jobs') {
-          const want = list(input.job_ids), good = st.jobs.filter(j => want.includes(j.id) && j.status === 'basarisiz').slice(0, CAP)
+          const want = list(input.job_ids), good = st.jobs.filter(j => want.includes(j.id) && j.status === 'basarisiz' && (j.acc === null || ids.has(j.acc))).slice(0, CAP)
           if (!good.length) return { error: true, data: { hata: 'Verilen kimliklerde yeniden denenebilecek başarısız iş yok. Kimlikleri get_channel_health ile al.' } }
           return made({ kind: 'retry', title: summary || `${good.length} başarısız işi yeniden dene`, ids: good.map(j => j.id), lines: good.slice(0, 6).map(j => `${j.acc ? account(j.acc).name : 'Sistem'} · ${j.kind}`) }, { reddedilen: want.length - good.length })
         }
@@ -292,7 +293,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       for (let turn = 0; turn < 8; turn++) {
         const r = await fetch(API, { method: 'POST', signal: AbortSignal.timeout(100_000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel } }) })
         const res = (await r.json().catch(() => ({}))) as { content?: Block[]; stop_reason?: string | null; message?: string }
-        if (!r.ok || !res.content) throw new Error(res.message || `Sunucu yanıt vermedi (${r.status})`)
+        if (!r.ok || !res.content) throw new Error(res.message || `Asistan şu an yanıt vermiyor. Biraz sonra yeniden deneyin ya da işlemi ilgili ekrandan yapın.`)
         api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
         const said = res.content.flatMap(b => (b.type === 'text' ? [b.text] : [])).join('\n').trim()
         // Yanıt reddedildiyse ya da yarıda kesildiyse içindeki araç çağrıları eksik olabilir: hiçbiri çalıştırılmaz,
@@ -412,12 +413,12 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
 
     if (has('etiket')) {
       const list = st.orders.filter(o => toShip(o) && o.supply === 'fiziki' && o.label === 'yok' && !o.issue)
-      if (!R.ops) return { body: <p className="m-0">Rolünüz ({R.label}) kargo etiketi oluşturamıyor; ben de sizin adınıza oluşturamam. Etiket bekleyen {plural(list.length, 'sipariş')} var.</p>, sources: [{ label: 'Gönderilecek siparişler', href: '#/orders?view=toship' }] }
+      if (!R.ops) return { body: <p className="m-0">Rolünüz ({R.label}) kargo etiketi oluşturamıyor; ben de sizin adınıza oluşturamam. Etiket bekleyen {plural(list.length, 'sipariş')} var.</p>, sources: [{ label: 'Kargoya verilecek siparişler', href: '#/orders?view=toship' }] }
       if (!list.length) return { body: <p className="m-0">Etiket bekleyen, ödemesi tamam ve sorunsuz sipariş yok.</p>, sources: [{ label: 'Kargo etiketleri', href: '#/labels' }] }
       const ids = list.slice(0, CAP).map(o => o.id)
       return {
         body: <><p className="m-0">Ödemesi tamam, fiziki stoktan karşılanan ve etiketi olmayan {plural(list.length, 'sipariş')} buldum. Adresi eksik ya da sorunlu olanları dışarıda bıraktım.</p>{noDraft}</>,
-        sources: [{ label: 'Gönderilecek siparişler', href: '#/orders?view=toship' }],
+        sources: [{ label: 'Kargoya verilecek siparişler', href: '#/orders?view=toship' }],
         act: draft({ kind: 'labels', title: `${ids.length} sipariş için kargo etiketi oluştur`, ids, lines: [...byChannel(list.slice(0, CAP)), list.length > CAP ? `Üst sınır ${CAP}: kalan ${fmtNum(list.length - CAP)} sipariş sonraki turda` : 'Tümü bu turda'] }),
       }
     }
@@ -548,7 +549,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       <header className="h-14 shrink-0 px-4 flex items-center gap-2 bg-navy text-white">
         <span className="relative size-8 grid place-items-center rounded-full bg-white/12"><Sparkles size={16} /><span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-[#4fbf4f] ring-2 ring-navy" /></span>
         <div className="min-w-0 flex-1"><div className="text-sm font-semibold leading-tight">Asistan</div><div className="text-[11px] text-white/60 truncate">{R.label} yetkisiyle · {scope}</div></div>
-        {live === 'canli' ? <Badge tone="ok" title="Yanıtlar yapay zekâdan gelir; rakamlar panel verisinden hesaplanır">Yapay zekâ bağlı</Badge> : <Badge tone="warn" title="Sunucuda API anahtarı yok; hazır senaryolar mock veriden hesaplanır">Hazır senaryolar</Badge>}
+        {live === 'canli' ? <Badge tone="ok" title="Yanıtlar yapay zekâdan gelir; rakamlar panel verisinden hesaplanır">Yapay zekâ bağlı</Badge> : <Badge tone="warn" title="Sunucuda API anahtarı yok; hazır senaryolar örnek veriden hesaplanır">Örnek yanıtlar</Badge>}
         <button onClick={() => setWide(w => !w)} aria-label={wide ? 'Pencereyi küçült' : 'Pencereyi büyüt'} title={wide ? 'Küçült' : 'Büyüt'} className="hidden sm:grid border-0 bg-transparent size-8 place-items-center text-white/70 rounded-md hover:bg-white/12 hover:text-white">{wide ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</button>
         <button onClick={onClose} aria-label="Asistanı kapat" className="border-0 bg-transparent size-8 grid place-items-center text-white/70 rounded-md hover:bg-white/12 hover:text-white"><X size={18} /></button>
       </header>

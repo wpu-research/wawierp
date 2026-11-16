@@ -27,7 +27,7 @@ const STOCK = [
   { key: 'fiziki', tab: 'Fiziki stok', kick: 'Deponuzdaki gerçek ürünler', title: 'Rafınızdaki ürünü, sayılmış adediyle yönetin.',
     text: 'Her deponun sayımı, fiyatı ve hareket geçmişi kendi içinde tutulur. Sayımı yapılmamış ürün sıfır stok sayılmaz; hangi depoda ne olduğunu görürsünüz.',
     points: ['Barkodla ürün bulma, sayım ve stok güncelleme', 'Kritik, biten ve henüz sayılmamış stoklar ayrı süzgeçte', 'Depo transferi, sevkiyat ve sayılarak mal kabul'],
-    card: { label: 'Sayılmış depo stoğu', rows: [['Almanya · A-3-2', '119'], ['Hollanda · C-1-4', '46'], ['Istanbul', 'Sayım yok']] } },
+    card: { label: 'Sayılmış depo stoğu', rows: [['Almanya · A-3-2', '119'], ['Hollanda · C-1-4', '46'], ['İstanbul', 'Hiç sayılmadı']] } },
   { key: 'sanal', tab: 'Sanal stok', kick: 'Planlanan satış kapasitesi', title: 'İlana açacağınız miktarı ayrıca tanımlayın.',
     text: 'Sanal miktar, rafta sayılmış ürün demek değildir. Ürün için belirlediğiniz satış kapasitesini fiziki ve tedarikçi miktarlarından ayrı izlersiniz.',
     points: ['Ürün bazında sanal stok değeri ve aç/kapa', 'Fiziki sayımı değiştirmeden kapasiteyi düzenleme', 'İlan kaynağı ve stok kuralı her zaman görünür'],

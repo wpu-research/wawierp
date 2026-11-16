@@ -76,7 +76,7 @@ export function AuditLog() {
               </tr>
             ))}</tbody>
           </table>
-          {rows.length === 0 && <Empty>Kayıt yok.</Empty>}
+          {rows.length === 0 && <Empty>Henüz kayıt yok.</Empty>}
         </div>
       </Card>
     </>

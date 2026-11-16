@@ -63,7 +63,7 @@ export function ListingWizard() {
 
   return (
     <>
-      <PageHead title="Toplu listeleme" desc="Seçtiğin ürünleri birkaç kanala tek akışta hazırla. Eksik bilgisi olan ilanlar gönderilmez, nedeni gösterilir." legacy={['pool', 'listing-wizard']} />
+      <PageHead title="Toplu listeleme" desc="Seçtiğiniz ürünleri birkaç kanala tek akışta hazırla. Eksik bilgisi olan ilanlar gönderilmez, nedeni gösterilir." legacy={['pool', 'listing-wizard']} />
       {!ops && <NoOps />}
       <Stepper step={step} go={next} />
       {step === 0 && (
@@ -189,7 +189,7 @@ export function PriceRules() {
   }
   return (
     <>
-      <PageHead title="Fiyat kuralları ve kârlılık" desc="Net kârı hesapla, fiyat kurallarının etkisini önizle, kanalların tahmini kârlılığına bak." legacy={['pricing', 'profitability']} />
+      <PageHead title="Fiyat kuralları ve kârlılık" desc="Net kârı hesaplayın, fiyat kurallarının etkisini önizleyin, kanalların tahmini kârlılığına bak." legacy={['pricing', 'profitability']} />
       <div className="grid xl:grid-cols-2 gap-3">
         <Calc products={products} accounts={accounts} />
         <Card title="Fiyat kuralları" right={<Badge tone="info">Yalnız öner · fiyat değişmez</Badge>}>

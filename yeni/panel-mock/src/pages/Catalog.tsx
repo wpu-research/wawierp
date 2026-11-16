@@ -13,7 +13,7 @@ export const listingBadge = (s: ListingStatus, reason?: string) => <Badge tone={
 
 export function StockCell({ v }: { v: number | null }) {
   const s = stockState(v)
-  if (s === 'sayim-yok') return <Badge tone="neutral" title="Sayılmamış; sıfır stok değildir">Sayım yok</Badge>
+  if (s === 'sayim-yok') return <Badge tone="neutral" title="Sayılmamış; sıfır stok değildir">Hiç sayılmadı</Badge>
   const tone: Tone = s === 'negatif' ? 'bad' : s === 'tukendi' ? 'bad' : s === 'alarm' || s === 'kritik' ? 'warn' : 'ok'
   return <span className="inline-flex items-center gap-1.5"><span className="num font-medium">{fmtNum(v!)}</span>{s !== 'var' && <Badge tone={tone}>{s === 'negatif' ? 'Negatif' : s === 'tukendi' ? 'Tükendi' : s === 'alarm' ? 'Alarm' : 'Kritik'}</Badge>}</span>
 }
@@ -47,7 +47,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
       <Tabs value={view} onChange={setView} items={[
         { key: 'all', label: 'Tümü', count: counts.all }, { key: 'ean', label: 'EAN eksik', count: counts.ean, tone: 'bad' },
         { key: 'gorsel', label: 'Görsel eksik', count: counts.gorsel, tone: 'bad' }, { key: 'kritik', label: 'Kritik stok', count: counts.kritik, tone: 'bad' },
-        { key: 'negatif', label: 'Negatif stok', count: counts.negatif, tone: 'bad' }, { key: 'sayim', label: 'Sayım yok', count: counts.sayim },
+        { key: 'negatif', label: 'Eksi stok', count: counts.negatif, tone: 'bad' }, { key: 'sayim', label: 'Hiç sayılmadı', count: counts.sayim },
       ]} />
       <Card pad={false} className="mt-2">
         <div className="p-3 border-b border-line flex flex-wrap items-center gap-2">
@@ -136,7 +136,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
 }
 
 function MoveList({ moves }: { moves: Move[] }) {
-  if (!moves.length) return <p className="m-0 text-mute">Hareket yok.</p>
+  if (!moves.length) return <p className="m-0 text-mute">Bu ürün için henüz stok hareketi yok.</p>
   return (
     <ul className="m-0 p-0 list-none border border-line rounded-lg divide-y divide-line">
       {moves.map(m => (
@@ -167,7 +167,7 @@ export function Stock() {
         legacy={['stock-movements', 'physical-stock-check', 'stock-transfer (geçmiş)', 'warehouse-product (işlem geçmişi)']} />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         <Stat label="Fiziki (sayılmış)" value={fmtNum(tot.fiziki)} hint={`${tot.unk} kayıtta sayım yok`} />
-        <Stat label="Sanal (ilana açık)" value={fmtNum(tot.sanal)} hint="Fiziki sayımı değiştirmez" />
+        <Stat label="İlana açılacak miktar" value={fmtNum(tot.sanal)} hint="Fiziki sayımı değiştirmez" />
         <Stat label="Drop" value={fmtNum(tot.drop)} hint="Tedarikçiden karşılanır" />
         <Stat label="Tedarikçi API stoğu" value={fmtNum(tot.ted)} hint="Son okuma kanal işlerinde" />
       </div>
@@ -196,7 +196,7 @@ export function Stock() {
               </tr>
             ) })}</tbody>
           </table>
-          {rows.length === 0 && <Empty>Hareket yok.</Empty>}
+          {rows.length === 0 && <Empty>Bu ürün için henüz stok hareketi yok.</Empty>}
         </div>
         <Pager page={page} size={SIZE} total={rows.length} onPage={setPage} />
       </Card>

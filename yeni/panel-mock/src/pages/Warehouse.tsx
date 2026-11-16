@@ -132,7 +132,7 @@ export function Picking() {
 
 /* -------------------------------------------------------------------- Sayım */
 type Reason = 'negatif' | 'hic' | 'kritik' | 'hareket'
-const REASON: Record<Reason, [Tone, string, number]> = { negatif: ['bad', 'Negatif stok', 0], hic: ['warn', 'Hiç sayılmamış', 1], kritik: ['warn', 'Kritik', 2], hareket: ['info', 'Çok hareket eden', 3] }
+const REASON: Record<Reason, [Tone, string, number]> = { negatif: ['bad', 'Eksi stok', 0], hic: ['warn', 'Hiç sayılmamış', 1], kritik: ['warn', 'Kritik', 2], hareket: ['info', 'Çok hareket eden', 3] }
 
 export function Counting() {
   const { products, whId, notify, role, moves, countStock } = useStore()
@@ -168,7 +168,7 @@ export function Counting() {
       <PageHead title="Sayım planı" desc="Sıradaki sayım listesi, öncelik sırasıyla: önce negatif stok, sonra hiç sayılmamış, kritik ve çok hareket eden ürünler." />
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
         <Stat label="Sayılacak satır" value={rows.length} />
-        <Stat label="Negatif stok" value={n('negatif')} tone={n('negatif') ? 'bad' : undefined} />
+        <Stat label="Eksi stok" value={n('negatif')} tone={n('negatif') ? 'bad' : undefined} />
         <Stat label="Hiç sayılmamış" value={n('hic')} tone={n('hic') ? 'warn' : undefined} />
         <Stat label="Kritik (min altı)" value={n('kritik')} tone={n('kritik') ? 'warn' : undefined} />
         <Stat label="Sayım yapıldı" value={Object.keys(done).length} tone="ok" hint="bu oturumda" />

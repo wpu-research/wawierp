@@ -177,7 +177,7 @@ function Count({ wh, act }: { wh: WhId; act: Act }) {
   const [saved, setSaved] = useState<Set<string>>(new Set())
   if (bin === null) return (
     <div className="space-y-3">
-      <Head title="Say" /><Note>Bir raf seç. Sayarken sistemdeki adet gizli kalır.</Note>
+      <Head title="Say" /><Note>Bir raf seçin. Sayarken sistemdeki adet gizli kalır.</Note>
       {!shelves.length && <Empty>Bu depoda fiziki stoklu raf yok.</Empty>}
       <div className="grid grid-cols-2 gap-2">
         {shelves.map(([b, ids]) => (

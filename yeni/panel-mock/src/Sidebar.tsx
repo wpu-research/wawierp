@@ -85,7 +85,7 @@ export default function Sidebar({ nav, page, badges, allowed, home, mini, setMin
       </div>
       <div className={`shrink-0 border-t border-white/10 flex items-center gap-2.5 ${slim ? 'flex-col py-2.5' : 'px-3 py-2.5'}`}>
         <Avatar name={ROLES[st.role].user} size={30} dot />
-        {!slim && <div className="min-w-0 flex-1"><div className="text-[13px] font-medium truncate">{ROLES[st.role].user}</div><div className="text-[11px] text-white/50 truncate">İlk kiracı · 12 şirket, 5 depo</div></div>}
+        {!slim && <div className="min-w-0 flex-1"><div className="text-[13px] font-medium truncate">{ROLES[st.role].user}</div><div className="text-[11px] text-white/50 truncate">Tek kuruluş · 12 şirket, 5 depo</div></div>}
         {!onClose && <button onClick={() => setMini(m => !m)} aria-label={mini ? 'Menüyü genişlet' : 'Menüyü daralt'} title={mini ? 'Menüyü genişlet' : 'Menüyü daralt'} className="size-7 grid place-items-center rounded-md border-0 bg-white/7 text-white/70 hover:bg-white/14 hover:text-white">{mini ? <ChevronsRight size={15} /> : <ChevronsLeft size={15} />}</button>}
       </div>
     </nav>

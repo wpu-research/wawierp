@@ -57,7 +57,7 @@ export default function Overview() {
         <Stat label="2 günü aşan fiziki" value={fmtNum(m.overdue)} tone={m.overdue ? 'bad' : 'ok'} hint="Sevk süresi geçti" href="#/orders?view=overdue" />
         <Stat label="Drop bekleyen" value={fmtNum(m.drop)} hint="Tedarikçide" href="#/orders?view=drop" />
         <Stat label="Sorunlu sipariş" value={fmtNum(m.issue)} tone={m.issue ? 'warn' : 'ok'} hint="Adres, stok, etiket" href="#/orders?view=issue" />
-        <Stat label="Negatif stoklu ürün" value={fmtNum(neg)} tone={neg ? 'bad' : 'ok'} hint="Sayım gerekiyor" href="#/catalog?view=negatif" />
+        <Stat label="Eksi stoklu ürün" value={fmtNum(neg)} tone={neg ? 'bad' : 'ok'} hint="Sayım gerekiyor" href="#/catalog?view=negatif" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-3 mb-4">

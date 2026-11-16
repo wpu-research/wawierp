@@ -98,7 +98,7 @@ export function QualityQueue() {
         <div className="flex justify-between text-sm mb-1.5"><span>Bugün düzeltilen</span><span className="num">{fmtNum(fixed.size)} / {fmtNum(total)}</span></div>
         <div className="h-2.5 rounded bg-bg overflow-hidden" role="progressbar" aria-valuenow={fixed.size} aria-valuemax={total}><div className="h-full bg-ok rounded" style={{ width: `${total ? (fixed.size / total) * 100 : 0}%` }} /></div>
       </Card>
-      <Tabs value={tab} onChange={setTab} items={[{ key: 'next', label: 'Sıradaki', count: queue.length }, { key: 'list', label: 'Liste', count: queue.length }, { key: 'dup', label: 'Mükerrer adayları', count: groups.filter(g => !dupDone[g.key]).length }]} />
+      <Tabs value={tab} onChange={setTab} items={[{ key: 'next', label: 'Sıradaki', count: queue.length }, { key: 'list', label: 'Liste', count: queue.length }, { key: 'dup', label: 'Aynı ürün olabilecekler', count: groups.filter(g => !dupDone[g.key]).length }]} />
       <div className="mt-2">
         {tab === 'next' && (cur ? (
           <Card title={<span className="flex items-center gap-2.5"><Thumb p={cur} size={36} />{cur.name}</span>} right={<span className="flex gap-1">{kindsOf(cur).map(k => <Badge key={k} tone={KIND[k].tone}>{KIND[k].label}</Badge>)}</span>}>

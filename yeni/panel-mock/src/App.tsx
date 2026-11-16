@@ -60,7 +60,7 @@ const NAV: NavGroup[] = [
   ] },
 ]
 const VIEWS: { label: string; href: string; page: string }[] = [
-  { label: 'Gönderilecek siparişler', href: '#/orders?view=toship', page: 'orders' }, { label: '2 günü aşan siparişler', href: '#/orders?view=overdue', page: 'orders' },
+  { label: 'Kargoya verilecek siparişler', href: '#/orders?view=toship', page: 'orders' }, { label: '2 günü aşan siparişler', href: '#/orders?view=overdue', page: 'orders' },
   { label: 'Sorunlu siparişler', href: '#/orders?view=issue', page: 'orders' }, { label: 'Barkodu eksik ürünler', href: '#/catalog?view=ean', page: 'catalog' },
   { label: 'Görseli eksik ürünler', href: '#/catalog?view=gorsel', page: 'catalog' }, { label: 'Eksi stoklu ürünler', href: '#/catalog?view=negatif', page: 'catalog' },
 ]
