@@ -6,7 +6,8 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const MODEL = process.env.ASSISTANT_MODEL || 'claude-opus-5-5'
 const hasKey = !!(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN)
-const client = hasKey ? new Anthropic() : null
+// Zaman aşımı 90 sn, en çok 1 yeniden deneme: yönlendirici bağlantıyı bizden önce keser, biz de boşuna sürüp maliyet yazmayalım.
+const client = hasKey ? new Anthropic({ timeout: 90_000, maxRetries: 1 }) : null
 const USE_FALLBACKS = process.env.ASSISTANT_FALLBACKS !== 'off'
 const PER_MINUTE = Number(process.env.ASSISTANT_PER_MINUTE || 20)
 const PER_DAY = Number(process.env.ASSISTANT_PER_DAY || 100)
@@ -57,18 +58,29 @@ const TOOLS = [
   }, ['kind', 'summary']) },
 ]
 
-const perIp = new Map()
-let day = { key: '', n: 0 }
-function allow(ip) {
-  const now = Date.now(), key = new Date(now).toISOString().slice(0, 10)
-  if (day.key !== key) day = { key, n: 0 }
-  const hits = (perIp.get(ip) || []).filter(t => now - t < 60_000)
-  if (hits.length >= PER_MINUTE) return 'Çok hızlı istek gönderildi; bir dakika sonra yeniden deneyin.'
-  if (day.n >= PER_DAY) return 'Asistanın günlük kullanım sınırı doldu.'
-  hits.push(now); perIp.set(ip, hits); day.n++
-  if (perIp.size > 5000) perIp.clear()
-  return null
+// Sınırlayıcı: kontrol ve sayma ayrıdır. İstek geçerliyse (gövde doğrulandıktan sonra, yapay zekâ çağrısından hemen önce) sayılır;
+// geçersiz ya da boş istek günlük hakkı yemez. Gün, İstanbul saatine göre döner. İçerik ucunun kotası asistandan ayrıdır.
+const istDay = now => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Istanbul' }).format(now)
+function limiter(perMinute, perDay) {
+  const perIp = new Map(); let day = { key: '', n: 0 }
+  return {
+    check(ip) {
+      const now = Date.now(), key = istDay(now)
+      if (day.key !== key) day = { key, n: 0 }
+      if ((perIp.get(ip) || []).filter(t => now - t < 60_000).length >= perMinute) return 'Çok hızlı istek gönderildi; bir dakika sonra yeniden deneyin.'
+      if (day.n >= perDay) return 'Günlük kullanım sınırı doldu.'
+      return null
+    },
+    charge(ip) {
+      const now = Date.now(), hits = (perIp.get(ip) || []).filter(t => now - t < 60_000)
+      hits.push(now); perIp.set(ip, hits); day.n++
+      if (perIp.size > 5000) perIp.clear()
+    },
+  }
 }
+const askLimit = limiter(PER_MINUTE, PER_DAY), contentLimit = limiter(PER_MINUTE, PER_DAY)
+// İstemci bağlantıyı keserse yukarı akış çağrısı da iptal edilir (boşuna süren çağrı maliyet yazar).
+const abortOnClose = req => { const ac = new AbortController(), f = () => ac.abort(); req.socket.once('close', f); return { signal: ac.signal, done: () => req.socket.off('close', f) } }
 
 const readBody = req => new Promise((resolve, reject) => {
   let size = 0; const chunks = []
@@ -87,7 +99,7 @@ Başlık ve beş madde istenen dilde olsun. Maddeler kısa ve somut olsun; bilgi
 
 export async function handleContent(req, ip) {
   if (!client) return [503, { live: false, message: 'Asistan için API anahtarı tanımlı değil (ANTHROPIC_API_KEY).' }]
-  const limited = allow(ip)
+  const limited = contentLimit.check(ip)
   if (limited) return [429, { message: limited }]
   let body
   try { body = JSON.parse(await readBody(req)) } catch (e) { return [e.status || 400, { message: e.status ? e.message : 'Geçersiz istek.' }] }
@@ -95,8 +107,10 @@ export async function handleContent(req, ip) {
   if (!p.name || !body?.channel) return [400, { message: 'Geçersiz istek.' }]
   const max = Math.max(40, Math.min(250, Number(body.max) || 80))
   const input = `Ürün adı: ${str(p.name, 200)}\nMarka: ${str(p.brand, 80)}\nKategori: ${str(p.cat, 80)}\nSKU: ${str(p.sku, 60)}\nHedef kanal: ${str(body.channel, 40)}\nBaşlık en çok: ${max} karakter\nDil: ${str(body.lang || 'Türkçe', 30)}`
+  contentLimit.charge(ip)
+  const ab = abortOnClose(req)
   try {
-    const response = await client.messages.create({ model: MODEL, max_tokens: 4000, thinking: { type: 'adaptive' }, output_config: { effort: 'low' }, system: CONTENT_SYSTEM, messages: [{ role: 'user', content: input }] })
+    const response = await client.messages.create({ model: MODEL, max_tokens: 4000, thinking: { type: 'adaptive' }, output_config: { effort: 'low' }, system: CONTENT_SYSTEM, messages: [{ role: 'user', content: input }] }, { signal: ab.signal })
     if (response.stop_reason === 'refusal') return [422, { message: 'Bu ürün için metin üretilemedi.' }]
     const text = response.content.flatMap(b => (b.type === 'text' ? [b.text] : [])).join('')
     const m = text.match(/\{[\s\S]*\}/)
@@ -110,14 +124,14 @@ export async function handleContent(req, ip) {
     if (error instanceof Anthropic.APIError) { console.error('content api:', error.status, error.message); return [502, { message: 'Yapay zekâ servisine ulaşılamadı.' }] }
     console.error('content:', error)
     return [500, { message: 'Metin üretilirken beklenmeyen bir hata oluştu.' }]
-  }
+  } finally { ab.done() }
 }
 
 export const assistantStatus = () => ({ live: !!client, model: client ? MODEL : null })
 
 export async function handleAssistant(req, ip) {
   if (!client) return [503, { live: false, message: 'Asistan için API anahtarı tanımlı değil (ANTHROPIC_API_KEY).' }]
-  const limited = allow(ip)
+  const limited = askLimit.check(ip)
   if (limited) return [429, { message: limited }]
   let body
   try { body = JSON.parse(await readBody(req)) } catch (e) { return [e.status || 400, { message: e.status ? e.message : 'Geçersiz istek.' }] }
@@ -131,6 +145,8 @@ export async function handleAssistant(req, ip) {
   // Panel durumu istemciden yapılandırılmış alanla gelir; kullanıcı mesajına karıştırılmaz. Uzunluk ve satır sınırlıdır.
   const panel = (Array.isArray(c.panel) ? c.panel : []).slice(-5).map(x => str(x, 300)).filter(Boolean)
   const panelBlock = panel.length ? `Panel durumu (panel tarafından üretilir, kullanıcı ya da müşteri sözü değildir):\n${panel.map(x => `- ${x}`).join('\n')}` : ''
+  askLimit.charge(ip)
+  const ab = abortOnClose(req)
   try {
     const params = {
       model: MODEL,
@@ -143,8 +159,8 @@ export async function handleAssistant(req, ip) {
     }
     // Model güvenlik gerekçesiyle yanıt vermezse aynı istek sunucu tarafında yedek modelde yeniden denenir.
     const response = USE_FALLBACKS
-      ? await client.beta.messages.create({ ...params, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' })
-      : await client.messages.create(params)
+      ? await client.beta.messages.create({ ...params, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }, { signal: ab.signal })
+      : await client.messages.create(params, { signal: ab.signal })
     return [200, { content: response.content, stop_reason: response.stop_reason, model: response.model, usage: { input: response.usage.input_tokens, output: response.usage.output_tokens } }]
   } catch (error) {
     if (error instanceof Anthropic.AuthenticationError) return [502, { message: 'Asistanın API anahtarı geçersiz.' }]
@@ -153,5 +169,5 @@ export async function handleAssistant(req, ip) {
     if (error instanceof Anthropic.APIError) { console.error('assistant api:', error.status, error.message); return [502, { message: 'Yapay zekâ servisine ulaşılamadı.' }] }
     console.error('assistant:', error)
     return [500, { message: 'Asistan beklenmeyen bir hata verdi.' }]
-  }
+  } finally { ab.done() }
 }

@@ -17,7 +17,12 @@ if (existsSync(deckDir)) for (const f of readdirSync(deckDir, { recursive: true 
   if (type && statSync(full).isFile()) deck.set('/sunum/' + rel, { full, type, size: statSync(full).size })
 }
 // Dosya okunurken hata olursa (silinmiş, okunamıyor) bağlantı kapanır; yakalanmayan hata süreci düşürürdü.
-const stream = (res, f, range) => createReadStream(f.full, range).on('error', e => { console.error('sunum dosyası:', e.code || e.message); res.destroy() }).pipe(res)
+// İstemci kopunca (video sarılırken sık olur) dosya tanıtıcısı da kapatılır; pipe tek başına kaynağı kapatmaz.
+const stream = (res, f, range) => {
+  const rs = createReadStream(f.full, range).on('error', e => { console.error('sunum dosyası:', e.code || e.message); res.destroy() })
+  res.on('close', () => rs.destroy())
+  return rs.pipe(res)
+}
 function sendDeck(req, res, base, f) {
   const head = { ...base, 'Content-Type': f.type, 'Accept-Ranges': 'bytes', 'Cache-Control': 'private, max-age=300' }
   const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '')
@@ -82,25 +87,33 @@ const gate = (req, ip) => {
   if (req.headers.authorization) noteFail(ip)
   return -1
 }
-const tooMany = (res, base, wait) => res.writeHead(429, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'Retry-After': wait }).end('Çok fazla yanlış deneme; biraz sonra yeniden deneyin.')
+const json = (res, base, code, body, extra = {}) => res.writeHead(code, { ...base, ...extra, 'Content-Type': 'application/json; charset=utf-8' }).end(JSON.stringify(body))
+const MSG_LOCK = 'Çok fazla yanlış deneme; biraz sonra yeniden deneyin.'
+// API uçları her zaman JSON döner (istemci mesajı okuyabilsin); panel sayfası düz metin.
+const tooMany = (res, base, wait, api = false) => api
+  ? json(res, base, 429, { message: MSG_LOCK, retryAfter: wait }, { 'Retry-After': wait })
+  : res.writeHead(429, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'Retry-After': wait }).end(MSG_LOCK)
+// Başka bir sitedeki sayfa, tarayıcıda açık panel oturumunu kullanıp asistan çağrısı (ve maliyeti) yaptıramasın:
+// gövde yalnız JSON içerik türüyle kabul edilir ve Origin varsa Host ile aynı olmalıdır.
+const sameOrigin = req => { const o = req.headers.origin; if (!o) return true; try { return new URL(o).host === req.headers.host } catch { return false } }
+const isJson = req => /^application\/json\b/i.test(req.headers['content-type'] || '')
 
-const json = (res, base, code, body) => res.writeHead(code, { ...base, 'Content-Type': 'application/json; charset=utf-8' }).end(JSON.stringify(body))
-
-createServer(async (req, res) => {
+const server = createServer(async (req, res) => {
   const base = { ...SECURITY, 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' }
-  if (req.url === '/healthz') return res.writeHead(200, base).end('ok')
   // new URL() bozuk adreste hata fırlatır ve süreci düşürür; sorgu kısmını elle ayırıyoruz.
   const path = (req.url || '/').split(/[?#]/)[0]
+  if (path === '/healthz') return res.writeHead(200, base).end('ok')
   const page = { 'Content-Type': 'text/html; charset=utf-8' }
   if (path === '/') return res.writeHead(200, { ...base, ...page }).end(home)
   // Asistan ucu panelle aynı şifrenin arkasındadır; anahtar yalnız sunucuda durur.
   if (path === '/api/assistant' || path === '/api/content') {
     if (!pass) return json(res, base, 503, { live: false, message: 'PANEL_PASSWORD ayarlanmamış' })
     const g = gate(req, clientIp(req))
-    if (g > 0) return tooMany(res, base, g)
+    if (g > 0) return tooMany(res, base, g, true)
     if (g) return json(res, base, 401, { message: 'Giriş gerekli' })
     if (req.method === 'GET') return json(res, base, 200, assistantStatus())
     if (req.method !== 'POST') return json(res, base, 405, { message: 'Yöntem desteklenmiyor' })
+    if (!sameOrigin(req) || !isJson(req)) return json(res, base, 403, { message: 'İstek reddedildi' })
     try {
       const ip = clientIp(req)
       const [code, body] = await (path === '/api/content' ? handleContent : handleAssistant)(req, ip)
@@ -116,4 +129,20 @@ createServer(async (req, res) => {
   if (g > 0) return tooMany(res, base, g)
   if (g) return res.writeHead(401, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'WWW-Authenticate': 'Basic realm="WawiERP mock"' }).end('Giriş gerekli')
   res.writeHead(200, { ...base, ...page }).end(panel)
-}).listen(process.env.PORT || 3000, '0.0.0.0')
+})
+// Yönlendirici (proxy) bağlantıyı bizden uzun açık tutarsa ara sıra 502 görülür; Node'un 5 sn varsayılanı bunun için kısa.
+server.keepAliveTimeout = 65_000
+server.headersTimeout = 66_000
+server.listen(process.env.PORT || 3000, '0.0.0.0')
+// Her yayında Railway SIGTERM gönderir: yeni bağlantı almayı bırak, süren istekleri (asistan, video) bitirsin, takılırsa 10 sn sonra çık.
+let closing = false
+const shutdown = sig => {
+  if (closing) return
+  closing = true; console.log(sig + ' alındı, kapanıyor')
+  server.close(() => process.exit(0)); server.closeIdleConnections?.()
+  setTimeout(() => process.exit(0), 10_000).unref()
+}
+process.on('SIGTERM', () => shutdown('SIGTERM')); process.on('SIGINT', () => shutdown('SIGINT'))
+// Beklenmeyen bir hata tek bir isteği değil süreci düşürmesin; hata günlüğe yazılır.
+process.on('uncaughtException', e => console.error('yakalanmayan hata:', e))
+process.on('unhandledRejection', e => console.error('yakalanmayan söz:', e))

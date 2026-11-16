@@ -267,6 +267,9 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   }
 
   async function runLive(t: string) {
+    // Konuşma sunucu sınırını (60 mesaj, 300 KB) aşmasın: en eski soru-cevap turları, araç çağrısı/sonucu çiftleri bölünmeden atılır.
+    const turnStarts = () => api.current.flatMap((m, i) => (m.role === 'user' && typeof m.content === 'string' ? [i] : []))
+    while (api.current.length > 36 || JSON.stringify(api.current).length > 200_000) { const st = turnStarts(); if (st.length < 2) break; api.current.splice(0, st[1]) }
     const mark = api.current.length
     const panel = notes.current.splice(0).slice(-5) // notlar yalnız bu soruyla bir kez gider; eski onay yeni sanılmasın
     api.current.push({ role: 'user', content: t })
@@ -274,7 +277,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const views: ReactNode[] = []
     try {
       for (let turn = 0; turn < 8; turn++) {
-        const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel } }) })
+        const r = await fetch(API, { method: 'POST', signal: AbortSignal.timeout(100_000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel } }) })
         const res = (await r.json().catch(() => ({}))) as { content?: Block[]; stop_reason?: string | null; message?: string }
         if (!r.ok || !res.content) throw new Error(res.message || `Sunucu yanıt vermedi (${r.status})`)
         api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
@@ -309,8 +312,9 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       push({ from: 'agent', body: <p className="m-0">Bu iş beklediğimden uzun sürdü; isteği daha küçük parçalara bölebilir misiniz?</p> })
     } catch (e) {
       api.current.length = mark // yarım kalan turu geri al ki sonraki istek geçerli kalsın
+      if (e instanceof Error && /çok uzadı/.test(e.message)) api.current.length = 0 // sunucu konuşmayı reddettiyse baştan başla; yoksa her soru aynı hatayı verir
       notes.current.unshift(...panel) // gönderilemeyen notlar sonraki soruya kalsın
-      push({ from: 'agent', body: <p className="m-0 text-bad">{e instanceof Error ? e.message : 'Asistana ulaşılamadı.'}</p> })
+      push({ from: 'agent', body: <p className="m-0 text-bad">{e instanceof Error && e.name === 'TimeoutError' ? 'Asistan zamanında yanıt vermedi; yeniden deneyin.' : e instanceof Error ? e.message : 'Asistana ulaşılamadı.'}</p> })
     } finally { setBusy(false) }
   }
 
