@@ -7,8 +7,9 @@ import { Badge, Btn, Card, Empty, PageHead, Stat, Tabs, sel, td, th, type Tone }
 
 const inputCls = 'h-8 rounded-md border border-line bg-card px-2 text-sm w-full'
 const DAY30 = 30 * 86400000
-const eanOk = (s: string) => /^\d{13}$/.test(s.trim())
 const eanCheck = (d12: string) => String((10 - ([...d12].reduce((a, c, i) => a + Number(c) * (i % 2 ? 3 : 1), 0) % 10)) % 10)
+// Barkod 13 haneli olmalı ve son hane kontrol hanesiyle tutmalı.
+const eanOk = (s: string) => { const t = s.trim(); return /^\d{13}$/.test(t) && eanCheck(t.slice(0, 12)) === t[12] }
 const norm = (s: string) => s.toLowerCase().replace(/ı/g, 'i').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim()
 const jaccard = (a: string, b: string) => {
   const x = new Set(norm(a).split(' ')), y = new Set(norm(b).split(' '))
@@ -71,6 +72,7 @@ export function QualityQueue() {
   useEffect(() => {
     const f = (e: KeyboardEvent) => {
       if (h.current.tab !== 'next' || e.ctrlKey || e.metaKey) return
+      if ((e.target as HTMLElement).closest('aside,[role=dialog]')) return // asistan, çekmece ve pencerelerdeki Enter bu kaydı tetiklemesin
       const typing = (e.target as HTMLElement).closest('input,textarea,select')
       if (e.key === 'Enter' && !(e.target as HTMLElement).closest('button')) { e.preventDefault(); h.current.save() }
       else if (!typing && e.key.toLowerCase() === 's') h.current.skip()
