@@ -4,10 +4,20 @@ import { createReadStream, existsSync, readFileSync, readdirSync, statSync } fro
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { createHash, timingSafeEqual } from 'node:crypto'
+import { brotliCompressSync, gzipSync, constants as zc } from 'node:zlib'
 import { assistantStatus, handleAssistant, handleContent } from './assistant.mjs'
 
 const home = readFileSync(new URL('./dist/index.html', import.meta.url))
 const panel = readFileSync(new URL('./dist/panel.html', import.meta.url))
+// İki sayfa açılışta bir kez sıkıştırılır (≈%66-70 küçülür); istek başına sıkıştırma maliyeti yoktur.
+const packed = b => ({ raw: b, br: brotliCompressSync(b, { params: { [zc.BROTLI_PARAM_QUALITY]: 9 } }), gz: gzipSync(b, { level: 9 }) })
+const homeZ = packed(home), panelZ = packed(panel)
+const sendPage = (req, res, head, z) => {
+  const ae = String(req.headers['accept-encoding'] || ''), br = /\bbr\b/.test(ae), gz = /\bgzip\b/.test(ae)
+  const body = br ? z.br : gz ? z.gz : z.raw
+  res.writeHead(200, { ...head, Vary: 'Accept-Encoding', 'Content-Length': body.length, ...(br ? { 'Content-Encoding': 'br' } : gz ? { 'Content-Encoding': 'gzip' } : {}) })
+  res.end(req.method === 'HEAD' ? undefined : body)
+}
 // Sunum dosyaları açılışta listelenir; istek yalnız bu listedeki adlarla eşleşir (klasör dışına çıkılamaz).
 const TYPES = { html: 'text/html; charset=utf-8', jpg: 'image/jpeg', mp4: 'video/mp4' }
 const deckDir = fileURLToPath(new URL('./sunum/', import.meta.url))
@@ -109,7 +119,7 @@ async function handle(req, res) {
   const path = (req.url || '/').split(/[?#]/)[0]
   if (path === '/healthz') return res.writeHead(200, base).end('ok')
   const page = { 'Content-Type': 'text/html; charset=utf-8' }
-  if (path === '/') return res.writeHead(200, { ...base, ...page }).end(home)
+  if (path === '/') return sendPage(req, res, { ...base, ...page }, homeZ)
   // Asistan ucu panelle aynı şifrenin arkasındadır; anahtar yalnız sunucuda durur.
   if (path === '/api/assistant' || path === '/api/content') {
     if (!pass) return json(res, base, 503, { live: false, message: 'PANEL_PASSWORD ayarlanmamış' })
@@ -133,7 +143,7 @@ async function handle(req, res) {
   const g = gate(req, clientIp(req))
   if (g > 0) return tooMany(res, base, g)
   if (g) return res.writeHead(401, { ...base, 'Content-Type': 'text/plain; charset=utf-8', 'WWW-Authenticate': 'Basic realm="WawiERP mock"' }).end('Giriş gerekli')
-  res.writeHead(200, { ...base, ...page }).end(panel)
+  sendPage(req, res, { ...base, ...page }, panelZ)
 }
 // Yönlendirici (proxy) bağlantıyı bizden uzun açık tutarsa ara sıra 502 görülür; Node'un 5 sn varsayılanı bunun için kısa.
 server.keepAliveTimeout = 65_000
