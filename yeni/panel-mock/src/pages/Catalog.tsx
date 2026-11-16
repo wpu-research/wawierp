@@ -15,7 +15,7 @@ export function StockCell({ v }: { v: number | null }) {
   const s = stockState(v)
   if (s === 'sayim-yok') return <Badge tone="neutral" title="Sayılmamış; sıfır stok değildir">Hiç sayılmadı</Badge>
   const tone: Tone = s === 'negatif' ? 'bad' : s === 'tukendi' ? 'bad' : s === 'alarm' || s === 'kritik' ? 'warn' : 'ok'
-  return <span className="inline-flex items-center gap-1.5"><span className="num font-medium">{fmtNum(v!)}</span>{s !== 'var' && <Badge tone={tone}>{s === 'negatif' ? 'Negatif' : s === 'tukendi' ? 'Tükendi' : s === 'alarm' ? 'Alarm' : 'Kritik'}</Badge>}</span>
+  return <span className="inline-flex items-center gap-1.5"><span className="num font-medium">{fmtNum(v!)}</span>{s !== 'var' && <Badge tone={tone}>{s === 'negatif' ? 'Eksi stok' : s === 'tukendi' ? 'Tükendi' : s === 'alarm' ? 'Alarm' : 'Kritik'}</Badge>}</span>
 }
 
 type View = 'all' | 'ean' | 'gorsel' | 'kritik' | 'negatif' | 'sayim'

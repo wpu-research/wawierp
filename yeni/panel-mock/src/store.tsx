@@ -230,9 +230,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (o.ret === 'odeme' && !ROLES[role].finance) return say('Para iadesini yalnız muhasebe onaylayabilir')
       // Kontrol bitince (geldi → odeme) fiziki siparişin kalemleri depoya geri yazılır; deftere düzeltme hareketi eklenir (kararlar/0010).
       const back: Delta[] = o.ret === 'geldi' && o.supply === 'fiziki' ? o.items.map(it => ({ pid: it.pid, wh: o.wh, qty: it.qty, type: 'duzeltme' as const, ref: 'İade · ' + o.no })) : []
-      keep('İade aşaması', back); if (back.length) applyStock(back, ROLES[role].user)
+      keep('İade aşaması', back); const wrote = back.length ? applyStock(back, ROLES[role].user).length : 0
       patch([id], x => ({ ...x, ret: NEXT[x.ret ?? 'bekleniyor'] }))
-      log('İade', `İade aşaması ilerletildi → ${NEXT[o.ret ?? 'bekleniyor']}${back.length ? '; stok defterine ' + back.length + ' düzeltme yazıldı' : ''}`, 'sipariş ' + o.no)
+      log('İade', `İade aşaması ilerletildi → ${NEXT[o.ret ?? 'bekleniyor']}${wrote ? '; stok defterine ' + wrote + ' düzeltme yazıldı' : back.length ? '; sayılmamış kayıt olduğu için stok yazılmadı' : ''}`, 'sipariş ' + o.no)
     },
     syncNow: accId => {
       keep('Elle eşitleme')

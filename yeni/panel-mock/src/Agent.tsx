@@ -32,7 +32,7 @@ export const maskPII = (t: string | null) => t && t.slice(0, 2000)
   .replace(/\b[A-Za-z]{2}\d{2}(?:[ .-]?[A-Za-z0-9]{2,4}){3,8}\b/g, '[IBAN]')
   .replace(/[\p{L}\p{N}._%+-]{1,64}@[\p{L}\p{N}-]{1,63}(?:\.[\p{L}\p{N}-]{1,63})+/gu, '[e-posta]')
   .replace(/\+?\d[\d ()/.-]{7,}\d/g, '[numara]')
-const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat ve kârlılık', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kârlılık', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
+const SCREEN: Record<string, string> = { overview: 'Genel bakış', orders: 'Siparişler', labels: 'Kargo etiketleri', returns: 'İadeler', support: 'Destek', catalog: 'Katalog', stock: 'Stok defteri', transfers: 'Depo transferi', channels: 'Kanallar', sync: 'Eşitleme işleri', finance: 'Faturalar ve KDV', b2b: 'Cari ve B2B portal', team: 'Ekip ve yetki', audit: 'Denetim kaydı', reservations: 'Stok ayırma', portal: 'Toptan müşteri portalı', 'return-form': 'Müşteri iade formu', picking: 'Toplama listesi', quality: 'Veri kalitesi', content: 'Ürün metni ve çeviri', counting: 'Sayım planı', replenish: 'Tedarik önerileri', listing: 'Toplu listeleme', prices: 'Fiyat kuralları', rules: 'Otomasyon kuralları', alerts: 'Uyarılar ve özet', shifts: 'Vardiya önerisi', bank: 'Banka mutabakatı', accounting: 'Muhasebe aktarımı', profit: 'Kanal ve şirket kârı', onboarding: 'Kurulum sihirbazı', developers: 'API ve bildirim uçları', billing: 'Kullanım ve abonelik', status: 'Durum sayfası' }
 // Mutlak adres: sayfa adresinde kullanıcı bilgisi olsa bile istek kurulabilsin; tarayıcı panel şifresini kendisi ekler.
 const API = location.origin + '/api/assistant'
 const NOTE_KIND: Record<ActKind, string> = { labels: 'Kargo etiketi oluşturma', ship: 'Kargoya verme', retry: 'Eşitlemeyi yeniden deneme', reply: 'Destek yanıtı', rule: 'Otomasyon kuralı', plan: 'Gün kapatma planı' }
@@ -51,7 +51,8 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   const [mode, setMode] = useState<Mode>('onay')
   const [msgs, setMsgs] = useState<Msg[]>([])
   // Rol değişince önceki rolün tutarları ve konuşması modelin bağlamında ve ekranda kalmasın.
-  useEffect(() => { api.current.length = 0; setMsgs([]) }, [st.role]) // eslint-disable-line react-hooks/exhaustive-deps
+  const epoch = useRef(0) // rol değişince sürüp giden istek eski rolün yetkisiyle sonuç yazmasın
+  useEffect(() => { epoch.current++; api.current.length = 0; setMsgs([]); setBusy(false) }, [st.role]) // eslint-disable-line react-hooks/exhaustive-deps
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const seq = useRef(1)
@@ -283,6 +284,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   }
 
   async function runLive(t: string) {
+    const ep = epoch.current
     // Konuşma sunucu sınırını (60 mesaj, 300 KB) aşmasın: en eski soru-cevap turları, araç çağrısı/sonucu çiftleri bölünmeden atılır.
     const turnStarts = () => api.current.flatMap((m, i) => (m.role === 'user' && typeof m.content === 'string' ? [i] : []))
     while (api.current.length > 36 || JSON.stringify(api.current).length > 200_000) { const st = turnStarts(); if (st.length < 2) break; api.current.splice(0, st[1]) }
@@ -295,6 +297,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       for (let turn = 0; turn < 8; turn++) {
         const r = await fetch(API, { method: 'POST', signal: AbortSignal.timeout(100_000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: api.current, context: { role: R.label, ops: R.ops, finance: R.finance, scope: scopeText, mode, panel } }) })
         const res = (await r.json().catch(() => ({}))) as { content?: Block[]; stop_reason?: string | null; message?: string }
+        if (ep !== epoch.current) return // rol değişti: bu yanıt eski role aittir, atılır
         if (!r.ok || !res.content) throw new Error(res.message || `Asistan şu an yanıt vermiyor. Biraz sonra yeniden deneyin ya da işlemi ilgili ekrandan yapın.`)
         api.current.push({ role: 'assistant', content: res.content } as ApiMsg)
         const said = res.content.flatMap(b => (b.type === 'text' ? [b.text] : [])).join('\n').trim()
@@ -327,6 +330,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       }
       push({ from: 'agent', body: <p className="m-0">Bu iş beklediğimden uzun sürdü; isteği daha küçük parçalara bölebilir misiniz?</p> })
     } catch (e) {
+      if (ep !== epoch.current) return
       api.current.length = mark // yarım kalan turu geri al ki sonraki istek geçerli kalsın
       if (e instanceof Error && /çok uzadı/.test(e.message)) api.current.length = 0 // sunucu konuşmayı reddettiyse baştan başla; yoksa her soru aynı hatayı verir
       notes.current.unshift(...panel) // gönderilemeyen notlar sonraki soruya kalsın
@@ -349,7 +353,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       const ilk = r.pazarlar.filter(m => m.sira === 1).length, pahali = r.pazarlar.filter(m => m.sira > 1)
       return {
         body: <><p className="m-0"><b>{p.name}</b> {plural(r.pazarlar.length, 'platformda')} satışta. {ilk ? `${fmtNum(ilk)} platformda en ucuz sizsiniz.` : 'Hiçbir platformda en ucuz değilsiniz.'}{pahali.length ? ` En büyük fark ${pahali[0].label}'da: en ucuz teklifin ${fmtMoney(pahali[0].fark, pahali[0].cur)} üstündesiniz.` : ''}</p>
-          <p className="m-0 mt-1.5 text-mute">Müşterinin ödediği toplam tutara (fiyat + kargo) göre sıraladım. Fiyatı ben değiştiremem; “Fiyat ve kârlılık” ekranından ayarlanır.</p></>,
+          <p className="m-0 mt-1.5 text-mute">Müşterinin ödediği toplam tutara (fiyat + kargo) göre sıraladım. Fiyatı ben değiştiremem; “Fiyat kuralları” ekranından ayarlanır.</p></>,
         extra: <RivalList r={r} />, sources: src,
       }
     }

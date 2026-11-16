@@ -13,7 +13,9 @@ const panel = readFileSync(new URL('./dist/panel.html', import.meta.url))
 const packed = b => ({ raw: b, br: brotliCompressSync(b, { params: { [zc.BROTLI_PARAM_QUALITY]: 9 } }), gz: gzipSync(b, { level: 9 }) })
 const homeZ = packed(home), panelZ = packed(panel)
 const sendPage = (req, res, head, z) => {
-  const ae = String(req.headers['accept-encoding'] || ''), br = /\bbr\b/.test(ae), gz = /\bgzip\b/.test(ae)
+  // q=0 olan kodlama istenmemiş sayılır.
+  const ok = new Set(String(req.headers['accept-encoding'] || '').split(',').map(x => x.trim().toLowerCase()).filter(x => !/;\s*q=0(\.0*)?$/.test(x)).map(x => x.split(';')[0]))
+  const br = ok.has('br'), gz = ok.has('gzip')
   const body = br ? z.br : gz ? z.gz : z.raw
   res.writeHead(200, { ...head, Vary: 'Accept-Encoding', 'Content-Length': body.length, ...(br ? { 'Content-Encoding': 'br' } : gz ? { 'Content-Encoding': 'gzip' } : {}) })
   res.end(req.method === 'HEAD' ? undefined : body)

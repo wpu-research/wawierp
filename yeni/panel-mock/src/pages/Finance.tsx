@@ -31,7 +31,7 @@ export function Returns() {
                       <div className="text-xs text-mute flex justify-between gap-2 mt-0.5"><Chan acc={o.acc} short /><span>{ago(o.t)}</span></div>
                     </div>
                   </div>
-                  {st.key !== 'cozuldu' && can && <Btn className="mt-2 w-full !h-7 !text-xs" onClick={() => advanceReturn(o.id)}>İlerlet <ArrowRight size={12} /></Btn>}
+                  {st.key !== 'cozuldu' && can && (st.key === 'odeme' ? ROLES[role].finance : st.key === 'geldi' ? ROLES[role].ops : true) && <Btn className="mt-2 w-full !h-7 !text-xs" onClick={() => advanceReturn(o.id)}>İlerlet <ArrowRight size={12} /></Btn>}
                 </li>
               ))}
               {list.length > 5 && <li className="text-xs text-mute text-center py-1">+{list.length - 5} kayıt daha</li>}
