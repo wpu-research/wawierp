@@ -313,6 +313,15 @@ export function reservedMap(allOrders: Order[]) {
   for (const o of allOrders) if (isOpen(o) && o.supply === 'fiziki') for (const it of o.items) { const k = it.pid + '|' + o.wh, l = res.get(k); if (l) l.push({ o, qty: it.qty }); else res.set(k, [{ o, qty: it.qty }]) }
   return res
 }
+// Aynı sipariş listesi için ayırma haritası bir kez hesaplanır (her hücrede yeniden kurulmasın).
+const resCache = new WeakMap<Order[], ReturnType<typeof reservedMap>>()
+export const reservedMapCached = (allOrders: Order[]) => { let m = resCache.get(allOrders); if (!m) { m = reservedMap(allOrders); resCache.set(allOrders, m) } return m }
+/** STOK DÜZEYİ, tek tanım (kararlar/0010): satılabilir = fiziki − ayrılan.
+ *  sayim-yok: hiç sayılmamış · negatif: fiziki < 0 (sayım hatası) · fazla: satılabilir < 0 (fazla satış riski) ·
+ *  kritik: 0 ≤ satılabilir ≤ asgari · var: diğer. Her ekran ve asistan bunu kullanır. */
+export type StockLevel = 'sayim-yok' | 'negatif' | 'fazla' | 'kritik' | 'var'
+export const stockLevel = (fiziki: number | null, ayrilan: number, min: number): StockLevel =>
+  fiziki === null ? 'sayim-yok' : fiziki < 0 ? 'negatif' : fiziki - ayrilan < 0 ? 'fazla' : fiziki - ayrilan <= min ? 'kritik' : 'var'
 export const reservedQty = (res: ReturnType<typeof reservedMap>, pid: string, wh: string) => (res.get(pid + '|' + wh) ?? []).reduce((a, x) => a + x.qty, 0)
 /** Etiket yalnız ödemesi gelmiş, sorunsuz, bizim depodan gidecek açık siparişe verilir; tedarikçi siparişine etiketi tedarikçi basar. */
 export const canLabel = (o: Order) => isOpen(o) && o.pay === 'odendi' && !o.issue && o.supply === 'fiziki' && o.label !== 'hazir'

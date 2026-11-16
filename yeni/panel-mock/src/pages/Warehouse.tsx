@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ScanBarcode, WifiOff } from 'lucide-react'
 import dist from '../dist30.json'
-import { WAREHOUSES, fmtNum, product, toShip, whName, type WhId } from '../data'
+import { WAREHOUSES, fmtNum, product, reservedMapCached, reservedQty, stockLevel, toShip, whName, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Bars, Btn, Card, Empty, PageHead, Stat, td, th, sel, type Tone } from '../ui'
@@ -135,17 +135,19 @@ type Reason = 'negatif' | 'hic' | 'kritik' | 'hareket'
 const REASON: Record<Reason, [Tone, string, number]> = { negatif: ['bad', 'Eksi stok', 0], hic: ['warn', 'Hiç sayılmamış', 1], kritik: ['warn', 'Kritik', 2], hareket: ['info', 'Çok hareket eden', 3] }
 
 export function Counting() {
-  const { products, whId, notify, role, moves, countStock } = useStore()
+  const { products, whId, notify, role, moves, countStock, allOrders } = useStore()
   const [vals, setVals] = useState<Record<string, string>>({})
   const [done, setDone] = useState<Record<string, number>>({})
   const rows = useMemo(() => {
+    const res = reservedMapCached(allOrders)
     const mv = new Map<string, number>()
     for (const m of moves) mv.set(m.pid + m.wh, (mv.get(m.pid + m.wh) ?? 0) + 1)
     const out: { key: string; pid: string; wh: WhId; bin: string; sys: number | null; reason: Reason; moves: number }[] = []
     for (const p of products) for (const [w, s] of Object.entries(p.stock) as [WhId, NonNullable<typeof p.stock[WhId]>][]) {
       if (whId && w !== whId) continue
       const moves = mv.get(p.id + w) ?? 0
-      const reason: Reason | null = s.fiziki === null ? 'hic' : s.fiziki < 0 ? 'negatif' : s.fiziki < s.min ? 'kritik' : moves >= 5 ? 'hareket' : null
+      const lv = stockLevel(s.fiziki, reservedQty(res, p.id, w), s.min) // tek tanım: satılabilir = fiziki − ayrılan
+      const reason: Reason | null = lv === 'sayim-yok' ? 'hic' : lv === 'negatif' ? 'negatif' : lv === 'fazla' || lv === 'kritik' ? 'kritik' : moves >= 5 ? 'hareket' : null
       if (reason) out.push({ key: p.id + w, pid: p.id, wh: w, bin: s.bin, sys: s.fiziki, reason, moves })
     }
     return out.sort((a, b) => REASON[a.reason][2] - REASON[b.reason][2] || b.moves - a.moves || binCmp(a.bin, b.bin))
@@ -170,7 +172,7 @@ export function Counting() {
         <Stat label="Sayılacak satır" value={rows.length} />
         <Stat label="Eksi stok" value={n('negatif')} tone={n('negatif') ? 'bad' : undefined} />
         <Stat label="Hiç sayılmamış" value={n('hic')} tone={n('hic') ? 'warn' : undefined} />
-        <Stat label="Kritik (min altı)" value={n('kritik')} tone={n('kritik') ? 'warn' : undefined} />
+        <Stat label="Kritik (satılabilir ≤ asgari)" value={n('kritik')} tone={n('kritik') ? 'warn' : undefined} />
         <Stat label="Sayım yapıldı" value={Object.keys(done).length} tone="ok" hint="bu oturumda" />
       </div>
       <p className="text-xs text-mute mt-0 mb-3"><b>Sayılmamış ile sıfır stok ayrıdır:</b> sayılmamış ürünün gerçek miktarı bilinmez, sıfır stokta miktar bilinir ve 0'dır. Çok hareket eden: son hareket kaydında 5 ve üzeri işlem.</p>

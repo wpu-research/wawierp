@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ImageOff, Search, Sparkles } from 'lucide-react'
-import { LISTING_FLOW, MOVE, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtNum, product, stockState, whName, account, type ListingStatus, type Move, type MoveType, type Product, type WhId } from '../data'
+import { LISTING_FLOW, MOVE, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtNum, product, reservedMapCached, reservedQty, stockLevel, whName, account, type ListingStatus, type Move, type MoveType, type Product, type WhId } from '../data'
 import { useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { SimilarList, similarTo } from '../similar'
@@ -11,27 +11,30 @@ import { Badge, Card, Chan, Drawer, Empty, PageHead, Pager, Stat, Tabs, sel, td,
 const LTONE: Record<ListingStatus, Tone> = { havuzda: 'neutral', hazirlaniyor: 'warn', onizleme: 'info', gonderildi: 'violet', aktif: 'ok', sorunlu: 'bad', kaldirildi: 'neutral' }
 export const listingBadge = (s: ListingStatus, reason?: string) => <Badge tone={LTONE[s]} title={reason}>{LISTING_FLOW.find(l => l.key === s)!.label}{reason ? ` · ${reason}` : ''}</Badge>
 
-export function StockCell({ v }: { v: number | null }) {
-  const s = stockState(v)
+export function StockCell({ v, pid, wh }: { v: number | null; pid: string; wh: WhId }) {
+  const { allOrders } = useStore()
+  const row = product(pid).stock[wh], lv = stockLevel(v, reservedQty(reservedMapCached(allOrders), pid, wh), row?.min ?? 5)
+  const s = lv === 'fazla' ? 'negatif' : lv === 'kritik' ? 'kritik' : lv === 'negatif' ? 'negatif' : lv === 'sayim-yok' ? 'sayim-yok' : 'var'
   if (s === 'sayim-yok') return <Badge tone="neutral" title="Sayılmamış; sıfır stok değildir">Hiç sayılmadı</Badge>
-  const tone: Tone = s === 'negatif' ? 'bad' : s === 'tukendi' ? 'bad' : s === 'alarm' || s === 'kritik' ? 'warn' : 'ok'
-  return <span className="inline-flex items-center gap-1.5"><span className="num font-medium">{fmtNum(v!)}</span>{s !== 'var' && <Badge tone={tone}>{s === 'negatif' ? 'Eksi stok' : s === 'tukendi' ? 'Tükendi' : s === 'alarm' ? 'Alarm' : 'Kritik'}</Badge>}</span>
+  const tone: Tone = s === 'negatif' ? 'bad' : 'warn'
+  return <span className="inline-flex items-center gap-1.5"><span className="num font-medium">{fmtNum(v!)}</span>{s !== 'var' && <Badge tone={tone}>{lv === 'fazla' ? 'Fazla satış riski' : lv === 'negatif' ? 'Eksi stok' : 'Kritik'}</Badge>}</span>
 }
 
 type View = 'all' | 'ean' | 'gorsel' | 'kritik' | 'negatif' | 'sayim'
 export default function Catalog({ query }: { query: URLSearchParams }) {
-  const { products, whId, moves } = useStore()
+  const { products, whId, moves, allOrders } = useStore()
+  const res = reservedMapCached(allOrders)
   const [view, setView] = useState<View>('all')
   const [q, setQ] = useState('')
   const [openId, setOpenId] = useState<string | null>(null)
   useEffect(() => { const v = query.get('view') as View | null; if (v && ['all', 'ean', 'gorsel', 'kritik', 'negatif', 'sayim'].includes(v)) setView(v); const p = query.get('p'); if (p) setOpenId(p) }, [query])
 
   const rowsOf = (p: Product) => (Object.entries(p.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).filter(([w]) => !whId || w === whId)
-  const has = (p: Product, ...st: string[]) => rowsOf(p).some(([, s]) => st.includes(stockState(s.fiziki)))
+  const has = (p: Product, ...st: string[]) => rowsOf(p).some(([w, s]) => st.includes(stockLevel(s.fiziki, reservedQty(res, p.id, w), s.min)))
   const F: Record<View, (p: Product) => boolean> = {
-    all: () => true, ean: p => !p.ean, gorsel: p => !p.image, kritik: p => has(p, 'kritik', 'alarm', 'tukendi'), negatif: p => has(p, 'negatif'), sayim: p => has(p, 'sayim-yok'),
+    all: () => true, ean: p => !p.ean, gorsel: p => !p.image, kritik: p => has(p, 'kritik', 'fazla'), negatif: p => has(p, 'negatif'), sayim: p => has(p, 'sayim-yok'),
   }
-  const counts = useMemo(() => Object.fromEntries((Object.keys(F) as View[]).map(k => [k, products.filter(F[k]).length])) as Record<View, number>, [products, whId])
+  const counts = useMemo(() => Object.fromEntries((Object.keys(F) as View[]).map(k => [k, products.filter(F[k]).length])) as Record<View, number>, [products, whId, allOrders])
   const s = q.trim().toLowerCase()
   const rows = products.filter(p => F[view](p) && (!s || [p.name, p.sku, p.ean ?? '', p.brand].some(x => x.toLowerCase().includes(s))))
   const open = openId ? product(openId) : null
@@ -73,7 +76,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
                     </td>
                     <td className={td}><div className="num">{p.sku}</div><div className="text-xs num">{p.ean ? <span className="text-mute">{p.ean}</span> : <span className="text-bad">EAN eksik</span>}</div></td>
                     <td className={td + ' text-ink2 whitespace-nowrap'}>{p.source}</td>
-                    <td className={td}><div className="space-y-0.5">{sr.map(([w, st]) => <div key={w} className="flex items-center gap-2 whitespace-nowrap"><span className="text-xs text-mute w-20 truncate">{whName(w)}</span><StockCell v={st.fiziki} /></div>)}</div></td>
+                    <td className={td}><div className="space-y-0.5">{sr.map(([w, st]) => <div key={w} className="flex items-center gap-2 whitespace-nowrap"><span className="text-xs text-mute w-20 truncate">{whName(w)}</span><StockCell v={st.fiziki} pid={p.id} wh={w} /></div>)}</div></td>
                     <td className={td + ' text-right num'}>{fmtNum(sr.reduce((a, [, x]) => a + x.drop, 0)) }</td>
                     <td className={td + ' text-right num'}>{fmtNum(sr.reduce((a, [, x]) => a + x.sanal, 0))}</td>
                     <td className={td + ' text-right num whitespace-nowrap'}>{fmtMoney(p.price)}</td>
@@ -95,7 +98,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
               <table className="w-full border-collapse text-sm">
                 <thead><tr><th className={th}>Depo</th><th className={th}>Fiziki</th><th className={th + ' text-right'}>Sanal</th><th className={th + ' text-right'}>Drop</th><th className={th + ' text-right'}>Tedarikçi</th><th className={th}>Raf</th></tr></thead>
                 <tbody>{(Object.entries(open.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).map(([w, st]) => (
-                  <tr key={w}><td className={td}>{whName(w)}</td><td className={td}><StockCell v={st.fiziki} /></td><td className={td + ' text-right num'}>{st.sanal}</td><td className={td + ' text-right num'}>{fmtNum(st.drop)}</td><td className={td + ' text-right num'}>{fmtNum(st.tedarikci)}</td><td className={td + ' num'}>{st.bin}</td></tr>
+                  <tr key={w}><td className={td}>{whName(w)}</td><td className={td}><StockCell v={st.fiziki} pid={open.id} wh={w} /></td><td className={td + ' text-right num'}>{st.sanal}</td><td className={td + ' text-right num'}>{fmtNum(st.drop)}</td><td className={td + ' text-right num'}>{fmtNum(st.tedarikci)}</td><td className={td + ' num'}>{st.bin}</td></tr>
                 ))}</tbody>
               </table>
             </div>
