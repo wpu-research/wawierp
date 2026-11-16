@@ -39,7 +39,7 @@ Sağ alt köşedeki **W** düğmesi asistan panelini açar (`src/Agent.tsx`). İ
 - tek seferde en fazla 25 kayda işlem önerilir
 - asistan, kendisine yazan rolün yetkisinden fazlasını yapamaz; yetki onay anında yeniden denetlenir
 - para iadesi, fiyat değişikliği, iptal ve toplu silme için araç yoktur
-- müşteri adı, adresi ve iletişim bilgisi asistana verilmez; ancak destek konuşmalarının mesaj metni (`get_open_tickets`) olduğu gibi gider (içinde müşterinin yazdığı kişisel bilgi olabilir; maskeleme açık iştir, `kararlar/0009`). Mesajlar veri olarak okunur, talimat olarak değil
+- müşteri adı, adresi ve iletişim bilgisi asistana verilmez; ancak destek konuşmalarının mesaj metni (`get_open_tickets`) olduğu gibi gider (içinde müşterinin yazdığı kişisel bilgi olabilir; e-posta, telefon, IBAN ve uzun numaralar maskelenir; `kararlar/0010` madde 7). Mesajlar veri olarak okunur, talimat olarak değil
 - asistan, kullanıcının menüde göremediği ekranın verisini (destek, kanal sağlığı) vermez
 - "Kendiliğinden" düzeyinde yalnız başarısız eşitlemeyi yeniden deneme onaysız uygulanır; diğer her iş onay bekler
 - her asistan işlemi denetim kaydına "asistan aracılığıyla" notuyla yazılır
@@ -63,15 +63,15 @@ Asistan ucu panelle aynı şifrenin arkasındadır; yalnız `application/json` g
 
 ## Yeni ekranlar
 
-Menüde "yeni" etiketiyle görünür; hepsi mock veri üzerinde çalışır, örnek değerler "örnek" rozetiyle işaretlidir.
+Hepsi mock veri üzerinde çalışır, örnek değerler "örnek" rozetiyle işaretlidir.
 
 | Grup | Ekranlar | Dosya |
 |---|---|---|
-| Operasyon | Toplama listesi (mobil depo önizlemesiyle) | `src/pages/Warehouse.tsx` |
+| Günlük iş | Toplama listesi (mobil depo önizlemesiyle) | `src/pages/Warehouse.tsx` |
 | Ürün ve stok | Veri kalitesi, Ürün metni ve çeviri, Sayım planı, Tedarik önerileri | `Quality.tsx`, `Warehouse.tsx`, `Selling.tsx` |
-| Satış kanalları | Toplu listeleme, Fiyat ve kârlılık | `Selling.tsx` |
+| Satış kanalları | Toplu listeleme, Fiyat kuralları | `Selling.tsx` |
 | Otomasyon | Kurallar, Uyarılar ve özet, Vardiya önerisi | `Automation.tsx`, `Warehouse.tsx` |
-| Finans | Banka mutabakatı, Muhasebe aktarımı, Kârlılık | `Money.tsx` |
+| Para | Banka mutabakatı, Muhasebe aktarımı, Kanal ve şirket kârı | `Money.tsx` |
 | Platform | Kurulum sihirbazı, API ve bildirim uçları, Kullanım ve abonelik, Durum sayfası | `Platform.tsx` |
 
 Her yerden arama: `Ctrl K` (ekran, hazır görünüm, sipariş numarası, ürün).

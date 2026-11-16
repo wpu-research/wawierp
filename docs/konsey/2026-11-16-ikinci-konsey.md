@@ -113,12 +113,12 @@ Mantık:
 
 Erişilebilirlik ve dil:
 - Sekme bileşenlerinde `tabpanel`/ok tuşu yok; menü rozetleri yalnız renk/sayı; kalan küçük dokunma hedefleri; kısmi terim tutarlılığı ("hesap/kanal/mağaza").
-- Belge bayatlıkları (bu turda kararlar ve `docs/` değiştirilmedi): `docs/03` 22 pazaryeri hesabı (24), `docs/01` "Mevcut (19)" (20), konsey raporu "37 öğe" (menüde 36), `0008` ≈470 sipariş (461), `docs/11` ve `docs/10` bayat açıklamalar, `docs/02:107` `0001` göndermesi, `0003`↔`0005` çelişkisi, `0006:22` ve `0007:18` kanıtsız rakip iddiaları, grafik raporu bayat (`/graphify . --update` bu işin dışında bırakıldı).
+- Belge bayatlıkları (bu turda kararlar ve `docs/` değiştirilmedi): `docs/03` 22 pazaryeri hesabı (24), `docs/01` "Mevcut (19)" (20), konsey raporu "37 öğe" (menüde 37), `0008` ≈470 sipariş (461), `docs/11` ve `docs/10` bayat açıklamalar, `docs/02:107` `0001` göndermesi, `0003`↔`0005` çelişkisi, `0006:22` ve `0007:18` kanıtsız rakip iddiaları, grafik raporu bayat (`/graphify . --update` bu işin dışında bırakıldı).
 - Video (`sunum/video-uret.py`) sahneleri yeni ekranlarla denenmedi; yayındaki video eski arayüzü gösteriyor.
 
 ## 7. Sahibinin kararını bekleyenler
 
-1. Menünün yeniden gruplanması (8 grup, 36 öğe, çok "yeni" noktası; "Kârlılık" iki kez), müşteriye dönük ekranların personel menüsünden ayrılması.
+1. Menünün yeniden gruplanması (8 grup, 37 öğe, çok "yeni" noktası; "Kârlılık" iki kez), müşteriye dönük ekranların personel menüsünden ayrılması.
 2. Asistan modeli (varsayılan Opus) ve günlük/dakikalık sınır sayıları; kullanım ve maliyetin kayda geçmesi.
 3. Rol tanımları (özellikle muhasebeye müşteri iletişimi "tam", depoya eşitleme ve destek).
 4. Dışarıya satış ekranları (abonelik, kurulum sihirbazı, tanıtım sayfasının konumu); "Firma girişi" ve yasal sayfalar (Impressum, Datenschutz, KVKK).
