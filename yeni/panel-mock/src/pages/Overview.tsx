@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { AlertTriangle, ArrowRight, ListChecks, MessagesSquare, Sparkles, Tag } from 'lucide-react'
-import { CHANNEL, NOW, WAREHOUSES, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, overdue, stockState, toShip, ago, type ChannelType } from '../data'
+import { CHANNEL, NOW, WAREHOUSES, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isRevenue, overdue, stockState, toShip, ago, type ChannelType } from '../data'
 import { ROLES, useStore } from '../store'
 import { askAssistant, useChat } from '../Chat'
 import { Badge, Bars, Card, HBars, PageHead, Stat } from '../ui'
@@ -18,8 +18,9 @@ export default function Overview() {
     for (const o of orders) {
       const k = dayKey(o.t)
       if (days.has(k)) days.set(k, days.get(k)! + 1)
-      if (o.cur === 'EUR') { eur30 += o.total; const t = account(o.acc).type; chan.set(t, (chan.get(t) ?? 0) + o.total) } else other++
-      if (k === today) { todayN++; if (o.cur === 'EUR') todayEur += o.total }
+      const rev = isRevenue(o) && o.t >= NOW - 30 * 86400_000 // ciro: iptal/iade hariç, son 30 gün
+      if (rev) { if (o.cur === 'EUR') { eur30 += o.total; const t = account(o.acc).type; chan.set(t, (chan.get(t) ?? 0) + o.total) } else other++ }
+      if (k === today) { todayN++; if (isRevenue(o) && o.cur === 'EUR') todayEur += o.total }
     }
     return {
       todayN, todayEur, eur30, other,
@@ -60,7 +61,7 @@ export default function Overview() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-3 mb-4">
-        <Card className="lg:col-span-2" title="Günlük sipariş · son 30 gün" right={<span className="text-xs text-mute num">{fmtNum(orders.length)} sipariş · {fmtMoney(m.eur30, 'EUR', 0)}{m.other ? ` · ${m.other} sipariş TRY/USD ayrı` : ''}</span>}>
+        <Card className="lg:col-span-2" title="Günlük sipariş · son 30 gün (ciro iptal ve iade hariç)" right={<span className="text-xs text-mute num">{fmtNum(orders.length)} sipariş · {fmtMoney(m.eur30, 'EUR', 0)}{m.other ? ` · ${m.other} sipariş TRY/USD ayrı` : ''}</span>}>
           <Bars data={m.days} height={150} />
         </Card>
         <Card title="Kanala göre ciro · 30 gün (EUR)">

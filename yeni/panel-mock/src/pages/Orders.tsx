@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Bookmark, Check, Eye, FileText, Lock, Search, Tag, Truck, X } from 'lucide-react'
-import { CHANNEL, NOW, OSTATUS, SUPPLY, account, ago, company, dropWaiting, fmtDT, fmtMoney, hasIssue, isOpen, mask, overdue, product, toShip, whName, type ChannelType, type OStatus, type Order } from '../data'
+import { CHANNEL, NOW, OSTATUS, SUPPLY, account, ago, canInvoice, canLabel, canShip, company, dropWaiting, fmtDT, fmtMoney, hasIssue, isOpen, mask, overdue, product, toShip, whName, type ChannelType, type OStatus, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb, ThumbStack } from '../Thumb'
 import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Pager, Tabs, sel, td, th, type Tone } from '../ui'
@@ -19,7 +19,7 @@ const STONE: Record<OStatus, Tone> = { yeni: 'info', hazirlaniyor: 'warn', kargo
 const SIZE = 25
 
 export default function Orders({ query }: { query: URLSearchParams }) {
-  const { orders, role, createLabels, ship, issueInvoices, views, saveView, removeView } = useStore()
+  const { orders, role, notify, createLabels, ship, issueInvoices, views, saveView, removeView } = useStore()
   const [naming, setNaming] = useState<string | null>(null)
   const R = ROLES[role]
   const [view, setView] = useState<View>('toship')
@@ -39,6 +39,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
   }, [orders, view, q, chan])
   const pageRows = rows.slice((page - 1) * SIZE, page * SIZE)
   const sel_ = [...picked]
+  const invoicable = (ids: string[]) => orders.filter(o => ids.includes(o.id) && canInvoice(o)).map(o => o.id)
   const selOrders = orders.filter(o => picked.has(o.id))
   const open = openId ? orders.find(o => o.id === openId) ?? null : null
   const toggle = (id: string) => setPicked(s => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n })
@@ -77,11 +78,11 @@ export default function Orders({ query }: { query: URLSearchParams }) {
           {picked.size > 0 && R.ops && (
             <span className="flex flex-wrap items-center gap-2 ml-auto">
               <span className="text-xs text-ink2 num">{picked.size} seçili</span>
-              <Btn onClick={() => { createLabels(selOrders.filter(o => isOpen(o) && o.label !== 'hazir').map(o => o.id)); setPicked(new Set()) }} disabled={!selOrders.some(o => isOpen(o) && o.label !== 'hazir')}><Tag size={14} />Etiket oluştur</Btn>
-              <Btn variant="primary" onClick={() => { const ids = selOrders.filter(o => o.label === 'hazir' && o.status === 'hazirlaniyor').map(o => o.id); if (ids.length > 1 && !window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesi kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) return; ship(ids); setPicked(new Set()) }} disabled={!selOrders.some(o => o.label === 'hazir' && o.status === 'hazirlaniyor')}><Truck size={14} />Kargoya ver</Btn>
+              <Btn onClick={() => { const ids = selOrders.filter(canLabel).map(o => o.id); if (ids.length > 1 && !window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesi için kargo etiketi oluşturulacak (ödemesi gelmeyen, sorunlu ya da tedarikçiden gidecek siparişler atlanır). Devam edilsin mi?`)) return; createLabels(ids); setPicked(new Set()) }} disabled={!selOrders.some(canLabel)}><Tag size={14} />Etiket oluştur</Btn>
+              <Btn variant="primary" onClick={() => { const ids = selOrders.filter(canShip).map(o => o.id); if (ids.length > 1 && !window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesi kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) return; ship(ids); setPicked(new Set()) }} disabled={!selOrders.some(canShip)}><Truck size={14} />Kargoya ver</Btn>
             </span>
           )}
-          {picked.size > 0 && !R.ops && R.finance && <Btn className="ml-auto" onClick={() => { issueInvoices(sel_); setPicked(new Set()) }}><FileText size={14} />Fatura kes ({picked.size})</Btn>}
+          {picked.size > 0 && !R.ops && R.finance && <Btn className="ml-auto" onClick={() => { const ids = invoicable(sel_); if (!ids.length) return notify('Seçilenlerin hiçbiri kesinleştirilemez (zaten kesin, iptal ya da ödemesi bekleniyor)'); if (!window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesinin faturası kesinleşecek; ${picked.size - ids.length ? `${picked.size - ids.length} tanesi atlanacak (zaten kesin, iptal ya da ödemesi bekleniyor). ` : ''}Kesin fatura geri alınamaz; iptali iade faturasıyla olur. Devam edilsin mi?`)) return; issueInvoices(ids); setPicked(new Set()) }}><FileText size={14} />Fatura kes ({picked.size})</Btn>}
         </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
@@ -137,19 +138,19 @@ function stepOf(o: Order) {
 }
 
 function OrderDrawer({ o, onClose }: { o: Order | null; onClose: () => void }) {
-  const { role, revealed, reveal, createLabels, ship, issueInvoices } = useStore()
+  const { role, revealed, reveal, createLabels, ship, issueInvoices, resolveIssue } = useStore()
   if (!o) return null
   const R = ROLES[role], shown = revealed.has(o.id), step = stepOf(o), a = account(o.acc)
   const cancelled = o.status === 'iptal'
   return (
     <Drawer open title={<span className="num">{o.no}</span>} sub={<>{CHANNEL[a.type].label} · {a.name} · {fmtDT(o.t)} ({ago(o.t, NOW)})</>} onClose={onClose}
       footer={<>
-        {R.ops && isOpen(o) && o.label !== 'hazir' && <Btn onClick={() => createLabels([o.id])}><Tag size={14} />Etiket oluştur</Btn>}
-        {R.ops && o.status === 'hazirlaniyor' && o.label === 'hazir' && <Btn variant="primary" onClick={() => ship([o.id])}><Truck size={14} />Kargoya ver</Btn>}
-        {R.finance && o.invoice !== 'kesin' && !cancelled && <Btn onClick={() => issueInvoices([o.id])}><FileText size={14} />Fatura kes</Btn>}
+        {R.ops && canLabel(o) && <Btn onClick={() => createLabels([o.id])}><Tag size={14} />Etiket oluştur</Btn>}
+        {R.ops && canShip(o) && <Btn variant="primary" onClick={() => ship([o.id])}><Truck size={14} />Kargoya ver</Btn>}
+        {R.finance && canInvoice(o) && <Btn onClick={() => { if (window.confirm(`${o.no} faturası kesinleşecek. Kesin fatura geri alınamaz; iptali iade faturasıyla olur. Devam edilsin mi?`)) issueInvoices([o.id]) }}><FileText size={14} />Fatura kes</Btn>}
         {!R.ops && !R.finance && <span className="text-xs text-mute">Bu rol siparişi yalnız görüntüler.</span>}
       </>}>
-      {hasIssue(o) && <div className="rounded-lg bg-bad-soft text-bad px-3 py-2 text-sm"><b>Sorun:</b> {o.issue ?? 'Etiket oluşturulamadı'}. Etiket yeniden oluşturulunca kapanır.</div>}
+      {hasIssue(o) && <div className="rounded-lg bg-bad-soft text-bad px-3 py-2 text-sm"><b>Sorun:</b> {o.issue ?? 'Etiket oluşturulamadı'}. {o.issue ? 'Sorun giderilmeden etiket oluşturulmaz ve sipariş kargoya verilmez.' : 'Etiket yeniden oluşturulunca kapanır.'}{R.ops && o.issue && <Btn className="ml-2" onClick={() => resolveIssue(o.id)}>Sorunu giderdim</Btn>}</div>}
       {cancelled ? <Badge tone="neutral">Sipariş iptal edildi</Badge> : (
         <div><ol className="m-0 p-0 list-none flex">
           {STEPS.map((s, i) => (

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { RefreshCw, RotateCw } from 'lucide-react'
-import { CHANNEL, JOB, LISTING_FLOW, PRODUCTS, account, ago, company, fmtDT, fmtMoney, fmtNum, whName, type Health, type JobStatus, type ListingStatus } from '../data'
+import { CHANNEL, JOB, LISTING_FLOW, PRODUCTS, account, ago, company, fmtDT, fmtMoney, fmtNum, revenueOrders, whName, type Health, type JobStatus, type ListingStatus } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Drawer, Empty, PageHead, Tabs, td, th, type Tone } from '../ui'
 import { listingBadge } from './Catalog'
@@ -15,7 +15,7 @@ export default function Channels() {
     const m = new Map<string, { n: number; sum: number; l: Record<ListingStatus, number> }>()
     const blank = () => ({ n: 0, sum: 0, l: Object.fromEntries(LISTING_FLOW.map(f => [f.key, 0])) as Record<ListingStatus, number> })
     for (const a of accounts) m.set(a.id, blank())
-    for (const o of orders) { const s = m.get(o.acc); if (s) { s.n++; s.sum += o.total } }
+    for (const o of revenueOrders(orders)) { const s = m.get(o.acc); if (s) { s.n++; s.sum += o.total } }
     for (const p of PRODUCTS) for (const l of p.listings) { const s = m.get(l.acc); if (s) s.l[l.status]++ }
     return m
   }, [accounts, orders])

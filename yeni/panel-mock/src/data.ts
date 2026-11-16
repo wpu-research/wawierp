@@ -294,6 +294,10 @@ export const nextInvNo = (orders: Order[], companyId: string, plus = 0) =>
   `RE-2026-${companyId.replace(/[^a-z0-9]/gi, '').slice(0, 4).toUpperCase()}-${String(orders.filter(o => o.company === companyId && o.invNo).length + 1 + plus).padStart(5, '0')}`
 ;[...ORDERS0].sort((a, b) => a.t - b.t).forEach(o => { if (o.invoice === 'kesin') o.invNo = nextInvNo(ORDERS0, o.company) })
 
+/** Ciro sayılacak sipariş: iptal ve iade değil (karar 0009, kural 7). Ciro, katkı ve kanal ekranları bunu kullanır. */
+export const isRevenue = (o: Order) => o.status !== 'iptal' && o.status !== 'iade' && o.pay !== 'iade'
+/** Son `days` günün ciro siparişleri (varsayılan 30 gün). */
+export const revenueOrders = (orders: Order[], days = 30) => orders.filter(o => isRevenue(o) && o.t >= NOW - days * 86400_000)
 export const isOpen = (o: Order) => o.status === 'yeni' || o.status === 'hazirlaniyor'
 export const toShip = (o: Order) => isOpen(o) && o.pay === 'odendi'
 /** Açık siparişler için ayrılan adet (ürün|depo). Stok depoda şirketler arasında ortaktır; bu yüzden hesap her zaman
@@ -304,6 +308,11 @@ export function reservedMap(allOrders: Order[]) {
   return res
 }
 export const reservedQty = (res: ReturnType<typeof reservedMap>, pid: string, wh: string) => (res.get(pid + '|' + wh) ?? []).reduce((a, x) => a + x.qty, 0)
+/** Etiket yalnız ödemesi gelmiş, sorunsuz, bizim depodan gidecek açık siparişe verilir; tedarikçi siparişine etiketi tedarikçi basar. */
+export const canLabel = (o: Order) => isOpen(o) && o.pay === 'odendi' && !o.issue && o.supply === 'fiziki' && o.label !== 'hazir'
+export const canShip = (o: Order) => o.label === 'hazir' && o.status === 'hazirlaniyor' && o.pay === 'odendi' && !o.issue
+/** Kesin fatura: iptal edilmemiş, ödemesi gelmiş, henüz kesinleşmemiş sipariş. */
+export const canInvoice = (o: Order) => o.invoice !== 'kesin' && o.status !== 'iptal' && o.pay !== 'bekliyor'
 export const overdue = (o: Order) => toShip(o) && o.supply === 'fiziki' && NOW - o.t > 48 * H
 export const dropWaiting = (o: Order) => isOpen(o) && o.supply !== 'fiziki'
 export const hasIssue = (o: Order) => isOpen(o) && (!!o.issue || o.label === 'hata')

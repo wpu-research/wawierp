@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
-import { CHANNEL, COMM, NOW, PRODUCTS, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
+import { CHANNEL, COMM, NOW, PRODUCTS, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Chan, Empty, HBars, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -171,7 +171,7 @@ export function PriceRules() {
   const [on, setOn] = useState<Record<string, boolean>>({ marj: true, alt: true, rakip: false, yuvarla: false })
   const chan = useMemo(() => {
     const m = new Map<ChannelType, { n: number; rev: number; comm: number; cost: number; vat: number }>()
-    for (const o of recent(orders).filter(o => o.status !== 'iptal')) {
+    for (const o of recent(orders).filter(isRevenue)) {
       const a = account(o.acc), r = m.get(a.type) ?? { n: 0, rev: 0, comm: 0, cost: 0, vat: 0 }
       r.n++
       if (o.cur === 'EUR') {
@@ -228,7 +228,7 @@ export function Replenish() {
   const [buf, setBuf] = useState(2)
   const sold = useMemo(() => {
     const m = new Map<string, number>()
-    for (const o of recent(orders).filter(o => o.status !== 'iptal')) for (const i of o.items) m.set(i.pid, (m.get(i.pid) ?? 0) + i.qty)
+    for (const o of recent(orders).filter(isRevenue)) for (const i of o.items) m.set(i.pid, (m.get(i.pid) ?? 0) + i.qty)
     return m
   }, [orders])
   const lines = useMemo(() => products.map(p => {

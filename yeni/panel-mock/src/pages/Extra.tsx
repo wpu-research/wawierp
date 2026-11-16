@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, Check, Download, Plus, RotateCw, Send, Truck } from 'lucide-react'
-import { CHANNEL, COMPANIES, NOW, OSTATUS, WAREHOUSES, account, ago, company, fmtDT, fmtMoney, fmtNum, mask, product, whName, type Cur, type WhId } from '../data'
+import { CHANNEL, COMPANIES, NOW, OSTATUS, WAREHOUSES, account, ago, canLabel, canShip, company, fmtDT, fmtMoney, fmtNum, mask, product, whName, type Cur, type WhId } from '../data'
 import { CARRIERS, TFLOW, TK, b2bTotals, carrierOf, type TStatus, type TkStatus } from '../data2'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
@@ -15,7 +15,7 @@ export function Labels() {
   const can = ROLES[role].ops
   const [tab, setTab] = useState<'hata' | 'hazir' | 'manual' | 'carriers'>('hata')
   const failed = orders.filter(o => o.label === 'hata' && (o.status === 'yeni' || o.status === 'hazirlaniyor'))
-  const ready = orders.filter(o => o.label === 'hazir' && o.status === 'hazirlaniyor')
+  const ready = orders.filter(canShip)
   const [f, setF] = useState({ name: '', city: '', kg: '1', wh: (whId || 'de') as WhId })
 
   return (
@@ -38,7 +38,7 @@ export function Labels() {
           <div className="p-3 border-b border-line flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs text-mute">{tab === 'hata' ? 'Neden adres ya da taşıyıcı hatasıdır; düzeltilip yeniden denenir.' : 'Taşıyıcı teslim aldığında takip no kanala gönderilir.'}</span>
             {can && rows.length > 0 && (tab === 'hata'
-              ? <Btn onClick={() => { if (window.confirm(`${rows.length} sipariş için etiket yeniden denenecek. Devam edilsin mi?`)) createLabels(rows.map(o => o.id)) }}><RotateCw size={14} />Tümünü yeniden dene ({rows.length})</Btn>
+              ? <Btn onClick={() => { const ids = rows.filter(canLabel).map(o => o.id); if (!ids.length) return notify('Yeniden denenebilecek sipariş yok (sorunu giderilmemiş siparişlere etiket verilmez)'); if (window.confirm(`${ids.length} sipariş için etiket yeniden denenecek${ids.length < rows.length ? ` (${rows.length - ids.length} sipariş sorunlu olduğu için atlanır)` : ''}. Devam edilsin mi?`)) createLabels(ids) }}><RotateCw size={14} />Tümünü yeniden dene ({rows.length})</Btn>
               : <span className="flex gap-2"><Btn onClick={() => notify(`${rows.length} etiket tek PDF olarak hazırlandı (mock)`)}><Download size={14} />Toplu PDF</Btn><Btn variant="primary" onClick={() => { if (window.confirm(`Bu listedeki ${rows.length} siparişin tamamı kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) ship(rows.map(o => o.id)) }}><Truck size={14} />Tümünü kargoya ver ({rows.length})</Btn></span>)}
           </div>
           <div className="overflow-x-auto">
@@ -308,7 +308,7 @@ export function B2BPage() {
                 <tr key={c.id + i.no} className="hover:bg-bg">
                   <td className={td + ' num font-medium'}>{i.no}</td><td className={td}>{c.name}</td><td className={td}>{compName(c.company)}</td>
                   <td className={td + ' num whitespace-nowrap'}>{fmtDT(i.t)}</td><td className={td + ' text-right num'}>{fmtMoney(i.total, c.cur)}</td>
-                  <td className={td + ' text-right'}>{can && <Btn onClick={() => finalizeB2B(c.id, i.no)}><Check size={14} />Faturaya çevir</Btn>}</td>
+                  <td className={td + ' text-right'}>{can && <Btn onClick={() => { if (window.confirm(`${i.no} taslağı kesin faturaya çevrilecek. Kesin fatura geri alınamaz; iptali iade faturasıyla olur. Devam edilsin mi?`)) finalizeB2B(c.id, i.no) }}><Check size={14} />Faturaya çevir</Btn>}</td>
                 </tr>
               ))}</tbody>
             </table>

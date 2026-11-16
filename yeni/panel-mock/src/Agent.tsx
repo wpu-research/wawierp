@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ArrowUp, Check, ExternalLink, Lock, Maximize2, Minimize2, ShieldCheck, Sparkles, X } from 'lucide-react'
-import { CHANNEL, NOW, RET, reservedMap, reservedQty, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
+import { CHANNEL, NOW, canLabel, canShip, RET, reservedMap, reservedQty, revenueOrders, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
 import { SimilarList, findProduct, inStock, similarTo } from './similar'
@@ -83,14 +83,14 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
   }
   const replenish = () => {
     const sold = new Map<string, number>()
-    for (const o of st.orders) if (o.status !== 'iptal') for (const i of o.items) sold.set(i.pid, (sold.get(i.pid) ?? 0) + i.qty)
+    for (const o of revenueOrders(st.allOrders)) for (const i of o.items) sold.set(i.pid, (sold.get(i.pid) ?? 0) + i.qty)
     return st.products.filter(p => sold.has(p.id)).map(p => {
       const stok = Object.values(p.stock).reduce((s, r) => s + (r?.fiziki ?? 0), 0), gunluk = sold.get(p.id)! / 30
       return { ad: p.name, sku: p.sku, son_30_gun_satis: sold.get(p.id)!, fiziki_stok: stok, kac_gun_yeter: Math.max(0, Math.round(stok / gunluk)), onerilen_siparis_30_gun: Math.max(0, Math.ceil(gunluk * 30 - stok)) }
     }).sort((a, b) => a.kac_gun_yeter - b.kac_gun_yeter)
   }
-  const labelable = (o: Order) => toShip(o) && o.supply === 'fiziki' && o.label === 'yok' && !o.issue
-  const shippable = (o: Order) => o.label === 'hazir' && o.status === 'hazirlaniyor'
+  const labelable = (o: Order) => canLabel(o) && o.label === 'yok'
+  const shippable = canShip
 
   // İşlemi uygular; denetim kaydına "asistan aracılığıyla" notu düşer.
   const exec = (kind: Step['kind'] | 'reply', ids: string[], payload?: string) => {
@@ -181,14 +181,14 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
         return { src: [{ label: 'Stok ayırma', href: '#/reservations' }, { label: 'Sayım planı', href: '#/counting' }], data: { aciklama: 'satilabilir = sayılmış fiziki stok − açık siparişler için ayrılan', eksiye_dusen: r.eksi.length, tukenmek_uzere: r.az.length, hic_sayilmamis_depo_kaydi: r.sayimYok, ayrilan_toplam_adet: r.ayrilanToplam, eksiye_dusenler: r.eksi.slice(0, 8), tukenmek_uzere_olanlar: r.az.slice(0, 8) } }
       }
       case 'get_replenishment':
-        return { src: [{ label: 'Tedarik önerileri', href: '#/replenish' }], data: { not: 'Satış hızı son 30 günün siparişlerinden; stok tüm depoların sayılmış fiziki toplamı.', urunler: replenish().slice(0, int(input.limit, 8, 20)) } }
+        return { src: [{ label: 'Tedarik önerileri', href: '#/replenish' }], data: { not: 'Satış hızı son 30 günün siparişlerinden; stok tüm depoların sayılmış fiziki toplamı; satış tüm şirket ve depoların siparişleri, iptal ve iade hariç.', urunler: replenish().slice(0, int(input.limit, 8, 20)) } }
       case 'get_channel_performance': {
         if (!R.finance) return { error: true, data: { hata: `Kullanıcının rolü (${R.label}) tutarları göremez.` } }
-        const m = new Map<ChannelType, { siparis: number; ciro_eur: number }>()
-        for (const o of st.orders) { if (o.status === 'iptal') continue; const t = account(o.acc).type, x = m.get(t) ?? { siparis: 0, ciro_eur: 0 }; x.siparis++; if (o.cur === 'EUR') x.ciro_eur += o.total; m.set(t, x) }
+        const m = new Map<ChannelType, { siparis: number; siparis_eur: number; ciro_eur: number }>()
+        for (const o of revenueOrders(st.orders)) { const t = account(o.acc).type, x = m.get(t) ?? { siparis: 0, siparis_eur: 0, ciro_eur: 0 }; x.siparis++; if (o.cur === 'EUR') { x.siparis_eur++; x.ciro_eur += o.total }; m.set(t, x) }
         const bekleyen = st.orders.filter(o => o.pay === 'bekliyor')
         return { src: [{ label: 'Kârlılık', href: '#/profit' }, { label: 'Banka mutabakatı', href: '#/bank' }], data: {
-          donem: 'son 30 gün; yalnız EUR siparişler ciroya dahil', kanallar: [...m.entries()].map(([t, x]) => ({ kanal: CHANNEL[t].label, siparis: x.siparis, ciro_eur: Math.round(x.ciro_eur), ortalama_sepet_eur: x.siparis ? Math.round(x.ciro_eur / x.siparis) : 0 })).sort((a, b) => b.ciro_eur - a.ciro_eur),
+          donem: 'son 30 gün; iptal ve iade siparişler dışarıda; yalnız EUR siparişler ciroya dahil', kanallar: [...m.entries()].map(([t, x]) => ({ kanal: CHANNEL[t].label, siparis: x.siparis, ciro_eur: Math.round(x.ciro_eur), ortalama_sepet_eur: x.siparis_eur ? Math.round(x.ciro_eur / x.siparis_eur) : 0 })).sort((a, b) => b.ciro_eur - a.ciro_eur),
           odeme_bekleyen_siparis: bekleyen.length, odeme_bekleyen_tutar_eur: Math.round(bekleyen.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0)),
         } }
       }
@@ -411,7 +411,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
       if (!list.length) return { body: <p className="m-0">Etiketi hazır olup kargoya verilmeyi bekleyen sipariş yok.</p>, sources: [{ label: 'Kargo etiketleri', href: '#/labels' }] }
       const ids = list.slice(0, CAP).map(o => o.id)
       return {
-        body: <><p className="m-0">Etiketi hazır {plural(list.length, 'sipariş')} kargoya verilmeyi bekliyor. Onaylarsanız fatura kesinleşir ve takip numarası kanala gönderilir.</p>{noDraft}</>,
+        body: <><p className="m-0">Etiketi hazır {plural(list.length, 'sipariş')} kargoya verilmeyi bekliyor. Onaylarsanız takip numarası kanala gönderilir ve stok defterine satış hareketi yazılır; fatura ayrı bir işlemle kesinleşir.</p>{noDraft}</>,
         sources: [{ label: 'Kargo etiketleri', href: '#/labels' }],
         act: draft({ kind: 'ship', title: `${ids.length} siparişi kargoya ver`, ids, lines: byChannel(list.slice(0, CAP)) }),
       }
