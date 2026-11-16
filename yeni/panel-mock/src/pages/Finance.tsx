@@ -78,7 +78,7 @@ export default function Finance() {
       <Tabs value={tab} onChange={setTab} items={[{ key: 'inv', label: 'Belgeler', count: inv.length }, { key: 'vat', label: 'KDV özeti · 30 gün', count: vat.length }]} />
       {tab === 'inv' ? (
         <Card pad={false} className="mt-2">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Belge no</th><th className={th}>Tür</th><th className={th}>Düzenleyen şirket</th><th className={th}>Sipariş</th><th className={th}>Tarih</th><th className={th + ' text-right'}>Net</th><th className={th + ' text-right'}>KDV</th><th className={th + ' text-right'}>Brüt</th><th className={th}>Durum</th></tr></thead>
               <tbody>{inv.slice((page - 1) * SIZE, page * SIZE).map((r, i) => { const c = company(r.o.company), rate = VAT[c.country], sign = r.kind === 'İade' ? -1 : 1, g = r.o.total * sign, net = g / (1 + rate); return (
@@ -101,7 +101,7 @@ export default function Finance() {
         </Card>
       ) : (
         <Card pad={false} className="mt-2">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Şirket</th><th className={th}>Ülke</th><th className={th}>Depo</th><th className={th + ' text-right'}>KDV oranı</th><th className={th + ' text-right'}>Fatura</th><th className={th + ' text-right'}>Net</th><th className={th + ' text-right'}>KDV</th><th className={th + ' text-right'}>Brüt</th></tr></thead>
               <tbody>{vat.map(r => (

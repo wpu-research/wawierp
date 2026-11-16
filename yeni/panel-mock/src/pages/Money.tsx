@@ -83,7 +83,7 @@ export function BankMatch() {
       </div>
       {lines.length === 0 ? <Card><Empty>Ödeme bekleyen sipariş yok, eşleştirilecek satır üretilemedi.</Empty></Card> : (
         <div className="grid xl:grid-cols-[1.4fr_1fr] gap-3 items-start">
-          <Card pad={false}><div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <Card pad={false}><div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Tarih</th><th className={th}>Referans</th><th className={th + ' text-right'}>Tutar</th><th className={th}>Durum</th><th className={th + ' text-right'}>Güven</th></tr></thead>
             <tbody>{lines.map(l => (
               <tr key={l.id} {...rowProps(() => setSid(l.id))} className={`cursor-pointer hover:bg-bg ${sel0?.id === l.id ? 'bg-bg' : ''}`}>
@@ -151,7 +151,7 @@ export function Accounting() {
     <Gate>
       <PageHead title="Muhasebe aktarımı ve e-fatura" desc="Kesilen satış faturaları şirket ve para birimi bazında özetlenir. KDV oranı şirketin ülkesinden gelir. Dosya hazırlama bir önizlemedir, hiçbir şey gönderilmez." />
       <Card title="Dönem özeti" right={<select className={sel} value={per} onChange={e => { setPer(e.target.value as Period); setPrep('') }} aria-label="Dönem seç"><option value="30">Son 30 gün</option><option value="ay">Bu ay</option><option value="gecen">Geçen ay</option></select>} pad={false}>
-        <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
           <thead><tr><th className={th}>Şirket</th><th className={th}>Para birimi</th><th className={th + ' text-right'}>Fatura</th><th className={th + ' text-right'}>Net</th><th className={th + ' text-right'}>KDV</th><th className={th + ' text-right'}>Brüt</th></tr></thead>
           <tbody>{rows.map(r => <tr key={r.c.id + r.cur} className="hover:bg-bg">
             <td className={td + ' whitespace-nowrap'}>{r.c.name} <span className="text-mute">· {r.c.country}</span></td><td className={td}>{r.cur}</td><td className={td + ' num text-right'}>{fmtNum(r.n)}</td>
@@ -163,13 +163,13 @@ export function Accounting() {
         <Card key={e.key} title={e.title}><p className="text-sm text-ink2 mt-0 mb-3">{prep === e.key ? `Önizleme hazır · ${lines.length} örnek satır` : e.state}</p>
           <Btn variant={prep === e.key ? 'outline' : 'primary'} onClick={() => { setPrep(e.key); notify('Önizleme hazırlandı. Hiçbir şey gönderilmedi.') }}>Hazırla</Btn></Card>))}</div>
       {prep && <Card className="mt-3" pad={false} title={<span className="flex items-center gap-2">Önizleme: ilk {lines.length} kayıt <Badge tone="violet">örnek hesap no</Badge></span>}>
-        <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
           <thead><tr><th className={th}>Hesap</th><th className={th}>Karşı hesap</th><th className={th + ' text-right'}>Tutar</th><th className={th}>Vergi kodu</th><th className={th}>Belge no</th></tr></thead>
           <tbody>{lines.map(l => <tr key={l.o.id}><td className={td + ' num'}>{l.hesap} <Badge>örnek</Badge></td><td className={td + ' num'}>{l.karsi} <Badge>örnek</Badge></td><td className={td + ' num text-right'}>{fmtMoney(l.o.total, l.o.cur)}</td><td className={td}>{l.kod}</td><td className={td + ' num'}>{l.o.no}</td></tr>)}
             {lines.length === 0 && <tr><td colSpan={5}><Empty>Bu dönemde aktarılacak kayıt yok.</Empty></td></tr>}</tbody></table></div>
         <p className="text-xs text-mute px-4 py-2 m-0">Hesap numaraları ve vergi kodları örnektir; gerçek hesap planı muhasebeden alınır. Bu ekran dosyayı hiçbir yere göndermez.</p></Card>}
       <Card className="mt-4" pad={false} title={<span className="flex items-center gap-2">Ödeme hatırlatma <Badge tone="warn">{overdue.length} gecikmiş</Badge></span>}>
-        <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
           <thead><tr><th className={th}>Müşteri kodu</th><th className={th}>Fatura</th><th className={th}>Vade</th><th className={th + ' text-right'}>Kalan</th><th className={th + ' text-right'}>Gecikme</th><th className={th}>Seviye</th><th className={th}></th></tr></thead>
           <tbody>{overdue.map(x => <tr key={x.i.no} className="hover:bg-bg"><td className={td + ' num'}>{x.c.code}</td><td className={td + ' num'}>{x.i.no}</td><td className={td + ' num'}>{dShort(x.i.t + 14 * D)}</td>
             <td className={td + ' num text-right'}>{fmtMoney(x.left, x.c.cur)}</td><td className={td + ' num text-right'}>{x.days} gün</td><td className={td}><Badge tone={x.lvl === 'Son' ? 'bad' : 'warn'}>{x.lvl} hatırlatma</Badge></td>
@@ -212,8 +212,8 @@ export function Profit() {
   const rows = [...(by === 'ch' ? chRows : coRows)].sort((a, b) => (sk === 'label' ? a.label.localeCompare(b.label, 'tr') : a[sk] - b[sk]) * (asc ? 1 : -1))
   const click = (k: SK) => { if (k === sk) setAsc(!asc); else { setSk(k); setAsc(k === 'label') } }
   const H = ({ k, children, right }: { k: SK; children: ReactNode; right?: boolean }) => (
-    <th className={th + (right ? ' text-right' : '')} aria-sort={sk === k ? (asc ? 'ascending' : 'descending') : 'none'}>
-      <button onClick={() => click(k)} className="inline-flex items-center gap-1 border-0 bg-transparent p-0 text-inherit font-medium cursor-pointer" aria-label={`${children} sütununa göre sırala`}>{children}{sk === k && (asc ? <ArrowUp size={12} /> : <ArrowDown size={12} />)}</button>
+    <th className={th + (right ? ' text-right' : '')} aria-sort={sk === k ? (asc ? 'ascending' : 'descending') : undefined}>
+      <button type="button" onClick={() => click(k)} className="inline-flex items-center gap-1 min-h-6 border-0 bg-transparent p-0 text-inherit font-medium cursor-pointer">{children}{sk === k && (asc ? <ArrowUp size={12} aria-hidden /> : <ArrowDown size={12} aria-hidden />)}</button>
     </th>)
   const top = (f: (r: PRow) => number, low = false) => [...chRows].sort((a, b) => (low ? f(a) - f(b) : f(b) - f(a)))[0]
   const best = top(r => r.rev), worst = top(r => r.margin, true), basket = top(r => r.avg)
@@ -243,7 +243,7 @@ export function Profit() {
           </Card>
         </div>
         <Card className="mt-4" pad={false} title={by === 'ch' ? 'Kanal tablosu' : 'Şirket tablosu'} right={<select className={sel} value={by} onChange={e => setBy(e.target.value as 'ch' | 'co')} aria-label="Gruplama"><option value="ch">Kanala göre</option><option value="co">Şirkete göre</option></select>}>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><H k="label">{by === 'ch' ? 'Kanal' : 'Şirket'}</H><H k="n" right>Sipariş</H><H k="rev" right>Ciro</H><H k="avg" right>Ort. sepet</H><H k="comm" right>Komisyon (örnek)</H><H k="ship" right>Kargo (örnek)</H><H k="net" right>Katkı</H><H k="margin" right>Oran</H></tr></thead>
             <tbody>{rows.map(r => <tr key={r.key} className="hover:bg-bg"><td className={td}>{r.label}</td><td className={td + ' num text-right'}>{fmtNum(r.n)}</td><td className={td + ' num text-right'}>{fmtMoney(r.rev, 'EUR', 0)}</td><td className={td + ' num text-right'}>{fmtMoney(r.avg, 'EUR')}</td>
               <td className={td + ' num text-right'}>{fmtMoney(r.comm, 'EUR', 0)}</td><td className={td + ' num text-right'}>{fmtMoney(r.ship, 'EUR', 0)}</td><td className={td + ' num text-right font-medium'}>{fmtMoney(r.net, 'EUR', 0)}</td><td className={td + ' num text-right'}>{pct(r.margin)}</td></tr>)}</tbody></table></div>

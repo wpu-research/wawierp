@@ -40,7 +40,7 @@ export default function Channels() {
         </div>
       </Card>
       <Card pad={false} title={`Hesaplar (${accounts.length})`}>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Kanal · hesap</th><th className={th}>Şirket · depo</th><th className={th + ' text-right'}>Sipariş 30 g</th><th className={th + ' text-right'}>Ciro 30 g</th><th className={th + ' text-right'}>Aktif ilan</th><th className={th + ' text-right'}>Sorunlu</th><th className={th}>Eşitleme</th></tr></thead>
             <tbody>{accounts.map(a => { const s = stats.get(a.id)!, [tone, label] = HT[a.health]; return (
@@ -103,7 +103,7 @@ export function Sync() {
         { key: 'all', label: 'Tümü', count: scoped.length },
       ]} />
       <Card pad={false} className="mt-2">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>İş</th><th className={th}>Kanal · hesap</th><th className={th}>Durum</th><th className={th + ' text-right'}>Deneme</th><th className={th}>Son çalışma</th><th className={th}>Sonraki</th><th className={th}></th></tr></thead>
             <tbody>{rows.map(j => { const a = j.acc ? account(j.acc) : null; return (

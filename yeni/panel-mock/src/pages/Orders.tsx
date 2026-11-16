@@ -86,7 +86,7 @@ export default function Orders({ query }: { query: URLSearchParams }) {
           )}
           {picked.size > 0 && R.finance && <Btn className="ml-auto" onClick={() => { const ids = invoicable(sel_); if (!ids.length) return notify('Seçilenlerin hiçbiri kesinleştirilemez (zaten kesin, iptal ya da ödemesi bekleniyor)'); if (!window.confirm(`Seçili ${picked.size} siparişten ${ids.length} tanesinin faturası kesinleşecek; ${picked.size - ids.length ? `${picked.size - ids.length} tanesi atlanacak (zaten kesin, iptal ya da ödemesi bekleniyor). ` : ''}Kesin fatura geri alınamaz; iptali iade faturasıyla olur. Devam edilsin mi?`)) return; issueInvoices(ids); setPicked(new Set()) }}><FileText size={14} />Fatura kes ({picked.size})</Btn>}
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr>
               <th className={th + ' w-8'}><input type="checkbox" aria-label="Sayfadakileri seç" checked={allOn} onChange={() => setPicked(s => { const n = new Set(s); pageRows.forEach(o => (allOn ? n.delete(o.id) : n.add(o.id))); return n })} /></th>

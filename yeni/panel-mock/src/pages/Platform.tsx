@@ -183,7 +183,7 @@ export function Developers() {
             <Lbl t="Yetki"><select className={sel} value={scope} onChange={e => setScope(e.target.value as Scope)}><option>salt okuma</option><option>sipariş</option><option>stok</option></select></Lbl>
             <Btn variant="primary" onClick={create}>Yeni anahtar</Btn>
           </div>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Ad</th><th className={th}>Önek</th><th className={th}>Yetki</th><th className={th}>Son kullanım</th><th className={th} /></tr></thead>
             <tbody>{keys.map(k => <tr key={k.id} className={k.revoked ? 'opacity-50' : ''}>
               <td className={td}>{k.name}</td><td className={td}><code>{k.prefix}…••••</code></td><td className={td}><Badge>{k.scope}</Badge></td>
@@ -193,7 +193,7 @@ export function Developers() {
           </table></div>
         </Card>
         <Card title="Bildirim uçları (webhook)" pad={false} right={<Ex />}>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Adres</th><th className={th}>Olaylar</th><th className={th}>Durum</th><th className={th}>Son teslim</th><th className={th + ' text-right'}>Başarı</th></tr></thead>
             <tbody>{HOOKS.map(h => <tr key={h.id} className="hover:bg-bg cursor-pointer" {...rowProps(() => setHook(h.id))}>
               <td className={td}><code>{h.url}</code></td>
@@ -206,7 +206,7 @@ export function Developers() {
           <p className="m-0 px-4 py-2 text-xs text-mute">Satıra tıklayınca son teslimatlar açılır. Desteklenen olaylar: {EVENTS.join(', ')}.</p>
         </Card>
         <Card title="Uç nokta başvurusu" right={<Badge tone="warn">planlanan, canlı değil</Badge>}>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Yöntem</th><th className={th}>Yol</th><th className={th}>Açıklama</th><th className={th}>Gereken yetki</th></tr></thead>
             <tbody>{ENDPOINTS.map(([m, p, d, s]) => <tr key={m + p}><td className={td}><Badge tone={MTONE[m]}>{m}</Badge></td><td className={td}><code>{p}</code></td><td className={td}>{d}</td><td className={td}><Badge>{s}</Badge></td></tr>)}</tbody>
           </table></div>
@@ -309,7 +309,7 @@ export function Status() {
         </Card>
         <Card title="Kanal eşitlemeleri" pad={false} className="lg:col-span-2" right={<a href="#/sync" className="text-sm text-brand mr-1">Eşitleme ekranı</a>}>
           <p className="m-0 px-4 pb-2 text-xs text-mute">{bad} hesapta sorun var; en kötüsü üstte.</p>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Kanal · hesap</th><th className={th}>Durum</th><th className={th}>Son başarılı eşitleme</th><th className={th}>Tarih</th></tr></thead>
             <tbody>{chans.map(a => <tr key={a.id}>
               <td className={td}><span className="inline-flex items-center gap-2"><span className="size-2.5 rounded-full" style={{ background: CHANNEL[a.type].color }} />{CHANNEL[a.type].label}<span className="text-mute">{a.name}</span></span></td>

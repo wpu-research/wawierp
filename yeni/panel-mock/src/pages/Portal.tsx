@@ -68,7 +68,7 @@ function PriceList({ c, tier, onAdd }: { c: B2B; tier: number; onAdd: (pid: stri
       right={<span className="flex flex-wrap gap-2">
         <input className={inp} placeholder="Ürün ara" aria-label="Ürün ara" value={q} onChange={e => setQ(e.target.value)} />
         <select className={sel} aria-label="Kategori" value={cat} onChange={e => setCat(e.target.value)}><option value="">Tüm kategoriler</option>{cats.map(x => <option key={x}>{x}</option>)}</select></span>}>
-      <div className="overflow-x-auto"><table className="w-full text-sm">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm">
         <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Liste fiyatı</th><th className={th + ' text-right'}>Size özel fiyat</th><th className={th}>İndirim</th><th className={th}>Stok</th><th className={th}>Adet</th><th className={th} /></tr></thead>
         <tbody>{rows.map(p => {
           const s = stockWord(p), n = qty[p.id] ?? 1
@@ -129,7 +129,7 @@ function CartView({ c, tier, cart, setCart, note, setNote, sent, onSend }: { c: 
           <p className="m-0 text-sm text-ink2">Satıcı onaylayınca faturaya döner. Bu bir önizlemedir; hiçbir şey gerçekten gönderilmedi.</p></div></div></Card>}
       <Card pad={false} title="Sepetim">
         {ids.length === 0 ? <Empty>Sepet boş. Fiyat listesinden ürün ekleyin.</Empty> : (
-          <div className="overflow-x-auto"><table className="w-full text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm">
             <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Birim</th><th className={th}>Adet</th><th className={th + ' text-right'}>Tutar</th><th className={th} /></tr></thead>
             <tbody>{ids.map(id => { const p = product(id), u = p.price * (1 - tier / 100); return (
               <tr key={id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} />{p.name}</div></td><td className={td + ' num text-right'}>{fmtMoney(u)}</td>
@@ -158,10 +158,10 @@ function Docs({ c }: { c: B2B }) {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Stat label="Kesilen faturalar" value={fmtMoney(t.billed, c.cur, 0)} /><Stat label="Yaptığınız ödemeler" value={fmtMoney(t.paid, c.cur, 0)} tone="ok" />
         <Stat label="Açık bakiye" value={fmtMoney(t.balance, c.cur, 0)} tone={t.balance > 0 ? 'warn' : 'ok'} /></div>
-      <Card pad={false} title="Faturalarım"><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr><th className={th}>Fatura</th><th className={th}>Tarih</th><th className={th + ' text-right'}>Tutar</th><th className={th}>Durum</th></tr></thead>
+      <Card pad={false} title="Faturalarım"><div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm"><thead><tr><th className={th}>Fatura</th><th className={th}>Tarih</th><th className={th + ' text-right'}>Tutar</th><th className={th}>Durum</th></tr></thead>
         <tbody>{c.invoices.map(i => <tr key={i.no}><td className={td}>{i.no}</td><td className={td + ' num'}>{fmtDT(i.t)}</td><td className={td + ' num text-right'}>{fmtMoney(i.total, c.cur)}</td>
           <td className={td}><Badge tone={i.status === 'kesin' ? 'ok' : 'warn'}>{i.status === 'kesin' ? 'Kesin' : 'Taslak'}</Badge></td></tr>)}</tbody></table></div></Card>
-      <Card pad={false} title="Ödemelerim">{c.payments.length === 0 ? <Empty>Kayıtlı ödeme yok.</Empty> : <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr><th className={th}>Tarih</th><th className={th}>Referans</th><th className={th + ' text-right'}>Tutar</th></tr></thead>
+      <Card pad={false} title="Ödemelerim">{c.payments.length === 0 ? <Empty>Kayıtlı ödeme yok.</Empty> : <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm"><thead><tr><th className={th}>Tarih</th><th className={th}>Referans</th><th className={th + ' text-right'}>Tutar</th></tr></thead>
         <tbody>{c.payments.map(p => <tr key={p.ref}><td className={td + ' num'}>{fmtDT(p.t)}</td><td className={td}>{p.ref}</td><td className={td + ' num text-right'}>{fmtMoney(p.amount, c.cur)}</td></tr>)}</tbody></table></div>}</Card>
       <p className="m-0 text-xs text-mute">Bu bölüm yalnızca okunur.</p>
     </div>

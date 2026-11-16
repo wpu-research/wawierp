@@ -103,7 +103,7 @@ export function Picking() {
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] items-start">
         <Card pad={false} title="Toplama listesi" right={<span className="num text-xs text-ink2">%{pct} · {nDone}/{lines.length}</span>}>
           <div className="px-4 pb-3"><div className="h-2 rounded bg-bg overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Toplama ilerlemesi"><div className="h-full bg-ok" style={{ width: `${pct}%` }} /></div></div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Toplandı</th><th className={th}>Sıra</th><th className={th}>Raf</th><th className={th}>Ürün</th><th className={th}>SKU</th><th className={th + ' text-right'}>Adet</th><th className={th + ' text-right'}>Sipariş</th></tr></thead>
               <tbody>{lines.map((l, i) => { const p = product(l.pid), on = ticked.has(l.pid); return (
@@ -175,7 +175,7 @@ export function Counting() {
       </div>
       <p className="text-xs text-mute mt-0 mb-3"><b>Sayılmamış ile sıfır stok ayrıdır:</b> sayılmamış ürünün gerçek miktarı bilinmez, sıfır stokta miktar bilinir ve 0'dır. Çok hareket eden: son hareket kaydında 5 ve üzeri işlem.</p>
       <Card pad={false} title={`Öncelikli liste (ilk ${shown.length} / ${fmtNum(rows.length)})`}>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Neden</th><th className={th}>Ürün</th><th className={th}>Depo · Raf</th><th className={th + ' text-right'}>Sistem</th><th className={th}>Sayılan</th><th className={th}>Sonuç</th></tr></thead>
             <tbody>{shown.map(r => { const p = product(r.pid), [tone, label] = REASON[r.reason], d = done[r.key]; return (
@@ -257,7 +257,7 @@ export function Shifts() {
           <input id="rate" type="range" min={4} max={30} value={rate} onChange={e => setRate(+e.target.value)} aria-label="Bir kişi saatte kaç sipariş hazırlar" />
           <b className="num">{rate}</b>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Dilim</th><th className={th + ' text-right'}>Saatlik ort. sipariş</th><th className={th + ' text-right'}>En yoğun saat ort.</th><th className={th + ' text-right'}>Önerilen kişi</th><th className={th + ' text-right'}>Tepe saatte</th></tr></thead>
             <tbody>{bands.map(b => (

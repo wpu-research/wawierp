@@ -135,7 +135,7 @@ export function QualityQueue() {
           <Card pad={false}>
             <div className="p-3 border-b border-line"><select className={sel} aria-label="Sorun türüne göre filtrele" value={filter} onChange={e => setFilter(e.target.value as Kind | 'all')}>
               <option value="all">Tüm sorunlar</option>{(Object.keys(KIND) as Kind[]).map(k => <option key={k} value={k}>{KIND[k].label}</option>)}</select></div>
-            <div className="overflow-x-auto"><table className="w-full border-collapse text-sm"><thead><tr><th className={th}>Ürün</th><th className={th}>Sorun</th><th className={th + ' text-right'}>30 gün satış</th></tr></thead><tbody>
+            <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm"><thead><tr><th className={th}>Ürün</th><th className={th}>Sorun</th><th className={th + ' text-right'}>30 gün satış</th></tr></thead><tbody>
               {queue.filter(p => filter === 'all' || kindsOf(p).includes(filter)).map(p => (
                 <tr key={p.id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div>{p.name}<div className="text-xs text-mute">{p.brand} · {p.sku}</div></div></div></td>
                   <td className={td}><span className="flex flex-wrap gap-1">{kindsOf(p).map(k => <Badge key={k} tone={KIND[k].tone}>{KIND[k].label}</Badge>)}</span></td>
@@ -249,7 +249,7 @@ export function ContentStudio() {
           : <p className="m-0 text-sm text-mute">gerçek sistemde yapay zekâ çevirir; bu taslakta örnek gösterilir. (Sabit çeviri yalnızca {Object.keys(TR_SAMPLES).length} ürün için var.)</p>}
       </Card>
       <Card title="Son kabul edilen taslaklar" className="mt-3" pad={false}>
-        {acc.length === 0 ? <Empty>Henüz taslak kabul edilmedi.</Empty> : <div className="overflow-x-auto"><table className="w-full border-collapse text-sm"><thead><tr><th className={th}>#</th><th className={th}>Kanal</th><th className={th}>Başlık</th><th className={th}>Şablon</th><th className={th + ' text-right'}>Karakter</th></tr></thead><tbody>
+        {acc.length === 0 ? <Empty>Henüz taslak kabul edilmedi.</Empty> : <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm"><thead><tr><th className={th}>#</th><th className={th}>Kanal</th><th className={th}>Başlık</th><th className={th}>Şablon</th><th className={th + ' text-right'}>Karakter</th></tr></thead><tbody>
           {acc.map((a, i) => <tr key={i}><td className={td + ' num'}>{acc.length - i}</td><td className={td}>{CH[a.ch].label}</td><td className={td}>{a.title}</td><td className={td + ' num'}>{a.v + 1}</td><td className={td + ' num text-right'}>{a.title.length}</td></tr>)}
         </tbody></table></div>}
       </Card>

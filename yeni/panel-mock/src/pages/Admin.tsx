@@ -62,7 +62,7 @@ export function AuditLog() {
           <label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={noise} onChange={e => setNoise(e.target.checked)} />Rutin sistem çağrılarını göster</label>
           {!noise && <span className="text-xs text-mute num">{fmtNum(hidden)} rutin çağrı gruplanıp gizlendi</span>}
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Zaman</th><th className={th}>Sonuç</th><th className={th}>Kategori</th><th className={th}>Olay</th><th className={th}>Kullanıcı</th><th className={th}>Nesne</th></tr></thead>
             <tbody>{rows.map(a => (

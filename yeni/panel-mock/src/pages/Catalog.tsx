@@ -57,7 +57,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
           </label>
           <span className="text-xs text-mute ml-auto">{PRODUCTS.length} örnek kart · gerçek katalog ≈232.500</span>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Ürün</th><th className={th}>SKU · EAN</th><th className={th}>Kaynak</th><th className={th}>Fiziki stok (depo)</th><th className={th + ' text-right'}>Drop</th><th className={th + ' text-right'}>Sanal</th><th className={th + ' text-right'}>Fiyat</th><th className={th}>İlan</th></tr></thead>
             <tbody>
@@ -179,7 +179,7 @@ export function Stock() {
           </select>
           <span className="text-xs text-mute ml-auto">{WAREHOUSES.length} depo · hesap: fiziki</span>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Zaman</th><th className={th}>Ürün</th><th className={th}>Depo</th><th className={th}>Hareket</th><th className={th + ' text-right'}>Önce</th><th className={th + ' text-right'}>Değişim</th><th className={th + ' text-right'}>Sonra</th><th className={th}>Yapan</th><th className={th}>Referans</th></tr></thead>
             <tbody>{rows.slice((page - 1) * SIZE, page * SIZE).map(m => { const p = product(m.pid), d = m.after - m.before; return (

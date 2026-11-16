@@ -41,7 +41,7 @@ export function Labels() {
               ? <Btn onClick={() => { const ids = rows.filter(canLabel).map(o => o.id); if (!ids.length) return notify('Yeniden denenebilecek sipariş yok (sorunu giderilmemiş siparişlere etiket verilmez)'); if (window.confirm(`${ids.length} sipariş için etiket yeniden denenecek${ids.length < rows.length ? ` (${rows.length - ids.length} sipariş sorunlu olduğu için atlanır)` : ''}. Devam edilsin mi?`)) createLabels(ids) }}><RotateCw size={14} />Tümünü yeniden dene ({rows.length})</Btn>
               : <span className="flex gap-2"><Btn onClick={() => notify(`${rows.length} etiket tek PDF olarak hazırlandı (örnek)`)}><Download size={14} />Toplu PDF</Btn><Btn variant="primary" onClick={() => { if (window.confirm(`Bu listedeki ${rows.length} siparişin tamamı kargoya verilecek ve takip numaraları kanallara gönderilecek. Devam edilsin mi?`)) ship(rows.map(o => o.id)) }}><Truck size={14} />Tümünü kargoya ver ({rows.length})</Btn></span>)}
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Sipariş</th><th className={th}>Kanal · mağaza</th><th className={th}>Depo</th><th className={th}>Taşıyıcı</th><th className={th}>Alıcı</th><th className={th}>{tab === 'hata' ? 'Hata nedeni' : 'Bekleme'}</th><th className={th}></th></tr></thead>
               <tbody>{rows.slice(0, 40).map(o => (
@@ -124,7 +124,7 @@ export function Transfers() {
         <Stat label="Taslak" value={fmtNum(transfers.filter(t => t.status === 'taslak').length)} />
       </div>
       <Card pad={false}>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
           <table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Transfer</th><th className={th}>Güzergâh</th><th className={th}>Taşıma</th><th className={th + ' text-right'}>Kalem</th><th className={th + ' text-right'}>Adet</th><th className={th}>Tahmini varış</th><th className={th}>Durum</th></tr></thead>
             <tbody>{transfers.map(t => { const late = t.eta < NOW && !['kabul', 'iptal', 'ulasti'].includes(t.status); return (
@@ -282,7 +282,7 @@ export function B2BPage() {
       <Tabs value={tab} onChange={setTab} items={[{ key: 'cari', label: 'Cariler', count: b2b.length }, { key: 'taslak', label: 'Toptan satış taslakları', count: drafts.length }]} />
       {tab === 'cari' ? (
         <Card pad={false} className="mt-2">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Cari</th><th className={th}>Satıcı şirket</th><th className={th + ' text-right'}>Lokasyon</th><th className={th + ' text-right'}>Portal kullanıcısı</th><th className={th + ' text-right'}>Faturalanan</th><th className={th + ' text-right'}>Tahsil edilen</th><th className={th + ' text-right'}>Bakiye</th></tr></thead>
               <tbody>{b2b.map(c => { const t = b2bTotals(c); return (
@@ -301,7 +301,7 @@ export function B2BPage() {
         </Card>
       ) : (
         <Card pad={false} className="mt-2">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir">
             <table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Taslak</th><th className={th}>Cari</th><th className={th}>Satıcı şirket</th><th className={th}>Oluşturma</th><th className={th + ' text-right'}>Tutar</th><th className={th}></th></tr></thead>
               <tbody>{drafts.map(({ c, i }) => (

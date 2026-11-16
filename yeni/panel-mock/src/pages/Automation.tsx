@@ -135,7 +135,7 @@ export function Rules() {
           const list = rules.filter(r => r.area === area)
           return list.length === 0 ? null : (
             <Card key={area} title={area} pad={false} right={<span className="num text-xs text-mute mr-1">{list.filter(r => r.on).length} / {list.length} açık</span>}>
-              <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr>
+              <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm"><thead><tr>
                 <th className={th}>Açık</th><th className={th}>Kural</th><th className={th}>Olay → koşul → işlem</th><th className={th}>Onay düzeyi</th><th className={th}>Üst sınır</th><th className={th}>Son çalışma</th></tr></thead>
                 <tbody>{list.map(r => (
                   <tr key={r.id} className={r.on ? '' : 'opacity-60'}>

@@ -141,9 +141,9 @@ export function Reservations() {
   const reservedRows = all.filter(r => r.ayrilan > 0)
   const cnt = (v: View) => all.filter(F[v]).length
   const head = (k: SortKey, label: string, right?: boolean) => (
-    <th className={th + (right ? ' text-right' : '')} aria-sort={sort.k === k ? (sort.d === 1 ? 'ascending' : 'descending') : 'none'}>
-      <button className="border-0 bg-transparent p-0 font-medium text-mute cursor-pointer" onClick={() => setSort(s => ({ k, d: s.k === k && s.d === 1 ? -1 : 1 }))}>
-        {label}{sort.k === k ? (sort.d === 1 ? ' ↑' : ' ↓') : ''}
+    <th className={th + (right ? ' text-right' : '')} aria-sort={sort.k === k ? (sort.d === 1 ? 'ascending' : 'descending') : undefined}>
+      <button type="button" className="min-h-6 border-0 bg-transparent p-0 font-medium text-mute cursor-pointer" onClick={() => setSort(s => ({ k, d: s.k === k && s.d === 1 ? -1 : 1 }))}>
+        {label}{sort.k === k ? <span aria-hidden>{sort.d === 1 ? ' ↑' : ' ↓'}</span> : ''}
       </button>
     </th>
   )
@@ -177,7 +177,7 @@ export function Reservations() {
           <div className="px-4 pt-3"><Tabs value={view} onChange={setView} items={[
             { key: 'all', label: 'Tümü', count: cnt('all') }, { key: 'neg', label: 'Eksi stok', count: cnt('neg'), tone: 'bad' },
             { key: 'low', label: 'Tükenmek üzere', count: cnt('low') }, { key: 'nocount', label: 'Hiç sayılmadı', count: cnt('nocount') }]} /></div>
-          <div className="overflow-x-auto"><table className="w-full text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full text-sm">
             <thead><tr>{head('name', 'Ürün')}{head('sku', 'SKU')}{head('wh', 'Depo')}{head('bin', 'Raf')}{head('fiziki', 'Fiziki', true)}{head('ayrilan', 'Ayrılan', true)}{head('sat', 'Satılabilir', true)}{head('show', 'Kanallara gösterilen', true)}{head('n', 'Bekleyen sipariş', true)}</tr></thead>
             <tbody>
               {rows.map(r => (

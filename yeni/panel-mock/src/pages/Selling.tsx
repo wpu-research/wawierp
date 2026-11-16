@@ -68,7 +68,7 @@ export function ListingWizard() {
       <Stepper step={step} go={next} />
       {step === 0 && (
         <Card pad={false} title="1 · Ürün seç" right={<label className="flex items-center gap-1.5 text-sm"><input type="checkbox" checked={onlyNew} onChange={e => setOnlyNew(e.target.checked)} />Henüz listelenmemiş</label>}>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}><input type="checkbox" aria-label="Tümünü seç" checked={rows.length > 0 && rows.every(p => pids.has(p.id))} onChange={e => setPids(e.target.checked ? new Set(rows.map(p => p.id)) : new Set())} /></th><th className={th}>Ürün</th><th className={th}>Marka</th><th className={th}>EAN</th><th className={th}>Görsel</th><th className={th + ' text-right'}>Fiyat</th><th className={th + ' text-right'}>İlan</th></tr></thead>
             <tbody>{rows.map(p => (
               <tr key={p.id} className="hover:bg-bg">
@@ -96,7 +96,7 @@ export function ListingWizard() {
       {step === 2 && (
         <Card pad={false} title="3 · Eksikleri tamamla" right={<span className="flex gap-1.5"><Badge tone="ok">{ready.length} hazır</Badge><Badge tone={skipped.length ? 'bad' : 'neutral'}>{skipped.length} eksik</Badge></span>}>
           <p className="m-0 px-4 pb-2 text-xs text-mute">Kurallar <Example t="örnek kural" /> : Kaufland, OTTO, Amazon ve METRO için EAN; her kanal için görsel; eBay için kategori eşleşmesi; fiyat 0'dan büyük olmalı.</p>
-          <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
             <thead><tr><th className={th}>Ürün</th>{selA.map(a => <th key={a.id} className={th}><Chan acc={a.id} /></th>)}</tr></thead>
             <tbody>{selP.map(p => (
               <tr key={p.id}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={28} />{p.name}</div></td>{selA.map(a => { const m = missing(p, a)
@@ -204,7 +204,7 @@ export function PriceRules() {
       </div>
       <Card pad={false} className="mt-3" title="Kanal bazında kârlılık (30 gün)" right={<Badge tone="warn">Tahmin</Badge>}>
         <p className="m-0 px-4 pb-2 text-xs text-mute">Yalnız EUR siparişler hesaba katıldı (sipariş adedi tüm para birimleri). Komisyon <Example t="örnek oran" />, maliyet ve kargo <Example /> varsayımdır; KDV ve iadeler gerçek hesapla farklı olabilir.</p>
-        <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
           <thead><tr><th className={th}>Kanal</th><th className={th + ' text-right'}>Sipariş</th><th className={th + ' text-right'}>Ciro (EUR)</th><th className={th + ' text-right'}>Tahmini komisyon</th><th className={th + ' text-right'}>Tahmini marj</th></tr></thead>
           <tbody>{chan.map(([t, r]) => { const mg = r.rev ? (r.rev - r.vat - r.comm - r.cost) / r.rev : null; return (
             <tr key={t} className="hover:bg-bg"><td className={td}><span className="inline-block size-2 rounded-full mr-1.5" style={{ background: CHANNEL[t].color }} />{CHANNEL[t].label}</td>
@@ -252,7 +252,7 @@ export function Replenish() {
       <div className="mt-2 space-y-3">
         {tab === 'order' && <>
           <Card pad={false} title="Yeniden sipariş önerisi" right={<label className="text-sm flex items-center gap-1.5">Hedef stok süresi<select className={sel} value={cover} onChange={e => setCover(+e.target.value)}>{[14, 30, 45].map(d => <option key={d} value={d}>{d} gün</option>)}</select></label>}>
-            <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+            <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>30 gün satış</th><th className={th + ' text-right'}>Günlük hız</th><th className={th + ' text-right'}>Fiziki stok</th><th className={th + ' text-right'}>Yeterlilik</th><th className={th + ' text-right'}>Önerilen</th><th className={th}></th></tr></thead>
               <tbody>{lines.map(l => (
                 <tr key={l.p.id} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={l.p} size={32} /><div>{l.p.name}<div className="text-xs text-mute">{l.p.brand}</div></div></div></td>
@@ -271,7 +271,7 @@ export function Replenish() {
         </>}
         {tab === 'transfer' && (
           <Card pad={false} title="Depolar arası aktarım önerisi" right={<a href="#/transfers" className="text-sm text-brand">Transferlere git</a>}>
-            <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+            <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th}>Eksik depo</th><th className={th}>Fazla depo</th><th className={th + ' text-right'}>Önerilen adet</th><th className={th}></th></tr></thead>
               <tbody>{moves.map((m, i) => (
                 <tr key={i} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={m.p} size={28} />{m.p.name}</div></td>
@@ -285,7 +285,7 @@ export function Replenish() {
         {tab === 'buffer' && (
           <Card pad={false} title="Güvenlik payı" right={<label className="text-sm flex items-center gap-2">Pay: <span className="num font-medium w-6">{buf}</span><input type="range" min={0} max={10} value={buf} onChange={e => setBuf(+e.target.value)} aria-label="Güvenlik payı adedi" /></label>}>
             <p className="m-0 px-4 pb-2 text-xs text-mute">Kanallara gerçek stoktan {buf} adet eksik gösterilir; fazla satış riski azalır. Yalnız önizleme, kanallara bir şey gönderilmez.</p>
-            <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+            <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Gerçek stok</th><th className={th + ' text-right'}>Kanallara gösterilen</th><th className={th + ' text-right'}>Fark</th></tr></thead>
               <tbody>{lines.map(l => { const sh = Math.max(0, l.st - buf); return (
                 <tr key={l.p.id} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={l.p} size={28} />{l.p.name}</div></td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
@@ -295,7 +295,7 @@ export function Replenish() {
         )}
         {tab === 'slow' && (
           <Card pad={false} title="Yavaş ve ölü stok" right={<span className="text-sm text-ink2">Bağlı değer: <b className="num">{fmtMoney(slow.reduce((s, l) => s + l.st * l.p.price, 0), 'EUR', 0)}</b> <Example t="satış fiyatıyla" /></span>}>
-            <div className="overflow-x-auto"><table className="w-full border-collapse text-sm">
+            <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tablo; yatay kaydırılabilir"><table className="w-full border-collapse text-sm">
               <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Stok</th><th className={th + ' text-right'}>30 gün satış</th><th className={th + ' text-right'}>Bağlı değer</th><th className={th}>Öneri</th></tr></thead>
               <tbody>{slow.map(l => (
                 <tr key={l.p.id} className="hover:bg-bg"><td className={td}><div className="flex items-center gap-2.5"><Thumb p={l.p} size={28} />{l.p.name}</div></td><td className={td + ' num text-right'}>{fmtNum(l.st)}</td>
