@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ScanBarcode, WifiOff } from 'lucide-react'
 import dist from '../dist30.json'
-import { MOVES0, WAREHOUSES, fmtNum, product, toShip, whName, type WhId } from '../data'
+import { WAREHOUSES, fmtNum, product, toShip, whName, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Bars, Btn, Card, Empty, PageHead, Stat, td, th, sel, type Tone } from '../ui'
@@ -135,12 +135,12 @@ type Reason = 'negatif' | 'hic' | 'kritik' | 'hareket'
 const REASON: Record<Reason, [Tone, string, number]> = { negatif: ['bad', 'Negatif stok', 0], hic: ['warn', 'Hiç sayılmamış', 1], kritik: ['warn', 'Kritik', 2], hareket: ['info', 'Çok hareket eden', 3] }
 
 export function Counting() {
-  const { products, whId, notify, role } = useStore()
+  const { products, whId, notify, role, moves } = useStore()
   const [vals, setVals] = useState<Record<string, string>>({})
   const [done, setDone] = useState<Record<string, number>>({})
   const rows = useMemo(() => {
     const mv = new Map<string, number>()
-    for (const m of MOVES0) mv.set(m.pid + m.wh, (mv.get(m.pid + m.wh) ?? 0) + 1)
+    for (const m of moves) mv.set(m.pid + m.wh, (mv.get(m.pid + m.wh) ?? 0) + 1)
     const out: { key: string; pid: string; wh: WhId; bin: string; sys: number | null; reason: Reason; moves: number }[] = []
     for (const p of products) for (const [w, s] of Object.entries(p.stock) as [WhId, NonNullable<typeof p.stock[WhId]>][]) {
       if (whId && w !== whId) continue

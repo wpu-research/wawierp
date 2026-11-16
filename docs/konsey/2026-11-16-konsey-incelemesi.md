@@ -185,3 +185,18 @@ Eksik kararlar: veri göçü ve açılış bakiyeleri · geçiş ve geri dönü�
 Düzeltme: D4'te başvuru formu için "hiçbir yere gitmiyor" denmişti; form gönderilince zaten "Bu bir tasarım önerisi, hiçbir bilgi kaydedilmedi" yazıyor. Bulgu geri çekildi.
 
 Açık kalanlar: A1, A2, A5, A6, A8, A9, A10, A11, A14 (stok, fatura ve iade formu davranışı; karar gerektiriyor), B2–B7, C1–C5, C7, D3, D5 ve bölüm 4'teki mimari şartlar.
+
+## 8. "Taslak şartnamedir" kararından sonra düzeltilenler (2026-11-16)
+
+Proje sahibi taslağın şartname olarak kullanılacağına karar verdi (`kararlar/0009`). Buna göre:
+
+| Bulgu | Yapılan |
+|---|---|
+| A1 | Sevk fiziki stoktan düşüyor ve stok defterine satış hareketi yazıyor; transfer çıkışı ve kabulü de deftere yazıyor. Geri alma stoğu ve defteri de geri alıyor. Yerelde denendi: defterde yeni satır, geri alınca eski hâl. |
+| A2 | Sevk faturayı kesinleştirmiyor. |
+| A5 | Fatura numarası kesinleştirme anında veriliyor, siparişte saklanıyor, şirket başına sıralı; taslak numara tüketmiyor. Kesin fatura geri alınamıyor. KDV sekmesi gerçekten son 30 günü süzüyor. |
+| A6 | İade formu tek hata mesajı veriyor. |
+| A8 | Ayrılan stok bütün siparişlerden tek işlevle hesaplanıyor (`reservedMap`); seçili depo dışındaki satırlar sayılmıyor. |
+| A10 | Asistandaki ciro iptal ve iadeyi içermiyor. |
+
+Açık kalanlar: A7'nin kalanı, A9, A11, A14, B2–B7, C1–C5, C7, D3, D5 ve mimari şartlar.

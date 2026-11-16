@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowRight } from 'lucide-react'
-import { PRODUCTS, WAREHOUSES, ago, fmtNum, isOpen, whName, type Order, type Product, type WhId } from '../data'
+import { PRODUCTS, WAREHOUSES, ago, fmtNum, reservedMap, whName, type Order, type Product, type WhId } from '../data'
 import { Thumb } from '../Thumb'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Chan, Drawer, Empty, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -10,11 +10,7 @@ type SortKey = 'name' | 'sku' | 'wh' | 'bin' | 'fiziki' | 'ayrilan' | 'sat' | 's
 type View = 'all' | 'neg' | 'low' | 'nocount'
 
 function buildRows(products: Product[], orders: Order[]): Row[] {
-  const res = new Map<string, { o: Order; qty: number }[]>()
-  for (const o of orders) {
-    if (!isOpen(o) || o.supply !== 'fiziki') continue
-    for (const it of o.items) { const k = it.pid + '|' + o.wh; res.set(k, [...(res.get(k) ?? []), { o, qty: it.qty }]) }
-  }
+  const res = reservedMap(orders)
   return products.flatMap(p => (Object.entries(p.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).map(([wh, s]) => {
     const list = res.get(p.id + '|' + wh) ?? [], ay = list.reduce((a, x) => a + x.qty, 0)
     return { key: p.id + '|' + wh, p, wh, bin: s.bin, fiziki: s.fiziki, ayrilan: ay, sat: s.fiziki === null ? null : s.fiziki - ay, min: s.min, tedarikci: s.tedarikci, orders: list }
@@ -126,7 +122,7 @@ function Detail({ r, guard }: { r: Row; guard: number }) {
 }
 
 export function Reservations() {
-  const { orders, products, whId, role } = useStore()
+  const { allOrders: orders, products, whId, role } = useStore() // ayrılan: bütün şirketlerin açık siparişleri (stok depoda ortaktır)
   const ops = ROLES[role].ops
   const [guard, setGuard] = useState(1), [wh, setWh] = useState<WhId | ''>(whId)
   const [view, setView] = useState<View>('all'), [sort, setSort] = useState<{ k: SortKey; d: 1 | -1 }>({ k: 'sat', d: 1 })

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ImageOff, Search, Sparkles } from 'lucide-react'
-import { LISTING_FLOW, MOVE, MOVES0, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtNum, product, stockState, whName, account, type ListingStatus, type MoveType, type Product, type WhId } from '../data'
+import { LISTING_FLOW, MOVE, PRODUCTS, WAREHOUSES, fmtDT, fmtMoney, fmtNum, product, stockState, whName, account, type ListingStatus, type Move, type MoveType, type Product, type WhId } from '../data'
 import { useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { SimilarList, similarTo } from '../similar'
@@ -20,7 +20,7 @@ export function StockCell({ v }: { v: number | null }) {
 
 type View = 'all' | 'ean' | 'gorsel' | 'kritik' | 'negatif' | 'sayim'
 export default function Catalog({ query }: { query: URLSearchParams }) {
-  const { products, whId } = useStore()
+  const { products, whId, moves } = useStore()
   const [view, setView] = useState<View>('all')
   const [q, setQ] = useState('')
   const [openId, setOpenId] = useState<string | null>(null)
@@ -127,7 +127,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
           </div>
           <div>
             <h3 className="m-0 mb-1.5 text-xs font-semibold text-mute uppercase tracking-wide">Son stok hareketleri</h3>
-            <MoveList moves={MOVES0.filter(m => m.pid === open.id).slice(0, 8)} />
+            <MoveList moves={moves.filter(m => m.pid === open.id).slice(0, 8)} />
           </div>
         </>}
       </Drawer>
@@ -135,7 +135,7 @@ export default function Catalog({ query }: { query: URLSearchParams }) {
   )
 }
 
-function MoveList({ moves }: { moves: typeof MOVES0 }) {
+function MoveList({ moves }: { moves: Move[] }) {
   if (!moves.length) return <p className="m-0 text-mute">Hareket yok.</p>
   return (
     <ul className="m-0 p-0 list-none border border-line rounded-lg divide-y divide-line">
@@ -151,10 +151,10 @@ function MoveList({ moves }: { moves: typeof MOVES0 }) {
 
 const SIZE = 20
 export function Stock() {
-  const { whId, products } = useStore()
+  const { whId, products, moves } = useStore()
   const [type, setType] = useState<MoveType | ''>('')
   const [page, setPage] = useState(1)
-  const rows = useMemo(() => MOVES0.filter(m => (!whId || m.wh === whId) && (!type || m.type === type)), [whId, type])
+  const rows = useMemo(() => moves.filter(m => (!whId || m.wh === whId) && (!type || m.type === type)), [moves, whId, type])
   useEffect(() => setPage(1), [whId, type])
   const tot = useMemo(() => {
     let fiziki = 0, sanal = 0, drop = 0, ted = 0, unk = 0

@@ -184,8 +184,8 @@ export function ReturnForm() {
 
   const find = () => {
     const o = allOrders.find(x => x.no.toLowerCase() === no.trim().toLowerCase())
-    if (!o) return setErr('Bu numarayla bir sipariş bulamadık.')
-    if (!zip.trim() || zip.trim() !== o.cust.zip) return setErr('Posta kodu siparişle eşleşmiyor.')
+    // Tek mesaj: numara mı yanlış, posta kodu mu, dışarıdan anlaşılmasın (sipariş numarası denenerek doğrulanamasın).
+    if (!o || !zip.trim() || zip.trim() !== o.cust.zip) return setErr('Sipariş numarası ile posta kodu eşleşmiyor. İkisini de sipariş onayı e-postanızdan kontrol edin.')
     if (o.status !== 'kargoda' && o.status !== 'tamamlandi') return setErr('Bu sipariş henüz iade için uygun değil.')
     setErr(''); setOrder(o); setPick({}); setStep(1)
   }

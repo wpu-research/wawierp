@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
-import { ACCOUNTS, AUDIT0, JOBS0, NOW, ORDERS0, PRODUCTS, account, trackingFor, type Account, type Audit, type Job, type Order, type Product, type RetStage, type WhId } from './data'
+import { ACCOUNTS, AUDIT0, JOBS0, MOVES0, NOW, ORDERS0, PRODUCTS, account, nextInvNo, trackingFor, type Account, type Move, type Audit, type Job, type Order, type Product, type RetStage, type WhId } from './data'
 import { B2B0, MANUAL0, TFLOW, TICKETS0, TRANSFERS0, type B2B, type ManualLabel, type Ticket, type Transfer } from './data2'
 
 export type Role = 'admin' | 'depo' | 'muhasebe'
@@ -21,7 +21,7 @@ interface Ctx {
   companyId: string; setCompanyId: (s: string) => void
   whId: WhId | ''; setWhId: (s: WhId | '') => void
   orders: Order[]; allOrders: Order[]; accounts: Account[]; products: Product[]
-  jobs: Job[]; audit: Audit[]; revealed: Set<string>; toast: string | null
+  jobs: Job[]; audit: Audit[]; revealed: Set<string>; toast: string | null; moves: Move[]
   createLabels: (ids: string[], via?: string) => void; ship: (ids: string[], via?: string) => void; issueInvoices: (ids: string[]) => void
   transfers: Transfer[]; tickets: Ticket[]; b2b: B2B[]; manual: ManualLabel[]
   advanceTransfer: (id: string) => void; replyTicket: (id: string, text: string, via?: string) => void; closeTicket: (id: string) => void; readTicket: (id: string) => void
@@ -45,6 +45,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [allB2b, setB2b] = useState(B2B0)
   const [allManual, setManual] = useState(MANUAL0)
   const [toast, setToast] = useState<string | null>(null)
+  // Stok defteri: fiziki stoğu değiştiren her işlem (sevk, transfer çıkışı, mal kabul) bir hareket satırı yazar.
+  // Örnek ürün verisi yerinde güncellenir; `stockVer` ekranların yeniden hesaplamasını sağlar.
+  const [moves, setMoves] = useState(MOVES0)
+  const [stockVer, setStockVer] = useState(0)
+  type Delta = { pid: string; wh: WhId; qty: number; type: Move['type']; ref: string }
+  const applyStock = (deltas: Delta[], user: string) => {
+    const rows: Move[] = []
+    for (const d of deltas) {
+      const p = PRODUCTS.find(x => x.id === d.pid); if (!p) continue
+      const r = p.stock[d.wh] ?? (p.stock[d.wh] = { fiziki: 0, sanal: 0, drop: 0, tedarikci: 0, min: 5, bin: '—' })
+      if (r.fiziki === null) continue // hiç sayılmamış kayıt: önce sayım gerekir, tahmini sayıya hareket yazılmaz
+      const before = r.fiziki; r.fiziki = before + d.qty
+      rows.push({ id: 'mx' + Date.now() + rows.length + d.pid + d.wh, t: NOW, pid: d.pid, wh: d.wh, type: d.type, before, after: r.fiziki, user, ref: d.ref })
+    }
+    if (rows.length) { setMoves(m => [...rows.reverse(), ...m]); setStockVer(v => v + 1) }
+    return rows
+  }
 
   const say = useCallback((m: string) => { setToast(m); window.setTimeout(() => setToast(t => (t === m ? null : t)), 3200) }, [])
   // İşlemi asistan yaptıysa denetim kaydında kullanıcının yanına not düşülür.
@@ -55,19 +72,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [role])
 
   // Geri alma: veri değiştiren her işlemden önce durumun kopyası saklanır; 10 saniye içinde geri yüklenebilir.
-  type Snap = { orders: typeof allOrders; jobs: typeof jobs; tickets: typeof allTickets; transfers: typeof allTransfers; b2b: typeof allB2b; manual: typeof allManual }
-  const [undo, setUndo] = useState<{ label: string; snap: Snap; at: number } | null>(null)
+  type Snap = { orders: typeof allOrders; jobs: typeof jobs; tickets: typeof allTickets; transfers: typeof allTransfers; b2b: typeof allB2b; manual: typeof allManual; moves: Move[] }
+  const [undo, setUndo] = useState<{ label: string; snap: Snap; at: number; stock: Delta[] } | null>(null)
   // Toplu işlemde yalnız koşulu sağlayan siparişler işlenir; kayıt ve bildirim gerçekte değişen sayıyı yazar.
   const hit = (ids: string[], ok: (o: Order) => boolean) => ids.filter(id => { const o = allOrders.find(x => x.id === id); return !!o && ok(o) })
-  const keep = (label: string) => {
+  const keep = (label: string, stock: Delta[] = []) => {
     const at = Date.now()
-    setUndo({ label, at, snap: { orders: allOrders, jobs, tickets: allTickets, transfers: allTransfers, b2b: allB2b, manual: allManual } })
+    setUndo({ label, at, stock, snap: { orders: allOrders, jobs, tickets: allTickets, transfers: allTransfers, b2b: allB2b, manual: allManual, moves } })
     window.setTimeout(() => setUndo(u => (u && u.at === at ? null : u)), 10_000)
   }
   const undoLast = () => {
     if (!undo) return
     const s = undo.snap
     setOrders(s.orders); setJobs(s.jobs); setTickets(s.tickets); setTransfers(s.transfers); setB2b(s.b2b); setManual(s.manual)
+    // Stok hareketi de geri alınır: fiziki stok eski değerine döner, defter satırları silinir.
+    for (const d of undo.stock) { const r = PRODUCTS.find(x => x.id === d.pid)?.stock[d.wh]; if (r && r.fiziki !== null) r.fiziki -= d.qty }
+    setMoves(s.moves); setStockVer(v => v + 1)
     log('Geri alma', `Geri alındı: ${undo.label}`, 'son işlem'); say(`Geri alındı: ${undo.label}`); setUndo(null)
   }
 
@@ -78,7 +98,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const inScope = useCallback((c: string, w: WhId) => (!companyId || c === companyId) && (!whId || w === whId), [companyId, whId])
   const orders = useMemo(() => allOrders.filter(o => inScope(o.company, o.wh)), [allOrders, inScope])
   const accounts = useMemo(() => ACCOUNTS.filter(a => inScope(a.company, a.wh)), [inScope])
-  const products = useMemo(() => PRODUCTS.filter(p => !whId || p.stock[whId]), [whId])
+  const products = useMemo(() => PRODUCTS.filter(p => !whId || p.stock[whId]), [whId, stockVer]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const transfers = useMemo(() => allTransfers.filter(t => !whId || t.from === whId || t.to === whId), [allTransfers, whId])
   const tickets = useMemo(() => { const ids = new Set(accounts.map(a => a.id)); return allTickets.filter(t => ids.has(t.acc)) }, [allTickets, accounts])
@@ -86,13 +106,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const manual = useMemo(() => allManual.filter(m => !whId || m.wh === whId), [allManual, whId])
 
   const value: Ctx = {
-    transfers, tickets, b2b, manual, notify: say,
+    transfers, tickets, b2b, manual, moves, notify: say,
     undo: undo ? { label: undo.label } : null, undoLast,
     views, saveView: v => putViews([...views.filter(x => x.name !== v.name), { ...v, id: 'v' + Date.now() }]), removeView: id => putViews(views.filter(x => x.id !== id)),
     advanceTransfer: id => {
-      keep('Transfer adımı')
-      const t = allTransfers.find(x => x.id === id)!, i = TFLOW.findIndex(f => f.key === t.status), next = TFLOW[i + 1]
+      const t = allTransfers.find(x => x.id === id)!, i = TFLOW.findIndex(f => f.key === t.status), next = i < 0 ? undefined : TFLOW[i + 1]
       if (!next) return
+      // Çıkışta gönderen depodan düşülür, kabulde alan depoya eklenir; ikisi de deftere yazılır.
+      const stock: Delta[] = next.key === 'cikti' ? t.lines.map(l => ({ pid: l.pid, wh: t.from, qty: -l.qty, type: 'transfer' as const, ref: t.no }))
+        : next.key === 'kabul' ? t.lines.map(l => ({ pid: l.pid, wh: t.to, qty: l.received ?? l.qty, type: 'transfer' as const, ref: t.no })) : []
+      keep('Transfer adımı', stock); applyStock(stock, ROLES[role].user)
       setTransfers(ts => ts.map(x => (x.id !== id ? x : { ...x, status: next.key, lines: next.key === 'kabul' ? x.lines.map(l => ({ ...l, received: l.received ?? l.qty })) : x.lines })))
       if (next.key === 'cikti') log('Stok', 'Transfer çıkışı stok defterine yazıldı', t.no)
       else if (next.key === 'kabul') log('Stok', 'Mal kabul stok defterine yazıldı', t.no)
@@ -141,9 +164,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     ship: (all, v) => {
       const ids = hit(all, o => o.label === 'hazir' && o.status === 'hazirlaniyor')
       if (!ids.length) return say('Kargoya verilebilecek sipariş yok')
-      keep(`${ids.length} siparişi kargoya verme`); via.current = v
-      patch(ids, o => (o.label === 'hazir' && o.status === 'hazirlaniyor' ? { ...o, status: 'kargoda', invoice: 'kesin', tracking: trackingFor(o.wh) } : o))
-      log('Kargo', `Kargoya verildi, takip no kanala gönderildi (${ids.length})`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')
+      // Sevk, fiziki stoktan düşer ve deftere satış hareketi yazar. Yoksa ayrılan azalır, fiziki aynı kalır ve satılabilir
+      // stok yeniden artardı (fazla satış). Tedarikçiden gönderilen (drop) siparişte bizim depomuzdan stok çıkmaz.
+      // Fatura burada kesinleşmez; o ayrı bir yetki ve ayrı bir işlemdir.
+      const stock: Delta[] = ids.flatMap(id => { const o = allOrders.find(x => x.id === id)!; return o.supply === 'fiziki' ? o.items.map(it => ({ pid: it.pid, wh: o.wh, qty: -it.qty, type: 'satis' as const, ref: o.no })) : [] })
+      keep(`${ids.length} siparişi kargoya verme`, stock); via.current = v
+      const written = applyStock(stock, 'Sistem')
+      patch(ids, o => (o.label === 'hazir' && o.status === 'hazirlaniyor' ? { ...o, status: 'kargoda', tracking: trackingFor(o.wh) } : o))
+      log('Kargo', `Kargoya verildi, takip no kanala gönderildi (${ids.length}); stok defterine ${written.length} hareket yazıldı`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')
       via.current = undefined
       say(`${ids.length} sipariş kargoya verildi`)
     },
@@ -151,8 +179,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       // İptal edilmiş ya da ödemesi gelmemiş siparişe kesin fatura kesilmez.
       const ids = hit(all, o => o.invoice !== 'kesin' && o.status !== 'iptal' && o.pay !== 'bekliyor')
       if (!ids.length) return say('Kesinleştirilebilecek fatura yok')
-      keep(`${ids.length} faturayı kesinleştirme`)
-      patch(ids, o => (o.invoice !== 'kesin' ? { ...o, invoice: 'kesin' } : o))
+      // Kesin fatura geri alınamaz (gerçekte iptali iade faturasıyla olur); bu yüzden geri alma kaydı tutulmaz.
+      setUndo(null)
+      const seq = new Map<string, number>()
+      setOrders(os => { const s = new Set(ids); return os.map(o => { if (!s.has(o.id)) return o; const k = seq.get(o.company) ?? 0; seq.set(o.company, k + 1); return { ...o, invoice: 'kesin' as const, invNo: nextInvNo(os, o.company, k) } }) })
       log('Finans', `Fatura kesinleştirildi (${ids.length})`, ids.length === 1 ? 'sipariş ' + allOrders.find(o => o.id === ids[0])!.no : 'toplu işlem')
       say(`${ids.length} fatura kesinleştirildi`)
     },

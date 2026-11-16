@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ArrowUp, Check, ExternalLink, Lock, Maximize2, Minimize2, ShieldCheck, Sparkles, X } from 'lucide-react'
-import { CHANNEL, NOW, RET, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
+import { CHANNEL, NOW, RET, reservedMap, reservedQty, account, dayKey, dropWaiting, fmtMoney, fmtNum, hasIssue, isOpen, overdue, toShip, whName, type ChannelType, type Order, type WhId } from './data'
 import { ROLES, useStore } from './store'
 import { Badge, Btn } from './ui'
 import { SimilarList, findProduct, inStock, similarTo } from './similar'
@@ -68,14 +68,13 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
 
   // ---- ortak hesaplar (hazır senaryolar ve yapay zekâ araçları aynı sayıları kullanır) ----
   const stockRisks = () => {
-    const res = new Map<string, number>()
-    for (const o of st.orders) if (isOpen(o) && o.supply === 'fiziki') for (const i of o.items) res.set(i.pid + '|' + o.wh, (res.get(i.pid + '|' + o.wh) ?? 0) + i.qty)
+    const res = reservedMap(st.allOrders)
     const rows: { ad: string; sku: string; depo: string; fiziki: number; ayrilan: number; satilabilir: number; min: number }[] = []
     let sayimYok = 0
     for (const p of st.products) for (const [wh, r] of Object.entries(p.stock)) {
-      if (!r) continue
+      if (!r || (st.whId && wh !== st.whId)) continue
       if (r.fiziki === null) { sayimYok++; continue }
-      const a = res.get(p.id + '|' + wh) ?? 0
+      const a = reservedQty(res, p.id, wh)
       rows.push({ ad: p.name, sku: p.sku, depo: whName(wh as WhId), fiziki: r.fiziki, ayrilan: a, satilabilir: r.fiziki - a, min: r.min })
     }
     const eksi = rows.filter(r => r.satilabilir < 0).sort((a, b) => a.satilabilir - b.satilabilir)
@@ -129,7 +128,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     const hours = (t: number) => Math.round((NOW - t) / 3600_000)
     const row = (o: Order) => ({ id: o.id, no: o.no, kanal: CHANNEL[account(o.acc).type].label, hesap: account(o.acc).name, durum: o.status, odeme: o.pay, etiket: o.label, tedarik: o.supply, bekleme_saat: hours(o.t), sorun: o.issue ?? null, ...(R.finance ? { tutar: o.total, para_birimi: o.cur } : {}) })
     const today = dayKey(NOW), yest = dayKey(NOW - 86400_000)
-    const eur = (l: Order[]) => Math.round(l.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0))
+    const eur = (l: Order[]) => Math.round(l.filter(o => o.cur === 'EUR' && o.status !== 'iptal' && o.status !== 'iade').reduce((s, o) => s + o.total, 0)) // ciro: iptal ve iade hariç
     const ids = new Set(st.accounts.map(a => a.id))
     const badJobs = st.jobs.filter(j => (j.status === 'basarisiz' || j.status === 'kismi') && (j.acc === null || ids.has(j.acc)))
 
@@ -476,7 +475,7 @@ export default function Agent({ open, onClose, ask }: { open: boolean; onClose: 
     if (has('sipariş', 'dün', 'bugün', 'satış', 'ciro')) {
       const today = dayKey(NOW), yest = dayKey(NOW - 86400_000)
       const dT = st.orders.filter(o => dayKey(o.t) === today), dY = st.orders.filter(o => dayKey(o.t) === yest)
-      const eur = (l: Order[]) => l.filter(o => o.cur === 'EUR').reduce((s, o) => s + o.total, 0)
+      const eur = (l: Order[]) => l.filter(o => o.cur === 'EUR' && o.status !== 'iptal' && o.status !== 'iade').reduce((s, o) => s + o.total, 0)
       return {
         body: <><p className="m-0">Dün {plural(dY.length, 'sipariş')}{R.finance ? `, ${fmtMoney(eur(dY), 'EUR', 0)}` : ''} geldi. Bugün şu ana kadar {fmtNum(dT.length)}{R.finance ? ` (${fmtMoney(eur(dT), 'EUR', 0)})` : ''}.</p>
           <ul className="m-0 mt-2 pl-4">{byChannel(dY).map(l => <li key={l}>{l}</li>)}</ul>

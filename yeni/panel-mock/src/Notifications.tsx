@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, ArrowRight, Bell, BellOff, CheckCheck, CircleCheck, Clock, ListTodo, MoreHorizontal, Settings2, Sparkles, UserCheck, X } from 'lucide-react'
-import { NOW, account, ago, dayKey, fmtNum, hasIssue, isOpen, overdue, toShip, type Order } from './data'
+import { NOW, reservedMap, reservedQty, account, ago, dayKey, fmtNum, hasIssue, isOpen, overdue, toShip, type Order } from './data'
 import { ROLES, useStore } from './store'
 
 /* Bildirim merkezi. Panel kendiliğinden üç şey söyler:
@@ -58,10 +58,9 @@ export default function Notifications({ open, setOpen, onAsk }: { open: boolean;
         const first = failed[0].acc ? account(failed[0].acc).name : 'Sistem'
         add({ id: 'esitleme', kind: 'olmadi', n: failed.length, t: Math.max(...failed.map(j => j.last)), title: failed.length === 1 ? `${first}: eşitleme başarısız` : `${first} ve ${fmtNum(failed.length - 1)} iş daha eşitlenemedi`, detail: failed[0].msg ?? failed[0].kind, href: '#/sync', cta: 'Eşitleme işleri', ask: 'Kanallarda sorun var mı?' })
       }
-      const res = new Map<string, number>()
-      for (const x of o) if (isOpen(x) && x.supply === 'fiziki') for (const i of x.items) res.set(i.pid + '|' + x.wh, (res.get(i.pid + '|' + x.wh) ?? 0) + i.qty)
+      const res = reservedMap(st.allOrders)
       let neg = 0
-      for (const p of st.products) for (const [wh, r] of Object.entries(p.stock)) if (r && r.fiziki !== null && r.fiziki - (res.get(p.id + '|' + wh) ?? 0) < 0) neg++
+      for (const p of st.products) for (const [wh, r] of Object.entries(p.stock)) if (r && (!st.whId || wh === st.whId) && r.fiziki !== null && r.fiziki - reservedQty(res, p.id, wh) < 0) neg++
       add(neg > 0 && { id: 'eksi-stok', kind: 'olmadi', n: neg, t: NOW - 2 * H, title: `${fmtNum(neg)} üründe satılabilir stok eksiye düştü`, detail: 'Açık siparişler eldeki sayılmış stoktan fazla; fazla satış riski.', href: '#/reservations', cta: 'Stok ayırma', ask: 'Stokta risk var mı?' })
       const lerr = o.filter(x => x.label === 'hata' && isOpen(x))
       add(lerr.length > 0 && { id: 'etiket-hata', kind: 'olmadi', n: lerr.length, t: NOW - 50 * 60_000, title: `${fmtNum(lerr.length)} siparişin etiketi oluşturulamadı`, detail: 'Çoğunlukla adres eksikliği; düzeltip yeniden deneyin.', href: '#/labels', cta: 'Etiketlere git' })

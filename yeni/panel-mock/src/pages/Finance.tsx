@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { Thumb } from '../Thumb'
-import { COMPANIES, RET, VAT, ago, company, fmtDT, fmtMoney, fmtNum, product, whName, type Order } from '../data'
+import { COMPANIES, NOW, RET, VAT, ago, company, fmtDT, fmtMoney, fmtNum, product, whName, type Order } from '../data'
 import { ROLES, useStore } from '../store'
 import { Badge, Btn, Card, Chan, Empty, PageHead, Pager, Tabs, td, th } from '../ui'
 
@@ -52,17 +52,17 @@ export default function Finance() {
   const inv = useMemo(() => {
     const out: { no: string; o: Order; kind: 'Satış' | 'İade'; status: string }[] = []
     const list = orders.filter(o => o.invoice !== 'yok').sort((a, b) => a.t - b.t)
-    list.forEach((o, i) => {
-      const n = String(i + 1).padStart(5, '0')
-      out.push({ no: o.invoice === 'kesin' ? `RE-2026-${n}` : 'Taslak', o, kind: 'Satış', status: o.invoice })
-      if (o.status === 'iade' && (o.ret === 'odeme' || o.ret === 'cozuldu')) out.push({ no: `RET-2026-${n}`, o, kind: 'İade', status: 'kesin' })
+    list.forEach(o => {
+      out.push({ no: o.invoice === 'kesin' ? o.invNo ?? 'Numara bekliyor' : 'Taslak', o, kind: 'Satış', status: o.invoice })
+      // İade faturası, iptal ettiği satış faturasının numarasına bağlıdır.
+      if (o.status === 'iade' && (o.ret === 'odeme' || o.ret === 'cozuldu')) out.push({ no: o.invNo ? o.invNo.replace('RE-', 'RET-') : 'RET · satış faturası yok', o, kind: 'İade', status: 'kesin' })
     })
     return out.reverse()
   }, [orders])
   useEffect(() => setPage(1), [orders.length, tab])
   const vat = useMemo(() => COMPANIES.map(c => {
     const rate = VAT[c.country]
-    const list = orders.filter(o => o.company === c.id && o.invoice === 'kesin' && o.status !== 'iade' && o.status !== 'iptal')
+    const list = orders.filter(o => o.company === c.id && o.invoice === 'kesin' && o.status !== 'iade' && o.status !== 'iptal' && o.t >= NOW - 30 * 86400_000)
     const gross = list.reduce((a, o) => a + o.total, 0)
     return { c, rate, n: list.length, gross, net: gross / (1 + rate), cur: list[0]?.cur ?? 'EUR' as const }
   }).filter(r => r.n > 0), [orders])

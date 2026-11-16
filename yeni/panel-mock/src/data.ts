@@ -222,6 +222,7 @@ export interface Order {
   items: { pid: string; qty: number; price: number }[]
   cust: { name: string; street: string; zip: string; city: string; country: string; email: string; phone: string }
   tracking?: { carrier: string; no: string }; ret?: RetStage
+  invNo?: string // fatura numarası: kesinleştirme anında verilir, bir daha değişmez
 }
 const FIRST = ['Anna', 'Lukas', 'Mehmet', 'Sophie', 'Jan', 'Elif', 'Thomas', 'Fatma', 'Daan', 'Laura', 'Emre', 'Julia', 'Pieter', 'Zeynep', 'Max', 'Lena']
 const LAST = ['Müller', 'Schmidt', 'Yılmaz', 'de Vries', 'Kaya', 'Weber', 'Jansen', 'Demir', 'Fischer', 'Bakker', 'Şahin', 'Wagner']
@@ -287,9 +288,22 @@ function buildOrders(): Order[] {
   return out.sort((a, b) => b.t - a.t)
 }
 export const ORDERS0 = buildOrders()
+// Fatura numarası şirket başına boşluksuz sıradır ve yalnız kesinleşen faturaya verilir; taslak numara tüketmez.
+// Süzgeç, sıralama ya da sonradan gelen sipariş verilmiş bir numarayı değiştirmez.
+export const nextInvNo = (orders: Order[], companyId: string, plus = 0) =>
+  `RE-2026-${companyId.replace(/[^a-z0-9]/gi, '').slice(0, 4).toUpperCase()}-${String(orders.filter(o => o.company === companyId && o.invNo).length + 1 + plus).padStart(5, '0')}`
+;[...ORDERS0].sort((a, b) => a.t - b.t).forEach(o => { if (o.invoice === 'kesin') o.invNo = nextInvNo(ORDERS0, o.company) })
 
 export const isOpen = (o: Order) => o.status === 'yeni' || o.status === 'hazirlaniyor'
 export const toShip = (o: Order) => isOpen(o) && o.pay === 'odendi'
+/** Açık siparişler için ayrılan adet (ürün|depo). Stok depoda şirketler arasında ortaktır; bu yüzden hesap her zaman
+    BÜTÜN siparişlerle yapılır, şirket süzgeciyle daraltılmış listeyle değil. */
+export function reservedMap(allOrders: Order[]) {
+  const res = new Map<string, { o: Order; qty: number }[]>()
+  for (const o of allOrders) if (isOpen(o) && o.supply === 'fiziki') for (const it of o.items) { const k = it.pid + '|' + o.wh; res.set(k, [...(res.get(k) ?? []), { o, qty: it.qty }]) }
+  return res
+}
+export const reservedQty = (res: ReturnType<typeof reservedMap>, pid: string, wh: string) => (res.get(pid + '|' + wh) ?? []).reduce((a, x) => a + x.qty, 0)
 export const overdue = (o: Order) => toShip(o) && o.supply === 'fiziki' && NOW - o.t > 48 * H
 export const dropWaiting = (o: Order) => isOpen(o) && o.supply !== 'fiziki'
 export const hasIssue = (o: Order) => isOpen(o) && (!!o.issue || o.label === 'hata')
