@@ -1,91 +1,96 @@
 # Graph Report - WaviERP  (2026-11-16)
 
 ## Corpus Check
-- 43 files · ~147,258 words
+- 39 files · ~417,190 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1854 nodes · 5261 edges · 84 communities (76 shown, 8 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 427 edges (avg confidence: 0.79)
+- 1923 nodes · 5367 edges · 89 communities (79 shown, 10 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 429 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
-- App.tsx / Badge()
 - data.ts / store.tsx
-- Alan Modeli / Panel Analizi - Birlesik Bulgular
 - panel-harita.md: WawiERP panel keş / Tek giriş noktası /?page=<ad>
-- Orders.tsx / Money.tsx
-- Agent.tsx / account()
-- orders-pool / Sipariş
-- customers-master / Satış faturası RE-<şirket>-<yıl>-<
-- warehouse_product / Ürün kartı
+- App.tsx / Badge()
+- Alan Modeli / Panel Analizi - Birlesik Bulgular
+- invoices / customers-master
+- warehouse / warehouse_product
+- Agent.tsx / Catalog.tsx
 - server.mjs / assistant.mjs
-- 02-urun-katalog-stok.md: Ürün, kat / Klasik form yolu POST ?page + erp_
-- warehouse-home / overview
-- Sunum: WawiERP Rakipler ve Yol Har / Belge 10 Rakip ve Hedef Mimari
 - team / Belge 09 Güvenlik ve Uyum
+- orders-pool / Sipariş
+- Automation.tsx / Overview.tsx
+- video-uret.py / time
+- warehouse-home / overview
+- Selling.tsx / Money.tsx
+- 02-urun-katalog-stok.md: Ürün, kat / Klasik form yolu POST ?page + erp_
 - Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler
-- accounting / orders-ebay
-- Yeni panel mock / Bildirim merkezi
-- warehouse / Üç stok modeli
-- Karar 0006 - Panelde yapay zekâ as / Asistan: yapay zekâ bağlı biçim
-- Otomasyon çekirdeği: Olay → Kural / 14 hazır kural
+- ui.tsx / Reservations.tsx
+- photos.ts / PHOTO
+- Platform.tsx / Channels.tsx
 - Ön Yüz Mimarisi / Desen: modal/dialog kabuğu her dos
 - Beyin katmanı / WawiERP Claude Kuralları
 - WawiERP / Entegrasyonlar: mevcut
-- Kanal sınıfı: kanala özel sayfalar / Aynı iş her kanalda ayrı sayfa/JS/
-- video-uret.py / go()
 - /api/menu-counts.php / Sayac/oturum uclari
-- Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları
+- Otomasyon çekirdeği: Olay → Kural / 14 hazır kural
+- Kanal sınıfı: kanala özel sayfalar / Aynı iş her kanalda ayrı sayfa/JS/
 - /api/dhl-labels.php / dhl-labels.js
-- Nerede güçlüyüz, nerede eksik / S8 Stok modeli ayrı alanlar, harek
-- Mobile.tsx / Thumb()
-- Platform.tsx / Role
-- Chat.tsx / Messages()
+- Karar 0006 - Panelde yapay zekâ as / Asistan akışı: soru → veri → yanıt
 - Landing.tsx / Landing()
-- finance-documents / Çıkış belgesi defteri
+- Dropshipping stok modeli / purchases
+- Sunum: WawiERP Rakipler ve Yol Har / Pazar haritası: odak
+- Yeni panel mock / Bildirim merkezi
+- Chat.tsx / Messages()
+- S8 Stok modeli ayrı alanlar, harek / Dalga 1: Sağlam temel
+- Belge 10 Rakip ve Hedef Mimari / Belge 11 Yeniden Tasarım Girdileri
 - package.json / devDependencies
-- Güvenlik incelemesi 2026-11-15 / Karar 0009: taslak panel gerçek si
-- Selling.tsx / PriceRules()
-- Pazaryerleri ve mağazalar / DHL
-- Quality.tsx / QualityQueue()
-- Karar 0004 - Yığın ayrıntıları / BullMQ + Redis
+- Mobile.tsx / Pack()
+- Satış Kanalları Ekranları / metro
+- Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları
+- Quality.tsx / revenueOrders()
+- Sıradaki adımlar / Ne hazır, ne değil durum tablosu
 - Bilgi Mimarisi / i18n 3: Satır içi t(tr, de) yardım
 - API Yuzeyi / app.js
+- Asistan: yapay zekâ bağlı biçim / Güvenlik incelemesi 2026-11-15
+- Karar 0009: taslak panel gerçek si / Konsey incelemesi 2
+- Pazaryerleri ve mağazalar / Kaynak chip sayıları
 - İlan yaşam döngüsü / Adım 3: Kategori eşleme
-- company-home / Kaynak chip sayıları
-- Satış Kanalları Ekranları / metro
-- Automation.tsx / Builder()
+- WawiERP Mimari ve Geçiş Sunumu / WawiERP Teknoloji Seçenekleri Sunu
+- Karar 0004 - Yığın ayrıntıları / BullMQ + Redis
 - /api/invoices.php / invoice-workflow.js
-- WawiERP Mimari ve Geçiş Sunumu / Karar 0003 - Teknoloji yığını
-- fmtNum() / Reservations.tsx
 - tr-market / tr-market-products
+- Geliştirme panosu: konuşmalardan s / Ekip mesajlaşması
 - Çoklu dil: üç ayrı mekanizma, orta / i18n 2: wawiText yardımcısı
 - compilerOptions / tsconfig.json
+- DHL / Toplama, paketleme, kargo
 - Çok kiracılı / Sıfırdan geliştirme
-- landing-main.tsx / App()
+- main.tsx / App()
 - Cloudflare / DNS / DNSSEC kapalı
-- WawiERP Teknoloji Seçenekleri Sunu / PostgreSQL
+- typescript / NestJS
 - Karar 0005 - Bulut sağlayıcı / AWS Frankfurt
 - Sidebar.tsx / Logo()
 - WawiERP Analiz Sunumu / Önemli sorunlar listesi
-- Sıradaki adımlar / Kaynak kod gelince doğrulanacak va
-- İş akışı 2: Barkodla fiziki sayım / İş akışı 2 adım 2: İşlemi yapanı s
-- Ne hazır, ne değil durum tablosu / Panel ekranları: çalışıyor, verile
+- Toptan satış sihirbazı / Finans akışı 4: cari seç/oluştur
+- Nerede güçlüyüz, nerede eksik / API ve bildirim uçları
 - Asterbuy siparişi / Asterbuy: Ödeme bekliyor
-- Ticket / ticket sayısı çelişkisi
+- İş akışı 2: Barkodla fiziki sayım / İş akışı 2 adım 2: İşlemi yapanı s
 - İş akışı 4: Depolar arası stok akt / İş akışı 4 adım 4: Dağıtımı önizle
+- İş akışı 5: Mükerrer birleştirme / İş akışı 5 adım 2: 2-20 kart seç
 - Banka içe aktarma penceresi / /api/shopify-bank-import.php
 - Geçiş aşamaları 0-5 / Stok defteri
 - Muhasebe aktarımı / S3 KDV özeti %19 sabit
-- TR entegratörleri grubu / Dopigo
+- /allordersfilter / 504 hatası
 - İş akışı 6 Dropship: Oluşturulacak / Ödeme bekliyor
 - İş akışı 3 Toplama: şirket/DHL hes / Siparişleri getir ve seç
 - İş akışı 8 İade: DHL iade etiketi / İncele / işle
+- Dışa aktarım: export=csv | excel | / Kapsam seçici: 5 depo, 11 şirket,
 - İş akışı 7 Depo içi sevk: plan tas / Depodan çıkar
 - İş akışı 1: Yeni ürün girişi / İş akışı 1 adım 2: Bulunamazsa yen
+- KDV/MwSt satış özeti sabit %19 / KDV: satır bazında; muhasebe özeti
 - scripts / build
 - Toplu fatura PDF/e-posta / İş akışı 5 Fatura: satırdan yazdır
+- İş akışı 7: EAN / görsel düzeltme / İş akışı 7 adım 1: Eksik EAN/görse
 - İş akışı 1 Sipariş girişi: platfor / Asterbuy 5 dakikada bir kontrol
 - Finans akışı 2: liste İşlemler Fat / edit_context, edit_save
 - Panel mock index.html / Panel mock giriş noktası
@@ -115,8 +120,8 @@
   sunum/wawierp-analiz-sunumu.html → kararlar/0001-cok-kiracili-sistem.md
 - `Müşteri bilgisi role göre gizli; açınca kayda geçer` --semantically_similar_to--> `Müşteri adı ve iletişim bilgisi asistana verilmez`  [INFERRED] [semantically similar]
   sunum/wawierp-yenilikler.html → kararlar/0006-asistan-katmani.md
-- `NestJS` --conceptually_related_to--> `typescript`  [INFERRED]
-  kararlar/0004-yigin-ayrintilari.md → yeni/panel-mock/package.json
+- `Karar 0003 - Teknoloji yığını` --references--> `typescript`  [EXTRACTED]
+  kararlar/0003-teknoloji-yigini.md → yeni/panel-mock/package.json
 
 ## Import Cycles
 - None detected.
@@ -148,167 +153,163 @@
 - **Kişisel veri ve kimlik güvenliği kümesi (S1, S6, maskeleme ilkesi)** — docs_11_yeniden_tasarim_girdileri_s1, docs_11_yeniden_tasarim_girdileri_s6, docs_11_yeniden_tasarim_girdileri_ilke_sunucu_maskeleme, docs_09_guvenlik_uyum_kisisel_veri_dom, docs_09_guvenlik_uyum_pin_kimlik [INFERRED 0.85]
 - **Sayaç tutarsızlığı ve yavaşlık sorun kümesi (S2, S4, tek kaynak ilkesi)** — docs_11_yeniden_tasarim_girdileri_s2, docs_11_yeniden_tasarim_girdileri_s4, docs_11_yeniden_tasarim_girdileri_ilke_tek_kaynak_sayac, docs_08_performans_sayac_ucu_cogullugu [INFERRED 0.85]
 
-## Communities (84 total, 8 thin omitted)
+## Communities (89 total, 10 thin omitted)
 
-### Community 0 - "App.tsx / Badge()"
-Cohesion: 0.11
-Nodes (86): GOTO, NAV, NoAccess(), Palette(), Shell(), Shortcuts(), VIEWS, Feedback() (+78 more)
+### Community 0 - "data.ts / store.tsx"
+Cohesion: 0.05
+Nodes (85): B2B, B2B0, b2bTotals(), carrierOf(), CARRIERS, MANUAL0, ManualLabel, Msg (+77 more)
 
-### Community 1 - "data.ts / store.tsx"
-Cohesion: 0.04
-Nodes (82): B2B, B2B0, CARRIERS, MANUAL0, ManualLabel, Msg, TFLOW, Ticket (+74 more)
+### Community 1 - "panel-harita.md: WawiERP panel keş / Tek giriş noktası /?page=<ad>"
+Cohesion: 0.05
+Nodes (72): eBay (mevcut), Modül: Ön muhasebe ve cari, Sorun: shipments/shipping ve pool adlandirmasi, Sorun: kanal basina kopya sayfa/JS/uc, Sorun: negatif fiziki stok (25.061 kritik kayit), Adlandirma tutarsizliklari (shipments/shipping, pool, sorunlu, TR/DE/EN), Yeniden kurulan menu agaci (yerlesim tahmin), Ayni ise giden yinelenen yollar (+64 more)
 
-### Community 2 - "Alan Modeli / Panel Analizi - Birlesik Bulgular"
+### Community 2 - "App.tsx / Badge()"
+Cohesion: 0.12
+Nodes (79): GOTO, NAV, NoAccess(), Palette(), Root(), Shell(), Shortcuts(), useRoute() (+71 more)
+
+### Community 3 - "Alan Modeli / Panel Analizi - Birlesik Bulgular"
 Cohesion: 0.05
 Nodes (57): Belge: Panel Analizi - Birlesik Bulgular, Baglam adreste tasiniyor (company, warehouse, channel, account), Sorun: kanal esitlemeleri bayat (Ozon, OTTO), Sorun: denetim kaydi DHL gurultusu, Koda gomulu kanal/depo kimlikleri, Hiyerarsi Depo -> Sirket -> Kanal -> Hesap, Iki ayri yazma yolu (erp_action formu + /api/*.php), Ilan yasam dongusu (havuz -> onizle -> gonder -> kontrol -> kaldir) (+49 more)
 
-### Community 3 - "panel-harita.md: WawiERP panel keş / Tek giriş noktası /?page=<ad>"
-Cohesion: 0.07
-Nodes (51): Modül: Ön muhasebe ve cari, Sorun: shipments/shipping ve pool adlandirmasi, Sorun: negatif fiziki stok (25.061 kritik kayit), Adlandirma tutarsizliklari (shipments/shipping, pool, sorunlu, TR/DE/EN), Yeniden kurulan menu agaci (yerlesim tahmin), Sayfa başına 91-98 istek, Müşteri kişisel verisi DOM'da açık (istemcide gizleme), Açık soru 3: faturalar yalnız Almanya deposunda mı (+43 more)
-
-### Community 4 - "Orders.tsx / Money.tsx"
+### Community 4 - "invoices / customers-master"
 Cohesion: 0.05
-Nodes (56): lucide-react, react, Account, CHANNEL, ChannelType, COMM, OStatus, OSTATUS (+48 more)
+Nodes (52): Fatura, Müşteri, Modül: B2B müşteri portalı, Modül: Faturalar ve belgeler, Sayfa başına 91-98 istek, Açık soru 3: faturalar yalnız Almanya deposunda mı, data-invoice-*: fatura yazdır/düzenle/gönder/iade faturası, B2B cari (48 cari, para birimi başına ayrı bakiye) (+44 more)
 
-### Community 5 - "Agent.tsx / account()"
-Cohesion: 0.09
+### Community 5 - "warehouse / warehouse_product"
+Cohesion: 0.07
+Nodes (43): EAN, SKU, Ürün, Modül: Ortak ürün kataloğu, Sanal stok, Beyin düğüm türleri (Modül, Varlık, Stok modeli, Entegrasyon, Akış, Altyapı, Risk, Karar), Sorun: yavas liste uclari, 504, zaman asimi, Sorun: sayac-liste ve stok/ticket tutarsizliklari (+35 more)
+
+### Community 6 - "Agent.tsx / Catalog.tsx"
+Cohesion: 0.07
 Nodes (55): Act, ActKind, Agent(), answer(), runLive(), runTool(), send(), ApiMsg (+47 more)
 
-### Community 6 - "orders-pool / Sipariş"
+### Community 7 - "server.mjs / assistant.mjs"
+Cohesion: 0.05
+Nodes (42): abortOnClose(), askLimit, assistantStatus(), contentLimit, handleAssistant(), handleContent(), PER_DAY, PER_MINUTE (+34 more)
+
+### Community 8 - "team / Belge 09 Güvenlik ve Uyum"
 Cohesion: 0.06
-Nodes (36): Fatura, Sipariş, Modül: Faturalar ve belgeler, Modül: Satın alma ve tedarikçiler, WawiERP Panel: Sipariş, Kargo, İade, Destek Alanı, data-customer-edit: müşteri bilgisi düzenle, data-dhl-order/download/settings/recreate, data-external-tracking-order: harici takip no (+28 more)
+Nodes (41): Modül: Ekip, yetki, denetim izi, Rol basina menu (yalniz sistem yoneticisi goruldu), Rol x depo x modul yetki matrisi belgesiz, Belge 09 Güvenlik ve Uyum, Giriş sayfası başlıkları ve CSP, Denetim kaydı kapsamı (180/30 gün saklama), DSGVO/KVKK boşlukları (Impressum, AVV, silme, aktarım), E-fatura (XRechnung/ZUGFeRD) gereksinimi (+33 more)
 
-### Community 7 - "customers-master / Satış faturası RE-<şirket>-<yıl>-<"
-Cohesion: 0.07
-Nodes (41): Müşteri, Modül: B2B müşteri portalı, B2B cari (48 cari, para birimi başına ayrı bakiye), Cari borcu = satış faturaları − tahsilatlar, para birimleri toplanmaz, CARİ KAYDI EKSİK rozeti, Cari lokasyonu (teslimat, müşteri portalı stoğu), Cari portal kullanıcısı (can_adjust_stock yetkisi), Eski ön ek WAWI-LE-<yıl>-<sıra> (+33 more)
+### Community 9 - "orders-pool / Sipariş"
+Cohesion: 0.06
+Nodes (31): Sipariş, WawiERP Panel: Sipariş, Kargo, İade, Destek Alanı, data-dhl-order/download/settings/recreate, data-external-tracking-order: harici takip no, DHL etiketi (gidiş + ayrı iade etiketi, ücretli, yeniden oluşturulabilir), Sipariş durumu: Hazırlanıyor (İşlemde), Sipariş durumu: İptal / iade, Sipariş durumu: Tamamlandı (+23 more)
 
-### Community 8 - "warehouse_product / Ürün kartı"
+### Community 10 - "Automation.tsx / Overview.tsx"
 Cohesion: 0.09
-Nodes (38): EAN, SKU, Ürün, Modül: Ortak ürün kataloğu, Beyin düğüm türleri (Modül, Varlık, Stok modeli, Entegrasyon, Akış, Altyapı, Risk, Karar), Sorun: yavas liste uclari, 504, zaman asimi, Sorun: sayac-liste ve stok/ticket tutarsizliklari, Ayni ise giden yinelenen yollar (+30 more)
+Nodes (39): askAssistant(), useChat(), ago(), dayKey(), dropWaiting(), hasIssue(), isOpen(), overdue() (+31 more)
 
-### Community 9 - "server.mjs / assistant.mjs"
-Cohesion: 0.07
-Nodes (39): abortOnClose(), askLimit, assistantStatus(), contentLimit, handleAssistant(), handleContent(), PER_DAY, PER_MINUTE (+31 more)
-
-### Community 10 - "02-urun-katalog-stok.md: Ürün, kat / Klasik form yolu POST ?page + erp_"
+### Community 11 - "video-uret.py / time"
 Cohesion: 0.11
-Nodes (40): Varlik: stok hareketi (degismez kayit), Klasik form yolu POST ?page + erp_action, Gömülü global modallar (Depo/Tedarikçi/Şirket/Stok/Kategori ekle vb.), message_action=send (depolara mesaj; erp_action yok), 02-urun-katalog-stok.md: Ürün, katalog, stok, satın alma alanı, bulk_products_download alanı (erp_action değil): şablon/CSV dışa aktarma, Depo ürün kaydı (151.075): ürün kartı x depo; sale_price, physical_stock, dropship_stock, minimum_stock, bin_location, Depo EAN 3, sanal stok, Kategori: ad, renk, ürün sayısı, depo görünürlüğü (411 kategori) (+32 more)
+Nodes (27): go(), mux(), record(), s_agent_act(), s_agent_q(), s_alerts(), s_bell(), s_channels() (+19 more)
 
-### Community 11 - "warehouse-home / overview"
-Cohesion: 0.14
-Nodes (32): Depo, Şirket, Modül: Çoklu depo ve şirket, En cok baglantili kavramlar, Kanal/mağaza (41), şirket (11), depo (5) süzgeç boyutları, Ana/alt depo ilişkisi: İstanbul ana; Almanya, Hollanda, Mega B, Technowelt alt depo, Satış kanalı: şirket + pazaryeri/platform + hesap (42 kanal), Bağlam zinciri: şirket → depo → kanal → hesap (URL ile taşınır) (+24 more)
+### Community 12 - "warehouse-home / overview"
+Cohesion: 0.15
+Nodes (34): Depo, Şirket, Modül: Çoklu depo ve şirket, En cok baglantili kavramlar, Kanal/mağaza (41), şirket (11), depo (5) süzgeç boyutları, Ana/alt depo ilişkisi: İstanbul ana; Almanya, Hollanda, Mega B, Technowelt alt depo, Drop tedarikçi: B2BUhren Germany, Satış kanalı: şirket + pazaryeri/platform + hesap (42 kanal) (+26 more)
 
-### Community 12 - "Sunum: WawiERP Rakipler ve Yol Har / Belge 10 Rakip ve Hedef Mimari"
-Cohesion: 0.11
-Nodes (36): Belge 10 Rakip ve Hedef Mimari, Base (BaseLinker), Bilinen mevcut durum (tek PHP girişi, stok defteri yok, iki yazma yolu), Billbee, Doğrulanamayan rakip verileri (resmi fiyat sayfaları açılamadı), JTL-Wawi, A+C birleşimi (önce stok defteri, sonra kanal eklentisi), Pickware (+28 more)
-
-### Community 13 - "team / Belge 09 Güvenlik ve Uyum"
-Cohesion: 0.08
-Nodes (36): Modül: Ekip, yetki, denetim izi, Rol basina menu (yalniz sistem yoneticisi goruldu), Rol x depo x modul yetki matrisi belgesiz, Belge 09 Güvenlik ve Uyum, Giriş sayfası başlıkları ve CSP, Denetim kaydı kapsamı (180/30 gün saklama), DSGVO/KVKK boşlukları (Impressum, AVV, silme, aktarım), E-fatura (XRechnung/ZUGFeRD) gereksinimi (+28 more)
-
-### Community 14 - "Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler"
-Cohesion: 0.09
-Nodes (37): S9 Kanal başına sayfa/JS/uç kopyası (puan 6), Açılışta sormadan fark ettiklerini bildirme, Aday: destek yanıtı taslağı, Aday: komisyon ve kargo dahil net kâr, Aday: yavaş satan stok raporu, Dalga 3: Fark yaratan, Eksik: belgelenmiş açık API, Eksik: kendi kendine kayıt ve açık fiyat (+29 more)
-
-### Community 15 - "accounting / orders-ebay"
-Cohesion: 0.08
-Nodes (27): eBay (mevcut), Sorun: kanal basina kopya sayfa/JS/uc, Yavaş sayfa TTFB (warehouse-home 3,2 sn), S2 Sayaç ve özetler çelişiyor (puan 9), data-* düğmeleri + JS ile çalışan eylemler (erp_action yok), data-open: iade ayrıntı diyaloğu, data-pack-action: toplama listesi, toplu fatura, data-action: fetch-ebay-orders (limit 200) (+19 more)
-
-### Community 16 - "Yeni panel mock / Bildirim merkezi"
-Cohesion: 0.07
-Nodes (35): Denetim kaydı "asistan aracılığıyla" + 10 sn geri alma, Her ekran başlığında ekran simgesi, Hareket ilkesi: kısa, yalnız transform ve opacity, hareketi azalt tercihinde kapalı, Akış şeridi: 26 ekranda işin dört adımda nasıl aktığı (gizlenebilir), Tabloda sıralı belirme, kayan çekmece, boş durum çizimi, Belge: panel-mock README, Erteleme (1 saat, yarın sabah) ve "Ben alıyorum", Gerçek sistemde gelecek: tarayıcı bildirimi, e-posta özeti, mobil bildirim (+27 more)
-
-### Community 17 - "warehouse / Üç stok modeli"
-Cohesion: 0.11
-Nodes (29): Tedarikçi, Dropshipping stok modeli, Fiziki stok, Sanal stok, Alış belgesi: fatura / irsaliye, ödeme durumu, Drop tedarikçi: Asterbuy (796 ürün, API, alış fiyatı KDV hariç), Drop tedarikçi: B2BUhren Germany, Drop tedarikçi: BueroArena (+21 more)
-
-### Community 18 - "Karar 0006 - Panelde yapay zekâ as / Asistan: yapay zekâ bağlı biçim"
+### Community 13 - "Selling.tsx / Money.tsx"
 Cohesion: 0.10
-Nodes (26): API anahtarı yalnız sunucuda, şifre ve istek sınırı, Aynı API, kullanıcının yetkisiyle, Gerçek dil modeli (Claude), Tek seferde en fazla 25 kayıt, Hazırla, onayla düzeyi (varsayılan), Kendiliğinden düzeyi, Müşteri mesajları ve ürün metinleri veridir, talimat değildir, Müşteri adı ve iletişim bilgisi asistana verilmez (+18 more)
+Nodes (37): COMM, COMPANIES, company(), fmtMoney(), isRevenue(), VAT, aggregate(), buildLines() (+29 more)
 
-### Community 19 - "Otomasyon çekirdeği: Olay → Kural / 14 hazır kural"
+### Community 14 - "02-urun-katalog-stok.md: Ürün, kat / Klasik form yolu POST ?page + erp_"
 Cohesion: 0.12
-Nodes (28): Her çalışma tetikleyen olayla kayda geçer, Otomasyon çekirdeği: Olay → Kural → Onay düzeyi, 14 hazır kural, Kendiliğinden düzeyi (kurallar), Kural (koşul + işlem), Kural: drop siparişi iletme, Kural: eşitlemeyi yeniden deneme, Kural: fatura ve takip bildirimi (+20 more)
+Nodes (37): Varlik: stok hareketi (degismez kayit), Klasik form yolu POST ?page + erp_action, Gömülü global modallar (Depo/Tedarikçi/Şirket/Stok/Kategori ekle vb.), message_action=send (depolara mesaj; erp_action yok), 02-urun-katalog-stok.md: Ürün, katalog, stok, satın alma alanı, Depo ürün kaydı (151.075): ürün kartı x depo; sale_price, physical_stock, dropship_stock, minimum_stock, bin_location, Depo EAN 3, sanal stok, Kategori: ad, renk, ürün sayısı, depo görünürlüğü (411 kategori), Stok hareketi: ürün, tarih, depo, önce->sonra, değişim, kullanıcı (+29 more)
 
-### Community 20 - "Ön Yüz Mimarisi / Desen: modal/dialog kabuğu her dos"
+### Community 15 - "Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler"
+Cohesion: 0.09
+Nodes (36): S9 Kanal başına sayfa/JS/uç kopyası (puan 6), Açılışta sormadan fark ettiklerini bildirme, Kural: havale eşleştirme, Aday: destek yanıtı taslağı, Aday: komisyon ve kargo dahil net kâr, Aday: yavaş satan stok raporu, Dalga 3: Fark yaratan, Eksik: kendi kendine kayıt ve açık fiyat (+28 more)
+
+### Community 16 - "ui.tsx / Reservations.tsx"
+Cohesion: 0.09
+Nodes (32): lucide-react, react, reservedMap(), STAFF, WAREHOUSES, MATRIX, MODS, buildRows() (+24 more)
+
+### Community 18 - "Platform.tsx / Channels.tsx"
+Cohesion: 0.07
+Nodes (31): Country, Health, JOB, JobStatus, LISTING_FLOW, ListingStatus, FLOW_COLOR, HT (+23 more)
+
+### Community 19 - "Ön Yüz Mimarisi / Desen: modal/dialog kabuğu her dos"
 Cohesion: 0.10
 Nodes (27): Rakip fiyatlar (eBay, Kaufland, Metro, Otto; 24 saatte bir okunur), API: /api/catalog-search.php, API: /api/company-applications.php, API: /api/marketplace-stop.php, API: /api/product-entry.php, API: /api/product-list-insights.php, API: /api/product-market-prices.php, API: /api/product-organization.php (+19 more)
 
-### Community 21 - "Beyin katmanı / WawiERP Claude Kuralları"
+### Community 20 - "Beyin katmanı / WawiERP Claude Kuralları"
 Cohesion: 0.14
 Nodes (25): Oturum başında kuralları, Çalışırken kuralları, WawiERP Claude Kuralları (CLAUDE.md), Oturum sonunda kuralları, Origin sunucu (tek, kararsız), Plesk (Linux origin), Risk: origin 525/500 hataları, Risk: x-powered-by başlıkları PHP/Plesk ifşa ediyor (+17 more)
 
-### Community 22 - "WawiERP / Entegrasyonlar: mevcut"
+### Community 21 - "WawiERP / Entegrasyonlar: mevcut"
 Cohesion: 0.11
 Nodes (29): Yeniden tasarım için açık sorular (4), Entegrasyonlar: mevcut (19), WAWIWELCOME oturum çerezi, PHP 8.1.34 (klasik PHP uygulama), Billbee entegrasyonu (mevcut), idealo (mevcut), JTL-Wawi entegrasyonu (mevcut), XML/CSV (mevcut) (+21 more)
 
-### Community 23 - "Kanal sınıfı: kanala özel sayfalar / Aynı iş her kanalda ayrı sayfa/JS/"
-Cohesion: 0.17
-Nodes (23): Kaufland (mevcut), Shopify (mevcut), Kaufland hesap işleyişi: Sipariş alımı, Ürün havuzu aktarımı, Stok/fiyat otomasyonu, Fiyat ve adet hesap bazında ayrı kayıt (Wawi fiyatı ≠ platform fiyatı), Görülemeyen: send-kaufland products ve issues listeleri, Görülemeyen: shopify-pool, send-shopify, ozon-pool, send-ozon, mixoutlet-payments, worklist images satırları, Kaufland: send-kaufland, catalog=kaufland/products/issues, Mixoutlet / Mollie ödeme eşleştirme kanalı (+15 more)
-
-### Community 24 - "video-uret.py / go()"
-Cohesion: 0.12
-Nodes (21): go(), s_agent_q(), s_alerts(), s_channels(), s_close(), s_feedback(), s_finance(), s_landing() (+13 more)
-
-### Community 25 - "/api/menu-counts.php / Sayac/oturum uclari"
+### Community 22 - "/api/menu-counts.php / Sayac/oturum uclari"
 Cohesion: 0.12
 Nodes (23): Baglama gore degisen menu (sirket, depo, kanal, izin, dil), Sayac/oturum uclari, Belge 08 Performans (pasif ölçüm), Pasif ölçüm yöntemi ve sınırları (tek ölçüm/sayfa), Yinelenen istek (product-pool-count x2, 43 betik), Açık soru 10: session-status ve warehouse-messages hangi dosyada çağrılıyor, S4 Menü sayaçları 6-8 sn, sayfa başına 91-98 istek (puan 6), API: /api/directory-search.php (+15 more)
 
-### Community 26 - "Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları"
-Cohesion: 0.09
-Nodes (26): İş akışı 5: Mükerrer birleştirme, İş akışı 5 adım 1: Eşleşme türü seç, İş akışı 5 adım 2: 2-20 kart seç, İş akışı 5 adım 3: Ana kartı seç, stok çatışmasını çöz, İş akışı 5 adım 4: Onay + yönetim PIN, İş akışı 5 adım 5: Birleştir ve kaydet, Asistan aracı find_similar_products: yanıtın altında fotoğraflı liste, Katalog ürün çekmecesinde "Benzer ürünler · diğer markalar" bölümü (+18 more)
+### Community 23 - "Otomasyon çekirdeği: Olay → Kural / 14 hazır kural"
+Cohesion: 0.14
+Nodes (25): Her çalışma tetikleyen olayla kayda geçer, Otomasyon çekirdeği: Olay → Kural → Onay düzeyi, 14 hazır kural, Kendiliğinden düzeyi (kurallar), Kural (koşul + işlem), Kural: eşitlemeyi yeniden deneme, Kural: fatura ve takip bildirimi, Kural: gecikme yakalama (+17 more)
 
-### Community 27 - "/api/dhl-labels.php / dhl-labels.js"
+### Community 24 - "Kanal sınıfı: kanala özel sayfalar / Aynı iş her kanalda ayrı sayfa/JS/"
+Cohesion: 0.19
+Nodes (21): Kaufland (mevcut), Shopify (mevcut), Kaufland hesap işleyişi: Sipariş alımı, Ürün havuzu aktarımı, Stok/fiyat otomasyonu, Görülemeyen: send-kaufland products ve issues listeleri, Görülemeyen: shopify-pool, send-shopify, ozon-pool, send-ozon, mixoutlet-payments, worklist images satırları, Kaufland: send-kaufland, catalog=kaufland/products/issues, Mixoutlet / Mollie ödeme eşleştirme kanalı, Ozon kanalı (USD, İthal Koku hesabı) (+13 more)
+
+### Community 25 - "/api/dhl-labels.php / dhl-labels.js"
 Cohesion: 0.11
 Nodes (21): innerHTML kullanimi, kacis dogrulanmadi, DHL / kargo ailesi, X-Request-ID izleme yalniz DHL'de, Tek uc, cok eylem (invoices ~35, dhl-labels ~40), S13 Sabit kodlanmış kanal/depo kimlikleri (puan 2), API: /api/dhl-labels.php, API: /api/external-tracking.php, API: /api/wholesale-sales.php (+13 more)
 
-### Community 28 - "Nerede güçlüyüz, nerede eksik / S8 Stok modeli ayrı alanlar, harek"
+### Community 26 - "Karar 0006 - Panelde yapay zekâ as / Asistan akışı: soru → veri → yanıt"
+Cohesion: 0.14
+Nodes (18): Aynı API, kullanıcının yetkisiyle, Gerçek dil modeli (Claude), Tek seferde en fazla 25 kayıt, Hazırla, onayla düzeyi (varsayılan), Kendiliğinden düzeyi, Müşteri mesajları ve ürün metinleri veridir, talimat değildir, Müşteri adı ve iletişim bilgisi asistana verilmez, Para iadesi, fiyat, iptal, silme için araç yok (+10 more)
+
+### Community 27 - "Landing.tsx / Landing()"
 Cohesion: 0.12
-Nodes (23): Açık soru 6: 79 iade neden ilk aşamada, S11 79 iade ilk aşamada kalmış (puan 4), S12 Kanal sağlık göstergesi ana ekranda yok (puan 4), S8 Stok modeli ayrı alanlar, hareket defteri yok (puan 6), Amazon eşleşme/onay sorunu 4.827 / 5.793 (%83), Negatif fiziki stok kayıtları ve gizli sayı kusuru, Toplu sıfırlama niteliğinde stok düzeltmeleri (sebep kaydı yok), Kanal sağlık göstergesi yok (N11 45/49 EAN'siz, Trendyol 86 inceleme) (+15 more)
+Nodes (23): Root(), BARS, BEFORE, CH, CHANNEL, Count(), Cta(), FAQ (+15 more)
 
-### Community 29 - "Mobile.tsx / Thumb()"
-Cohesion: 0.22
-Nodes (23): canShip(), product(), Act, Bar(), Big(), binCmp(), Count(), Empty() (+15 more)
+### Community 28 - "Dropshipping stok modeli / purchases"
+Cohesion: 0.14
+Nodes (24): Tedarikçi, Modül: Satın alma ve tedarikçiler, Dropshipping stok modeli, Fiziki stok, data-customer-edit: müşteri bilgisi düzenle, Alış belgesi: fatura / irsaliye, ödeme durumu, Drop tedarikçi: Asterbuy (796 ürün, API, alış fiyatı KDV hariç), Drop tedarikçi: BueroArena (+16 more)
 
-### Community 30 - "Platform.tsx / Role"
-Cohesion: 0.09
-Nodes (22): Country, CARRIER, CODES, COMPONENTS, CURS, ENDPOINTS, EVENTS, fakeKey() (+14 more)
+### Community 29 - "Sunum: WawiERP Rakipler ve Yol Har / Pazar haritası: odak"
+Cohesion: 0.20
+Nodes (21): JTL-Wawi, Pickware, weclapp, Xentral, Ortak desen: yapay zekâ yardımcıları, Sunum: WawiERP Rakipler ve Yol Haritası, Güçlü: DE ve TR pazaryerleri aynı panelde, Ortak desen: kural motoru (+13 more)
+
+### Community 30 - "Yeni panel mock / Bildirim merkezi"
+Cohesion: 0.10
+Nodes (23): Denetim kaydı "asistan aracılığıyla" + 10 sn geri alma, Olay, Her ekran başlığında ekran simgesi, Hareket ilkesi: kısa, yalnız transform ve opacity, hareketi azalt tercihinde kapalı, Akış şeridi: 26 ekranda işin dört adımda nasıl aktığı (gizlenebilir), Tabloda sıralı belirme, kayan çekmece, boş durum çizimi, Belge: panel-mock README, Erteleme (1 saat, yarın sabah) ve "Ben alıyorum" (+15 more)
 
 ### Community 31 - "Chat.tsx / Messages()"
 Cohesion: 0.11
 Nodes (22): CHANNELS, ChatApi, ChatProvider(), Ctx, dmId(), HUES, Idea, IDEAS0 (+14 more)
 
-### Community 32 - "Landing.tsx / Landing()"
+### Community 32 - "S8 Stok modeli ayrı alanlar, harek / Dalga 1: Sağlam temel"
 Cohesion: 0.13
-Nodes (22): BARS, BEFORE, CH, CHANNEL, Count(), Cta(), FAQ, FEATURES (+14 more)
+Nodes (20): Açık soru 6: 79 iade neden ilk aşamada, S11 79 iade ilk aşamada kalmış (puan 4), S12 Kanal sağlık göstergesi ana ekranda yok (puan 4), S8 Stok modeli ayrı alanlar, hareket defteri yok (puan 6), Amazon eşleşme/onay sorunu 4.827 / 5.793 (%83), Negatif fiziki stok kayıtları ve gizli sayı kusuru, Toplu sıfırlama niteliğinde stok düzeltmeleri (sebep kaydı yok), Kanal sağlık göstergesi yok (N11 45/49 EAN'siz, Trendyol 86 inceleme) (+12 more)
 
-### Community 33 - "finance-documents / Çıkış belgesi defteri"
-Cohesion: 0.10
-Nodes (15): Belge ayrıntısı: kaynak sipariş no, KDV, net/brüt, Çıkış belgesi defteri (SF/SV rozetleri, 1.763 belge Almanya), Çıkış belgesi KPI: toplam, satış faturası, şirketler arası, sevk, kesin toplam, İade faturası RET-<sipariş>-<n> (negatif tutar), Depolar arası sevk belgesi (stok değiştirmez), Şirketler arası fatura (0 kayıt), Tedarikçi faturası (1 kayıt, ödeme Ödenmedi), invoices view=purchases: Tedarikçi faturaları (+7 more)
+### Community 33 - "Belge 10 Rakip ve Hedef Mimari / Belge 11 Yeniden Tasarım Girdileri"
+Cohesion: 0.13
+Nodes (19): Belge 10 Rakip ve Hedef Mimari, Base (BaseLinker), Bilinen mevcut durum (tek PHP girişi, stok defteri yok, iki yazma yolu), Billbee, Doğrulanamayan rakip verileri (resmi fiyat sayfaları açılamadı), Dopigo (TR entegratör), Entegra (TR entegratör), A+C birleşimi (önce stok defteri, sonra kanal eklentisi) (+11 more)
 
 ### Community 34 - "package.json / devDependencies"
 Cohesion: 0.14
 Nodes (19): tailwindcss, @tailwindcss/vite, @types/react, @types/react-dom, vite, vite-plugin-singlefile, @vitejs/plugin-react, devDependencies (+11 more)
 
-### Community 35 - "Güvenlik incelemesi 2026-11-15 / Karar 0009: taslak panel gerçek si"
-Cohesion: 0.11
-Nodes (21): Ziyaretçi adresi Railway X-Real-IP başlığından alınır, Güvenlik başlıkları: CSP, HSTS, X-Frame-Options, Referrer-Policy, Bulgu: eski sistemde desteği bitmiş PHP 8.1, HSTS yok, SPF/DMARC yok (yüksek), Bulgu: eski sistemde müşteri bilgisi yetkisiz ekranda da tarayıcıya gidiyor (yüksek), Yanlış şifre sınırı: 10 dakikada 20 yanlış denemede adres geçici kilitlenir, Bulgu: yeni sistemde en büyük risk kiracı ayrımı; Prisma RLS'yi kendiliğinden uygulamaz (kritik), Onay notuna modelin yazdığı başlık girmez; notlar bir kez gider, Belge: Güvenlik incelemesi 2026-11-15 (taslak panel, eski sistem, yeni tasarım) (+13 more)
+### Community 35 - "Mobile.tsx / Pack()"
+Cohesion: 0.26
+Nodes (19): Act, Bar(), Big(), binCmp(), Count(), Empty(), Head(), Line (+11 more)
 
-### Community 36 - "Selling.tsx / PriceRules()"
-Cohesion: 0.19
-Nodes (20): alreadyOn(), Calc(), compPrice(), estCost(), Example(), ListingWizard(), missing(), NEEDS_EAN (+12 more)
+### Community 36 - "Satış Kanalları Ekranları / metro"
+Cohesion: 0.20
+Nodes (13): METRO (mevcut), Belge: Satış Kanalları Ekranları (03-satis-kanallari.md), Görülemeyen: engellenen desenlerle (import, delete, sync, send=, /api/ vb.) hiçbir adres açılmadı, Görülemeyen: METRO sipariş, havuz, gönder, Gitmeyen ürünler içerikleri (hesap seçimi boş), Görülemeyen: OTTO orders/history/source ve Amazon products/listings sekmeleri yüklenmedi, METRO: tek sayfa, view=pool/send/failed/orders/overview/messages/categories, API: /api/metro.php, JS: metro.js — METRO sayfa ana betiği (+5 more)
 
-### Community 37 - "Pazaryerleri ve mağazalar / DHL"
-Cohesion: 0.15
-Nodes (20): Entegrasyonlar: kurulum talebi (≈50), DHL (mevcut), DPD (kurulum talebi), Etsy (kurulum talebi), Hepsiburada (kurulum talebi), PostNL (mevcut), Temu (kurulum talebi), WooCommerce (kurulum talebi) (+12 more)
-
-### Community 38 - "Quality.tsx / QualityQueue()"
-Cohesion: 0.15
-Nodes (19): BANNED, bullets(), CAT_SUG, CH, dupGroups(), eanCheck(), eanOk(), jaccard() (+11 more)
-
-### Community 39 - "Karar 0004 - Yığın ayrıntıları / BullMQ + Redis"
+### Community 37 - "Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları"
 Cohesion: 0.12
-Nodes (17): Karar 0004 - Yığın ayrıntıları, BullMQ + Redis, Drizzle - reddedildi, Hetzner + Coolify - reddedildi, Keycloak - reddedildi, Mantine - reddedildi, Next.js - reddedildi, pg-boss - reddedildi (+9 more)
+Nodes (19): Asistan aracı find_similar_products: yanıtın altında fotoğraflı liste, Katalog ürün çekmecesinde "Benzer ürünler · diğer markalar" bölümü, Gerçek sistemde özellikler ürün kartından gelir; müşteriye açık sitede asistan maliyeti görmez, Benzerlik: aynı kategori, ürün türü, ortak özellikler ve fiyat yakınlığı; yalnız stokta olanlar, Özelliği girilmemiş üründe yalnız kategori ve fiyata bakılır (kaba eşleşme), Benzer ürün önerisi: stoktaki diğer markalardan en yakın ürünler, Asistan aracı get_competitor_offers: platform başına satıcı, fiyat, kargo, sıra, Katalog ürün çekmecesinde "Rakipler · aynı ürün, aynı platform" bölümü (+11 more)
+
+### Community 38 - "Quality.tsx / revenueOrders()"
+Cohesion: 0.13
+Nodes (18): revenueOrders(), BANNED, bullets(), CAT_SUG, CH, dupGroups(), eanCheck(), eanOk() (+10 more)
+
+### Community 39 - "Sıradaki adımlar / Ne hazır, ne değil durum tablosu"
+Cohesion: 0.11
+Nodes (18): Kaynak kod gelince doğrulanacak varsayımlar tablosu, Sonraki adım: asistanı gerçek yapay zekâyla denemek, Sonraki adım: eski kaynak koddan iş kurallarını çıkarmak, Sonraki adım: ekranları telefon genişliğinde gözden geçirmek, Sonraki adım: yeni ekranları ve asistanı yayına göndermek, Sizden: asistan için yapay zekâ anahtarı, Sizden: eski kaynak kod ve veritabanı yapısı, Sizden: gerçek komisyon oranları ve KDV kuralları (+10 more)
 
 ### Community 40 - "Bilgi Mimarisi / i18n 3: Satır içi t(tr, de) yardım"
 Cohesion: 0.19
@@ -318,166 +319,182 @@ Nodes (16): Belge: Bilgi Mimarisi, Kenar menu bolumleri (orders, products, compa
 Cohesion: 0.20
 Nodes (17): Belge: API Yuzeyi, CSRF yalniz govde alani, header yok, 16 bayt idempotency anahtari (8 dosya), Ortak istek bicimi (fetch, JSON, same-origin, csrf govde alani), Oturum bitince JSON yerine HTML giris sayfasi (kirilgan sozlesme), Siparis cekme/esitleme uclari, Yazma yolu sayisi = 2, Yontem ve R/W sinifi eylem adindan cikarim (+9 more)
 
-### Community 42 - "İlan yaşam döngüsü / Adım 3: Kategori eşleme"
-Cohesion: 0.18
-Nodes (17): Adım 8: Çıkarma (Acil satıştan kaldır, withdraw), Adım 5: Durum kontrolü (eşzamansız sonuç), Adım 1: Havuz (Wawi ürün havuzu → kanal gönder sekmesi), Adım 2: Hazırlık (EAN, görsel, kategori, marka/model tamamla), Adım 3: Kategori eşleme (eBay öneri, Kaufland/OTTO seçim, Ozon çeviri), Adım 9: Kayıt (işlem geçmişi: publish, withdraw, auto_stock_policy), Adım 4: Önizleme ve onay (ayrı onay adımı), Adım 7: Sorun listesi (eksik/reddedilen, EAN boş, gönderim başarısız) (+9 more)
+### Community 42 - "Asistan: yapay zekâ bağlı biçim / Güvenlik incelemesi 2026-11-15"
+Cohesion: 0.14
+Nodes (17): API anahtarı yalnız sunucuda, şifre ve istek sınırı, Asistan: yapay zekâ bağlı biçim (/api/assistant), Ziyaretçi adresi Railway X-Real-IP başlığından alınır, Güvenlik başlıkları: CSP, HSTS, X-Frame-Options, Referrer-Policy, Bulgu: istem enjeksiyonu gerçek modelle denenmedi; pilot öncesi yapılmalı, Bulgu: eski sistemde desteği bitmiş PHP 8.1, HSTS yok, SPF/DMARC yok (yüksek), Bulgu: eski sistemde müşteri bilgisi yetkisiz ekranda da tarayıcıya gidiyor (yüksek), Yanlış şifre sınırı: 10 dakikada 20 yanlış denemede adres geçici kilitlenir (+9 more)
 
-### Community 43 - "company-home / Kaynak chip sayıları"
+### Community 43 - "Karar 0009: taslak panel gerçek si / Konsey incelemesi 2"
+Cohesion: 0.14
+Nodes (17): Kural: ayrılan stok bütün şirketlerin açık siparişlerinden (reservedMap), Kural: ciro iptal ve iade hariç, tek işlevden (revenueOrders), useDialog: pencerelerde odak, Esc, Tab tuzağı ve odak geri dönüşü, Kural: fatura numarası kesinleştirmede verilir, şirket başına sıralı, değişmez, Etiket ve sevk kapısı: ödemesiz, sorunlu ya da tedarikçi siparişi geçmez, Karar 0009: taslak panel gerçek sistemin davranış şartnamesidir, Sahibinin kararını bekleyen 9 madde: menü, asistan modeli ve sınırı, roller, dış satış, iade stoğu, maskeleme, şifre, Konsey incelemesi 1: altı üye, taslak tasarım olarak güçlü şartname olarak zayıf (+9 more)
+
+### Community 44 - "Pazaryerleri ve mağazalar / Kaynak chip sayıları"
 Cohesion: 0.17
-Nodes (13): Amazon (mevcut), OTTO (mevcut), Kaynak chip sayıları (JTL 11.834, Amazon 3.895, eBay 3.877, Kaufland 1.291 ...), Chip toplamı 14.258i aşıyor (bir sipariş birden fazla chip, tahmin), Görülemeyen: dedicated sayfalarda formsuz JS yazma işlemleri; erp_action ve /api/ uçları yalnız Amazon(Woida), Kaufland, Metro için gözlendi, Görülemeyen: OTTO orders/history/source ve Amazon products/listings sekmeleri yüklenmedi, Amazon: company-home içinde gömülü sekme takımı (amazon_tab, yalnız Woida), OTTO: company-home içinde gömülü sekme takımı (otto_tab) (+5 more)
+Nodes (16): Entegrasyonlar: kurulum talebi (≈50), Amazon (mevcut), Etsy (kurulum talebi), Hepsiburada (kurulum talebi), OTTO (mevcut), Temu (kurulum talebi), WooCommerce (kurulum talebi), Modül: Pazaryerleri ve mağazalar (+8 more)
 
-### Community 44 - "Satış Kanalları Ekranları / metro"
-Cohesion: 0.26
-Nodes (12): METRO (mevcut), Belge: Satış Kanalları Ekranları (03-satis-kanallari.md), Görülemeyen: engellenen desenlerle (import, delete, sync, send=, /api/ vb.) hiçbir adres açılmadı, Görülemeyen: METRO sipariş, havuz, gönder, Gitmeyen ürünler içerikleri (hesap seçimi boş), METRO: tek sayfa, view=pool/send/failed/orders/overview/messages/categories, API: /api/metro.php, JS: metro.js — METRO sayfa ana betiği, JS: metro-account-selection.js — METRO hesap seçimi (istemcide, tahmin) (+4 more)
+### Community 45 - "İlan yaşam döngüsü / Adım 3: Kategori eşleme"
+Cohesion: 0.20
+Nodes (16): Adım 8: Çıkarma (Acil satıştan kaldır, withdraw), Adım 5: Durum kontrolü (eşzamansız sonuç), Adım 1: Havuz (Wawi ürün havuzu → kanal gönder sekmesi), Adım 2: Hazırlık (EAN, görsel, kategori, marka/model tamamla), Adım 3: Kategori eşleme (eBay öneri, Kaufland/OTTO seçim, Ozon çeviri), Adım 9: Kayıt (işlem geçmişi: publish, withdraw, auto_stock_policy), Adım 4: Önizleme ve onay (ayrı onay adımı), Adım 7: Sorun listesi (eksik/reddedilen, EAN boş, gönderim başarısız) (+8 more)
 
-### Community 45 - "Automation.tsx / Builder()"
-Cohesion: 0.13
-Nodes (15): RETURN_RULE, ACTS, Anom, AREAS, Builder(), CONDS, EVENTS, Level (+7 more)
+### Community 46 - "WawiERP Mimari ve Geçiş Sunumu / WawiERP Teknoloji Seçenekleri Sunu"
+Cohesion: 0.18
+Nodes (16): Karar 0001 - Çok kiracılı sistem, Karar 0002 - Sıfırdan geliştirme, Karar 0003 - Teknoloji yığını, Küçük ölçek (ayda 2.555 sipariş), PHP (Symfony/Laravel) - reddedildi, PostgreSQL, WawiERP Mimari ve Geçiş Sunumu, Birlikte çalışma biçimi (+8 more)
 
-### Community 46 - "/api/invoices.php / invoice-workflow.js"
+### Community 47 - "Karar 0004 - Yığın ayrıntıları / BullMQ + Redis"
+Cohesion: 0.14
+Nodes (14): Karar 0004 - Yığın ayrıntıları, BullMQ + Redis, Drizzle - reddedildi, Hetzner + Coolify - reddedildi, Keycloak - reddedildi, Mantine - reddedildi, pg-boss - reddedildi, Prisma (+6 more)
+
+### Community 48 - "/api/invoices.php / invoice-workflow.js"
 Cohesion: 0.27
 Nodes (13): Fatura ailesi (invoices.php), CSRF alanı ve sınırlı idempotency, S5 İki yazma yolu ve tek-uç-çok-eylem (puan 6), API: /api/invoices.php, Desen: fatura üçlüsü + paketleme aynı request/idempotency/Almanca sözlüğü paylaşmadan, Desen: request/api fetch sarmalayıcısı her dosyada yeniden yazılmış (AbortController + fetch + JSON denetimi), Desen: crypto.getRandomValues ile 16 baytlık idempotency anahtarı ve "otomatik tekrar yapılmadı" yaklaşımı, i18n: Dosya içi Almanca hata/durum sözlükleri (invoice-marketplace, invoice-order-pipeline) (+5 more)
 
-### Community 47 - "WawiERP Mimari ve Geçiş Sunumu / Karar 0003 - Teknoloji yığını"
-Cohesion: 0.19
-Nodes (15): Karar 0001 - Çok kiracılı sistem, Karar 0002 - Sıfırdan geliştirme, Karar 0003 - Teknoloji yığını, PHP (Symfony/Laravel) - reddedildi, React, Fastify - reddedildi, NestJS, typescript (+7 more)
-
-### Community 48 - "fmtNum() / Reservations.tsx"
-Cohesion: 0.29
-Nodes (14): fmtNum(), buildRows(), Chip(), Detail(), Flow(), Reservations(), Rules(), Sat() (+6 more)
-
 ### Community 49 - "tr-market / tr-market-products"
-Cohesion: 0.19
-Nodes (9): n11 (mevcut), Trendyol (mevcut), S14 Adlandırma tutarsızlığı, tab=dashboard sessiz düşüş (puan 3), Görülemeyen: tr-market questions/actions/history/dashboard, n11 products, tr-market-products platform, Trendyol ve N11: tr-market + tr-market-products, Trendyol "aktarım dosyası" mantığı (doğrudan yayın değil — tahmin), tab=dashboard geçersiz değer varsayılana düşüyor, Ekran: tr-market — Türkiye pazaryeri siparişleri (n11, Trendyol) (+1 more)
+Cohesion: 0.18
+Nodes (10): n11 (mevcut), Trendyol (mevcut), S14 Adlandırma tutarsızlığı, tab=dashboard sessiz düşüş (puan 3), Fiyat ve adet hesap bazında ayrı kayıt (Wawi fiyatı ≠ platform fiyatı), Görülemeyen: tr-market questions/actions/history/dashboard, n11 products, tr-market-products platform, Trendyol ve N11: tr-market + tr-market-products, Trendyol "aktarım dosyası" mantığı (doğrudan yayın değil — tahmin), tab=dashboard geçersiz değer varsayılana düşüyor (+2 more)
 
-### Community 50 - "Çoklu dil: üç ayrı mekanizma, orta / i18n 2: wawiText yardımcısı"
+### Community 50 - "Geliştirme panosu: konuşmalardan s / Ekip mesajlaşması"
+Cohesion: 0.15
+Nodes (14): Bildirimler role göre süzülür; müşteri adı ve adresi geçmez, Gerçek sistemde mesajlar sunucuda ve anlık; taramayı asistan yapar, Karar verilince sonuç kanala geri yazılır, Birebir mesajlar geliştirme için taranmaz; yalnız ortak kanallar, Asistandan haftalık özet: tekrar eden sorunlar ve çözüm önerileri, Geliştirme istekleri: oylama ve durum (Yeni, İnceleniyor, Planlandı, Yapıldı), Ortak kanallarda tekrar eden konuların sayılması ve çözüm önerisi, Geliştirme panosu: konuşmalardan sistemi geliştirme (+6 more)
+
+### Community 51 - "Çoklu dil: üç ayrı mekanizma, orta / i18n 2: wawiText yardımcısı"
 Cohesion: 0.17
 Nodes (12): API: /api/barcode-count.php, Genel nesneler (window): WawiLocale, WawiI18n, WawiDhlConfig, WawiOrderSelection vb., Dil seçimi: lang sorgu parametresi ve <html lang>, yalnız TR ve DE, Çoklu dil: üç ayrı mekanizma, ortak çatı yok, JS: barcode-count.js — Barkodla sayım (kamera, hızlı sayım), JS: catalog-labels.js — Üretilmiş katalog kategori sözlüğü TR↔DE (58 KB), JS: directory-picker.js — Dizin (şirket/depo/kanal) seçici ve directory-search araması, JS: ui-dictionary-de-entry-pack-options-20261015.js — Almanca ek sözlük: ürün girişi paket seçenekleri (+4 more)
 
-### Community 51 - "compilerOptions / tsconfig.json"
+### Community 52 - "compilerOptions / tsconfig.json"
 Cohesion: 0.15
 Nodes (12): compilerOptions, isolatedModules, jsx, lib, module, moduleResolution, noEmit, resolveJsonModule (+4 more)
 
-### Community 52 - "Çok kiracılı / Sıfırdan geliştirme"
+### Community 53 - "DHL / Toplama, paketleme, kargo"
+Cohesion: 0.24
+Nodes (12): DHL (mevcut), DPD (kurulum talebi), PostNL (mevcut), Modül: Toplama, paketleme, kargo, Adım 1: Ürünü hazırla, Adım 2: Kaynağı seç, Adım 3: Kanala gönder, Adım 4: Siparişi hazırla (+4 more)
+
+### Community 54 - "Çok kiracılı / Sıfırdan geliştirme"
 Cohesion: 0.17
 Nodes (10): Çok kiracılı (multi-tenant) sistem, Kiracı → Şirket → Depo → Kanal → Hesap, Mevcut WawiERP (12 şirket, 5 depo, 41 kanal), Aşamalı geçiş, Ekip: sahibi + Claude, Eski PHP sistemi (legacy), Sıfırdan geliştirme, Seçenek C - Sıfırdan yeni sistem (+2 more)
 
-### Community 53 - "landing-main.tsx / App()"
-Cohesion: 0.18
-Nodes (9): react-dom, dependencies, lucide-react@^0.460.0, react@^18.3.1, react-dom@^18.3.1, App(), Root(), useRoute() (+1 more)
+### Community 55 - "main.tsx / App()"
+Cohesion: 0.17
+Nodes (7): react-dom, dependencies, lucide-react@^0.460.0, react@^18.3.1, react-dom@^18.3.1, App(), Guard
 
-### Community 54 - "Cloudflare / DNS / DNSSEC kapalı"
+### Community 56 - "Cloudflare / DNS / DNSSEC kapalı"
 Cohesion: 0.20
 Nodes (10): Cloudflare (DNS, proxy, analitik), DNS / DNSSEC kapalı, Alan adı wawib2b.com (Namecheap), E-posta altyapısı (MX/SPF/DMARC), TLS (Google Trust Services, joker sertifika), Risk: DNSSEC kapalı, security.txt yok, Risk: HSTS yok, Risk: MX/SPF/DMARC kaydı yok (+2 more)
 
-### Community 55 - "WawiERP Teknoloji Seçenekleri Sunu / PostgreSQL"
-Cohesion: 0.22
-Nodes (10): Küçük ölçek (ayda 2.555 sipariş), PostgreSQL, WawiERP Teknoloji Seçenekleri Sunumu, Abonelik ve faturalama, Pazaryeri kanal eklentisi, Verilen kararlar tablosu, Önerilen katmanlı yapı, Modüler tek uygulama (+2 more)
+### Community 57 - "typescript / NestJS"
+Cohesion: 0.20
+Nodes (10): React, Fastify - reddedildi, NestJS, Next.js - reddedildi, Vite + React, typescript, Desteği biten PHP sürümü, Bugünkü mimari (tek PHP sunucusu) (+2 more)
 
-### Community 56 - "Karar 0005 - Bulut sağlayıcı / AWS Frankfurt"
+### Community 58 - "Karar 0005 - Bulut sağlayıcı / AWS Frankfurt"
 Cohesion: 0.38
 Nodes (10): Karar 0005 - Bulut sağlayıcı, AWS CDK (TypeScript), AWS Frankfurt (eu-central-1), ECS Fargate, ElastiCache (Redis uyumlu), GCP Frankfurt - reddedildi, RDS for PostgreSQL, S3 (+2 more)
 
-### Community 57 - "Sidebar.tsx / Logo()"
+### Community 59 - "Sidebar.tsx / Logo()"
 Cohesion: 0.29
 Nodes (8): Avatar(), Logo(), Badges, load(), NavGroup, NavItem, Saved, Sidebar()
 
-### Community 58 - "WawiERP Analiz Sunumu / Önemli sorunlar listesi"
+### Community 60 - "WawiERP Analiz Sunumu / Önemli sorunlar listesi"
 Cohesion: 0.28
 Nodes (9): WawiERP Analiz Sunumu, Bilgi haritası ve hafıza, Müşteri bilgisinin sayfaya açık gelmesi, Seçenek A - Yerinde yenileme, Seçenek B - Hazır ERP çekirdeği, Sipariş hacmi (2.555/30 gün), WawiERP mevcut sistem (54 ekran, 232.500 ürün), Önemli sorunlar listesi (+1 more)
 
-### Community 59 - "Sıradaki adımlar / Kaynak kod gelince doğrulanacak va"
+### Community 61 - "Toptan satış sihirbazı / Finans akışı 4: cari seç/oluştur"
 Cohesion: 0.25
-Nodes (8): Kaynak kod gelince doğrulanacak varsayımlar tablosu, Sonraki adım: eski kaynak koddan iş kurallarını çıkarmak, Sonraki adım: ekranları telefon genişliğinde gözden geçirmek, Sonraki adım: yeni ekranları ve asistanı yayına göndermek, Sizden: eski kaynak kod ve veritabanı yapısı, Sizden: gerçek komisyon oranları ve KDV kuralları, Sizden: ekip için rol listesi, Sıradaki adımlar
+Nodes (8): Toptan satış sihirbazı (save_customer, products, save, finalize, cancel, state, create), Finans akışı 4: cari seç/oluştur, Satıcı şirket + stok çıkış deposu, Ürünler, Doğrula, Kesinleştir (stok bir kez düşer), Fatura PDF, Tahsilat kaydı
 
-### Community 60 - "İş akışı 2: Barkodla fiziki sayım / İş akışı 2 adım 2: İşlemi yapanı s"
+### Community 62 - "Nerede güçlüyüz, nerede eksik / API ve bildirim uçları"
+Cohesion: 0.29
+Nodes (7): Ortak desen: açık kapılar (API, yapay zekâ bağlantıları), Eksik: belgelenmiş açık API, Eksik: yapay zekâ özelliği, Eksik: kullanıcının kurabildiği kural motoru, Nerede güçlüyüz, nerede eksik, Güçlü: toptan müşteri portalı ve cari hesap, Ekran: API ve bildirim uçları
+
+### Community 63 - "Asterbuy siparişi / Asterbuy: Ödeme bekliyor"
+Cohesion: 0.43
+Nodes (7): Asterbuy: Kontrol edilecek (hata/inceleme, tahmin), Asterbuy: Ödeme bekliyor, Asterbuy: Oluşturulacak, Asterbuy: Takip aktarıldı, Asterbuy: Takip bekliyor / aktarılıyor, Asterbuy siparişi (dropship tedarikçi akışı), Kural: drop siparişi iletme
+
+### Community 64 - "İş akışı 2: Barkodla fiziki sayım / İş akışı 2 adım 2: İşlemi yapanı s"
 Cohesion: 0.52
 Nodes (7): İş akışı 2: Barkodla fiziki sayım, İş akışı 2 adım 1: Sayım deposu seç, İş akışı 2 adım 2: İşlemi yapanı seç, İş akışı 2 adım 3: SKU/EAN okut (+1), İş akışı 2 adım 4: Güncel stoğu kontrol et, İş akışı 2 adım 5: Kayıt yöntemi seç (ekle/ayarla), İş akışı 2 adım 6: Sayımı kaydet
 
-### Community 61 - "Ne hazır, ne değil durum tablosu / Panel ekranları: çalışıyor, verile"
-Cohesion: 0.29
-Nodes (7): Panel ekranları: çalışıyor, veriler örnek, Mobil uygulama: yalnız önizleme, Pazaryeri bağlantıları yok, Asistan hazır senaryolar: çalışıyor, Gerçek sunucu ve veritabanı yok, Yeni ekranlar ve asistan henüz yayına gönderilmedi, Ne hazır, ne değil durum tablosu
-
-### Community 62 - "Asterbuy siparişi / Asterbuy: Ödeme bekliyor"
-Cohesion: 0.53
-Nodes (6): Asterbuy: Kontrol edilecek (hata/inceleme, tahmin), Asterbuy: Ödeme bekliyor, Asterbuy: Oluşturulacak, Asterbuy: Takip aktarıldı, Asterbuy: Takip bekliyor / aktarılıyor, Asterbuy siparişi (dropship tedarikçi akışı)
-
-### Community 63 - "Ticket / ticket sayısı çelişkisi"
-Cohesion: 0.33
-Nodes (4): Ticket (pazaryeri müşteri sorusu), Ticket durumları: Yanıtımız bekleniyor, Müşteri/platform bekleniyor, Kapalı, Okunmamış, İş akışı 9 Destek: tickets mağaza soruları (28 gün), Mesaj seç, yanıtla (tahmin)
-
-### Community 64 - "İş akışı 4: Depolar arası stok akt / İş akışı 4 adım 4: Dağıtımı önizle"
+### Community 65 - "İş akışı 4: Depolar arası stok akt / İş akışı 4 adım 4: Dağıtımı önizle"
 Cohesion: 0.60
 Nodes (6): İş akışı 4: Depolar arası stok aktarımı, İş akışı 4 adım 1: Ürün/kategori seç, İş akışı 4 adım 2: Eşit/yüzdeli dağıtım, İş akışı 4 adım 3: Hedef depolar, İş akışı 4 adım 4: Dağıtımı önizle, İş akışı 4 adım 5: Kayıt (hareket geçmişi)
 
-### Community 65 - "Banka içe aktarma penceresi / /api/shopify-bank-import.php"
+### Community 66 - "İş akışı 5: Mükerrer birleştirme / İş akışı 5 adım 2: 2-20 kart seç"
+Cohesion: 0.60
+Nodes (6): İş akışı 5: Mükerrer birleştirme, İş akışı 5 adım 1: Eşleşme türü seç, İş akışı 5 adım 2: 2-20 kart seç, İş akışı 5 adım 3: Ana kartı seç, stok çatışmasını çöz, İş akışı 5 adım 4: Onay + yönetim PIN, İş akışı 5 adım 5: Birleştir ve kaydet
+
+### Community 67 - "Banka içe aktarma penceresi / /api/shopify-bank-import.php"
 Cohesion: 0.47
 Nodes (5): Banka içe aktarma penceresi (bank-import.js, Shopify havale, 5 MB CSV), erp-features: Banka ekstresi ve mutabakat hazırlanıyor, Finans akışı 8: banka CSV tara, kontrol et ve tamamla, API: /api/shopify-bank-import.php, JS: bank-import.js — Shopify havale/banka CSV içe aktarma (tarama, eşleştirme, onay)
 
-### Community 66 - "Geçiş aşamaları 0-5 / Stok defteri"
+### Community 68 - "Geçiş aşamaları 0-5 / Stok defteri"
 Cohesion: 0.40
 Nodes (6): Tutmayan sayılar ve negatif stok, Geçiş aşamaları 0-5, Gölgede çalışma, İstanbul pilotu, Kanal dalgaları (küçükten büyüğe), Stok defteri (yalnız ekleme hareket defteri)
 
-### Community 67 - "Muhasebe aktarımı / S3 KDV özeti %19 sabit"
+### Community 69 - "Muhasebe aktarımı / S3 KDV özeti %19 sabit"
 Cohesion: 0.50
 Nodes (4): KDV/OSS: sabit %19 özet riski, Açık soru 2: şirket başına KDV oranları/OSS ve muhasebe kaynağı, S3 KDV özeti %19 sabit (puan 6), Ekran: Muhasebe aktarımı
 
-### Community 68 - "TR entegratörleri grubu / Dopigo"
+### Community 70 - "/allordersfilter / 504 hatası"
 Cohesion: 0.40
-Nodes (5): Dopigo (TR entegratör), Entegra (TR entegratör), Sentos (TR entegratör), StockMount (TR entegratör), TR entegratörleri grubu (AB pazaryeri kapsamı doğrulanamadı)
+Nodes (3): allordersfilter HTML 30,2 sn (sunucu render), Shopify geçmişi 60 gün sınırı (read_all_orders), Ekran: /allordersfilter — tüm siparişler filtre ucu
 
-### Community 69 - "İş akışı 6 Dropship: Oluşturulacak / Ödeme bekliyor"
+### Community 71 - "İş akışı 6 Dropship: Oluşturulacak / Ödeme bekliyor"
 Cohesion: 0.40
 Nodes (5): İş akışı 6 Dropship: Oluşturulacak, Ödeme bekliyor, Takip alınır (4 saatte bir), Satış kanalına işlenir, Takip aktarıldı
 
-### Community 70 - "İş akışı 3 Toplama: şirket/DHL hes / Siparişleri getir ve seç"
+### Community 72 - "İş akışı 3 Toplama: şirket/DHL hes / Siparişleri getir ve seç"
 Cohesion: 0.40
 Nodes (5): İş akışı 3 Toplama: şirket/DHL hesabı seç, Siparişleri getir ve seç, Toplama listesi, DHL etiket / toplu yazdır, Başarısızlar Oluşturulamayanlar filtresi → toplu yeniden oluştur
 
-### Community 71 - "İş akışı 8 İade: DHL iade etiketi / İncele / işle"
+### Community 73 - "İş akışı 8 İade: DHL iade etiketi / İncele / işle"
 Cohesion: 0.40
 Nodes (5): İş akışı 8 İade: DHL iade etiketi listelenir, İncele / işle, Ürün geldi kontrolü, Müşteriye ödeme / tekrar gönderim / sorun, Çözüldü
 
-### Community 72 - "İş akışı 7 Depo içi sevk: plan tas / Depodan çıkar"
+### Community 74 - "Dışa aktarım: export=csv | excel | / Kapsam seçici: 5 depo, 11 şirket,"
+Cohesion: 0.40
+Nodes (5): Dışa aktarım: export=csv | excel | datev (Muhasebe CSV), Kapsam seçici: 5 depo, 11 şirket, 41 kanal, Finans akışı 7: kapsamı seç, Siparişleri al, CSV / Excel / DATEV dışa aktar
+
+### Community 75 - "İş akışı 7 Depo içi sevk: plan tas / Depodan çıkar"
 Cohesion: 0.50
 Nodes (4): İş akışı 7 Depo içi sevk: plan taslağı, Depodan çıkar (stok hareketi), Yolda, Hedef depoda mal kabul
 
-### Community 73 - "İş akışı 1: Yeni ürün girişi / İş akışı 1 adım 2: Bulunamazsa yen"
+### Community 76 - "İş akışı 1: Yeni ürün girişi / İş akışı 1 adım 2: Bulunamazsa yen"
 Cohesion: 0.83
 Nodes (4): İş akışı 1: Yeni ürün girişi (sihirbaz), İş akışı 1 adım 1: Havuzda EAN/ad/SKU ile ara, İş akışı 1 adım 2: Bulunamazsa yeni ürün formu (varyantsız/varyantlı), İş akışı 1 adım 3: eBay gönderimini hazırla
 
-### Community 74 - "scripts / build"
+### Community 78 - "scripts / build"
 Cohesion: 0.50
 Nodes (4): scripts, build, dev, preview
 
-### Community 75 - "Toplu fatura PDF/e-posta / İş akışı 5 Fatura: satırdan yazdır"
+### Community 79 - "Toplu fatura PDF/e-posta / İş akışı 5 Fatura: satırdan yazdır"
 Cohesion: 0.67
 Nodes (3): İş akışı 5 Fatura: satırdan yazdır/düzenle/gönder, Toplu fatura PDF/e-posta (shipping), İade faturası
+
+### Community 80 - "İş akışı 7: EAN / görsel düzeltme / İş akışı 7 adım 1: Eksik EAN/görse"
+Cohesion: 1.00
+Nodes (3): İş akışı 7: EAN / görsel düzeltme, İş akışı 7 adım 1: Eksik EAN/görsel listesi, İş akışı 7 adım 2: EAN ekle / düzelt veya görsel düzenle
 
 ## Ambiguous Edges - Review These
 - `API: /api/warehouse-messages.php` → `JS: menu-counts.js — Kenar menü sayaçları (120 sn yenileme)`  [AMBIGUOUS]
   docs/panel/05-on-yuz-mimarisi.md · relation: calls
 
 ## Knowledge Gaps
-- **170 isolated node(s):** `product_key: ebay-account:16:<ilan>:<hash>`, `product_key: manual:<hash>`, `product_key: shopify:9:variant:<id>`, `Kanala göre ilan durumu değerleri (eBay, Kaufland, METRO, OTTO, Shopify, Ozon, Trendyol, Amazon)`, `data-external-tracking-order: harici takip no` (+165 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 424 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **170 isolated node(s):** `message_action=send (depolara mesaj; erp_action yok)`, `bulk_products_download alanı (erp_action değil): şablon/CSV dışa aktarma`, `Varlık: Hesap (account) — küresel sayısal kimlik, kanal başına kimlik bilgisi`, `Varlık: Kanal (channel) — tür + ad, küresel kimlik`, `Doğrulanamayan rakip verileri (resmi fiyat sayfaları açılamadı)` (+165 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 472 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Yeni panel mock (tıklanabilir taslak)` connect `Yeni panel mock / Bildirim merkezi` to `Güvenlik incelemesi 2026-11-15 / Karar 0009: taslak panel gerçek si`, `Karar 0004 - Yığın ayrıntıları / BullMQ + Redis`, `server.mjs / assistant.mjs`, `Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler`, `Karar 0006 - Panelde yapay zekâ as / Asistan: yapay zekâ bağlı biçim`, `Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları`, `Nerede güçlüyüz, nerede eksik / S8 Stok modeli ayrı alanlar, harek`?**
-  _High betweenness centrality (0.319) - this node is a cross-community bridge._
-- **What connects `product_key: ebay-account:16:<ilan>:<hash>`, `product_key: manual:<hash>`, `product_key: shopify:9:variant:<id>` to the rest of the system?**
+- **Why does `Yeni panel mock (tıklanabilir taslak)` connect `Yeni panel mock / Bildirim merkezi` to `S8 Stok modeli ayrı alanlar, harek / Dalga 1: Sağlam temel`, `Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları`, `server.mjs / assistant.mjs`, `Asistan: yapay zekâ bağlı biçim / Güvenlik incelemesi 2026-11-15`, `Karar 0009: taslak panel gerçek si / Konsey incelemesi 2`, `Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler`, `Geliştirme panosu: konuşmalardan s / Ekip mesajlaşması`, `typescript / NestJS`, `Karar 0006 - Panelde yapay zekâ as / Asistan akışı: soru → veri → yanıt`?**
+  _High betweenness centrality (0.314) - this node is a cross-community bridge._
+- **What connects `message_action=send (depolara mesaj; erp_action yok)`, `bulk_products_download alanı (erp_action değil): şablon/CSV dışa aktarma`, `Varlık: Hesap (account) — küresel sayısal kimlik, kanal başına kimlik bilgisi` to the rest of the system?**
   _170 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `App.tsx / Badge()` be split into smaller, more focused modules?**
-  _Cohesion score 0.1094017094017094 - nodes in this community are weakly interconnected._
-- **Why does `Sunum: WawiERP Yenilikler` connect `Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler` to `Sunum: WawiERP Rakipler ve Yol Har / Belge 10 Rakip ve Hedef Mimari`, `team / Belge 09 Güvenlik ve Uyum`, `accounting / orders-ebay`, `Yeni panel mock / Bildirim merkezi`, `Karar 0006 - Panelde yapay zekâ as / Asistan: yapay zekâ bağlı biçim`, `Otomasyon çekirdeği: Olay → Kural / 14 hazır kural`, `/api/menu-counts.php / Sayac/oturum uclari`, `Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları`, `Sıradaki adımlar / Kaynak kod gelince doğrulanacak va`, `Nerede güçlüyüz, nerede eksik / S8 Stok modeli ayrı alanlar, harek`, `Ne hazır, ne değil durum tablosu / Panel ekranları: çalışıyor, verile`?**
-  _High betweenness centrality (0.162) - this node is a cross-community bridge._
 - **Should `data.ts / store.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.044444444444444446 - nodes in this community are weakly interconnected._
-- **Why does `Ekran: Veri kalitesi ("sıradakini düzelt" kuyruğu)` connect `Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları` to `warehouse_product / Ürün kartı`, `Otomasyon çekirdeği: Olay → Kural / 14 hazır kural`, `Nerede güçlüyüz, nerede eksik / S8 Stok modeli ayrı alanlar, harek`, `Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler`?**
-  _High betweenness centrality (0.135) - this node is a cross-community bridge._
+  _Cohesion score 0.045069778082818576 - nodes in this community are weakly interconnected._
+- **Why does `Sunum: WawiERP Yenilikler` connect `Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler` to `S8 Stok modeli ayrı alanlar, harek / Dalga 1: Sağlam temel`, `panel-harita.md: WawiERP panel keş / Tek giriş noktası /?page=<ad>`, `Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları`, `Sıradaki adımlar / Ne hazır, ne değil durum tablosu`, `team / Belge 09 Güvenlik ve Uyum`, `/api/menu-counts.php / Sayac/oturum uclari`, `Otomasyon çekirdeği: Olay → Kural / 14 hazır kural`, `Karar 0006 - Panelde yapay zekâ as / Asistan akışı: soru → veri → yanıt`, `Sunum: WawiERP Rakipler ve Yol Har / Pazar haritası: odak`, `Yeni panel mock / Bildirim merkezi`?**
+  _High betweenness centrality (0.173) - this node is a cross-community bridge._
+- **Should `panel-harita.md: WawiERP panel keş / Tek giriş noktası /?page=<ad>` be split into smaller, more focused modules?**
+  _Cohesion score 0.051770451770451774 - nodes in this community are weakly interconnected._
+- **Why does `Ekran: Veri kalitesi ("sıradakini düzelt" kuyruğu)` connect `Benzer ürün önerisi: stoktaki diğe / Gerçek ürün fotoğrafları` to `S8 Stok modeli ayrı alanlar, harek / Dalga 1: Sağlam temel`, `İş akışı 5: Mükerrer birleştirme / İş akışı 5 adım 2: 2-20 kart seç`, `warehouse / warehouse_product`, `Sunum: WawiERP Yenilikler / Sonraki aday geliştirmeler`, `Otomasyon çekirdeği: Olay → Kural / 14 hazır kural`?**
+  _High betweenness centrality (0.131) - this node is a cross-community bridge._
 
 ### Low-confidence Hints
 _AMBIGUOUS edges — the extractor was unsure. Verify before acting on these._

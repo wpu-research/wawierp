@@ -75,6 +75,13 @@
       "output_tokens": 0,
       "files": 43,
       "note": "konsey 1 ve 2, karar 0009 ve d\u00fczeltmeler: kod AST + konsey ve karar kavramlar\u0131 (elle)"
+    },
+    {
+      "date": "2026-11-16T03:44:54.482970+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 39,
+      "note": "konsey tur 4-5 kodu (AST) + karar 0010 kavramlar\u0131 (elle)"
     }
   ],
   "total_input_tokens": 776442,
