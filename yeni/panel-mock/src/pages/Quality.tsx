@@ -21,7 +21,7 @@ const CAT_SUG: Record<string, string> = { Parfüm: 'Parfüm', Toner: 'Toner', Sa
 
 type Kind = 'ean' | 'gorsel' | 'sorunlu'
 const KIND: Record<Kind, { label: string; tone: Tone }> = { ean: { label: 'Barkod yok', tone: 'bad' }, gorsel: { label: 'Görsel yok', tone: 'warn' }, sorunlu: { label: 'Sorunlu ilan', tone: 'bad' } }
-const kindsOf = (p: Product): Kind[] => [...(!p.ean ? ['ean' as const] : []), ...(!p.image ? ['gorsel' as const] : []), ...(p.listings.some(l => l.status === 'sorunlu') ? ['sorunlu' as const] : [])]
+export const kindsOf = (p: Product): Kind[] => [...(!p.ean ? ['ean' as const] : []), ...(!p.image ? ['gorsel' as const] : []), ...(p.listings.some(l => l.status === 'sorunlu') ? ['sorunlu' as const] : [])]
 
 function useSales() {
   const { allOrders } = useStore()

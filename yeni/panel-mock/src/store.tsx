@@ -6,8 +6,8 @@ export type Role = 'admin' | 'depo' | 'muhasebe'
 // Öneri niteliğinde rol tanımları; gerçek rol × modül matrisi sahibinin onayını bekliyor (docs/11 §3, soru 1).
 export const ROLES: Record<Role, { label: string; user: string; nav: string[] | 'all'; pii: 'tam' | 'adres'; ops: boolean; finance: boolean }> = {
   admin: { label: 'Sistem yöneticisi', user: 'Sistem Yöneticisi', nav: 'all', pii: 'tam', ops: true, finance: true },
-  depo: { label: 'Depo çalışanı', user: 'Depo Çalışanı 1', nav: ['overview', 'orders', 'labels', 'picking', 'mobile', 'returns', 'catalog', 'stock', 'reservations', 'transfers', 'counting', 'quality', 'alerts', 'shifts', 'status'], pii: 'adres', ops: true, finance: false },
-  muhasebe: { label: 'Muhasebe', user: 'Muhasebe', nav: ['overview', 'orders', 'returns', 'return-form', 'support', 'finance', 'b2b', 'portal', 'bank', 'accounting', 'profit', 'prices', 'alerts', 'billing', 'audit'], pii: 'tam', ops: false, finance: true },
+  depo: { label: 'Depo çalışanı', user: 'Depo Çalışanı 1', nav: ['overview', 'wall', 'orders', 'labels', 'picking', 'mobile', 'returns', 'catalog', 'stock', 'reservations', 'transfers', 'counting', 'quality', 'alerts', 'shifts', 'status'], pii: 'adres', ops: true, finance: false },
+  muhasebe: { label: 'Muhasebe', user: 'Muhasebe', nav: ['overview', 'wall', 'orders', 'returns', 'return-form', 'support', 'finance', 'b2b', 'portal', 'bank', 'accounting', 'profit', 'prices', 'alerts', 'billing', 'audit'], pii: 'tam', ops: false, finance: true },
 }
 
 export interface SavedView { id: string; name: string; view: string; chan: string; q: string }

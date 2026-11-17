@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, ChevronRight, LayoutDashboard, LifeBuoy, Lightbulb, ListChecks, Menu, MessagesSquare, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Undo2, UserRound, Users, Workflow, X } from 'lucide-react'
+import { Activity, BadgePercent, BellRing, Boxes, Building2, CalendarClock, ClipboardCheck, Code2, CreditCard, FileSpreadsheet, FileText, Landmark, Languages, ChevronRight, LayoutDashboard, LifeBuoy, Lightbulb, ListChecks, Menu, MessagesSquare, Moon, Package, PackagePlus, RefreshCw, Rocket, RotateCcw, ScanSearch, ScrollText, Search, Send, ShieldCheck, ShoppingCart, Smartphone, Store, Sun, Tag, TrendingUp, Truck, Tv, Undo2, UserRound, Users, Workflow, X } from 'lucide-react'
 import { COMPANIES, WAREHOUSES, account, toShip, type WhId } from './data'
 import { ROLES, StoreProvider, useStore, type Role } from './store'
 import { PageIcon, sel, useDialog } from './ui'
@@ -24,13 +24,14 @@ import { Billing, Developers, Onboarding, Status } from './pages/Platform'
 import { Reservations } from './pages/Reservations'
 import { CustomerPortal, ReturnForm } from './pages/Portal'
 import { MobileDepot } from './pages/Mobile'
+import Wall from './pages/Wall'
 
 const HOME = location.protocol === 'file:' ? 'index.html' : '/'
 
 const NAV: NavGroup[] = [
   { group: '', items: [{ key: 'overview', label: 'Genel bakış', icon: LayoutDashboard }, { key: 'messages', label: 'Mesajlar', icon: MessagesSquare }] },
   { group: 'Günlük iş', items: [
-    { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks }, { key: 'mobile', label: 'Mobil depo', icon: Smartphone }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
+    { key: 'wall', label: 'Duvar ekranı', icon: Tv }, { key: 'orders', label: 'Siparişler', icon: ShoppingCart }, { key: 'picking', label: 'Toplama listesi', icon: ListChecks }, { key: 'mobile', label: 'Mobil depo', icon: Smartphone }, { key: 'labels', label: 'Kargo etiketleri', icon: Tag },
     { key: 'returns', label: 'İadeler', icon: RotateCcw }, { key: 'support', label: 'Destek', icon: LifeBuoy },
   ] },
   { group: 'Ürün ve stok', items: [
@@ -135,7 +136,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
   }, [st.orders, st.accounts, st.jobs, st.tickets, st.transfers, chat.totalUnread])
 
   const view = !allowed(page) ? <NoAccess /> :
-    page === 'overview' ? <Overview /> : page === 'messages' ? <Messages query={query} /> : page === 'feedback' ? <Feedback /> : page === 'orders' ? <Orders query={query} /> : page === 'catalog' ? <Catalog query={query} /> :
+    page === 'overview' ? <Overview /> : page === 'wall' ? <NoAccess /> : page === 'messages' ? <Messages query={query} /> : page === 'feedback' ? <Feedback /> : page === 'orders' ? <Orders query={query} /> : page === 'catalog' ? <Catalog query={query} /> :
     page === 'stock' ? <Stock /> : page === 'channels' ? <Channels /> : page === 'sync' ? <Sync /> : page === 'returns' ? <Returns /> :
     page === 'finance' ? <Finance /> : page === 'team' ? <Team /> : page === 'audit' ? <AuditLog /> :
     page === 'labels' ? <Labels /> : page === 'transfers' ? <Transfers /> : page === 'support' ? <Support /> : page === 'b2b' ? <B2BPage /> :
@@ -146,6 +147,7 @@ function Shell({ page, query, dark, setDark }: { page: string; query: URLSearchP
     page === 'reservations' ? <Reservations /> : page === 'portal' ? <CustomerPortal /> : page === 'return-form' ? <ReturnForm /> : <NoAccess />
 
   if (page === 'mobile' && allowed('mobile')) return <MobileDepot />
+  if (page === 'wall' && allowed('wall')) return <Wall />
 
   const here = NAV.flatMap(g => g.items.map(i => ({ ...i, group: g.group }))).find(i => i.key === page)
   const side = (onClose?: () => void) => <Sidebar nav={NAV} page={page} badges={badges} allowed={allowed} home={HOME} mini={mini} setMini={setMini} onClose={onClose} />
