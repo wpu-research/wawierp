@@ -1,2456 +1,2072 @@
 {
   "CLAUDE.md": {
     "mtime": 1794665894.1962428,
-    "seen": 1794666004.4019182,
     "ast_hash": "e08d4902e29e18764cece94821df7b9c",
     "semantic_hash": "e08d4902e29e18764cece94821df7b9c"
   },
   "docs/01-sirket-analizi.md": {
-    "mtime": 1794665725.0459297,
-    "seen": 1794666004.401924,
-    "ast_hash": "a2b76859e22b54afa65adfb46a606dd6",
-    "semantic_hash": "a2b76859e22b54afa65adfb46a606dd6"
+    "mtime": 1794805522.3744624,
+    "ast_hash": "77ca942aebba3ce74277b6ac0062af12",
+    "semantic_hash": "77ca942aebba3ce74277b6ac0062af12"
   },
   "docs/02-hafiza-beyin-mimarisi.md": {
-    "mtime": 1794665894.1482444,
-    "seen": 1794666004.401927,
-    "ast_hash": "4e92caad4dc62942b597158793c7a327",
-    "semantic_hash": "4e92caad4dc62942b597158793c7a327"
+    "mtime": 1794805522.3754625,
+    "ast_hash": "bd19ed9c4bb6c1cbe6ef6dbf17f8491a",
+    "semantic_hash": "bd19ed9c4bb6c1cbe6ef6dbf17f8491a"
   },
   "docs/03-panel-analizi.md": {
-    "mtime": 1794670529.1082828,
-    "seen": 1794670977.128205,
-    "ast_hash": "d990dddb9cf50d79af89e03e1ff4d5b0",
-    "semantic_hash": "d990dddb9cf50d79af89e03e1ff4d5b0"
+    "mtime": 1794805522.3734624,
+    "ast_hash": "4773401e939cb247f9b8ede88e527b29",
+    "semantic_hash": "4773401e939cb247f9b8ede88e527b29"
   },
   "docs/panel/01-siparis-kargo-iade.md": {
     "mtime": 1794668789.3718715,
-    "seen": 1794669303.7618546,
     "ast_hash": "2c44d2cbbf631996667d8764c7bbb824",
     "semantic_hash": "2c44d2cbbf631996667d8764c7bbb824"
   },
   "docs/panel/02-urun-katalog-stok.md": {
     "mtime": 1794668906.8279886,
-    "seen": 1794669303.7618558,
     "ast_hash": "6d44ccc7193a7959373a6e1e1e41e7ba",
     "semantic_hash": "6d44ccc7193a7959373a6e1e1e41e7ba"
   },
   "docs/panel/03-satis-kanallari.md": {
     "mtime": 1794668757.3454394,
-    "seen": 1794669303.7618568,
     "ast_hash": "be969922c49ef4d6852716f60079d55a",
     "semantic_hash": "be969922c49ef4d6852716f60079d55a"
   },
   "docs/panel/04-finans-yonetim.md": {
     "mtime": 1794668513.5517836,
-    "seen": 1794669303.7618577,
     "ast_hash": "17de499c062565d66b08c8311aff9b3a",
     "semantic_hash": "17de499c062565d66b08c8311aff9b3a"
   },
   "docs/panel/05-on-yuz-mimarisi.md": {
     "mtime": 1794668606.453123,
-    "seen": 1794669303.7618585,
     "ast_hash": "25bde57a0f8ff478bfb104c55779e479",
     "semantic_hash": "25bde57a0f8ff478bfb104c55779e479"
   },
   "raw/panel-harita.md": {
     "mtime": 1794667550.0368972,
-    "seen": 1794669303.7618597,
     "ast_hash": "327672659adc4e35a7f8462f8b6c71ff",
     "semantic_hash": "327672659adc4e35a7f8462f8b6c71ff"
   },
   "docs/04-kavram-koprusu.md": {
-    "mtime": 1794790458.6382186,
-    "seen": 1794800693.66837,
-    "ast_hash": "d91216e1edd5cece7c454ce403b184d8",
-    "semantic_hash": "d91216e1edd5cece7c454ce403b184d8"
+    "mtime": 1794800694.7139332,
+    "ast_hash": "adf9205b18caf8336f28d12c4e059d86",
+    "semantic_hash": "adf9205b18caf8336f28d12c4e059d86"
   },
   "docs/05-bilgi-mimarisi.md": {
     "mtime": 1794670228.544962,
-    "seen": 1794670977.1282089,
     "ast_hash": "6da9bf59ddcece9efc4e886f831a6312",
     "semantic_hash": "6da9bf59ddcece9efc4e886f831a6312"
   },
   "docs/06-alan-modeli.md": {
     "mtime": 1794670355.076691,
-    "seen": 1794670977.1282098,
     "ast_hash": "f5e1f3f0dbe88f8399f8360d76c03852",
     "semantic_hash": "f5e1f3f0dbe88f8399f8360d76c03852"
   },
   "docs/07-api-yuzeyi.md": {
     "mtime": 1794670137.1463692,
-    "seen": 1794670977.128211,
     "ast_hash": "adda8391f6b07b77849038c7c1b96d51",
     "semantic_hash": "adda8391f6b07b77849038c7c1b96d51"
   },
   "docs/08-performans.md": {
     "mtime": 1794670638.5955508,
-    "seen": 1794670977.128212,
     "ast_hash": "a675a5bec5f6b7874e2bcfdcd5283f61",
     "semantic_hash": "a675a5bec5f6b7874e2bcfdcd5283f61"
   },
   "docs/09-guvenlik-uyum.md": {
     "mtime": 1794670130.0475578,
-    "seen": 1794670977.1282127,
     "ast_hash": "31514e29d4e338c685c90590f677bf81",
     "semantic_hash": "31514e29d4e338c685c90590f677bf81"
   },
   "docs/10-rakip-ve-hedef-mimari.md": {
-    "mtime": 1794670230.4759116,
-    "seen": 1794670977.1282134,
-    "ast_hash": "bb68bf7109919a4d114662b102ddcc10",
-    "semantic_hash": "bb68bf7109919a4d114662b102ddcc10"
+    "mtime": 1794805522.3744624,
+    "ast_hash": "f8721cb9e8dfe22eba1dcc138f74a865",
+    "semantic_hash": "f8721cb9e8dfe22eba1dcc138f74a865"
   },
   "docs/11-yeniden-tasarim-girdileri.md": {
-    "mtime": 1794670673.0776956,
-    "seen": 1794670977.1282146,
-    "ast_hash": "aeb773a361e6195806b31ade39544ba1",
-    "semantic_hash": "aeb773a361e6195806b31ade39544ba1"
+    "mtime": 1794805522.3754625,
+    "ast_hash": "92ae7ecae3230b48853ee40addb33fd6",
+    "semantic_hash": "92ae7ecae3230b48853ee40addb33fd6"
   },
   "docs/panel/06-yeniden-denenen-ekranlar.md": {
     "mtime": 1794670463.5949318,
-    "seen": 1794670977.1282215,
     "ast_hash": "ee8deb6bdbffcb270fbc498c1c84e9ae",
     "semantic_hash": "ee8deb6bdbffcb270fbc498c1c84e9ae"
   },
   "docs/panel/07-kapsam-tamamlama.md": {
     "mtime": 1794670638.5365522,
-    "seen": 1794670977.1282225,
     "ast_hash": "198b3253e40b7c807d2086a0d5047963",
     "semantic_hash": "198b3253e40b7c807d2086a0d5047963"
   },
   "raw/siparis-dagilimi-30gun.json": {
     "mtime": 1794673277.1010876,
-    "seen": 1794684924.8449109,
     "ast_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4",
     "semantic_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4"
   },
   "yeni/panel-mock/package.json": {
     "mtime": 1794689205.2256947,
-    "seen": 1794692324.9968367,
     "ast_hash": "73d45744ebcba53fd9f3e16573d987f8",
     "semantic_hash": "73d45744ebcba53fd9f3e16573d987f8"
   },
   "yeni/panel-mock/src/App.tsx": {
-    "mtime": 1794790929.8720374,
-    "seen": 1794800693.6681347,
-    "ast_hash": "81539bfa3bb4c6c35a555fb6bb435cb6",
-    "semantic_hash": "81539bfa3bb4c6c35a555fb6bb435cb6"
+    "mtime": 1794927583.4154882,
+    "ast_hash": "6856e5be4bf4d3ca752c33855017189f",
+    "semantic_hash": "6856e5be4bf4d3ca752c33855017189f"
   },
   "yeni/panel-mock/src/data.ts": {
-    "mtime": 1794799772.1266775,
-    "seen": 1794800693.6681411,
-    "ast_hash": "3b7a5dae522c68e683cb66b2efd441c4",
-    "semantic_hash": "3b7a5dae522c68e683cb66b2efd441c4"
+    "mtime": 1794803399.9363315,
+    "ast_hash": "6867dcbe4dd8c35f3ee7842ebcbc0e86",
+    "semantic_hash": "6867dcbe4dd8c35f3ee7842ebcbc0e86"
   },
   "yeni/panel-mock/src/data2.ts": {
     "mtime": 1794790709.2556806,
-    "seen": 1794800693.6681418,
     "ast_hash": "7329e1e23bdf54b3c496fab40f0826d0",
     "semantic_hash": "7329e1e23bdf54b3c496fab40f0826d0"
   },
   "yeni/panel-mock/src/dist30.json": {
     "mtime": 1794685144.9340732,
-    "seen": 1794692324.9968433,
     "ast_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4",
     "semantic_hash": "b9c6a46f6b8cdc36d5dcbca6cfd867b4"
   },
   "yeni/panel-mock/src/main.tsx": {
     "mtime": 1794799797.521515,
-    "seen": 1794800693.6681476,
     "ast_hash": "44dce8345eec867524172376c7c9ff54",
     "semantic_hash": "44dce8345eec867524172376c7c9ff54"
   },
   "yeni/panel-mock/src/pages/Admin.tsx": {
-    "mtime": 1794790714.7145398,
-    "seen": 1794800693.6681488,
-    "ast_hash": "626bc1eb31f6f378c2258f01572beb98",
-    "semantic_hash": "626bc1eb31f6f378c2258f01572beb98"
+    "mtime": 1794800949.8514948,
+    "ast_hash": "f8f8c8c2f1b5a77bc17dcf1cd9eda3ca",
+    "semantic_hash": "f8f8c8c2f1b5a77bc17dcf1cd9eda3ca"
   },
   "yeni/panel-mock/src/pages/Catalog.tsx": {
-    "mtime": 1794798225.4078224,
-    "seen": 1794800693.6681511,
-    "ast_hash": "d063843ecf6b9433d8ac49f9c96754f1",
-    "semantic_hash": "d063843ecf6b9433d8ac49f9c96754f1"
+    "mtime": 1794803410.2608747,
+    "ast_hash": "10869085973d59d9100ae214a24682c4",
+    "semantic_hash": "10869085973d59d9100ae214a24682c4"
   },
   "yeni/panel-mock/src/pages/Channels.tsx": {
-    "mtime": 1794790714.71554,
-    "seen": 1794800693.668152,
-    "ast_hash": "1b128df08e2a05b55f8075a14d11a91a",
-    "semantic_hash": "1b128df08e2a05b55f8075a14d11a91a"
+    "mtime": 1794800949.848495,
+    "ast_hash": "287e3e1427463809d37cd6907f2a9e2e",
+    "semantic_hash": "287e3e1427463809d37cd6907f2a9e2e"
   },
   "yeni/panel-mock/src/pages/Extra.tsx": {
-    "mtime": 1794790929.8690374,
-    "seen": 1794800693.668153,
-    "ast_hash": "8f58e7379d4186874c096266a540896d",
-    "semantic_hash": "8f58e7379d4186874c096266a540896d"
+    "mtime": 1794939297.3080823,
+    "ast_hash": "ff8f2ce20fbd72f51279253a2efb1eb2",
+    "semantic_hash": "ff8f2ce20fbd72f51279253a2efb1eb2"
   },
   "yeni/panel-mock/src/pages/Finance.tsx": {
-    "mtime": 1794798225.4078224,
-    "seen": 1794800693.6681538,
-    "ast_hash": "bed25c1f5130e101ad136e99d268d36e",
-    "semantic_hash": "bed25c1f5130e101ad136e99d268d36e"
+    "mtime": 1794800949.849495,
+    "ast_hash": "de2ac4f7dba9eb3c807ab0043066a515",
+    "semantic_hash": "de2ac4f7dba9eb3c807ab0043066a515"
   },
   "yeni/panel-mock/src/pages/Orders.tsx": {
-    "mtime": 1794790929.8700373,
-    "seen": 1794800693.6681576,
-    "ast_hash": "c74abce11702c08280241d93f427a990",
-    "semantic_hash": "c74abce11702c08280241d93f427a990"
+    "mtime": 1794800949.849495,
+    "ast_hash": "d6730055aa0bad716ff1d7bfb08515f5",
+    "semantic_hash": "d6730055aa0bad716ff1d7bfb08515f5"
   },
   "yeni/panel-mock/src/pages/Overview.tsx": {
     "mtime": 1794790714.7165399,
-    "seen": 1794800693.6681588,
     "ast_hash": "037188297562b019542709aba67447b1",
     "semantic_hash": "037188297562b019542709aba67447b1"
   },
   "yeni/panel-mock/src/store.tsx": {
-    "mtime": 1794798225.4078224,
-    "seen": 1794800693.6681702,
-    "ast_hash": "ef9d75b2a29160b867b3a43f7ba9aa83",
-    "semantic_hash": "ef9d75b2a29160b867b3a43f7ba9aa83"
+    "mtime": 1794939297.1650813,
+    "ast_hash": "dd0c51b800c1c49db7e2e97772bd398b",
+    "semantic_hash": "dd0c51b800c1c49db7e2e97772bd398b"
   },
   "yeni/panel-mock/src/ui.tsx": {
-    "mtime": 1794789732.5889482,
-    "seen": 1794790457.6021595,
-    "ast_hash": "9c35902d5692526f4218a7c47a19e394",
-    "semantic_hash": "9c35902d5692526f4218a7c47a19e394"
+    "mtime": 1794800812.778376,
+    "ast_hash": "a2a0ba4a24acd07ff3841c6f4ef29f3a",
+    "semantic_hash": "a2a0ba4a24acd07ff3841c6f4ef29f3a"
   },
   "yeni/panel-mock/tsconfig.json": {
     "mtime": 1794685144.9350731,
-    "seen": 1794692324.9968636,
     "ast_hash": "a390d69561cfce0a731d52518ccb3b7b",
     "semantic_hash": "a390d69561cfce0a731d52518ccb3b7b"
   },
   "yeni/panel-mock/vite.config.ts": {
     "mtime": 1794686165.6741936,
-    "seen": 1794692324.9968646,
     "ast_hash": "78f468d59a8335ec9ab25a3d63803d62",
     "semantic_hash": "78f468d59a8335ec9ab25a3d63803d62"
   },
   "kararlar/0001-cok-kiracili-sistem.md": {
     "mtime": 1794673673.7366438,
-    "seen": 1794684924.8449593,
     "ast_hash": "d2626bc610d424d2c845d3e206ce8a94",
     "semantic_hash": "d2626bc610d424d2c845d3e206ce8a94"
   },
   "kararlar/0002-sifirdan-gelistirme.md": {
     "mtime": 1794674786.7858307,
-    "seen": 1794684924.8449602,
     "ast_hash": "0075a11af49a7120a5211af4467a8425",
     "semantic_hash": "0075a11af49a7120a5211af4467a8425"
   },
   "kararlar/0003-teknoloji-yigini.md": {
     "mtime": 1794674854.6218967,
-    "seen": 1794684924.844961,
     "ast_hash": "9caf8fd6b5dbf65abaf72c8454b799e6",
     "semantic_hash": "9caf8fd6b5dbf65abaf72c8454b799e6"
   },
   "kararlar/0004-yigin-ayrintilari.md": {
     "mtime": 1794675080.3054643,
-    "seen": 1794684924.8449621,
     "ast_hash": "76d436be52376350ff543650a3d45d79",
     "semantic_hash": "76d436be52376350ff543650a3d45d79"
   },
   "kararlar/0005-bulut-saglayici.md": {
     "mtime": 1794675284.107657,
-    "seen": 1794684924.8449628,
     "ast_hash": "1423e75105aeaad47ab2714ad2ecad05",
     "semantic_hash": "1423e75105aeaad47ab2714ad2ecad05"
   },
   "sunum/wawierp-analiz-sunumu.html": {
     "mtime": 1794673361.9526293,
-    "seen": 1794684924.8449657,
     "ast_hash": "95b9141f044595976d5af2302bed6056",
     "semantic_hash": "95b9141f044595976d5af2302bed6056"
   },
   "sunum/wawierp-mimari-ve-gecis.html": {
     "mtime": 1794675284.2216537,
-    "seen": 1794684924.844967,
     "ast_hash": "7887e980b3033657e021b3627ae72a84",
     "semantic_hash": "7887e980b3033657e021b3627ae72a84"
   },
   "sunum/wawierp-teknoloji-secenekleri.html": {
     "mtime": 1794675284.2216537,
-    "seen": 1794684924.8449676,
     "ast_hash": "495e7b00e45baebaf9a437fc53b9b277",
     "semantic_hash": "495e7b00e45baebaf9a437fc53b9b277"
   },
   "yeni/panel-mock/README.md": {
     "mtime": 1794790871.9725108,
-    "seen": 1794800693.6684096,
     "ast_hash": "174a4b2c7181c76fd6012c5c2900b8bb",
     "semantic_hash": "174a4b2c7181c76fd6012c5c2900b8bb"
   },
   "yeni/panel-mock/index.html": {
     "mtime": 1794799768.1347098,
-    "seen": 1794800693.6684105,
     "ast_hash": "400aacc7932e54ad5561cc426354a883",
     "semantic_hash": "400aacc7932e54ad5561cc426354a883"
   },
   "sunum/video-uret.py": {
     "mtime": 1794743997.7131028,
-    "seen": 1794773377.4691665,
     "ast_hash": "ea6377c9ce51654caa39baaa9f446a33",
     "semantic_hash": "ea6377c9ce51654caa39baaa9f446a33"
   },
   "yeni/panel-mock/assistant.mjs": {
     "mtime": 1794790503.4020379,
-    "seen": 1794800693.6681292,
     "ast_hash": "0892e9add927ed6292cc593a16cb64e1",
     "semantic_hash": "0892e9add927ed6292cc593a16cb64e1"
   },
   "yeni/panel-mock/server.mjs": {
     "mtime": 1794799768.1527097,
-    "seen": 1794800693.6681323,
     "ast_hash": "9f51c27be6850ac0dcf3f3597dc9866f",
     "semantic_hash": "9f51c27be6850ac0dcf3f3597dc9866f"
   },
   "yeni/panel-mock/src/Agent.tsx": {
     "mtime": 1794798225.4068222,
-    "seen": 1794800693.6681337,
     "ast_hash": "7d95e217763f554764fe199aeac41506",
     "semantic_hash": "7d95e217763f554764fe199aeac41506"
   },
   "yeni/panel-mock/src/landing-main.tsx": {
     "mtime": 1794686165.6741936,
-    "seen": 1794692324.9968443,
     "ast_hash": "067a09cf0a1b621f340b6b37a5f0969a",
     "semantic_hash": "067a09cf0a1b621f340b6b37a5f0969a"
   },
   "yeni/panel-mock/src/logo.tsx": {
     "mtime": 1794686165.6731937,
-    "seen": 1794692324.996845,
     "ast_hash": "06f16bad5c5d916810b279653000281b",
     "semantic_hash": "06f16bad5c5d916810b279653000281b"
   },
   "yeni/panel-mock/src/pages/Automation.tsx": {
-    "mtime": 1794790714.71554,
-    "seen": 1794800693.66815,
-    "ast_hash": "b9a9ac499425eb54a93d654632b1ca33",
-    "semantic_hash": "b9a9ac499425eb54a93d654632b1ca33"
+    "mtime": 1794800949.848495,
+    "ast_hash": "868c73927d69225296c141440c0c5c76",
+    "semantic_hash": "868c73927d69225296c141440c0c5c76"
   },
   "yeni/panel-mock/src/pages/Landing.tsx": {
     "mtime": 1794790714.7165399,
-    "seen": 1794800693.6681552,
     "ast_hash": "e97d2825b62ab17adeb0c038c8ca7d5b",
     "semantic_hash": "e97d2825b62ab17adeb0c038c8ca7d5b"
   },
   "yeni/panel-mock/src/pages/Mobile.tsx": {
     "mtime": 1794790714.7165399,
-    "seen": 1794800693.668156,
     "ast_hash": "c6db7fe8c5ef5bac0c3679acde764e9b",
     "semantic_hash": "c6db7fe8c5ef5bac0c3679acde764e9b"
   },
   "yeni/panel-mock/src/pages/Money.tsx": {
-    "mtime": 1794790714.7165399,
-    "seen": 1794800693.6681569,
-    "ast_hash": "560ee7303f1d6dfe06a6c52da4b881c6",
-    "semantic_hash": "560ee7303f1d6dfe06a6c52da4b881c6"
+    "mtime": 1794801284.2863495,
+    "ast_hash": "da5d4b8254d4d8f619d395b9bee19d0a",
+    "semantic_hash": "da5d4b8254d4d8f619d395b9bee19d0a"
   },
   "yeni/panel-mock/src/pages/Platform.tsx": {
-    "mtime": 1794790714.7165399,
-    "seen": 1794800693.6681595,
-    "ast_hash": "1230f100fac0db4d643b88a660e6d055",
-    "semantic_hash": "1230f100fac0db4d643b88a660e6d055"
+    "mtime": 1794800949.849495,
+    "ast_hash": "daa442d3b3fe4f8a96dd24b4d2d1f509",
+    "semantic_hash": "daa442d3b3fe4f8a96dd24b4d2d1f509"
   },
   "yeni/panel-mock/src/pages/Portal.tsx": {
-    "mtime": 1794790714.7175398,
-    "seen": 1794800693.6681604,
-    "ast_hash": "6b55b6e8986dbb29fa32b74b1c03c185",
-    "semantic_hash": "6b55b6e8986dbb29fa32b74b1c03c185"
+    "mtime": 1794801232.0855665,
+    "ast_hash": "d588edb7dc79c959f3e53cfb62b73f50",
+    "semantic_hash": "d588edb7dc79c959f3e53cfb62b73f50"
   },
   "yeni/panel-mock/src/pages/Quality.tsx": {
-    "mtime": 1794790714.7175398,
-    "seen": 1794800693.6681616,
-    "ast_hash": "c0645a76aff80f955157cdafca684ad6",
-    "semantic_hash": "c0645a76aff80f955157cdafca684ad6"
+    "mtime": 1794927583.4144883,
+    "ast_hash": "be0e5b353b1b28fb546f44ba1c3f64cf",
+    "semantic_hash": "be0e5b353b1b28fb546f44ba1c3f64cf"
   },
   "yeni/panel-mock/src/pages/Reservations.tsx": {
-    "mtime": 1794790714.7175398,
-    "seen": 1794800693.6681626,
-    "ast_hash": "00b19c32ef58ec7ea9f7c9299391f5d2",
-    "semantic_hash": "00b19c32ef58ec7ea9f7c9299391f5d2"
+    "mtime": 1794800973.1581159,
+    "ast_hash": "acff002bc6ee25b5b81ed4b8378a0a0b",
+    "semantic_hash": "acff002bc6ee25b5b81ed4b8378a0a0b"
   },
   "yeni/panel-mock/src/pages/Selling.tsx": {
-    "mtime": 1794790714.7175398,
-    "seen": 1794800693.6681635,
-    "ast_hash": "59f5c61a1e04cb759de8b0ea80f61f6f",
-    "semantic_hash": "59f5c61a1e04cb759de8b0ea80f61f6f"
+    "mtime": 1794939289.782023,
+    "ast_hash": "2ab94c0335d7cb75de44e593a5588d76",
+    "semantic_hash": "2ab94c0335d7cb75de44e593a5588d76"
   },
   "yeni/panel-mock/src/pages/Warehouse.tsx": {
-    "mtime": 1794799772.1266775,
-    "seen": 1794800693.668165,
-    "ast_hash": "a29fb7497773ccee1d5a2a191ecd8d6e",
-    "semantic_hash": "a29fb7497773ccee1d5a2a191ecd8d6e"
+    "mtime": 1794803429.9230182,
+    "ast_hash": "5345936bc2372618b2d91142bb8d29ad",
+    "semantic_hash": "5345936bc2372618b2d91142bb8d29ad"
   },
   "yeni/panel-mock/src/vite-env.d.ts": {
     "mtime": 1794686258.181887,
-    "seen": 1794692324.9968624,
     "ast_hash": "0352474ba2918efe13895edbc3780d94",
     "semantic_hash": "0352474ba2918efe13895edbc3780d94"
   },
   "kararlar/0006-asistan-katmani.md": {
     "mtime": 1794692053.9364543,
-    "seen": 1794692324.996894,
     "ast_hash": "333e27ac0e9ae444e7595924ccd8d6ba",
     "semantic_hash": "333e27ac0e9ae444e7595924ccd8d6ba"
   },
   "kararlar/0007-otomasyon-cekirdegi.md": {
     "mtime": 1794692053.9374542,
-    "seen": 1794692324.996895,
     "ast_hash": "4288816b25c4a5ffac12bd983c95ffb6",
     "semantic_hash": "4288816b25c4a5ffac12bd983c95ffb6"
   },
   "sunum/wawierp-rakipler-ve-yol-haritasi.html": {
     "mtime": 1794687972.48455,
-    "seen": 1794692324.9968987,
     "ast_hash": "20a99badda1a0b9bb6fd26ffa945f1a6",
     "semantic_hash": "20a99badda1a0b9bb6fd26ffa945f1a6"
   },
   "sunum/wawierp-yenilikler.html": {
     "mtime": 1794798230.4564452,
-    "seen": 1794800693.6684074,
     "ast_hash": "2236fa16bfc3fd5bb826e3f68b23506a",
     "semantic_hash": "2236fa16bfc3fd5bb826e3f68b23506a"
   },
   "yeni/panel-mock/panel.html": {
     "mtime": 1794799768.13571,
-    "seen": 1794800693.6684115,
     "ast_hash": "bc0c45d1786b46199a57bf6f7afab900",
     "semantic_hash": "bc0c45d1786b46199a57bf6f7afab900"
   },
   "sunum/img/arama.jpg": {
     "mtime": 1794734880.4957306,
-    "seen": 1794773377.4693239,
     "ast_hash": "b2bd39d997927a294bd01a0b8fcfe124",
     "semantic_hash": "b2bd39d997927a294bd01a0b8fcfe124"
   },
   "sunum/img/asistan1.jpg": {
     "mtime": 1794734880.6527264,
-    "seen": 1794773377.4693253,
     "ast_hash": "e7de722c5382bf6e301006b0b342b50e",
     "semantic_hash": "e7de722c5382bf6e301006b0b342b50e"
   },
   "sunum/img/asistan2.jpg": {
     "mtime": 1794734880.749724,
-    "seen": 1794773377.4693267,
     "ast_hash": "2585fcadb8901ca825c35fca48025729",
     "semantic_hash": "2585fcadb8901ca825c35fca48025729"
   },
   "sunum/img/finans.jpg": {
     "mtime": 1794734879.984744,
-    "seen": 1794773377.4693313,
     "ast_hash": "dbca73ea7097c676a9ae18dfd6bf16d0",
     "semantic_hash": "dbca73ea7097c676a9ae18dfd6bf16d0"
   },
   "sunum/img/fiyat.jpg": {
     "mtime": 1794734879.3987594,
-    "seen": 1794773377.4693327,
     "ast_hash": "97ac24ca6e38c6ca6fa1af99e5f6ea50",
     "semantic_hash": "97ac24ca6e38c6ca6fa1af99e5f6ea50"
   },
   "sunum/img/genel.jpg": {
     "mtime": 1794734878.3497868,
-    "seen": 1794773377.4693341,
     "ast_hash": "ca232109a18442fa8668a98b6ad307e2",
     "semantic_hash": "ca232109a18442fa8668a98b6ad307e2"
   },
   "sunum/img/kalite.jpg": {
     "mtime": 1794734879.1567657,
-    "seen": 1794773377.4693367,
     "ast_hash": "fec3a39dfbfe45f43292efebfbfc6941",
     "semantic_hash": "fec3a39dfbfe45f43292efebfbfc6941"
   },
   "sunum/img/kanal.jpg": {
     "mtime": 1794734879.0167694,
-    "seen": 1794773377.469338,
     "ast_hash": "816d30c196972b9de7e2ebae39859b3f",
     "semantic_hash": "816d30c196972b9de7e2ebae39859b3f"
   },
   "sunum/img/kural.jpg": {
     "mtime": 1794734879.5117564,
-    "seen": 1794773377.4693413,
     "ast_hash": "36b401c15f46c19c7b9bf5c16008518d",
     "semantic_hash": "36b401c15f46c19c7b9bf5c16008518d"
   },
   "sunum/img/listeleme.jpg": {
     "mtime": 1794734879.257763,
-    "seen": 1794773377.4693427,
     "ast_hash": "15384067012ca027ad2a4bb8d4cf5781",
     "semantic_hash": "15384067012ca027ad2a4bb8d4cf5781"
   },
   "sunum/img/platform.jpg": {
     "mtime": 1794734880.1257403,
-    "seen": 1794773377.4693482,
     "ast_hash": "c14d15682ebba21271040074ac867f27",
     "semantic_hash": "c14d15682ebba21271040074ac867f27"
   },
   "sunum/img/siparis.jpg": {
     "mtime": 1794734878.60378,
-    "seen": 1794773377.4693496,
     "ast_hash": "638dc2780ab94541ecf43f7795b11523",
     "semantic_hash": "638dc2780ab94541ecf43f7795b11523"
   },
   "sunum/img/toplama.jpg": {
     "mtime": 1794734878.8697731,
-    "seen": 1794773377.4693508,
     "ast_hash": "b0fabdac81296aa00841cb35abfb2cf0",
     "semantic_hash": "b0fabdac81296aa00841cb35abfb2cf0"
   },
   "sunum/img/uyari.jpg": {
     "mtime": 1794734879.6287534,
-    "seen": 1794773377.4693522,
     "ast_hash": "6b49c27b6eeceb435851f2993be76f94",
     "semantic_hash": "6b49c27b6eeceb435851f2993be76f94"
   },
   "sunum/img/vardiya.jpg": {
     "mtime": 1794734879.8397477,
-    "seen": 1794773377.4693534,
     "ast_hash": "2eccbd56cb209fbe084d8ff5eafd252d",
     "semantic_hash": "2eccbd56cb209fbe084d8ff5eafd252d"
   },
   "sunum/wawierp-tanitim-kapak.jpg": {
     "mtime": 1794734881.0057173,
-    "seen": 1794773377.4693549,
     "ast_hash": "abd860c640ad5f79c736f77788e5e7cc",
     "semantic_hash": "abd860c640ad5f79c736f77788e5e7cc"
   },
   "yeni/panel-mock/src/assets/marks/aliexpress.svg": {
     "mtime": 1794686236.4571872,
-    "seen": 1794692324.9969168,
     "ast_hash": "1ca90870ce829682adbf14031f0cfd02",
     "semantic_hash": "1ca90870ce829682adbf14031f0cfd02"
   },
   "yeni/panel-mock/src/assets/marks/allegro.svg": {
     "mtime": 1794686236.4981866,
-    "seen": 1794692324.9969177,
     "ast_hash": "33f500b3a2bb4982f6e601c6a710a64f",
     "semantic_hash": "33f500b3a2bb4982f6e601c6a710a64f"
   },
   "yeni/panel-mock/src/assets/marks/amazon.svg": {
     "mtime": 1794686236.5341861,
-    "seen": 1794692324.9969184,
     "ast_hash": "1ab2a827ea30a5450670007d1d33cb57",
     "semantic_hash": "1ab2a827ea30a5450670007d1d33cb57"
   },
   "yeni/panel-mock/src/assets/marks/bigcommerce.svg": {
     "mtime": 1794686236.5631857,
-    "seen": 1794692324.9969192,
     "ast_hash": "03ef0add1f184b3c23b42637e82416a3",
     "semantic_hash": "03ef0add1f184b3c23b42637e82416a3"
   },
   "yeni/panel-mock/src/assets/marks/dhl.svg": {
     "mtime": 1794686236.602185,
-    "seen": 1794692324.9969199,
     "ast_hash": "34b2f49705b6c5d045c5204a9341b773",
     "semantic_hash": "34b2f49705b6c5d045c5204a9341b773"
   },
   "yeni/panel-mock/src/assets/marks/dpd.svg": {
     "mtime": 1794686236.6371846,
-    "seen": 1794692324.9969206,
     "ast_hash": "da881ee087479497aadf1d8fcd762ce8",
     "semantic_hash": "da881ee087479497aadf1d8fcd762ce8"
   },
   "yeni/panel-mock/src/assets/marks/ebay.svg": {
     "mtime": 1794686236.677184,
-    "seen": 1794692324.9969213,
     "ast_hash": "58e0a45f1848902bd0601c7f52dacdfa",
     "semantic_hash": "58e0a45f1848902bd0601c7f52dacdfa"
   },
   "yeni/panel-mock/src/assets/marks/etsy.svg": {
     "mtime": 1794686236.7181835,
-    "seen": 1794692324.996922,
     "ast_hash": "e78d29ee89b58a2d6a47c7af55bac122",
     "semantic_hash": "e78d29ee89b58a2d6a47c7af55bac122"
   },
   "yeni/panel-mock/src/assets/marks/fedex.svg": {
     "mtime": 1794686236.7431831,
-    "seen": 1794692324.996923,
     "ast_hash": "26752ebbb890dc93526cd09c4e930466",
     "semantic_hash": "26752ebbb890dc93526cd09c4e930466"
   },
   "yeni/panel-mock/src/assets/marks/flipkart.svg": {
     "mtime": 1794686236.7811825,
-    "seen": 1794692324.9969234,
     "ast_hash": "1f7f056d2303446227c83ae14ad1e1a3",
     "semantic_hash": "1f7f056d2303446227c83ae14ad1e1a3"
   },
   "yeni/panel-mock/src/assets/marks/hermes.svg": {
     "mtime": 1794686236.8141823,
-    "seen": 1794692324.9969242,
     "ast_hash": "b1a7b61c9ac2383882485357d046f221",
     "semantic_hash": "b1a7b61c9ac2383882485357d046f221"
   },
   "yeni/panel-mock/src/assets/marks/kaufland.svg": {
     "mtime": 1794686236.8541815,
-    "seen": 1794692324.9969249,
     "ast_hash": "75d35305ad995419c5368a0a6ae07689",
     "semantic_hash": "75d35305ad995419c5368a0a6ae07689"
   },
   "yeni/panel-mock/src/assets/marks/magento.svg": {
     "mtime": 1794686236.8811812,
-    "seen": 1794692324.9969273,
     "ast_hash": "cb220e0e6e3dab0e9427137b01cb25a5",
     "semantic_hash": "cb220e0e6e3dab0e9427137b01cb25a5"
   },
   "yeni/panel-mock/src/assets/marks/metro.svg": {
     "mtime": 1794686236.897181,
-    "seen": 1794692324.996928,
     "ast_hash": "d3b7492a4e460d4516ea46b6716f9e5e",
     "semantic_hash": "d3b7492a4e460d4516ea46b6716f9e5e"
   },
   "yeni/panel-mock/src/assets/marks/otto.svg": {
     "mtime": 1794686236.9251807,
-    "seen": 1794692324.9969287,
     "ast_hash": "d8ae873d576c736ec7c339b6612a09b6",
     "semantic_hash": "d8ae873d576c736ec7c339b6612a09b6"
   },
   "yeni/panel-mock/src/assets/marks/prestashop.svg": {
     "mtime": 1794686236.9521801,
-    "seen": 1794692324.9969296,
     "ast_hash": "ec69fdd94d9f676a545b3520e680041b",
     "semantic_hash": "ec69fdd94d9f676a545b3520e680041b"
   },
   "yeni/panel-mock/src/assets/marks/rakuten.svg": {
     "mtime": 1794686236.9611802,
-    "seen": 1794692324.9969304,
     "ast_hash": "af0d727ab5fbaecd94008c4231d0f326",
     "semantic_hash": "af0d727ab5fbaecd94008c4231d0f326"
   },
   "yeni/panel-mock/src/assets/marks/shopee.svg": {
     "mtime": 1794686236.96818,
-    "seen": 1794692324.9969308,
     "ast_hash": "25fd60959f22dba0c830693158b8f285",
     "semantic_hash": "25fd60959f22dba0c830693158b8f285"
   },
   "yeni/panel-mock/src/assets/marks/shopify.svg": {
     "mtime": 1794686236.9761798,
-    "seen": 1794692324.9969316,
     "ast_hash": "87af3ae567983eaf1c00ecb9fcf6842f",
     "semantic_hash": "87af3ae567983eaf1c00ecb9fcf6842f"
   },
   "yeni/panel-mock/src/assets/marks/shopware.svg": {
     "mtime": 1794686236.98518,
-    "seen": 1794692324.9969323,
     "ast_hash": "c3fd71913aeedc3aa1b2f5cca973241a",
     "semantic_hash": "c3fd71913aeedc3aa1b2f5cca973241a"
   },
   "yeni/panel-mock/src/assets/marks/squarespace.svg": {
     "mtime": 1794686237.0031796,
-    "seen": 1794692324.9969332,
     "ast_hash": "6aceb49dc85ca777c538d530690e5478",
     "semantic_hash": "6aceb49dc85ca777c538d530690e5478"
   },
   "yeni/panel-mock/src/assets/marks/taobao.svg": {
     "mtime": 1794686237.0221794,
-    "seen": 1794692324.996934,
     "ast_hash": "487ebf3518456cb4ad02e036deacb1e2",
     "semantic_hash": "487ebf3518456cb4ad02e036deacb1e2"
   },
   "yeni/panel-mock/src/assets/marks/ups.svg": {
     "mtime": 1794686237.0521789,
-    "seen": 1794692324.9969347,
     "ast_hash": "26342ff01f856abc6dbbed9b6052a337",
     "semantic_hash": "26342ff01f856abc6dbbed9b6052a337"
   },
   "yeni/panel-mock/src/assets/marks/walmart.svg": {
     "mtime": 1794686237.0671787,
-    "seen": 1794692324.9969354,
     "ast_hash": "d348496f161e33c4b349a916f9590722",
     "semantic_hash": "d348496f161e33c4b349a916f9590722"
   },
   "yeni/panel-mock/src/assets/marks/wix.svg": {
     "mtime": 1794686237.0801785,
-    "seen": 1794692324.996936,
     "ast_hash": "0d828049fc22b53bf400d6c752ca6d8b",
     "semantic_hash": "0d828049fc22b53bf400d6c752ca6d8b"
   },
   "yeni/panel-mock/src/assets/marks/woocommerce.svg": {
     "mtime": 1794686237.0901783,
-    "seen": 1794692324.996937,
     "ast_hash": "1af52dd76d4ec6b2c9e317a6d3d92c82",
     "semantic_hash": "1af52dd76d4ec6b2c9e317a6d3d92c82"
   },
   "yeni/panel-mock/src/assets/marks/zalando.svg": {
     "mtime": 1794686237.0981781,
-    "seen": 1794692324.9969378,
     "ast_hash": "6b270412451d98cb5d90235075a13f58",
     "semantic_hash": "6b270412451d98cb5d90235075a13f58"
   },
   "sunum/wawierp-tanitim.mp4": {
     "mtime": 1794734878.0417948,
-    "seen": 1794773377.4694827,
     "ast_hash": "3f0b24608771607e3bcdf34b89a6136f",
     "semantic_hash": "3f0b24608771607e3bcdf34b89a6136f"
   },
   "yeni/panel-mock/src/Notifications.tsx": {
     "mtime": 1794790531.7162943,
-    "seen": 1794800693.6681378,
     "ast_hash": "0e9c50a402ed065534dc53118b526210",
     "semantic_hash": "0e9c50a402ed065534dc53118b526210"
   },
   "kararlar/0008-izleme-ve-pilot.md": {
     "mtime": 1794692512.8613443,
-    "seen": 1794713238.9322615,
     "ast_hash": "b121fc35b859e2d441e60f34c11c76e4",
     "semantic_hash": "b121fc35b859e2d441e60f34c11c76e4"
   },
   "yeni/panel-mock/src/Chat.tsx": {
     "mtime": 1794789446.6341958,
-    "seen": 1794790457.6021261,
     "ast_hash": "71db6c227c9e15cd8689ee3735ec876e",
     "semantic_hash": "71db6c227c9e15cd8689ee3735ec876e"
   },
   "yeni/panel-mock/src/Sidebar.tsx": {
-    "mtime": 1794790709.2566805,
-    "seen": 1794800693.6681387,
-    "ast_hash": "85e8a80b20efa8699c26915e6708b9af",
-    "semantic_hash": "85e8a80b20efa8699c26915e6708b9af"
+    "mtime": 1794807460.8998945,
+    "ast_hash": "2712d9facc05a07187f5925ae4f42e60",
+    "semantic_hash": "2712d9facc05a07187f5925ae4f42e60"
   },
   "yeni/panel-mock/src/Thumb.tsx": {
     "mtime": 1794716024.2822747,
-    "seen": 1794718985.1263096,
     "ast_hash": "e9bfa52e3709d4e266c7157434724dbc",
     "semantic_hash": "e9bfa52e3709d4e266c7157434724dbc"
   },
   "yeni/panel-mock/src/flows.tsx": {
     "mtime": 1794790472.6808476,
-    "seen": 1794800693.6681442,
     "ast_hash": "1f3376b49d69a63fc0bb3adde2b68b98",
     "semantic_hash": "1f3376b49d69a63fc0bb3adde2b68b98"
   },
   "yeni/panel-mock/src/photos.ts": {
     "mtime": 1794716009.2795513,
-    "seen": 1794718985.1263373,
     "ast_hash": "29c2aa0134ba50177be63ca0b4519575",
     "semantic_hash": "29c2aa0134ba50177be63ca0b4519575"
   },
   "yeni/panel-mock/GORSEL-KAYNAKLARI.md": {
     "mtime": 1794716009.2795513,
-    "seen": 1794718985.1263776,
     "ast_hash": "0d6e54717fe8658b00de618b23b9fefc",
     "semantic_hash": "0d6e54717fe8658b00de618b23b9fefc"
   },
   "yeni/panel-mock/src/assets/products/00.webp": {
     "mtime": 1794716009.1245542,
-    "seen": 1794718985.126425,
     "ast_hash": "d77f3da0697eac745c0e3cfe66785395",
     "semantic_hash": "d77f3da0697eac745c0e3cfe66785395"
   },
   "yeni/panel-mock/src/assets/products/01.webp": {
     "mtime": 1794716009.129554,
-    "seen": 1794718985.1264262,
     "ast_hash": "3a3d4693d77e2b3e960c53fa04f4c2ec",
     "semantic_hash": "3a3d4693d77e2b3e960c53fa04f4c2ec"
   },
   "yeni/panel-mock/src/assets/products/02.webp": {
     "mtime": 1794716009.1355538,
-    "seen": 1794718985.1264272,
     "ast_hash": "0d6e18e7c96e2602ba6bda80ccdca3c2",
     "semantic_hash": "0d6e18e7c96e2602ba6bda80ccdca3c2"
   },
   "yeni/panel-mock/src/assets/products/03.webp": {
     "mtime": 1794716009.1405537,
-    "seen": 1794718985.126428,
     "ast_hash": "b66a6c0dcc1be9853cc0fee2e79c3aaa",
     "semantic_hash": "b66a6c0dcc1be9853cc0fee2e79c3aaa"
   },
   "yeni/panel-mock/src/assets/products/04.webp": {
     "mtime": 1794716009.1485536,
-    "seen": 1794718985.1264288,
     "ast_hash": "7854e76447f12d85802ba281acd54393",
     "semantic_hash": "7854e76447f12d85802ba281acd54393"
   },
   "yeni/panel-mock/src/assets/products/05.webp": {
     "mtime": 1794716009.1545534,
-    "seen": 1794718985.1264298,
     "ast_hash": "dcce9998fde6c100b3858b882e8947ea",
     "semantic_hash": "dcce9998fde6c100b3858b882e8947ea"
   },
   "yeni/panel-mock/src/assets/products/06.webp": {
     "mtime": 1794716009.1605535,
-    "seen": 1794718985.1264305,
     "ast_hash": "ff124c1a62cc8f50086291e8c8ce8e0b",
     "semantic_hash": "ff124c1a62cc8f50086291e8c8ce8e0b"
   },
   "yeni/panel-mock/src/assets/products/07.webp": {
     "mtime": 1794716009.1635535,
-    "seen": 1794718985.1264312,
     "ast_hash": "b8101e303673bd2cdb7f5d9dfda5f07c",
     "semantic_hash": "b8101e303673bd2cdb7f5d9dfda5f07c"
   },
   "yeni/panel-mock/src/assets/products/08.webp": {
     "mtime": 1794716009.1665533,
-    "seen": 1794718985.126432,
     "ast_hash": "43bc4d40f35c141e3ec08ab74e06c035",
     "semantic_hash": "43bc4d40f35c141e3ec08ab74e06c035"
   },
   "yeni/panel-mock/src/assets/products/09.webp": {
     "mtime": 1794716009.1735532,
-    "seen": 1794718985.1264331,
     "ast_hash": "37d890c690f1b961434761ecab46e13d",
     "semantic_hash": "37d890c690f1b961434761ecab46e13d"
   },
   "yeni/panel-mock/src/assets/products/10.webp": {
     "mtime": 1794716009.175553,
-    "seen": 1794718985.1264338,
     "ast_hash": "8767967dbfe3a1c9184bd67852e7cadd",
     "semantic_hash": "8767967dbfe3a1c9184bd67852e7cadd"
   },
   "yeni/panel-mock/src/assets/products/11.webp": {
     "mtime": 1794716009.179553,
-    "seen": 1794718985.1264346,
     "ast_hash": "bf50da0dcd99a387d1cea5f8d60975e1",
     "semantic_hash": "bf50da0dcd99a387d1cea5f8d60975e1"
   },
   "yeni/panel-mock/src/assets/products/12.webp": {
     "mtime": 1794716009.183553,
-    "seen": 1794718985.1264353,
     "ast_hash": "41ab6d52b339a5423dc5ed8c6a0632ca",
     "semantic_hash": "41ab6d52b339a5423dc5ed8c6a0632ca"
   },
   "yeni/panel-mock/src/assets/products/14.webp": {
     "mtime": 1794716009.190553,
-    "seen": 1794718985.1264362,
     "ast_hash": "25b0e6886064c91967cf02c2cfee4f4f",
     "semantic_hash": "25b0e6886064c91967cf02c2cfee4f4f"
   },
   "yeni/panel-mock/src/assets/products/15.webp": {
     "mtime": 1794716009.194553,
-    "seen": 1794718985.1264372,
     "ast_hash": "0b747b33e6e1fac2e41c2dbe5c39103f",
     "semantic_hash": "0b747b33e6e1fac2e41c2dbe5c39103f"
   },
   "yeni/panel-mock/src/assets/products/16.webp": {
     "mtime": 1794716009.1995528,
-    "seen": 1794718985.1264381,
     "ast_hash": "73de1ea3f0f8197c0a4b0461dc3f9021",
     "semantic_hash": "73de1ea3f0f8197c0a4b0461dc3f9021"
   },
   "yeni/panel-mock/src/assets/products/17.webp": {
     "mtime": 1794716009.2045527,
-    "seen": 1794718985.1264389,
     "ast_hash": "961285cd6c86481350d3e3d18e069185",
     "semantic_hash": "961285cd6c86481350d3e3d18e069185"
   },
   "yeni/panel-mock/src/assets/products/18.webp": {
     "mtime": 1794716009.2085526,
-    "seen": 1794718985.12644,
     "ast_hash": "1006fb42a1b46e5fe1502c0b22b58469",
     "semantic_hash": "1006fb42a1b46e5fe1502c0b22b58469"
   },
   "yeni/panel-mock/src/assets/products/19.webp": {
     "mtime": 1794716009.2115524,
-    "seen": 1794718985.1264408,
     "ast_hash": "ab5259a8e4bd5d23b2aa612e2f273288",
     "semantic_hash": "ab5259a8e4bd5d23b2aa612e2f273288"
   },
   "yeni/panel-mock/src/assets/products/20.webp": {
     "mtime": 1794716009.2145524,
-    "seen": 1794718985.1264415,
     "ast_hash": "9fe30984b5171373ee35bfeacd531f9d",
     "semantic_hash": "9fe30984b5171373ee35bfeacd531f9d"
   },
   "yeni/panel-mock/src/assets/products/21.webp": {
     "mtime": 1794716009.2185524,
-    "seen": 1794718985.1264424,
     "ast_hash": "9b96e7d4ef3f908f1674573b019dc6b4",
     "semantic_hash": "9b96e7d4ef3f908f1674573b019dc6b4"
   },
   "yeni/panel-mock/src/assets/products/22.webp": {
     "mtime": 1794716009.2225523,
-    "seen": 1794718985.1264431,
     "ast_hash": "5e04bb9e13a9e88570592ff203cab262",
     "semantic_hash": "5e04bb9e13a9e88570592ff203cab262"
   },
   "yeni/panel-mock/src/assets/products/23.webp": {
     "mtime": 1794716009.2275522,
-    "seen": 1794718985.126444,
     "ast_hash": "a903c25c5f0442498275bf5351c905bb",
     "semantic_hash": "a903c25c5f0442498275bf5351c905bb"
   },
   "yeni/panel-mock/src/assets/products/24.webp": {
     "mtime": 1794716009.2305522,
-    "seen": 1794718985.1264448,
     "ast_hash": "bbae3091831f4220f1c4994e2317e373",
     "semantic_hash": "bbae3091831f4220f1c4994e2317e373"
   },
   "yeni/panel-mock/src/assets/products/25.webp": {
     "mtime": 1794716009.235552,
-    "seen": 1794718985.1264455,
     "ast_hash": "ff1b1f2a7287effccd00847399d9fd86",
     "semantic_hash": "ff1b1f2a7287effccd00847399d9fd86"
   },
   "yeni/panel-mock/src/assets/products/26.webp": {
     "mtime": 1794716009.240552,
-    "seen": 1794718985.1264465,
     "ast_hash": "7b783079837ccd784959bea133a653c4",
     "semantic_hash": "7b783079837ccd784959bea133a653c4"
   },
   "yeni/panel-mock/src/assets/products/27.webp": {
     "mtime": 1794716009.2465518,
-    "seen": 1794718985.1264474,
     "ast_hash": "fe177d28ada05991155b5b1705f295b0",
     "semantic_hash": "fe177d28ada05991155b5b1705f295b0"
   },
   "yeni/panel-mock/src/assets/products/28.webp": {
     "mtime": 1794716009.2495518,
-    "seen": 1794718985.1264482,
     "ast_hash": "a041018414d4f6d413aeefc84eb401b4",
     "semantic_hash": "a041018414d4f6d413aeefc84eb401b4"
   },
   "yeni/panel-mock/src/assets/products/29.webp": {
     "mtime": 1794716009.2535517,
-    "seen": 1794718985.1264489,
     "ast_hash": "a77e6d52a2b3694bf19054849c57df37",
     "semantic_hash": "a77e6d52a2b3694bf19054849c57df37"
   },
   "yeni/panel-mock/src/assets/products/30.webp": {
     "mtime": 1794716009.2575517,
-    "seen": 1794718985.1264496,
     "ast_hash": "05c4d22ea63291eb0867f3e53707edfa",
     "semantic_hash": "05c4d22ea63291eb0867f3e53707edfa"
   },
   "yeni/panel-mock/src/assets/products/31.webp": {
     "mtime": 1794716009.2625515,
-    "seen": 1794718985.1264505,
     "ast_hash": "299a507ee977748b1b7ec5a311d82a4a",
     "semantic_hash": "299a507ee977748b1b7ec5a311d82a4a"
   },
   "yeni/panel-mock/src/assets/products/32.webp": {
     "mtime": 1794716009.2665515,
-    "seen": 1794718985.1264513,
     "ast_hash": "03e60e0aee973e4ce23171d56c342d92",
     "semantic_hash": "03e60e0aee973e4ce23171d56c342d92"
   },
   "yeni/panel-mock/src/assets/products/33.webp": {
     "mtime": 1794716009.2715514,
-    "seen": 1794718985.126452,
     "ast_hash": "787e9877327dd49635bd6ad9c7cf9ccc",
     "semantic_hash": "787e9877327dd49635bd6ad9c7cf9ccc"
   },
   "yeni/panel-mock/src/assets/products/34.webp": {
     "mtime": 1794716009.2755513,
-    "seen": 1794718985.1264527,
     "ast_hash": "4054de1a8929b90a9397d7a8a65e1822",
     "semantic_hash": "4054de1a8929b90a9397d7a8a65e1822"
   },
   "yeni/panel-mock/src/assets/products/35.webp": {
     "mtime": 1794716009.2795513,
-    "seen": 1794718985.1264539,
     "ast_hash": "ab778659a2197445a104368afc6c8807",
     "semantic_hash": "ab778659a2197445a104368afc6c8807"
   },
   "sunum/yayina-kopyala.sh": {
     "mtime": 1794789697.9370623,
-    "seen": 1794790457.6021183,
     "ast_hash": "6c3156c6345308cc2f21fa0865bcf8ef",
     "semantic_hash": "6c3156c6345308cc2f21fa0865bcf8ef"
   },
   "yeni/panel-mock/sunum/index.html": {
     "mtime": 1794798230.4534447,
-    "seen": 1794800693.6684124,
     "ast_hash": "2236fa16bfc3fd5bb826e3f68b23506a",
     "semantic_hash": "2236fa16bfc3fd5bb826e3f68b23506a"
   },
   "sunum/img/acilis.jpg": {
     "mtime": 1794734878.1637917,
-    "seen": 1794773377.4693222,
     "ast_hash": "7eef17b877336befb2c3e51f0fb04b39",
     "semantic_hash": "7eef17b877336befb2c3e51f0fb04b39"
   },
   "sunum/img/bildirim.jpg": {
     "mtime": 1794734879.75575,
-    "seen": 1794773377.4693298,
     "ast_hash": "d87addba46f0620f484592786ef2ef43",
     "semantic_hash": "d87addba46f0620f484592786ef2ef43"
   },
   "sunum/img/iade.jpg": {
     "mtime": 1794734878.7327769,
-    "seen": 1794773377.4693353,
     "ast_hash": "072c64013c326153af2f8d5f62d14d9d",
     "semantic_hash": "072c64013c326153af2f8d5f62d14d9d"
   },
   "sunum/img/kapanis.jpg": {
     "mtime": 1794734880.9217196,
-    "seen": 1794773377.4693396,
     "ast_hash": "8036b7455d6f77cedc223615e4aa1d3c",
     "semantic_hash": "8036b7455d6f77cedc223615e4aa1d3c"
   },
   "sunum/img/menu.jpg": {
     "mtime": 1794734878.4767835,
-    "seen": 1794773377.4693441,
     "ast_hash": "073052a18496c189782c8dd147248eae",
     "semantic_hash": "073052a18496c189782c8dd147248eae"
   },
   "sunum/img/mesaj.jpg": {
     "mtime": 1794734880.211738,
-    "seen": 1794773377.4693456,
     "ast_hash": "0b1a3fa4600875a1db7abe1a54d2739c",
     "semantic_hash": "0b1a3fa4600875a1db7abe1a54d2739c"
   },
   "sunum/img/pano.jpg": {
     "mtime": 1794734880.4057329,
-    "seen": 1794773377.4693468,
     "ast_hash": "1b4c031e7e25124cde8b162e4caf38e3",
     "semantic_hash": "1b4c031e7e25124cde8b162e4caf38e3"
   },
   "yeni/panel-mock/sunum/img/arama.jpg": {
     "mtime": 1794788550.7714605,
-    "seen": 1794790457.6022804,
     "ast_hash": "b2bd39d997927a294bd01a0b8fcfe124",
     "semantic_hash": "b2bd39d997927a294bd01a0b8fcfe124"
   },
   "yeni/panel-mock/sunum/img/asistan1.jpg": {
     "mtime": 1794788550.7814603,
-    "seen": 1794790457.6022813,
     "ast_hash": "e7de722c5382bf6e301006b0b342b50e",
     "semantic_hash": "e7de722c5382bf6e301006b0b342b50e"
   },
   "yeni/panel-mock/sunum/img/asistan2.jpg": {
     "mtime": 1794788550.78746,
-    "seen": 1794790457.6022823,
     "ast_hash": "2585fcadb8901ca825c35fca48025729",
     "semantic_hash": "2585fcadb8901ca825c35fca48025729"
   },
   "yeni/panel-mock/sunum/img/bildirim.jpg": {
     "mtime": 1794788550.8004599,
-    "seen": 1794790457.602284,
     "ast_hash": "d87addba46f0620f484592786ef2ef43",
     "semantic_hash": "d87addba46f0620f484592786ef2ef43"
   },
   "yeni/panel-mock/sunum/img/finans.jpg": {
     "mtime": 1794788550.8064597,
-    "seen": 1794790457.6022851,
     "ast_hash": "dbca73ea7097c676a9ae18dfd6bf16d0",
     "semantic_hash": "dbca73ea7097c676a9ae18dfd6bf16d0"
   },
   "yeni/panel-mock/sunum/img/fiyat.jpg": {
     "mtime": 1794788550.8134596,
-    "seen": 1794790457.6022859,
     "ast_hash": "97ac24ca6e38c6ca6fa1af99e5f6ea50",
     "semantic_hash": "97ac24ca6e38c6ca6fa1af99e5f6ea50"
   },
   "yeni/panel-mock/sunum/img/genel.jpg": {
     "mtime": 1794788550.8214593,
-    "seen": 1794790457.6022866,
     "ast_hash": "ca232109a18442fa8668a98b6ad307e2",
     "semantic_hash": "ca232109a18442fa8668a98b6ad307e2"
   },
   "yeni/panel-mock/sunum/img/iade.jpg": {
     "mtime": 1794788550.8294592,
-    "seen": 1794790457.6022875,
     "ast_hash": "072c64013c326153af2f8d5f62d14d9d",
     "semantic_hash": "072c64013c326153af2f8d5f62d14d9d"
   },
   "yeni/panel-mock/sunum/img/kalite.jpg": {
     "mtime": 1794788550.835459,
-    "seen": 1794790457.6022885,
     "ast_hash": "fec3a39dfbfe45f43292efebfbfc6941",
     "semantic_hash": "fec3a39dfbfe45f43292efebfbfc6941"
   },
   "yeni/panel-mock/sunum/img/kanal.jpg": {
     "mtime": 1794788550.842459,
-    "seen": 1794790457.6022892,
     "ast_hash": "816d30c196972b9de7e2ebae39859b3f",
     "semantic_hash": "816d30c196972b9de7e2ebae39859b3f"
   },
   "yeni/panel-mock/sunum/img/kural.jpg": {
     "mtime": 1794788550.8504586,
-    "seen": 1794790457.60229,
     "ast_hash": "36b401c15f46c19c7b9bf5c16008518d",
     "semantic_hash": "36b401c15f46c19c7b9bf5c16008518d"
   },
   "yeni/panel-mock/sunum/img/listeleme.jpg": {
     "mtime": 1794788550.8584585,
-    "seen": 1794790457.6022904,
     "ast_hash": "15384067012ca027ad2a4bb8d4cf5781",
     "semantic_hash": "15384067012ca027ad2a4bb8d4cf5781"
   },
   "yeni/panel-mock/sunum/img/menu.jpg": {
     "mtime": 1794788550.8644583,
-    "seen": 1794790457.6022913,
     "ast_hash": "073052a18496c189782c8dd147248eae",
     "semantic_hash": "073052a18496c189782c8dd147248eae"
   },
   "yeni/panel-mock/sunum/img/mesaj.jpg": {
     "mtime": 1794788550.8714583,
-    "seen": 1794790457.6022923,
     "ast_hash": "0b1a3fa4600875a1db7abe1a54d2739c",
     "semantic_hash": "0b1a3fa4600875a1db7abe1a54d2739c"
   },
   "yeni/panel-mock/sunum/img/pano.jpg": {
     "mtime": 1794788550.878458,
-    "seen": 1794790457.602293,
     "ast_hash": "1b4c031e7e25124cde8b162e4caf38e3",
     "semantic_hash": "1b4c031e7e25124cde8b162e4caf38e3"
   },
   "yeni/panel-mock/sunum/img/platform.jpg": {
     "mtime": 1794788550.8874578,
-    "seen": 1794790457.6022935,
     "ast_hash": "c14d15682ebba21271040074ac867f27",
     "semantic_hash": "c14d15682ebba21271040074ac867f27"
   },
   "yeni/panel-mock/sunum/img/siparis.jpg": {
     "mtime": 1794788550.893458,
-    "seen": 1794790457.6022942,
     "ast_hash": "638dc2780ab94541ecf43f7795b11523",
     "semantic_hash": "638dc2780ab94541ecf43f7795b11523"
   },
   "yeni/panel-mock/sunum/img/toplama.jpg": {
     "mtime": 1794788550.8994577,
-    "seen": 1794790457.6022954,
     "ast_hash": "b0fabdac81296aa00841cb35abfb2cf0",
     "semantic_hash": "b0fabdac81296aa00841cb35abfb2cf0"
   },
   "yeni/panel-mock/sunum/img/uyari.jpg": {
     "mtime": 1794788550.9074576,
-    "seen": 1794790457.6022959,
     "ast_hash": "6b49c27b6eeceb435851f2993be76f94",
     "semantic_hash": "6b49c27b6eeceb435851f2993be76f94"
   },
   "yeni/panel-mock/sunum/img/vardiya.jpg": {
     "mtime": 1794788550.9114573,
-    "seen": 1794790457.6022966,
     "ast_hash": "2eccbd56cb209fbe084d8ff5eafd252d",
     "semantic_hash": "2eccbd56cb209fbe084d8ff5eafd252d"
   },
   "yeni/panel-mock/sunum/wawierp-tanitim-kapak.jpg": {
     "mtime": 1794788550.746461,
-    "seen": 1794790457.6022973,
     "ast_hash": "abd860c640ad5f79c736f77788e5e7cc",
     "semantic_hash": "abd860c640ad5f79c736f77788e5e7cc"
   },
   "yeni/panel-mock/sunum/wawierp-tanitim.mp4": {
     "mtime": 1794788550.746461,
-    "seen": 1794790457.6022995,
     "ast_hash": "3f0b24608771607e3bcdf34b89a6136f",
     "semantic_hash": "3f0b24608771607e3bcdf34b89a6136f"
   },
   "yeni/panel-mock/src/similar.tsx": {
     "mtime": 1794729242.0677392,
-    "seen": 1794730948.2528794,
     "ast_hash": "c3b016c32036ace6d63deb661be872c6",
     "semantic_hash": "c3b016c32036ace6d63deb661be872c6"
   },
   "yeni/panel-mock/src/rivals.tsx": {
     "mtime": 1794772978.5894866,
-    "seen": 1794773377.4692457,
     "ast_hash": "7981213ea188ced2ac08fe10c7a43e55",
     "semantic_hash": "7981213ea188ced2ac08fe10c7a43e55"
   },
   "docs/guvenlik/2026-11-15-guvenlik-incelemesi.md": {
     "mtime": 1794744634.6658568,
-    "seen": 1794773377.4692779,
     "ast_hash": "afeba0e219089cc79f7b2c5d812629af",
     "semantic_hash": "afeba0e219089cc79f7b2c5d812629af"
   },
   "sunum/img/benzer.jpg": {
     "mtime": 1794734880.8367217,
-    "seen": 1794773377.4693284,
     "ast_hash": "5af6341b9ba81a1346a38ccc3ac9367a",
     "semantic_hash": "5af6341b9ba81a1346a38ccc3ac9367a"
   },
   "yeni/panel-mock/sunum/img/benzer.jpg": {
     "mtime": 1794788550.79246,
-    "seen": 1794790457.602283,
     "ast_hash": "5af6341b9ba81a1346a38ccc3ac9367a",
     "semantic_hash": "5af6341b9ba81a1346a38ccc3ac9367a"
   },
   "docs/konsey/2026-11-16-ikinci-konsey.md": {
-    "mtime": 1794799858.1033962,
-    "seen": 1794800693.6683803,
-    "ast_hash": "99b920d072136742b46acb831a0043f4",
-    "semantic_hash": "99b920d072136742b46acb831a0043f4"
+    "mtime": 1794805109.1220787,
+    "ast_hash": "e08adcd04270b029a8a6ac10e1f95e2e",
+    "semantic_hash": "e08adcd04270b029a8a6ac10e1f95e2e"
   },
   "docs/konsey/2026-11-16-konsey-incelemesi.md": {
     "mtime": 1794787735.3871882,
-    "seen": 1794790457.6021779,
     "ast_hash": "2c02c78b3328d1a2994db8554a30d997",
     "semantic_hash": "2c02c78b3328d1a2994db8554a30d997"
   },
   "kararlar/0009-taslak-sartnamedir.md": {
     "mtime": 1794787735.3871882,
-    "seen": 1794790457.6021926,
     "ast_hash": "a5873979d210489cbb2d2186a15b099a",
     "semantic_hash": "a5873979d210489cbb2d2186a15b099a"
   },
   "skills-lock.json": {
     "mtime": 1794800664.5470338,
-    "seen": 1794800693.668119,
     "ast_hash": "23ee0c471091092ea95b5ff38a2639a9",
     "semantic_hash": "23ee0c471091092ea95b5ff38a2639a9"
   },
   ".agents/skills/modern-web-guidance/SKILL.md": {
     "mtime": 1794800664.494036,
-    "seen": 1794800693.6681764,
     "ast_hash": "a03ae032d2c4cba6fd96ba9e5624f23a",
     "semantic_hash": "a03ae032d2c4cba6fd96ba9e5624f23a"
   },
   ".agents/skills/modern-web-guidance/guides/accessibility/accessibility.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681776,
     "ast_hash": "6424302d6cc5b62db14d93c5917ccf70",
     "semantic_hash": "6424302d6cc5b62db14d93c5917ccf70"
   },
   ".agents/skills/modern-web-guidance/guides/accessibility/accessible-error-announcement.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681783,
     "ast_hash": "98f3e8045c9ba02ced88ff81b71ad24d",
     "semantic_hash": "98f3e8045c9ba02ced88ff81b71ad24d"
   },
   ".agents/skills/modern-web-guidance/guides/accessibility/accessible-generated-content.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681795,
     "ast_hash": "ad38eca1c7ed47ca3ae3500d680bf339",
     "semantic_hash": "ad38eca1c7ed47ca3ae3500d680bf339"
   },
   ".agents/skills/modern-web-guidance/guides/accessibility/respect-os-text-scale.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681805,
     "ast_hash": "2ee16d5de349ad7040be1557ea545946",
     "semantic_hash": "2ee16d5de349ad7040be1557ea545946"
   },
   ".agents/skills/modern-web-guidance/guides/built-in-ai/language-detection.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681812,
     "ast_hash": "e93e691af35b124cc74090c97e9c1881",
     "semantic_hash": "e93e691af35b124cc74090c97e9c1881"
   },
   ".agents/skills/modern-web-guidance/guides/built-in-ai/language-model.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681824,
     "ast_hash": "e21f86b0890f401e991d95a4f61ea5e9",
     "semantic_hash": "e21f86b0890f401e991d95a4f61ea5e9"
   },
   ".agents/skills/modern-web-guidance/guides/built-in-ai/prompt-api.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668183,
     "ast_hash": "e21f86b0890f401e991d95a4f61ea5e9",
     "semantic_hash": "e21f86b0890f401e991d95a4f61ea5e9"
   },
   ".agents/skills/modern-web-guidance/guides/built-in-ai/summarizer.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681838,
     "ast_hash": "f091be12fd68b1f5a5f8ff183487b66c",
     "semantic_hash": "f091be12fd68b1f5a5f8ff183487b66c"
   },
   ".agents/skills/modern-web-guidance/guides/built-in-ai/translator.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681848,
     "ast_hash": "fc8e8c0943debdb7c4fdef5481b1252b",
     "semantic_hash": "fc8e8c0943debdb7c4fdef5481b1252b"
   },
   ".agents/skills/modern-web-guidance/guides/css/animate-to-intrinsic-sizes.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681857,
     "ast_hash": "ada4740e064a0c2fc253acfbd1ff8a07",
     "semantic_hash": "ada4740e064a0c2fc253acfbd1ff8a07"
   },
   ".agents/skills/modern-web-guidance/guides/css/atrule-support-conditionals.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681867,
     "ast_hash": "cc645f0f94bb51c3c4621886b9a63183",
     "semantic_hash": "cc645f0f94bb51c3c4621886b9a63183"
   },
   ".agents/skills/modern-web-guidance/guides/css/calculate-with-intrinsic-sizes.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681876,
     "ast_hash": "d5f74521bad1343af66aa7a2110b1c14",
     "semantic_hash": "d5f74521bad1343af66aa7a2110b1c14"
   },
   ".agents/skills/modern-web-guidance/guides/css/child-state-based-styling.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681888,
     "ast_hash": "7305fe7297ec300980e2835e6e7e7d1c",
     "semantic_hash": "7305fe7297ec300980e2835e6e7e7d1c"
   },
   ".agents/skills/modern-web-guidance/guides/css/content-based-styling.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681898,
     "ast_hash": "ea0dd6dd468582d799b5691f8eefb899",
     "semantic_hash": "ea0dd6dd468582d799b5691f8eefb899"
   },
   ".agents/skills/modern-web-guidance/guides/css/css-layout.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681907,
     "ast_hash": "ab5c4eddc23b7504d7abd3671c47e2f3",
     "semantic_hash": "ab5c4eddc23b7504d7abd3671c47e2f3"
   },
   ".agents/skills/modern-web-guidance/guides/css/css.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681914,
     "ast_hash": "9cef29197685793365d0e416e1f4749d",
     "semantic_hash": "9cef29197685793365d0e416e1f4749d"
   },
   ".agents/skills/modern-web-guidance/guides/css/design-token-reactivity.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681926,
     "ast_hash": "142bc94e10e1e0f034d95338739e5993",
     "semantic_hash": "142bc94e10e1e0f034d95338739e5993"
   },
   ".agents/skills/modern-web-guidance/guides/css/dynamic-sibling-styling.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681933,
     "ast_hash": "eed7233c57d71b624912d748f360aeb5",
     "semantic_hash": "eed7233c57d71b624912d748f360aeb5"
   },
   ".agents/skills/modern-web-guidance/guides/css/fluid-scaling.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681943,
     "ast_hash": "f0461aa5e71cab4a220c9fbf861f5b6d",
     "semantic_hash": "f0461aa5e71cab4a220c9fbf861f5b6d"
   },
   ".agents/skills/modern-web-guidance/guides/css/individual-transform-properties.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668195,
     "ast_hash": "30c74574de4f815365b2dbabc2c8b3fa",
     "semantic_hash": "30c74574de4f815365b2dbabc2c8b3fa"
   },
   ".agents/skills/modern-web-guidance/guides/css/overflow-clipping-control.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681962,
     "ast_hash": "26450f8386080cbff5b84f71b4478daa",
     "semantic_hash": "26450f8386080cbff5b84f71b4478daa"
   },
   ".agents/skills/modern-web-guidance/guides/css/reduce-style-repetition.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668197,
     "ast_hash": "5cd169dc56a792d2fd798f6d738e21a7",
     "semantic_hash": "5cd169dc56a792d2fd798f6d738e21a7"
   },
   ".agents/skills/modern-web-guidance/guides/css/responsive-design.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681979,
     "ast_hash": "237844b46572e73525c89e73213f186a",
     "semantic_hash": "237844b46572e73525c89e73213f186a"
   },
   ".agents/skills/modern-web-guidance/guides/css/selector-atrule-combinations.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681986,
     "ast_hash": "63926ad60ddb9fe1aa0a15aae465b5d4",
     "semantic_hash": "63926ad60ddb9fe1aa0a15aae465b5d4"
   },
   ".agents/skills/modern-web-guidance/guides/css/size-aware-styling.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6681998,
     "ast_hash": "682698e1eff6b9b001c55fb3b4236efb",
     "semantic_hash": "682698e1eff6b9b001c55fb3b4236efb"
   },
   ".agents/skills/modern-web-guidance/guides/css/style-parent-with-has.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682005,
     "ast_hash": "3af7d43b79786a3a738b6baf0bd971c4",
     "semantic_hash": "3af7d43b79786a3a738b6baf0bd971c4"
   },
   ".agents/skills/modern-web-guidance/guides/css/usage-aware-component-variations.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682014,
     "ast_hash": "698d41e98f8a7e29056aac574a9cc036",
     "semantic_hash": "698d41e98f8a7e29056aac574a9cc036"
   },
   ".agents/skills/modern-web-guidance/guides/forms/animated-select-picker.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682022,
     "ast_hash": "d7df93f00f1a6f855f98a88e097b34ed",
     "semantic_hash": "d7df93f00f1a6f855f98a88e097b34ed"
   },
   ".agents/skills/modern-web-guidance/guides/forms/autofill-address-form.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682034,
     "ast_hash": "fd04da72cdb4dfd3d487cafe584effb7",
     "semantic_hash": "fd04da72cdb4dfd3d487cafe584effb7"
   },
   ".agents/skills/modern-web-guidance/guides/forms/autofill-highlight-inputs.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668204,
     "ast_hash": "0515567ae1b395f733b431e87667c258",
     "semantic_hash": "0515567ae1b395f733b431e87667c258"
   },
   ".agents/skills/modern-web-guidance/guides/forms/autofill-payment-form.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668205,
     "ast_hash": "e1e1691847d1e43ee36b0d0102c9c270",
     "semantic_hash": "e1e1691847d1e43ee36b0d0102c9c270"
   },
   ".agents/skills/modern-web-guidance/guides/forms/autofill-sign-in-form.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682057,
     "ast_hash": "5948eee6eb70b939983e575159a2d71c",
     "semantic_hash": "5948eee6eb70b939983e575159a2d71c"
   },
   ".agents/skills/modern-web-guidance/guides/forms/autofill-sign-up-form.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668207,
     "ast_hash": "33b8ca7d3a7885fe91e50dac65cd3341",
     "semantic_hash": "33b8ca7d3a7885fe91e50dac65cd3341"
   },
   ".agents/skills/modern-web-guidance/guides/forms/brand-consistent-forms.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682076,
     "ast_hash": "9884d808c9a4d8e8d9b47135689ba978",
     "semantic_hash": "9884d808c9a4d8e8d9b47135689ba978"
   },
   ".agents/skills/modern-web-guidance/guides/forms/branded-select-styling.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682086,
     "ast_hash": "9d75023f0045007ef34a938919e6a1b5",
     "semantic_hash": "9d75023f0045007ef34a938919e6a1b5"
   },
   ".agents/skills/modern-web-guidance/guides/forms/custom-select-picker-layouts.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682093,
     "ast_hash": "29217e50ee91fb8d6de03af86607a278",
     "semantic_hash": "29217e50ee91fb8d6de03af86607a278"
   },
   ".agents/skills/modern-web-guidance/guides/forms/form-fields-automatically-fit-contents.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682107,
     "ast_hash": "42632026dcee29ce78fb72e5559cc1ac",
     "semantic_hash": "42632026dcee29ce78fb72e5559cc1ac"
   },
   ".agents/skills/modern-web-guidance/guides/forms/forms.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682115,
     "ast_hash": "508e3ca2e00738366a78253fc721babb",
     "semantic_hash": "508e3ca2e00738366a78253fc721babb"
   },
   ".agents/skills/modern-web-guidance/guides/forms/ime-safe-enter-submit.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682124,
     "ast_hash": "de4df34d69b7bc54cae0470439e6fdf7",
     "semantic_hash": "de4df34d69b7bc54cae0470439e6fdf7"
   },
   ".agents/skills/modern-web-guidance/guides/forms/required-field-feedback.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682131,
     "ast_hash": "3b7047f14a25d836c3e8cef43391876d",
     "semantic_hash": "3b7047f14a25d836c3e8cef43391876d"
   },
   ".agents/skills/modern-web-guidance/guides/forms/rich-media-picker.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682143,
     "ast_hash": "7614555df00d4e3eac7299b26542d52e",
     "semantic_hash": "7614555df00d4e3eac7299b26542d52e"
   },
   ".agents/skills/modern-web-guidance/guides/forms/select-menu-interaction.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682153,
     "ast_hash": "530754798dad29cd7ea9d5e5d35aa002",
     "semantic_hash": "530754798dad29cd7ea9d5e5d35aa002"
   },
   ".agents/skills/modern-web-guidance/guides/forms/slider.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682162,
     "ast_hash": "6ce28851f76dae3f69a6363ba880f1ef",
     "semantic_hash": "6ce28851f76dae3f69a6363ba880f1ef"
   },
   ".agents/skills/modern-web-guidance/guides/forms/sms-otp-form.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682172,
     "ast_hash": "78995ad502179b7b6a1255ab66715d35",
     "semantic_hash": "78995ad502179b7b6a1255ab66715d35"
   },
   ".agents/skills/modern-web-guidance/guides/forms/switch.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668218,
     "ast_hash": "af1ff49e1987656ef4eb3699b9f82084",
     "semantic_hash": "af1ff49e1987656ef4eb3699b9f82084"
   },
   ".agents/skills/modern-web-guidance/guides/forms/validate-input-after-interaction.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682189,
     "ast_hash": "31d6eb2dddf38171755dea5a60a091b6",
     "semantic_hash": "31d6eb2dddf38171755dea5a60a091b6"
   },
   ".agents/skills/modern-web-guidance/guides/html/accessible-web-components.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682196,
     "ast_hash": "374646dc81d34787198440d70e5b0ce4",
     "semantic_hash": "374646dc81d34787198440d70e5b0ce4"
   },
   ".agents/skills/modern-web-guidance/guides/html/custom-elements.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682208,
     "ast_hash": "8f5ceab29ad7be7337bd294766426975",
     "semantic_hash": "8f5ceab29ad7be7337bd294766426975"
   },
   ".agents/skills/modern-web-guidance/guides/html/form-associated-custom-elements.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682217,
     "ast_hash": "f4b2e8fb378bdf675834448a6f851d25",
     "semantic_hash": "f4b2e8fb378bdf675834448a6f851d25"
   },
   ".agents/skills/modern-web-guidance/guides/html/html.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668223,
     "ast_hash": "60b8ada4608f38e6f1c40daaf0f2969e",
     "semantic_hash": "60b8ada4608f38e6f1c40daaf0f2969e"
   },
   ".agents/skills/modern-web-guidance/guides/html/prerendering-custom-elements.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668224,
     "ast_hash": "6a33ee3f25fe1f88481b939ddddb6482",
     "semantic_hash": "6a33ee3f25fe1f88481b939ddddb6482"
   },
   ".agents/skills/modern-web-guidance/guides/html/shadow-dom.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682248,
     "ast_hash": "a06df1408d5edb300503b9333339f0a4",
     "semantic_hash": "a06df1408d5edb300503b9333339f0a4"
   },
   ".agents/skills/modern-web-guidance/guides/html/styling-web-components.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682255,
     "ast_hash": "5f099b2dffe1738499ad894d59f845b0",
     "semantic_hash": "5f099b2dffe1738499ad894d59f845b0"
   },
   ".agents/skills/modern-web-guidance/guides/html/web-components.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682265,
     "ast_hash": "c11fa1af5c2557fdf83a6e01e9a2e948",
     "semantic_hash": "c11fa1af5c2557fdf83a6e01e9a2e948"
   },
   ".agents/skills/modern-web-guidance/guides/js/calculate-event-differentials.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682277,
     "ast_hash": "50b299353461b638374314a59e41cdc6",
     "semantic_hash": "50b299353461b638374314a59e41cdc6"
   },
   ".agents/skills/modern-web-guidance/guides/js/capture-location-agnostic-data.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682286,
     "ast_hash": "f81322867b7dc43beeb4f7e2051429b2",
     "semantic_hash": "f81322867b7dc43beeb4f7e2051429b2"
   },
   ".agents/skills/modern-web-guidance/guides/js/coordinate-global-events.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682296,
     "ast_hash": "886dcb76e5619ce8dd7b5e6175f9ed65",
     "semantic_hash": "886dcb76e5619ce8dd7b5e6175f9ed65"
   },
   ".agents/skills/modern-web-guidance/guides/js/sort-high-precision-timestamps.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682308,
     "ast_hash": "b9f560cd42f3eac2742b2fe7b232ec97",
     "semantic_hash": "b9f560cd42f3eac2742b2fe7b232ec97"
   },
   ".agents/skills/modern-web-guidance/guides/js/support-global-calendar-systems.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682315,
     "ast_hash": "5fb9092363e34ed93c86493c04265f02",
     "semantic_hash": "5fb9092363e34ed93c86493c04265f02"
   },
   ".agents/skills/modern-web-guidance/guides/performance/batch-analytics-events.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682324,
     "ast_hash": "75b37bf05ead00f2a541269b773b5719",
     "semantic_hash": "75b37bf05ead00f2a541269b773b5719"
   },
   ".agents/skills/modern-web-guidance/guides/performance/break-up-long-tasks.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682334,
     "ast_hash": "7b81b2fe16426ce8be4c9126f92b5436",
     "semantic_hash": "7b81b2fe16426ce8be4c9126f92b5436"
   },
   ".agents/skills/modern-web-guidance/guides/performance/calculate-total-foreground-time.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682346,
     "ast_hash": "53ab66c5d34bf7b81fb129d5686b20ac",
     "semantic_hash": "53ab66c5d34bf7b81fb129d5686b20ac"
   },
   ".agents/skills/modern-web-guidance/guides/performance/conditional-async-dependencies.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682353,
     "ast_hash": "fde9a778fecb85a404b16de8ed552771",
     "semantic_hash": "fde9a778fecb85a404b16de8ed552771"
   },
   ".agents/skills/modern-web-guidance/guides/performance/defer-rendering-heavy-content.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682363,
     "ast_hash": "a7f45a5e13171af18c80a98891d9d86c",
     "semantic_hash": "a7f45a5e13171af18c80a98891d9d86c"
   },
   ".agents/skills/modern-web-guidance/guides/performance/defer-work-until-scroll-ends.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668237,
     "ast_hash": "bd6a19e3bbcedaecb68adc92e5bbd8a4",
     "semantic_hash": "bd6a19e3bbcedaecb68adc92e5bbd8a4"
   },
   ".agents/skills/modern-web-guidance/guides/performance/deliver-optimized-decorative-images.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668238,
     "ast_hash": "a739b7356b4ba930fdd08b38e4daa6b8",
     "semantic_hash": "a739b7356b4ba930fdd08b38e4daa6b8"
   },
   ".agents/skills/modern-web-guidance/guides/performance/deprioritize-background-fetches.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682386,
     "ast_hash": "75e54661216c662a5e6384ee16c6f8fb",
     "semantic_hash": "75e54661216c662a5e6384ee16c6f8fb"
   },
   ".agents/skills/modern-web-guidance/guides/performance/detect-initial-visibility-state.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682396,
     "ast_hash": "cf524db4a96ce5be9fc63bb720bfb5f2",
     "semantic_hash": "cf524db4a96ce5be9fc63bb720bfb5f2"
   },
   ".agents/skills/modern-web-guidance/guides/performance/efficient-background-processing.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682403,
     "ast_hash": "020a571a2a2851d2039df7cad25ea838",
     "semantic_hash": "020a571a2a2851d2039df7cad25ea838"
   },
   ".agents/skills/modern-web-guidance/guides/performance/faster-spa-view-transitions.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682415,
     "ast_hash": "35defe7b77b200437254d670a0a5dade",
     "semantic_hash": "35defe7b77b200437254d670a0a5dade"
   },
   ".agents/skills/modern-web-guidance/guides/performance/flicker-free-client-side-ab-testing.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682422,
     "ast_hash": "9b7b8b249dd56f561fca19492f752bf5",
     "semantic_hash": "9b7b8b249dd56f561fca19492f752bf5"
   },
   ".agents/skills/modern-web-guidance/guides/performance/full-session-analytics.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668243,
     "ast_hash": "94efd404fdd41f017305da2acb77a7eb",
     "semantic_hash": "94efd404fdd41f017305da2acb77a7eb"
   },
   ".agents/skills/modern-web-guidance/guides/performance/identify-heavy-scripts.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.668244,
     "ast_hash": "b75b51aa81a454b7dbc413af39f00d4e",
     "semantic_hash": "b75b51aa81a454b7dbc413af39f00d4e"
   },
   ".agents/skills/modern-web-guidance/guides/performance/identify-inp-causes.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682448,
     "ast_hash": "9a9bbe8291cc9c8e2f353725c95b72cc",
     "semantic_hash": "9a9bbe8291cc9c8e2f353725c95b72cc"
   },
   ".agents/skills/modern-web-guidance/guides/performance/improve-next-page-load-performance.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682458,
     "ast_hash": "9aec04d7e09b6ee7cab5b6450bceee1b",
     "semantic_hash": "9aec04d7e09b6ee7cab5b6450bceee1b"
   },
   ".agents/skills/modern-web-guidance/guides/performance/interaction-paint-timing.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682465,
     "ast_hash": "aad61de003b15e6bec35c6efd7baceaa",
     "semantic_hash": "aad61de003b15e6bec35c6efd7baceaa"
   },
   ".agents/skills/modern-web-guidance/guides/performance/interactions-in-complex-layouts.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682472,
     "ast_hash": "760da7219c362ea146dd6226f851feb9",
     "semantic_hash": "760da7219c362ea146dd6226f851feb9"
   },
   ".agents/skills/modern-web-guidance/guides/performance/lazy-load-video-and-audio.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682484,
     "ast_hash": "44d406eb8df12cb69ad2542e295f0ef9",
     "semantic_hash": "44d406eb8df12cb69ad2542e295f0ef9"
   },
   ".agents/skills/modern-web-guidance/guides/performance/optimize-image-priority.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682494,
     "ast_hash": "f5bbcf1383e7d167915dd6d06077a6ec",
     "semantic_hash": "f5bbcf1383e7d167915dd6d06077a6ec"
   },
   ".agents/skills/modern-web-guidance/guides/performance/optimize-preload-priority.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.66825,
     "ast_hash": "ef471cdc22776ed35ef023df38cfde74",
     "semantic_hash": "ef471cdc22776ed35ef023df38cfde74"
   },
   ".agents/skills/modern-web-guidance/guides/performance/optimize-script-priority.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682508,
     "ast_hash": "4dc2d60a3104d3198b5eac1a719ac3a8",
     "semantic_hash": "4dc2d60a3104d3198b5eac1a719ac3a8"
   },
   ".agents/skills/modern-web-guidance/guides/performance/out-of-order-html-streaming.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682518,
     "ast_hash": "8db3fce0f1ef216d5580a7b26b00b3ab",
     "semantic_hash": "8db3fce0f1ef216d5580a7b26b00b3ab"
   },
   ".agents/skills/modern-web-guidance/guides/performance/performance.md": {
     "mtime": 1794800664.5100353,
-    "seen": 1794800693.6682527,
     "ast_hash": "c34af0755e7c2af2fb8996420ccf9458",
     "semantic_hash": "c34af0755e7c2af2fb8996420ccf9458"
   },
   ".agents/skills/modern-web-guidance/guides/performance/resolution-optimized-pseudo-elements.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682534,
     "ast_hash": "1933e0fbed036bea482a07aea8e6f630",
     "semantic_hash": "1933e0fbed036bea482a07aea8e6f630"
   },
   ".agents/skills/modern-web-guidance/guides/performance/schedule-tasks-by-priority.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682544,
     "ast_hash": "06ce03dc56f3761c0a896a10687b1f4b",
     "semantic_hash": "06ce03dc56f3761c0a896a10687b1f4b"
   },
   ".agents/skills/modern-web-guidance/guides/privacy/privacy.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682553,
     "ast_hash": "743aa3634758d411dc6466dcb08d9c08",
     "semantic_hash": "743aa3634758d411dc6466dcb08d9c08"
   },
   ".agents/skills/modern-web-guidance/guides/pwa/install-web-app.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668256,
     "ast_hash": "34a79f111040000af9d74d8a312e4af7",
     "semantic_hash": "34a79f111040000af9d74d8a312e4af7"
   },
   ".agents/skills/modern-web-guidance/guides/pwa/migrate-web-app-origin.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668257,
     "ast_hash": "d31ba4dcd4354d273ccafcc4c53e98d2",
     "semantic_hash": "d31ba4dcd4354d273ccafcc4c53e98d2"
   },
   ".agents/skills/modern-web-guidance/guides/security/client-side-encryption.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668258,
     "ast_hash": "d5dbeab6aa68c04f9b77c2b4f4b4f32a",
     "semantic_hash": "d5dbeab6aa68c04f9b77c2b4f4b4f32a"
   },
   ".agents/skills/modern-web-guidance/guides/security/digital-signatures.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682591,
     "ast_hash": "e8240c8d785ccbd629d4e905cfa37d35",
     "semantic_hash": "e8240c8d785ccbd629d4e905cfa37d35"
   },
   ".agents/skills/modern-web-guidance/guides/security/local-network-access.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682599,
     "ast_hash": "f5e51ad10294310796e6804b02296e6d",
     "semantic_hash": "f5e51ad10294310796e6804b02296e6d"
   },
   ".agents/skills/modern-web-guidance/guides/security/passkey-authentication.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682608,
     "ast_hash": "b076d0c889ec7d7bee0fa775d1d1f7df",
     "semantic_hash": "b076d0c889ec7d7bee0fa775d1d1f7df"
   },
   ".agents/skills/modern-web-guidance/guides/security/passkey-conditional-create.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668262,
     "ast_hash": "715c51e5d0c6fea92a4c7e56209ed43a",
     "semantic_hash": "715c51e5d0c6fea92a4c7e56209ed43a"
   },
   ".agents/skills/modern-web-guidance/guides/security/passkey-management.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682627,
     "ast_hash": "5d8b1dbb700dee05ecc7aaccf4b31803",
     "semantic_hash": "5d8b1dbb700dee05ecc7aaccf4b31803"
   },
   ".agents/skills/modern-web-guidance/guides/security/passkey-reauthentication.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668264,
     "ast_hash": "11708c587fcb28a5fc1576c556f57df3",
     "semantic_hash": "11708c587fcb28a5fc1576c556f57df3"
   },
   ".agents/skills/modern-web-guidance/guides/security/passkey-registration.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682649,
     "ast_hash": "807cae1e862957089ca3abadc8c94c99",
     "semantic_hash": "807cae1e862957089ca3abadc8c94c99"
   },
   ".agents/skills/modern-web-guidance/guides/security/passkeys.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682658,
     "ast_hash": "385d5b5d8847cbfef0b771ecca4ebe72",
     "semantic_hash": "385d5b5d8847cbfef0b771ecca4ebe72"
   },
   ".agents/skills/modern-web-guidance/guides/security/quick-sign-ins.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682665,
     "ast_hash": "4787042cc4345baf24ac4cf5cd475fd8",
     "semantic_hash": "4787042cc4345baf24ac4cf5cd475fd8"
   },
   ".agents/skills/modern-web-guidance/guides/security/restrict-outbound-connections.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682673,
     "ast_hash": "952913f620dbc76b1e3c99b336a7a238",
     "semantic_hash": "952913f620dbc76b1e3c99b336a7a238"
   },
   ".agents/skills/modern-web-guidance/guides/security/sanitize-untrusted-html.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682682,
     "ast_hash": "10b62e77baa4e78ea56fa68f1f482490",
     "semantic_hash": "10b62e77baa4e78ea56fa68f1f482490"
   },
   ".agents/skills/modern-web-guidance/guides/security/secure-external-subresources.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682694,
     "ast_hash": "d34797d9e7cdfdca527fee01d3051339",
     "semantic_hash": "d34797d9e7cdfdca527fee01d3051339"
   },
   ".agents/skills/modern-web-guidance/guides/security/security.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.66827,
     "ast_hash": "1703d402bced981eef41bc9424444a0b",
     "semantic_hash": "1703d402bced981eef41bc9424444a0b"
   },
   ".agents/skills/modern-web-guidance/guides/security/trusted-types.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682708,
     "ast_hash": "f0220ce8f151edb410b0fd8c78657664",
     "semantic_hash": "f0220ce8f151edb410b0fd8c78657664"
   },
   ".agents/skills/modern-web-guidance/guides/security/validate-origins.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682715,
     "ast_hash": "f48a4c488b41227c9c6c53c97b5ef20d",
     "semantic_hash": "f48a4c488b41227c9c6c53c97b5ef20d"
   },
   ".agents/skills/modern-web-guidance/guides/security/verify-email-ownership.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682727,
     "ast_hash": "7c1348ac1c063b2423e81f3f598689be",
     "semantic_hash": "7c1348ac1c063b2423e81f3f598689be"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/carousel-slide-effects.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682734,
     "ast_hash": "80a3a8216d89e8350caf478e4b5f9b49",
     "semantic_hash": "80a3a8216d89e8350caf478e4b5f9b49"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/component-specific-light-dark-theme.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6682742,
     "ast_hash": "eb704c306db07edc702996038b7f603d",
     "semantic_hash": "eb704c306db07edc702996038b7f603d"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/icons.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668275,
     "ast_hash": "25eec0523a651d78adaaadd8d0aa77ca",
     "semantic_hash": "25eec0523a651d78adaaadd8d0aa77ca"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/position-aware-tooltips.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668276,
     "ast_hash": "fd3d864633868ae3366750a6f31f116c",
     "semantic_hash": "fd3d864633868ae3366750a6f31f116c"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/pull-to-reveal.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668277,
     "ast_hash": "6492d013ba7fa06be56e0cc4f76efdcf",
     "semantic_hash": "6492d013ba7fa06be56e0cc4f76efdcf"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/responsive-table.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682777,
     "ast_hash": "d200d4d09f2b1d57d50564ad9e46772b",
     "semantic_hash": "d200d4d09f2b1d57d50564ad9e46772b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/scroll-position-aware-elements.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682785,
     "ast_hash": "0eaba9818790179023d2e4a925400c4b",
     "semantic_hash": "0eaba9818790179023d2e4a925400c4b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/scroll-progress-indicator.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682794,
     "ast_hash": "404cd65f26ff2b9ea889378b0a9d30c7",
     "semantic_hash": "404cd65f26ff2b9ea889378b0a9d30c7"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/scrollability-affordance-hints.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682804,
     "ast_hash": "886e61d40f728c8d3681135f96f83d5a",
     "semantic_hash": "886e61d40f728c8d3681135f96f83d5a"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/shrinking-header-on-scroll.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668281,
     "ast_hash": "3c360d4caffd89210f441b59cd2cfb32",
     "semantic_hash": "3c360d4caffd89210f441b59cd2cfb32"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/single-line-overflow.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682818,
     "ast_hash": "464c86098482fafd55adf8c3a9c07627",
     "semantic_hash": "464c86098482fafd55adf8c3a9c07627"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/state-aware-sticky-headers.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668283,
     "ast_hash": "d60fc47963a03d7c55b2c507603d2664",
     "semantic_hash": "d60fc47963a03d7c55b2c507603d2664"
   },
   ".agents/skills/modern-web-guidance/guides/ui-atoms/viewport-aware-dropdowns.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682837,
     "ast_hash": "3370e9b8e21e0fd66f9e916e8b67c7cc",
     "semantic_hash": "3370e9b8e21e0fd66f9e916e8b67c7cc"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/2d-panning.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682847,
     "ast_hash": "47664d831af9e69514af70563d6acb5b",
     "semantic_hash": "47664d831af9e69514af70563d6acb5b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/anchor-positioning-tab-underline.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682856,
     "ast_hash": "da895d250372f059b96f2a9e2452a0a7",
     "semantic_hash": "da895d250372f059b96f2a9e2452a0a7"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/animate-element-entry-exit.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682866,
     "ast_hash": "9615a50424338ef578cd94e76c27fcca",
     "semantic_hash": "9615a50424338ef578cd94e76c27fcca"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/animate-to-from-top-layer.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682875,
     "ast_hash": "490f4ae99cf2f1097984014e10c09595",
     "semantic_hash": "490f4ae99cf2f1097984014e10c09595"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/carousel-snap-highlights.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682882,
     "ast_hash": "aa73ee6d6ef2d7cc4ae9dbe32aa79f44",
     "semantic_hash": "aa73ee6d6ef2d7cc4ae9dbe32aa79f44"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/consistent-cross-document-transitions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668289,
     "ast_hash": "3bdcb6b570ea866be3e0144fc7b5c16b",
     "semantic_hash": "3bdcb6b570ea866be3e0144fc7b5c16b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/cross-document-transitions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682901,
     "ast_hash": "64b95a7a6377032106ec337ee6c92ae5",
     "semantic_hash": "64b95a7a6377032106ec337ee6c92ae5"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/custom-button-actions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682909,
     "ast_hash": "5b7372a5604fa2788c3aa694652096b3",
     "semantic_hash": "5b7372a5604fa2788c3aa694652096b3"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/declarative-dialog-popover-control.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682916,
     "ast_hash": "e8456970bc70c6746228f9b76106ba10",
     "semantic_hash": "e8456970bc70c6746228f9b76106ba10"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/directional-navigation-transitions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682923,
     "ast_hash": "6949f2d712b4bb8d0f6262ee7dcb6b72",
     "semantic_hash": "6949f2d712b4bb8d0f6262ee7dcb6b72"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/drag-and-drop.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682935,
     "ast_hash": "d28583d23ad200d853c5eff27b40ff61",
     "semantic_hash": "d28583d23ad200d853c5eff27b40ff61"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/drag.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682942,
     "ast_hash": "fbdc854d6f75b86fd826a7f1c76cfa3e",
     "semantic_hash": "fbdc854d6f75b86fd826a7f1c76cfa3e"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/dynamic-sibling-animations.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668295,
     "ast_hash": "ef54127642354c453a67282896d02dc0",
     "semantic_hash": "ef54127642354c453a67282896d02dc0"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/dynamic-sort.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682959,
     "ast_hash": "dd027c5c14805e3105c16aa81e9d279d",
     "semantic_hash": "dd027c5c14805e3105c16aa81e9d279d"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/group-element-transitions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682968,
     "ast_hash": "93d97ab90fbe7dfb69cb111952e43a9b",
     "semantic_hash": "93d97ab90fbe7dfb69cb111952e43a9b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/highlight-text-ranges.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682975,
     "ast_hash": "5df208b46de65da042166709a9e9e3a9",
     "semantic_hash": "5df208b46de65da042166709a9e9e3a9"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/interactive-content-reveal.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682985,
     "ast_hash": "d07f3a28190feaeb953daa4bff572053",
     "semantic_hash": "d07f3a28190feaeb953daa4bff572053"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/interest-triggered-action-previews.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6682992,
     "ast_hash": "a003b2a60c067bfcd82e0cd08858e037",
     "semantic_hash": "a003b2a60c067bfcd82e0cd08858e037"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/interest-triggered-tooltips.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683,
     "ast_hash": "06fdf227780280c862cfba4e34ffe887",
     "semantic_hash": "06fdf227780280c862cfba4e34ffe887"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/light-dismiss-a-dialog.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683009,
     "ast_hash": "eba76be85a56ee678907453e820e827d",
     "semantic_hash": "eba76be85a56ee678907453e820e827d"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/motion.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683018,
     "ast_hash": "deecdb950e5982b498c03b2a01e5dde7",
     "semantic_hash": "deecdb950e5982b498c03b2a01e5dde7"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/move-dom-element-without-losing-state.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683025,
     "ast_hash": "8d7ba3f95f7355c542ef074711435c33",
     "semantic_hash": "8d7ba3f95f7355c542ef074711435c33"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/parallax-scroll-effects.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683037,
     "ast_hash": "255e8c7ac1b632e2e27157144b44605b",
     "semantic_hash": "255e8c7ac1b632e2e27157144b44605b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/persistent-top-layer-ui.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683044,
     "ast_hash": "b1388bafbbb0e3c7bb4c6b4ceb12b1a8",
     "semantic_hash": "b1388bafbbb0e3c7bb4c6b4ceb12b1a8"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/physics-based-easing.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683054,
     "ast_hash": "c42647d176102c7ac23f6a55ffd4cb69",
     "semantic_hash": "c42647d176102c7ac23f6a55ffd4cb69"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/platform-controls-dismiss-dialog.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668306,
     "ast_hash": "3ad76d381132b1dceee370f3823bb635",
     "semantic_hash": "3ad76d381132b1dceee370f3823bb635"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/prevent-page-scroll-under-modal-dialog.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.66831,
     "ast_hash": "3f014b7c7de434971cc9b2ccede552d3",
     "semantic_hash": "3f014b7c7de434971cc9b2ccede552d3"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/same-document-transitions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.668311,
     "ast_hash": "274290704ee45e206939ec94ecb515e2",
     "semantic_hash": "274290704ee45e206939ec94ecb515e2"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scoped-component-transitions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683118,
     "ast_hash": "53885b2fc40d1a1da58fc2cbce372e30",
     "semantic_hash": "53885b2fc40d1a1da58fc2cbce372e30"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-completion-effects.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683125,
     "ast_hash": "33024961696612ff800ed423b87dc13d",
     "semantic_hash": "33024961696612ff800ed423b87dc13d"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-entry-exit-effects.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683133,
     "ast_hash": "af355012a6f72296b8eb40b46c311fe3",
     "semantic_hash": "af355012a6f72296b8eb40b46c311fe3"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-snap-realtime-feedback.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683142,
     "ast_hash": "b9f0bbff7fc279275d002ed6019cbca5",
     "semantic_hash": "b9f0bbff7fc279275d002ed6019cbca5"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-snap-state-sync.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683152,
     "ast_hash": "1de06bf5269518deb01dfdd9cff111ed",
     "semantic_hash": "1de06bf5269518deb01dfdd9cff111ed"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-target-on-load.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.668316,
     "ast_hash": "b087e91bb440691b020032c8aa017c17",
     "semantic_hash": "b087e91bb440691b020032c8aa017c17"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/scrollytelling.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683166,
     "ast_hash": "c0964d2d00ce7273d4c3191162895ff6",
     "semantic_hash": "c0964d2d00ce7273d4c3191162895ff6"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/search-hidden-content.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683176,
     "ast_hash": "a78323d8da37c8fc87930d071b1a1402",
     "semantic_hash": "a78323d8da37c8fc87930d071b1a1402"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/sortable-table.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683183,
     "ast_hash": "a2a9d1fec87beb49d86d1f45029f2e60",
     "semantic_hash": "a2a9d1fec87beb49d86d1f45029f2e60"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/spatial-navigation.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.668319,
     "ast_hash": "e9cef9408cacd59dff5117a78f4afef5",
     "semantic_hash": "e9cef9408cacd59dff5117a78f4afef5"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/swipe-to-remove.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683197,
     "ast_hash": "eeedb88128956fb1f758c5299bc3f2bb",
     "semantic_hash": "eeedb88128956fb1f758c5299bc3f2bb"
   },
   ".agents/skills/modern-web-guidance/guides/ui-behaviors/swipe-to-reveal.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683207,
     "ast_hash": "ca0de6aaca9aa3369c67695e0c9ba722",
     "semantic_hash": "ca0de6aaca9aa3369c67695e0c9ba722"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/accordion.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683216,
     "ast_hash": "11bd65f413f0c9fddd2a39869b086b71",
     "semantic_hash": "11bd65f413f0c9fddd2a39869b086b71"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/app-menus.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683223,
     "ast_hash": "67f9fdf06cb44df5b543428512a3eb6a",
     "semantic_hash": "67f9fdf06cb44df5b543428512a3eb6a"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/breadcrumbs.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668323,
     "ast_hash": "f6795a56d64dee1555e88ae72b462958",
     "semantic_hash": "f6795a56d64dee1555e88ae72b462958"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/card.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668324,
     "ast_hash": "236bc2214182f902bffc6801230b13f4",
     "semantic_hash": "236bc2214182f902bffc6801230b13f4"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/carousel.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668325,
     "ast_hash": "0a0395c00426d98ca66ac25d6529df34",
     "semantic_hash": "0a0395c00426d98ca66ac25d6529df34"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/checkbox.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683257,
     "ast_hash": "01eba0afb9d22917616307c1555e8427",
     "semantic_hash": "01eba0afb9d22917616307c1555e8427"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/copy-button.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683264,
     "ast_hash": "2f73fbfa43be4719a7829672d110b455",
     "semantic_hash": "2f73fbfa43be4719a7829672d110b455"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/dark-mode-toggle.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683273,
     "ast_hash": "00cb4f18e831fc14a81840dd616af8d5",
     "semantic_hash": "00cb4f18e831fc14a81840dd616af8d5"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/dialog.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683283,
     "ast_hash": "63fa77bf461d5946611300b93ebf3817",
     "semantic_hash": "63fa77bf461d5946611300b93ebf3817"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/hovercard.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668329,
     "ast_hash": "9178fa7e337bc18b8d3e6a12642c13b0",
     "semantic_hash": "9178fa7e337bc18b8d3e6a12642c13b0"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/menu.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.66833,
     "ast_hash": "dedd7762f7bed83919046c548b831a13",
     "semantic_hash": "dedd7762f7bed83919046c548b831a13"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/navbar.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683307,
     "ast_hash": "5b9dc72a73632b919b8ce27bf5d3ba01",
     "semantic_hash": "5b9dc72a73632b919b8ce27bf5d3ba01"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/navigation-drawer.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683316,
     "ast_hash": "0bd4bb16bf14f85a7689f1c549941909",
     "semantic_hash": "0bd4bb16bf14f85a7689f1c549941909"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/persistent-app-tours.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683326,
     "ast_hash": "c09f158c789ccd6bb95baf0600a67be2",
     "semantic_hash": "c09f158c789ccd6bb95baf0600a67be2"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/persistent-toast-notifications.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683333,
     "ast_hash": "d712dac8116bdb4584f0e19e3513b268",
     "semantic_hash": "d712dac8116bdb4584f0e19e3513b268"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/progress-ring.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683342,
     "ast_hash": "43a9980c6d83dba343e4332380e52db0",
     "semantic_hash": "43a9980c6d83dba343e4332380e52db0"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/progress.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683352,
     "ast_hash": "727b3d333275b2be854e08c8767038ed",
     "semantic_hash": "727b3d333275b2be854e08c8767038ed"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/scrollspy.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.668336,
     "ast_hash": "feaa864fcf950ec170cde189d29b7f48",
     "semantic_hash": "feaa864fcf950ec170cde189d29b7f48"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/spinner.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683366,
     "ast_hash": "a5cb76330bdfba8175239107a0b87b16",
     "semantic_hash": "a5cb76330bdfba8175239107a0b87b16"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/stack-drill-down.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683376,
     "ast_hash": "704736a0ba76a76651379bb26612999b",
     "semantic_hash": "704736a0ba76a76651379bb26612999b"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/tabs.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683385,
     "ast_hash": "a09e513a9c725f5255bc9ec414a0ed3d",
     "semantic_hash": "a09e513a9c725f5255bc9ec414a0ed3d"
   },
   ".agents/skills/modern-web-guidance/guides/ui-components/toolbar.md": {
     "mtime": 1794800664.5110352,
-    "seen": 1794800693.6683393,
     "ast_hash": "6988ed6a7dbe8e13183c1ca7db711ce2",
     "semantic_hash": "6988ed6a7dbe8e13183c1ca7db711ce2"
   },
   ".agents/skills/modern-web-guidance/guides/user-experience/content-first-noise-reduction.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.66834,
     "ast_hash": "82dc61597ee6b19709e295d13a705afc",
     "semantic_hash": "82dc61597ee6b19709e295d13a705afc"
   },
   ".agents/skills/modern-web-guidance/guides/user-experience/form-factor-adaptation.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683407,
     "ast_hash": "b96349afe274fd032eaa026b27a6c55f",
     "semantic_hash": "b96349afe274fd032eaa026b27a6c55f"
   },
   ".agents/skills/modern-web-guidance/guides/user-experience/natural-interactions.md": {
     "mtime": 1794800664.5120351,
-    "seen": 1794800693.6683419,
     "ast_hash": "73155a42b6e5a819c5cf7685f1dfb31e",
     "semantic_hash": "73155a42b6e5a819c5cf7685f1dfb31e"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/adapt-scrollbar-to-contrast-preferences.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683426,
     "ast_hash": "93926212ad87e727f96fd0d8f3176b27",
     "semantic_hash": "93926212ad87e727f96fd0d8f3176b27"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/apply-webgl-shaders.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683435,
     "ast_hash": "5fedc3b914c3d89fd1766bcb710cdf1a",
     "semantic_hash": "5fedc3b914c3d89fd1766bcb710cdf1a"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/browser-ui-theming.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683443,
     "ast_hash": "32fbf96bd0dcd14f6e57a01dbf0151aa",
     "semantic_hash": "32fbf96bd0dcd14f6e57a01dbf0151aa"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/color.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.668345,
     "ast_hash": "865f84ebc6ab6c3c36752bb1b2ef5c32",
     "semantic_hash": "865f84ebc6ab6c3c36752bb1b2ef5c32"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/complex-shapes.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.668346,
     "ast_hash": "f0defb1104bfa7266b8682fcee5a7030",
     "semantic_hash": "f0defb1104bfa7266b8682fcee5a7030"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/contrast-color.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683466,
     "ast_hash": "4ea1dbe6d8c2377a51416fe877ded103",
     "semantic_hash": "4ea1dbe6d8c2377a51416fe877ded103"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/custom-text-decorations.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683476,
     "ast_hash": "5f27a6b19473f2f6e661469550c11d3b",
     "semantic_hash": "5f27a6b19473f2f6e661469550c11d3b"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/customize-scrollbar-color-and-thickness.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.6683483,
     "ast_hash": "68689635a7c68884dd13214b91407e96",
     "semantic_hash": "68689635a7c68884dd13214b91407e96"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/dark-mode.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683493,
     "ast_hash": "90a333899f9d52fa806d8314b1d23efd",
     "semantic_hash": "90a333899f9d52fa806d8314b1d23efd"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/equal-width-text-lines.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683502,
     "ast_hash": "80a19187d0781ce1674f28837d161bf0",
     "semantic_hash": "80a19187d0781ce1674f28837d161bf0"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/export-html-media-from-canvas.md": {
     "mtime": 1794800664.513035,
-    "seen": 1794800693.668351,
     "ast_hash": "c4a76356397e23f8882a246d81c2faa9",
     "semantic_hash": "c4a76356397e23f8882a246d81c2faa9"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/expose-canvas-content-to-browser-features.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683517,
     "ast_hash": "8fe51023b26cdcdf61867af0e6a59914",
     "semantic_hash": "8fe51023b26cdcdf61867af0e6a59914"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/improve-text-layout-and-legibility.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683526,
     "ast_hash": "a6f619a8fcad2d11b5ffefb2224679f9",
     "semantic_hash": "a6f619a8fcad2d11b5ffefb2224679f9"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/interactive-content-in-3d-scenes.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683536,
     "ast_hash": "f717a0526b6af0525344e5e0ae9ae81d",
     "semantic_hash": "f717a0526b6af0525344e5e0ae9ae81d"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/precise-text-alignment.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683543,
     "ast_hash": "c422df3027acc4dbd5d8d4fc1d4b5bad",
     "semantic_hash": "c422df3027acc4dbd5d8d4fc1d4b5bad"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/shaped-cutouts.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.668355,
     "ast_hash": "3627fa4bbb4a37dc46c70e5ed773199e",
     "semantic_hash": "3627fa4bbb4a37dc46c70e5ed773199e"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/soft-edge-content-fade.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.668356,
     "ast_hash": "6aa27897428e36e6baa6fd3cfb8108d2",
     "semantic_hash": "6aa27897428e36e6baa6fd3cfb8108d2"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/typography.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.668357,
     "ast_hash": "1c8437e2182b10ccb789feea4cfadbcc",
     "semantic_hash": "1c8437e2182b10ccb789feea4cfadbcc"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/visual-effects.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683576,
     "ast_hash": "df2bcefd95879c194f1f80120620e82b",
     "semantic_hash": "df2bcefd95879c194f1f80120620e82b"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/visually-stable-font-fallbacks.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683583,
     "ast_hash": "86ecada272179e23075d43924d9d51cd",
     "semantic_hash": "86ecada272179e23075d43924d9d51cd"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/visually-stable-mixed-fonts.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683595,
     "ast_hash": "57dd77b79bc39a246b91178588501419",
     "semantic_hash": "57dd77b79bc39a246b91178588501419"
   },
   ".agents/skills/modern-web-guidance/guides/visual-design/visually-texture-content.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683602,
     "ast_hash": "729d2f440179417e51c16ec837152950",
     "semantic_hash": "729d2f440179417e51c16ec837152950"
   },
   ".agents/skills/modern-web-guidance/guides/wasm/cpp-on-the-web.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.668361,
     "ast_hash": "bf656b4242ff3bb9eb302b05b83a2c54",
     "semantic_hash": "bf656b4242ff3bb9eb302b05b83a2c54"
   },
   ".agents/skills/modern-web-guidance/guides/webmcp/agentic-forms.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683617,
     "ast_hash": "d4b064c00a722ac4084a8bf67ee62566",
     "semantic_hash": "d4b064c00a722ac4084a8bf67ee62566"
   },
   ".agents/skills/modern-web-guidance/guides/webmcp/agentic-javascript-tools.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683624,
     "ast_hash": "7b4a23574d337da176b861eda4650c3c",
     "semantic_hash": "7b4a23574d337da176b861eda4650c3c"
   },
   ".agents/skills/modern-web-guidance/guides/webmcp/webmcp.md": {
     "mtime": 1794800664.5140352,
-    "seen": 1794800693.6683636,
     "ast_hash": "2cb5f3a7f19f405fa87384e0df1b4f73",
     "semantic_hash": "2cb5f3a7f19f405fa87384e0df1b4f73"
   },
   "docs/panel/08-sartname-bosluklari.md": {
     "mtime": 1794790887.4351168,
-    "seen": 1794800693.6683893,
     "ast_hash": "399dfe2e5ff6a5dfa3e6f096c010e50c",
     "semantic_hash": "399dfe2e5ff6a5dfa3e6f096c010e50c"
   },
   "kararlar/0010-konsey-sorulari-vekil-kararlar.md": {
     "mtime": 1794790573.855192,
-    "seen": 1794800693.6684012,
     "ast_hash": "e83a02a365c45ac398e860fcf1601865",
     "semantic_hash": "e83a02a365c45ac398e860fcf1601865"
+  },
+  ".claude/launch.json": {
+    "mtime": 1794927700.5024042,
+    "ast_hash": "32e5d8fb305a8798e1b41063e155f383",
+    "semantic_hash": "32e5d8fb305a8798e1b41063e155f383"
+  },
+  "yeni/panel-mock/src/pages/Wall.tsx": {
+    "mtime": 1794927644.8284261,
+    "ast_hash": "fbd55d171bf0ba28514ab7f29a5c5863",
+    "semantic_hash": "fbd55d171bf0ba28514ab7f29a5c5863"
+  },
+  "docs/12-kart-kural-sartnamesi.md": {
+    "mtime": 1794912441.001962,
+    "ast_hash": "6fce9ea7248cd4850906c876fc74fdc0",
+    "semantic_hash": "6fce9ea7248cd4850906c876fc74fdc0"
+  },
+  "kararlar/0011-ses-notu-kartlarinin-bolunmesi.md": {
+    "mtime": 1794911938.490008,
+    "ast_hash": "3b9cab513a3fceb18a59d70be467a848",
+    "semantic_hash": "3b9cab513a3fceb18a59d70be467a848"
+  },
+  "kararlar/0012-duvar-ekrani.md": {
+    "mtime": 1794927300.669453,
+    "ast_hash": "29bb1539bf5591a2e9862b7f992545fe",
+    "semantic_hash": "29bb1539bf5591a2e9862b7f992545fe"
   }
 }
