@@ -1,4 +1,4 @@
-// Ana sayfa (/) ve sunum (/sunum/) herkese açık; panel (/panel) şifreli. PANEL_PASSWORD yoksa panel gösterilmez.
+// Ana sayfa (/), duvar ekranı (/tv) ve sunum (/sunum/) herkese açık; panel (/panel) şifreli. PANEL_PASSWORD yoksa panel gösterilmez.
 import { createServer } from 'node:http'
 import { createReadStream, existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -9,9 +9,10 @@ import { assistantStatus, handleAssistant, handleContent } from './assistant.mjs
 
 const home = readFileSync(new URL('./dist/index.html', import.meta.url))
 const panel = readFileSync(new URL('./dist/panel.html', import.meta.url))
+const wall = readFileSync(new URL('./dist/wall.html', import.meta.url))
 // İki sayfa açılışta bir kez sıkıştırılır (≈%66-70 küçülür); istek başına sıkıştırma maliyeti yoktur.
 const packed = b => ({ raw: b, br: brotliCompressSync(b, { params: { [zc.BROTLI_PARAM_QUALITY]: 9 } }), gz: gzipSync(b, { level: 9 }) })
-const homeZ = packed(home), panelZ = packed(panel)
+const homeZ = packed(home), panelZ = packed(panel), wallZ = packed(wall)
 const sendPage = (req, res, head, z) => {
   // q=0 olan kodlama istenmemiş sayılır.
   const ok = new Set(String(req.headers['accept-encoding'] || '').split(',').map(x => x.trim().toLowerCase()).filter(x => !/;\s*q=0(\.0*)?$/.test(x)).map(x => x.split(';')[0]))
@@ -122,6 +123,8 @@ async function handle(req, res) {
   if (path === '/healthz') return res.writeHead(200, base).end('ok')
   const page = { 'Content-Type': 'text/html; charset=utf-8' }
   if (path === '/') return sendPage(req, res, { ...base, ...page }, homeZ)
+  // Duvar ekranı (TV) şifresizdir; panel verisini ve asistanı içermeyen ayrı pakettir.
+  if (path === '/tv' || path === '/tv/') return sendPage(req, res, { ...base, ...page }, wallZ)
   // Asistan ucu panelle aynı şifrenin arkasındadır; anahtar yalnız sunucuda durur.
   if (path === '/api/assistant' || path === '/api/content') {
     if (!pass) return json(res, base, 503, { live: false, message: 'PANEL_PASSWORD ayarlanmamış' })
