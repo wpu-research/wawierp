@@ -107,9 +107,10 @@ const TT: Record<TStatus, Tone> = { taslak: 'neutral', hazir: 'info', cikti: 'vi
 const tLabel = (s: TStatus) => (s === 'iptal' ? 'İptal edildi' : TFLOW.find(f => f.key === s)!.label)
 
 export function Transfers() {
-  const { transfers, advanceTransfer, role } = useStore()
+  const { transfers, advanceTransfer, setReceived, role } = useStore()
   const [openId, setOpenId] = useState<string | null>(null)
   const open = transfers.find(t => t.id === openId) ?? null
+  // Hedefe ulaşmış ama henüz kabul edilmemiş adet de yoldadır: stok defterine kabulde girer.
   const qty = (st: TStatus[]) => transfers.filter(t => st.includes(t.status)).reduce((a, t) => a + t.lines.reduce((b, l) => b + l.qty, 0), 0)
   const step = open ? TFLOW.findIndex(f => f.key === open.status) : -1
   const next = open && step >= 0 ? TFLOW[step].next : undefined
@@ -118,7 +119,7 @@ export function Transfers() {
       <PageHead title="Depo transferi" desc="Depolar arası sevkiyat. Çıkış ve mal kabul stok defterine iki ayrı hareket olarak yazılır; aradaki adet “yoldaki stok” olarak görünür."
         legacy={['shipments', 'stock-transfer', 'pull_branch_stock']} />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-        <Stat label="Yoldaki stok" value={fmtNum(qty(['cikti', 'yolda']))} hint="Çıktı, henüz kabul edilmedi" />
+        <Stat label="Yoldaki stok" value={fmtNum(qty(['cikti', 'yolda', 'ulasti']))} hint="Çıktı veya ulaştı, henüz kabul edilmedi" />
         <Stat label="Mal kabul bekleyen" value={fmtNum(transfers.filter(t => t.status === 'ulasti').length)} tone={transfers.some(t => t.status === 'ulasti') ? 'warn' : undefined} hint="Hedef depoda sayılacak" />
         <Stat label="Sevke hazır" value={fmtNum(transfers.filter(t => t.status === 'hazir').length)} hint="Stok henüz düşmedi" />
         <Stat label="Taslak" value={fmtNum(transfers.filter(t => t.status === 'taslak').length)} />
@@ -167,7 +168,7 @@ export function Transfers() {
                 <thead><tr><th className={th}>Ürün</th><th className={th + ' text-right'}>Planlanan</th><th className={th + ' text-right'}>Kabul edilen</th><th className={th + ' text-right'}>Fark</th></tr></thead>
                 <tbody>{open.lines.map(l => { const p = product(l.pid), d = l.received === undefined ? null : l.received - l.qty; return (
                   <tr key={l.pid}><td className={td}><div className="flex items-center gap-2.5"><Thumb p={p} size={32} /><div className="min-w-0"><div className="truncate max-w-[210px]">{p.name}</div><div className="text-xs text-mute num">{p.sku}</div></div></div></td>
-                    <td className={td + ' text-right num'}>{fmtNum(l.qty)}</td><td className={td + ' text-right num'}>{l.received === undefined ? '—' : fmtNum(l.received)}</td>
+                    <td className={td + ' text-right num'}>{fmtNum(l.qty)}</td><td className={td + ' text-right num'}>{open.status === 'ulasti' ? <label className="inline-flex items-center gap-1.5 justify-end"><span className="sr-only">{p.name} kabul adedi</span><input type="number" min={0} max={l.qty} step={1} className={sel + ' w-20 text-right'} value={l.received ?? l.qty} onChange={e => setReceived(open.id, l.pid, Number(e.target.value))} /></label> : l.received === undefined ? '—' : fmtNum(l.received)}</td>
                     <td className={`${td} text-right num ${d ? 'text-bad font-medium' : 'text-mute'}`}>{d === null ? '—' : d}</td></tr>
                 ) })}</tbody>
               </table>

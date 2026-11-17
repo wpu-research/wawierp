@@ -24,7 +24,7 @@ interface Ctx {
   jobs: Job[]; audit: Audit[]; revealed: Set<string>; toast: string | null; moves: Move[]
   createLabels: (ids: string[], via?: string) => void; ship: (ids: string[], via?: string) => void; issueInvoices: (ids: string[]) => void
   transfers: Transfer[]; tickets: Ticket[]; b2b: B2B[]; manual: ManualLabel[]
-  advanceTransfer: (id: string) => void; replyTicket: (id: string, text: string, via?: string) => void; closeTicket: (id: string) => void; readTicket: (id: string) => void
+  advanceTransfer: (id: string) => void; setReceived: (id: string, pid: string, qty: number) => void; replyTicket: (id: string, text: string, via?: string) => void; closeTicket: (id: string) => void; readTicket: (id: string) => void
   addPayment: (id: string, amount: number, ref: string) => void; finalizeB2B: (id: string, no: string) => void; addManual: (m: Omit<ManualLabel, 'id' | 't'>) => void; notify: (m: string) => void; record: (cat: string, event: string, obj: string) => void
   countStock: (pid: string, wh: WhId, qty: number, ref?: string) => number | null
   resolveIssue: (id: string) => void; reveal: (o: Order) => void; advanceReturn: (id: string) => void; syncNow: (accId: string) => void; retryJob: (id: string, via?: string) => void
@@ -132,6 +132,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       else if (next.key === 'kabul') log('Stok', 'Mal kabul stok defterine yazıldı', t.no)
       else log('Transfer', `Durum: ${next.label}`, t.no)
       say(`${t.no}: ${next.label}`)
+    },
+    // Mal kabulde sayılan adet: yalnız "Hedefe ulaştı" durumundaki transferde, 0 ile planlanan arasında. Stok kabul adımında bu adetle yazılır.
+    setReceived: (id, pid, qty) => {
+      const t = allTransfers.find(x => x.id === id)
+      if (!t || t.status !== 'ulasti') return
+      const l = t.lines.find(x => x.pid === pid)
+      if (!l || !Number.isInteger(qty) || qty < 0 || qty > l.qty) return say('Kabul adedi 0 ile planlanan adet arasında tam sayı olmalı')
+      setTransfers(ts => ts.map(x => (x.id !== id ? x : { ...x, lines: x.lines.map(y => (y.pid !== pid ? y : { ...y, received: qty })) })))
     },
     replyTicket: (id, text, v) => {
       if (allTickets.find(x => x.id === id)?.status === 'closed') return say('Bu konuşma kapatılmış; yanıt gönderilmedi')

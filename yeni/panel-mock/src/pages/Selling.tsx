@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
-import { CHANNEL, COMM, NOW, PRODUCTS, SHIP, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
+import { CHANNEL, COMM, NOW, PRODUCTS, SHIP, VAT, WAREHOUSES, account, company, fmtMoney, fmtNum, isRevenue, reservedMapCached, reservedQty, whName, type Account, type ChannelType, type Product, type WhId } from '../data'
 import { ROLES, useStore } from '../store'
 import { Thumb } from '../Thumb'
 import { Badge, Btn, Card, Chan, Empty, HBars, PageHead, Stat, Tabs, sel, td, th } from '../ui'
@@ -236,8 +236,10 @@ export function Replenish() {
     const s = sold.get(p.id) ?? 0, rate = s / 30, st = phys(p), days = rate > 0 ? st / rate : Infinity
     return { p, s, rate, st, days, qty: Math.max(0, Math.ceil(rate * cover - st)) }
   }).sort((a, b) => a.days - b.days), [products, sold, cover])
+  // Tek tanım (kararlar/0010): satılabilir = fiziki − ayrılan. Aktarım, satılabilir stok asgariye inen depoya gider.
   const moves = products.flatMap(p => {
-    const rows = (Object.entries(p.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).map(([w, r]) => ({ w, f: r.fiziki ?? 0, min: r.min, known: r.fiziki !== null }))
+    const res = reservedMapCached(allOrders)
+    const rows = (Object.entries(p.stock) as [WhId, NonNullable<Product['stock'][WhId]>][]).map(([w, r]) => ({ w, f: (r.fiziki ?? 0) - reservedQty(res, p.id, w), min: r.min, known: r.fiziki !== null }))
     return rows.filter(r => r.known && r.f <= r.min).flatMap(low => rows.filter(d => d.w !== low.w && d.known && d.f - d.min * 2 > 0).slice(0, 1).map(from => ({ p, low, from, qty: Math.min(low.min * 2 - low.f, from.f - from.min * 2) }))).filter(x => x.qty > 0)
   })
   const slow = lines.filter(l => l.st > 0 && l.s <= 1).sort((a, b) => b.st * b.p.price - a.st * a.p.price)
