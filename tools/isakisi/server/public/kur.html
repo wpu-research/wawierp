@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İş Akışı Kaydı — Kurulum</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#16181d;--mute:#5f6670;--line:#e3e3df;--acc:#0f766e}
+@media (prefers-color-scheme:dark){:root{--bg:#141517;--card:#1d1f22;--ink:#ececea;--mute:#a1a7af;--line:#2e3135;--acc:#5eead4}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,sans-serif}main{max-width:680px;margin:0 auto;padding:28px 16px 60px}
+h1{font-size:24px;margin:0 0 6px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:14px 0}
+ul,ol{padding-left:22px;margin:6px 0}.btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-weight:600}
+@media (prefers-color-scheme:dark){.btn{color:#062b27}}
+.mute{color:var(--mute);font-size:14px}
+</style></head>
+<body><main>
+<h1>İş Akışı Kaydı — Kurulum</h1>
+<p>Bu eklenti, tarayıcıda tekrar tekrar elle yaptığımız işleri bulup otomatikleştirmek için. Kişileri değerlendirmek için değil.</p>
+<div class="card"><b>Kaydedilir</b> (yalnız şirketin iş sitelerinde): hangi sayfa türünde ne kadar kalındığı, tıklanan düğmenin yazısı, form alanlarının <i>adları</i>, kopyala-yapıştırın <i>hangi siteden hangi siteye</i> yapıldığı, indirilen/yüklenen dosyanın <i>türü</i>.<br><br>
+<b>Asla kaydedilmez:</b> şifreler, yazdıklarınız, alan değerleri, kopyalanan içerik, ekran görüntüsü, kişisel siteler.</div>
+<div class="card"><b>Kurmadan önce</b>
+<ol><li><a href="/aydinlatma">Aydınlatma metnini</a> okuyun ve onay formunu imzalayın.</li>
+<li>Chrome ya da Edge'de <b>iş profilinizi</b> açın (kişisel profilinize kurmayın).</li>
+<li>Aşağıdaki düğmeye basın → <b>Chrome'a ekle</b>.</li>
+<li>Açılan sayfada bilgilendirmeyi okuyup onay verin. Simgede kırmızı nokta görünür.</li></ol>
+<p id="kur"></p>
+<p class="mute">İstediğiniz an simgeden kaydı duraklatabilir, kendi kayıtlarınızı görebilir ve silebilirsiniz. Katılmamak ya da onayı geri çekmek hiçbir olumsuz sonuç doğurmaz.</p></div>
+</main>
+<script>
+const url = "{{STORE_URL}}";
+document.getElementById('kur').innerHTML = /^https:\/\/(chromewebstore\.google\.com|chrome\.google\.com|microsoftedge\.microsoft\.com)\//.test(url)
+  ? '<a class="btn" href="' + url.replace(/"/g, '') + '">Eklentiyi kur</a>'
+  : '<span class="mute">Kurulum bağlantısı henüz hazır değil. Yöneticinize sorun.</span>';
+</script>
+</body></html>

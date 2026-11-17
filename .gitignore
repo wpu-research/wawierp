@@ -15,3 +15,8 @@ legacy/**/dump*
 
 # video üretiminin ara dosyaları
 sunum/video/
+
+# is akisi araci: sirlar ve toplanan veri
+tools/**/GIZLI-*
+tools/**/server/data/
+tools/**/dist/

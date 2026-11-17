@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>İş Akışı Kaydı — Bilgilendirme ve Onay</title>
+<style>
+ body{font:16px/1.55 system-ui,sans-serif;max-width:720px;margin:32px auto;padding:0 16px;color:#111}
+ h1{font-size:24px} h2{font-size:18px;margin-top:24px}
+ .box{border:1px solid #ddd;border-radius:8px;padding:12px 16px;margin:12px 0}
+ .yes{border-color:#86efac;background:#f0fdf4} .never{border-color:#fca5a5;background:#fef2f2}
+ ul{margin:6px 0;padding-left:22px}
+ button{padding:10px 18px;font:inherit;border-radius:6px;border:1px solid #111;cursor:pointer;margin-right:8px}
+ #ok{background:#111;color:#fff} #ok:disabled{opacity:.4;cursor:default}
+ #done{display:none;font-weight:600;color:#15803d}
+</style></head>
+<body>
+<h1>İş Akışı Kaydı</h1>
+<p>Bu eklenti, ofiste tarayıcıda <b>tekrar tekrar elle yapılan işleri</b> bulmak için var
+(ör. her sipariş için pazaryeri panelinden kopyalayıp WawiERP'ye yapıştırmak). Amaç bu işleri
+otomatikleştirmek. <b>Kişileri değerlendirmek değil.</b> Kişi bazlı verim puanı üretilmez.</p>
+
+<div class="box yes"><b>Kaydedilenler</b> (yalnız şirketin iş siteleri listesinde):
+<ul>
+ <li>Hangi sitede, hangi sayfa türünde olduğunuz ve ne kadar kaldığınız (ör. <code>/orders/:id</code>; sipariş numarası silinir)</li>
+ <li>Tıklanan düğmenin yazısı (ör. "Kaydet"); bağlantılarda yalnız gidilen sayfa türü</li>
+ <li>Form gönderildiğinde yalnız alan <i>adları</i> (ör. "takip_no"), değerleri asla</li>
+ <li>Kopyala → yapıştır yapıldığında yalnız <i>hangi siteden hangi siteye</i>; içerik asla</li>
+ <li>Dosya indirme/yükleme olduğunda yalnız dosya türü (pdf, csv); dosya adı asla</li>
+</ul>
+Listede olmayan siteler (kişisel siteler dahil) yalnız "diğer" olarak süre sayılır; adres kaydedilmez.</div>
+
+<div class="box never"><b>Asla kaydedilmeyenler</b>
+<ul>
+ <li>Şifreler ve şifre alanları</li>
+ <li>Yazdığınız metin, tuş vuruşları, form alanlarının değerleri</li>
+ <li>Kopyalanan içerik, sayfa içeriği, müşteri bilgisi</li>
+ <li>Ekran görüntüsü, kamera, mikrofon</li>
+ <li>Gizli (incognito) pencereler ve kişisel tarayıcı profilleri</li>
+</ul></div>
+
+<h2>Haklarınız</h2>
+<ul>
+ <li>Simgedeki <b>kırmızı nokta</b> kaydın açık olduğunu gösterir. İstediğiniz an <b>duraklatabilirsiniz</b>.</li>
+ <li>Kendi kayıtlarınızı eklentideki "Kaydedilen verilerimi gör" bağlantısından görebilir ve silebilirsiniz.</li>
+ <li>Onayınızı istediğiniz an geri çekebilirsiniz; tüm kayıtlarınız silinir.</li>
+ <li>Ham kayıtlar <b>30 gün</b> sonra silinir; yalnız kişisiz toplu sayılar kalır.</li>
+ <li>Raporlarda adınız geçmez; rastgele bir takma kimlik kullanılır.</li>
+</ul>
+<p>Tam aydınlatma metni: <a id="full" href="#" target="_blank">aydınlatma metni</a>. Sorular için: veri sorumlusu irtibat kişisi (aydınlatma metninde).</p>
+
+<p><label><input type="checkbox" id="read"> Bilgilendirmeyi okudum, anladım. Bu iş profilinde kayda onay veriyorum.</label></p>
+<button id="ok" disabled>Onaylıyorum, kaydı başlat</button>
+<button id="no">Onaylamıyorum</button>
+<p id="done"></p>
+<script src="onboarding.js"></script>
+</body></html>

@@ -1,0 +1,7 @@
+{
+  "type": "object",
+  "properties": {
+    "server": { "title": "Toplama sunucusu adresi", "description": "Ör. https://isakisi.sirket.local", "type": "string" },
+    "key": { "title": "Kayıt anahtarı", "type": "string" }
+  }
+}

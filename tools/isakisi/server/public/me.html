@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kayıtlı Verilerim</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#16181d;--mute:#5f6670;--line:#e3e3df;--red:#b91c1c}
+@media (prefers-color-scheme:dark){:root{--bg:#141517;--card:#1d1f22;--ink:#ececea;--mute:#a1a7af;--line:#2e3135;--red:#fca5a5}}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}main{max-width:900px;margin:0 auto;padding:24px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line)}th{color:var(--mute)}
+.scroll{overflow-x:auto;max-height:60vh}button{padding:8px 14px;border:1px solid var(--red);color:var(--red);background:transparent;border-radius:6px;font:inherit;cursor:pointer}
+.mute{color:var(--mute)}
+</style></head>
+<body><main>
+<h1>Kayıtlı verilerim</h1>
+<p class="mute">Bu sayfa yalnız sizin tarayıcınızdaki eklentinin takma kimliğiyle açılır. Burada gördüğünüz her şey, hakkınızda tutulan ham kayıtların <b>tamamıdır</b>.</p>
+<div class="card" id="sum">Yükleniyor…</div>
+<div class="card scroll"><table id="t"></table></div>
+<button id="del">Tüm kayıtlarımı sil</button>
+<p class="mute" style="font-size:13px">Silme, onayınızı da geri çeker. Kaydı tamamen durdurmak için eklenti simgesinden "Onayımı geri çek" seçeneğini de kullanın.</p>
+</main>
+<script>
+const pid = location.hash.slice(1);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const detail = (e) => ({
+  visit: () => `${Math.round(e.ms / 1000)} sn`,
+  click: () => (e.kind === 'link' ? 'bağlantı → ' : 'düğme: ') + e.label,
+  submit: () => 'form alanları: ' + (e.fields || []).join(', '),
+  copy: () => 'kopyalandı (içerik kaydedilmez)',
+  paste: () => `kaynak: ${e.srcSite}${e.srcPath ? ' ' + e.srcPath : ''}${e.field ? ' · alan: ' + e.field : ''}`,
+  download: () => 'dosya türü: ' + e.ext,
+  upload: () => `${e.count} dosya: ${(e.exts || []).join(', ')}`,
+  switch: () => `${e.from} → ${e.to}`,
+}[e.type] || (() => ''))();
+async function load() {
+  if (!pid) { document.getElementById('sum').textContent = 'Bu sayfayı eklenti simgesindeki bağlantıdan açın.'; return; }
+  const r = await fetch('/api/me', { headers: { 'X-Pid': pid } });
+  const d = await r.json();
+  const evs = d.olaylar || [];
+  const bySite = {};
+  for (const e of evs) if (e.type === 'visit') bySite[e.site] = (bySite[e.site] || 0) + e.ms;
+  document.getElementById('sum').innerHTML = `<b>${evs.length}</b> kayıt · onay: ${d.onay && d.onay.at ? new Date(d.onay.at).toLocaleString('tr-TR') : 'yok'} · ham kayıtlar ${d.saklamaGun} gün sonra silinir<br>` +
+    Object.entries(bySite).sort((a, b) => b[1] - a[1]).map(([s, ms]) => `${esc(s)}: ${Math.round(ms / 60000)} dk`).join(' · ');
+  document.getElementById('t').innerHTML = '<tr><th>Zaman</th><th>Tür</th><th>Site</th><th>Sayfa</th><th>Ayrıntı</th></tr>' +
+    evs.slice().reverse().slice(0, 1000).map((e) => `<tr><td>${new Date(e.ts).toLocaleString('tr-TR')}</td><td>${esc(e.type)}</td><td>${esc(e.site)}</td><td>${esc(e.path || '')}</td><td>${esc(detail(e))}</td></tr>`).join('');
+}
+document.getElementById('del').onclick = async () => {
+  if (!confirm('Tüm kayıtlarınız kalıcı olarak silinecek. Emin misiniz?')) return;
+  const r = await fetch('/api/me', { method: 'DELETE', headers: { 'X-Pid': pid } });
+  const d = await r.json();
+  alert(d.silinen + ' kayıt silindi.');
+  load();
+};
+load();
+</script>
+</body></html>

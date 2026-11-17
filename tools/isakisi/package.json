@@ -1,0 +1,8 @@
+{
+  "name": "isakisi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "İş Akışı Kaydı — toplama sunucusu (ek paket yok)",
+  "engines": { "node": ">=18" },
+  "scripts": { "start": "node server/server.mjs" }
+}

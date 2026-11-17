@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İş Akışı Raporu</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#16181d;--mute:#5f6670;--line:#e3e3df;--acc:#0f766e;--accbg:#e6f4f1;--bar:#0f766e;--warn:#9a3412}
+@media (prefers-color-scheme:dark){:root{--bg:#141517;--card:#1d1f22;--ink:#ececea;--mute:#a1a7af;--line:#2e3135;--acc:#5eead4;--accbg:#123b37;--bar:#2dd4bf;--warn:#fdba74}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:32px 0 10px}
+.mute{color:var(--mute)}.note{font-size:13px;color:var(--mute);border-left:3px solid var(--acc);padding:6px 10px;background:var(--card);margin:12px 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.kpi span{font-size:13px;color:var(--mute)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.cand h3{margin:0 0 4px;font-size:16px}.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--accbg);color:var(--acc);margin-right:6px}
+.save{float:right;font-weight:700;color:var(--acc);font-variant-numeric:tabular-nums}
+.rule{display:grid;grid-template-columns:70px 1fr;gap:2px 10px;font-size:14px;margin-top:8px}.rule dt{color:var(--mute)}.rule dd{margin:0}
+ol.steps{margin:8px 0 0;padding-left:22px;font-size:13px;font-family:ui-monospace,monospace}
+.bars .row{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;margin:5px 0;font-size:14px}
+.bars .track{height:12px;background:var(--line);border-radius:6px;overflow:hidden}.bars .fill{height:100%;background:var(--bar)}
+.bars .row.other .fill{background:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600}td.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}.empty{color:var(--mute);font-style:italic}
+@media (max-width:600px){.bars .row{grid-template-columns:100px 1fr 70px}}
+</style></head>
+<body><main>
+<h1>İş Akışı Raporu</h1>
+<div class="mute" id="meta">Yükleniyor…</div>
+<div class="note">Bu rapor iş akışlarını gösterir, kişileri değil. Kimin ne yaptığı yoktur; yalnız "kaç kişide görüldü" sayısı vardır.
+Az kişide görülen akışlar (<span id="mk"></span> kişiden az) gizlenir. Süre tahminleri gözlenen günlerden haftaya (5 iş günü) çevrilmiştir; kaba tahmindir.</div>
+<div class="kpis" id="kpis"></div>
+
+<h2>Otomasyon adayları</h2>
+<div id="cands"></div>
+
+<h2>En çok vakit alan siteler</h2>
+<div class="card bars" id="sites"></div>
+
+<h2>Siteler arası kopyala → yapıştır</h2>
+<div class="card scroll"><table id="paste"></table></div>
+
+<h2>Tekrar eden adım zincirleri</h2>
+<div id="chains"></div>
+
+<h2>En çok vakit alan sayfa türleri</h2>
+<div class="card scroll"><table id="pages"></table></div>
+</main>
+<script>
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const dk = (m) => m < 1 ? Math.round(m * 60) + ' sn' : m >= 60 ? (Math.round(m / 6) / 10) + ' saat' : Math.round(m) + ' dk';
+fetch('/api/report').then((r) => r.json()).then((d) => {
+  const g = d.gozlem;
+  document.getElementById('meta').textContent = `${g.gun} gün gözlem · ${g.kisi} katılımcı · ${g.olay} olay · ${new Date(d.olusturuldu).toLocaleString('tr-TR')}`;
+  document.getElementById('mk').textContent = g.minKisi;
+  document.getElementById('kpis').innerHTML = [
+    [dk(d.toplamHaftalikDakika), 'tahmini kazanç / hafta'],
+    [d.adaylar.length, 'otomasyon adayı'],
+    [d.kopyala.length, 'kopyala-yapıştır akışı'],
+    [d.zincirler.length, 'tekrar eden zincir'],
+  ].map(([v, l]) => `<div class="kpi"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('');
+
+  document.getElementById('cands').innerHTML = d.adaylar.length ? d.adaylar.map((a) => `
+    <div class="card cand"><span class="save">~${dk(a.haftalikDakika)}/hafta</span>
+      <span class="tag">${esc(a.tur)}</span><h3>${esc(a.baslik)}</h3>
+      <div class="mute" style="font-size:13px">Kanıt: ${esc(a.kanit)}</div>
+      <dl class="rule"><dt>Olay</dt><dd>${esc(a.oneri.olay)}</dd><dt>Kural</dt><dd>${esc(a.oneri.kural)}</dd><dt>Onay</dt><dd>${esc(a.oneri.onay)}</dd></dl>
+      ${a.adimlar ? `<ol class="steps">${a.adimlar.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>` : ''}
+    </div>`).join('') : '<div class="card empty">Henüz yeterli veri yok.</div>';
+
+  const max = Math.max(1, ...d.siteler.map((s) => s.dakika));
+  document.getElementById('sites').innerHTML = d.siteler.length ? d.siteler.map((s) => `
+    <div class="row ${s.site === 'diğer' ? 'other' : ''}"><span>${esc(s.site === 'diğer' ? 'Diğer (liste dışı)' : s.site)}</span>
+    <div class="track"><div class="fill" style="width:${(s.dakika / max) * 100}%"></div></div><span class="n">${dk(s.dakika)} · %${s.yuzde}</span></div>`).join('') : '<div class="empty">Veri yok.</div>';
+
+  document.getElementById('paste').innerHTML = '<tr><th>Nereden</th><th>Nereye</th><th>Alan</th><th class="n">Tekrar</th><th class="n">Kişi</th><th class="n">Ort. sn</th></tr>' +
+    (d.kopyala.length ? d.kopyala.map((f) => `<tr><td>${esc(f.kaynak)}</td><td>${esc(f.hedef)}</td><td>${esc(f.alanlar.join(', ') || '—')}</td><td class="n">${f.tekrar}</td><td class="n">${f.kisi}</td><td class="n">${f.ortSaniye ?? '—'}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Veri yok.</td></tr>');
+
+  document.getElementById('chains').innerHTML = d.zincirler.length ? d.zincirler.map((z) => `
+    <div class="card"><span class="save">${z.tekrar} kez · ~${z.ortSaniye} sn</span><b>${esc(z.siteler.join(' → '))}</b> <span class="mute">(${z.kisi} kişi)</span>
+    <ol class="steps">${z.adimlar.map((s) => `<li>${esc(s)}</li>`).join('')}</ol></div>`).join('') : '<div class="card empty">Henüz tekrar eden zincir bulunmadı.</div>';
+
+  document.getElementById('pages').innerHTML = '<tr><th>Sayfa türü</th><th class="n">Süre</th></tr>' +
+    (d.sayfalar.length ? d.sayfalar.map((p) => `<tr><td>${esc(p.sayfa)}</td><td class="n">${dk(p.dakika)}</td></tr>`).join('') : '<tr><td colspan="2" class="empty">Veri yok.</td></tr>');
+}).catch((e) => { document.getElementById('meta').textContent = 'Rapor alınamadı: ' + e; });
+</script>
+</body></html>

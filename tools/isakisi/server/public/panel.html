@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İş Akışı Paneli</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#16181d;--mute:#5f6670;--line:#e3e3df;--acc:#0f766e;--accbg:#e6f4f1;--bar:#0f766e;--warn:#9a3412;--h0:#e9f3f1;--h1:#0f766e}
+@media (prefers-color-scheme:dark){:root{--bg:#141517;--card:#1d1f22;--ink:#ececea;--mute:#a1a7af;--line:#2e3135;--acc:#5eead4;--accbg:#123b37;--bar:#2dd4bf;--warn:#fdba74;--h0:#22262a;--h1:#2dd4bf}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:28px 0 10px}
+.mute{color:var(--mute)}.note{font-size:13px;color:var(--mute);border-left:3px solid var(--acc);padding:6px 10px;background:var(--card);margin:12px 0}
+a{color:var(--acc)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;font-size:22px;font-variant-numeric:tabular-nums}.kpi span{font-size:13px;color:var(--mute)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:16px 0 4px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.tabs button{flex:none;background:none;border:1px solid transparent;border-radius:8px 8px 0 0;padding:8px 12px;font:inherit;color:var(--mute);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--acc);border-color:var(--line);border-bottom-color:var(--bg);font-weight:600;background:var(--card)}
+section[hidden]{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.cand h3{margin:0 0 4px;font-size:16px}.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--accbg);color:var(--acc);margin-right:6px}
+.save{float:right;font-weight:700;color:var(--acc);font-variant-numeric:tabular-nums}
+.rule{display:grid;grid-template-columns:70px 1fr;gap:2px 10px;font-size:14px;margin-top:8px}.rule dt{color:var(--mute)}.rule dd{margin:0}
+ol.steps{margin:8px 0 0;padding-left:22px;font-size:13px;font-family:ui-monospace,monospace;overflow-wrap:anywhere}
+.bars .row{display:grid;grid-template-columns:150px 1fr 110px;gap:10px;align-items:center;margin:5px 0;font-size:14px}
+.bars .track{height:12px;background:var(--line);border-radius:6px;overflow:hidden}.bars .fill{height:100%;background:var(--bar)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600;white-space:nowrap}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}.empty{color:var(--mute);font-style:italic}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 14px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin:10px 0}
+.filters label{font-size:12px;color:var(--mute);display:flex;flex-direction:column;gap:2px}
+input,select,button.b{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-width:0}
+button.b{cursor:pointer}button.b.pri{background:var(--acc);color:var(--card);border-color:var(--acc)}
+button.b:disabled{opacity:.5;cursor:default}
+.pager{display:flex;gap:8px;align-items:center;margin:8px 0;font-size:14px}
+.hm text{font-size:10px;fill:var(--mute)}.mono{font-family:ui-monospace,monospace;font-size:13px;overflow-wrap:anywhere}
+.matrix td,.matrix th{text-align:center;padding:5px 8px}
+@media (max-width:600px){.bars .row{grid-template-columns:90px 1fr 80px}main{padding:16px 16px 60px}.save{float:none;display:block}}
+</style></head>
+<body><main>
+<h1>İş Akışı Paneli</h1>
+<div class="mute" id="meta">Yükleniyor…</div>
+<div class="note">Bu panel ham kayıtları gösterir; yalnız proje sorumlusu içindir. Kişi kimliği gösterilmez.
+Analizlerde en az kişi şartı yoktur (1 kişi yeterli). <a href="/rapor">Herkese açık özet rapor →</a></div>
+<div class="tabs" role="tablist" id="tabs"></div>
+<section id="t-ozet"></section><section id="t-aday" hidden></section><section id="t-site" hidden></section>
+<section id="t-akis" hidden></section><section id="t-eylem" hidden></section><section id="t-zaman" hidden></section><section id="t-kayit" hidden></section>
+</main>
+<script>
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const dk = (m) => m < 1 ? Math.round(m * 60) + ' sn' : m >= 60 ? (Math.round(m / 6) / 10) + ' saat' : (Math.round(m * 10) / 10) + ' dk';
+const ms2 = (ms) => dk((ms || 0) / 60000);
+const tarih = (ts) => new Date(ts).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' });
+const TURAD = { visit: 'ziyaret', switch: 'site geçişi', click: 'tıklama', submit: 'form gönderimi', copy: 'kopyala', paste: 'yapıştır', download: 'indirme', upload: 'yükleme' };
+const tur = (t) => TURAD[t] || t;
+const tbl = (head, rows, nums = []) => `<div class="scroll"><table><tr>${head.map((h, i) => `<th class="${nums.includes(i) ? 'n' : ''}">${esc(h)}</th>`).join('')}</tr>` +
+  (rows.length ? rows.map((r) => `<tr>${r.map((c, i) => `<td class="${nums.includes(i) ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${head.length}" class="empty">Veri yok.</td></tr>`) + '</table></div>';
+const bars = (items, fmt) => { const mx = Math.max(1e-9, ...items.map((i) => i.v)); return items.length ? `<div class="bars">${items.map((i) => `<div class="row"><span>${esc(i.k)}</span><div class="track"><div class="fill" style="width:${(i.v / mx) * 100}%"></div></div><span class="n">${esc(fmt(i.v))}</span></div>`).join('')}</div>` : '<div class="empty">Veri yok.</div>'; };
+const card = (h, body) => `<div class="card"><b>${esc(h)}</b><div style="margin-top:8px">${body}</div></div>`;
+const kpis = (a) => `<div class="kpis">${a.map(([v, l]) => `<div class="kpi"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('')}</div>`;
+const $ = (id) => document.getElementById(id);
+const TABS = [['ozet', 'Özet'], ['aday', 'Otomasyon adayları'], ['site', 'Siteler'], ['akis', 'Akışlar'], ['eylem', 'Eylemler'], ['zaman', 'Zaman'], ['kayit', 'Kayıtlar']];
+let D = null, kayitYuklendi = false;
+
+$('tabs').innerHTML = TABS.map(([k, l], i) => `<button role="tab" data-t="${k}" aria-selected="${i === 0}">${l}</button>`).join('');
+$('tabs').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  for (const x of $('tabs').children) x.setAttribute('aria-selected', x === b);
+  for (const [k] of TABS) $('t-' + k).hidden = k !== b.dataset.t;
+  if (b.dataset.t === 'kayit' && D && !kayitYuklendi) { kayitYuklendi = true; kayitKur(); }
+});
+
+fetch('/api/panel').then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then((d) => { D = d; ciz(d); })
+  .catch((e) => { $('meta').textContent = 'Panel alınamadı: ' + e.message; });
+
+function ciz(d) {
+  const o = d.ozet, a = d.analiz;
+  $('meta').textContent = `${o.gun} gün · ${o.olay} olay · ${o.oturum} oturum · saat dilimi ${d.saatDilimi} · ${tarih(d.olusturuldu)}`;
+  // Özet
+  $('t-ozet').innerHTML = kpis([[o.gun, 'gün'], [o.olay, 'olay'], [o.oturum, 'oturum'], [dk(o.toplamAktifDakika), 'toplam aktif süre'], [dk(o.ortOturumDakika), 'ortalama oturum süresi'], [o.ortOturumOlay, 'oturum başına olay (adım)'], [dk(a.toplamHaftalikDakika), 'tahmini kazanç / hafta']]) +
+    '<h2>Olay türleri</h2>' + card('Sayılar', bars(Object.entries(o.turSayilari).sort((x, y) => y[1] - x[1]).map(([k, v]) => ({ k: tur(k), v })), (v) => v + ' olay')) +
+    '<h2>En çok vakit alan siteler</h2>' + card('Site süreleri', bars(a.siteler.map((s) => ({ k: s.site === 'diğer' ? 'Diğer (liste dışı)' : s.site, v: s.dakika })), dk)) +
+    '<h2>En çok vakit alan sayfa türleri</h2>' + card('Sayfalar', tbl(['Sayfa türü', 'Süre'], a.sayfalar.map((p) => [esc(p.sayfa), dk(p.dakika)]), [1]));
+  // Adaylar
+  $('t-aday').innerHTML = `<h2>Otomasyon adayları (${a.adaylar.length})</h2>` + (a.adaylar.length ? a.adaylar.map((x) => `
+    <div class="card cand"><span class="save">~${dk(x.haftalikDakika)}/hafta</span><span class="tag">${esc(x.tur)}</span><h3>${esc(x.baslik)}</h3>
+    <div class="mute" style="font-size:13px">Kanıt: ${esc(x.kanit)}</div>
+    <dl class="rule"><dt>Olay</dt><dd>${esc(x.oneri.olay)}</dd><dt>Kural</dt><dd>${esc(x.oneri.kural)}</dd><dt>Onay</dt><dd>${esc(x.oneri.onay)}</dd></dl>
+    ${x.adimlar ? `<ol class="steps">${x.adimlar.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>` : ''}</div>`).join('') : '<div class="card empty">Aday yok.</div>');
+  // Siteler
+  $('t-site').innerHTML = '<h2>Site bazında döküm</h2>' + (d.siteDetay.length ? d.siteDetay.map((s) => `
+    <div class="card"><span class="save">${dk(s.dakika)}</span><b>${esc(s.site === 'diğer' ? 'Diğer (liste dışı)' : s.site)}</b>
+    <div class="grid2" style="margin-top:8px"><div><div class="mute" style="font-size:13px">Eylemler</div>${tbl(['Tür', 'Sayı'], Object.entries(s.eylemler).sort((x, y) => y[1] - x[1]).map(([k, v]) => [esc(tur(k)), v]), [1])}</div>
+    <div><div class="mute" style="font-size:13px">Sayfa türleri (süre)</div>${tbl(['Sayfa', 'Süre'], s.sayfalar.map((p) => [`<span class="mono">${esc(p.path)}</span>`, dk(p.dakika)]), [1])}</div></div></div>`).join('') : '<div class="card empty">Veri yok.</div>');
+  // Akışlar
+  const sites = [...new Set(d.gecis.flatMap((g) => [g.from, g.to]))];
+  const gm = {}; let gmax = 1; for (const g of d.gecis) { gm[g.from + '\u0001' + g.to] = g.sayi; gmax = Math.max(gmax, g.sayi); }
+  $('t-akis').innerHTML = '<h2>Tekrar eden adım zincirleri</h2>' + (a.zincirler.length ? a.zincirler.map((z) => `
+    <div class="card"><span class="save">${z.tekrar} kez · ~${z.ortSaniye} sn</span><b>${esc(z.siteler.join(' → '))}</b> <span class="mute">(toplam ~${dk(z.toplamDakika)})</span>
+    <ol class="steps">${z.adimlar.map((s) => `<li>${esc(s)}</li>`).join('')}</ol></div>`).join('') : '<div class="card empty">Tekrar eden zincir bulunmadı.</div>') +
+    '<h2>Kopyala → yapıştır akışları</h2>' + card('Nereden nereye', tbl(['Nereden', 'Nereye', 'Alan', 'Tekrar', 'Ort. sn'], a.kopyala.map((f) => [esc(f.kaynak), esc(f.hedef), esc(f.alanlar.join(', ') || '—'), f.tekrar, f.ortSaniye ?? '—']), [3, 4])) +
+    '<h2>Siteler arası geçiş matrisi</h2>' + card('Satır = nereden, sütun = nereye', sites.length ? `<div class="scroll"><table class="matrix"><tr><th></th>${sites.map((s) => `<th>${esc(s)}</th>`).join('')}</tr>${sites.map((f) => `<tr><th style="text-align:left">${esc(f)}</th>${sites.map((t) => { const v = gm[f + '\u0001' + t] || 0; return `<td style="background:color-mix(in srgb,var(--h1) ${Math.round((v / gmax) * 70)}%,transparent)">${v || ''}</td>`; }).join('')}</tr>`).join('')}</table></div>` : '<div class="empty">Geçiş kaydı yok.</div>');
+  // Eylemler
+  const dosyaT = (l) => tbl(['Site', 'Tür', 'Sayı'], l.map((x) => [esc(x.site), esc(x.tur), x.sayi]), [2]);
+  $('t-eylem').innerHTML = '<div class="grid2"><div>' + '<h2>En çok tıklanan düğmeler</h2>' + card('Düğme yazıları', tbl(['Site', 'Düğme', 'Tıklama'], d.dugmeler.map((x) => [esc(x.site), esc(x.etiket), x.sayi]), [2])) +
+    '</div><div><h2>En çok gidilen bağlantılar</h2>' + card('Hedef sayfa türleri', tbl(['Site', 'Hedef', 'Tıklama'], d.linkler.map((x) => [esc(x.site), esc(x.etiket), x.sayi]), [2])) + '</div></div>' +
+    '<h2>Formlar (veri girişi adayları)</h2>' + (d.formlar.length ? d.formlar.map((f) => `<div class="card"><span class="save">${f.gonderim} gönderim</span><b>${esc(f.site)}</b> <span class="mono">${esc(f.path)}</span><div style="margin-top:6px;font-size:13px">${f.alanlar.map((x) => `<span class="tag">${esc(x.ad)} · ${x.sayi}</span>`).join(' ') || '<span class="empty">alan yok</span>'}</div></div>`).join('') : '<div class="card empty">Form gönderimi yok.</div>') +
+    '<div class="grid2"><div><h2>İndirmeler</h2>' + card('Site ve dosya türü', dosyaT(d.indirme)) + '</div><div><h2>Yüklemeler</h2>' + card('Site ve dosya türü', dosyaT(d.yukleme)) + '</div></div>' +
+    '<h2>Yapıştırma kaynakları</h2>' + card('Nereden → hangi sayfa / alan', tbl(['Kaynak', 'Hedef site', 'Sayfa', 'Alan', 'Sayı'], d.yapistirKaynak.map((x) => [esc(x.kaynak), esc(x.site), `<span class="mono">${esc(x.path)}</span>`, esc(x.alan || '—'), x.sayi]), [4])) +
+    '<h2>Dış uygulamadan yapıştırma (ör. Excel)</h2>' + card('Tarayıcı dışından gelen veri', tbl(['Hedef site', 'Sayfa', 'Alan', 'Sayı'], d.disUygulama.map((x) => [esc(x.site), `<span class="mono">${esc(x.path)}</span>`, esc(x.alan || '—'), x.sayi]), [3]));
+  // Zaman
+  $('t-zaman').innerHTML = '<h2>Saat × hafta günü ısı haritası (dakika)</h2><div class="card scroll">' + isi(d) + '</div>' +
+    '<h2>Günlük eğilim</h2>' + card('Gün başına süre (site bazında)', gunluk(d)) +
+    '<h2>Günlük kayıtlar</h2>' + card('Olay sayıları', tbl(['Gün', 'Toplam süre', 'Olaylar'], d.gunluk.slice().reverse().map((g) => [esc(g.gun), dk(g.toplamDk), esc(Object.entries(g.olay).map(([k, v]) => tur(k) + ' ' + v).join(' · '))]), [1])) +
+    (d.arsiv.length ? '<h2>Arşivlenmiş günler (saklama süresi dolmuş)</h2>' + card('Yalnız toplu sayılar', tbl(['Gün', 'Toplam süre', 'Siteler', 'Olaylar'], d.arsiv.slice().reverse().map((g) => [esc(g.gun), dk(g.toplamDk), esc(Object.entries(g.siteDk).map(([k, v]) => k + ' ' + v + ' dk').join(' · ')), esc(Object.entries(g.olay).map(([k, v]) => tur(k) + ' ' + v).join(' · '))]), [1])) : '');
+}
+
+function isi(d) {
+  const W = 24, H = 22, L = 34, T = 16, mx = Math.max(0.01, ...d.isiHaritasi.flat());
+  let s = `<svg class="hm" role="img" aria-label="Isı haritası" viewBox="0 0 ${L + 24 * W} ${T + 7 * H + 4}" width="100%" style="min-width:560px;max-width:900px">`;
+  for (let h = 0; h < 24; h += 2) s += `<text x="${L + h * W + W / 2}" y="11" text-anchor="middle">${h}</text>`;
+  d.haftaGunleri.forEach((g, i) => {
+    s += `<text x="0" y="${T + i * H + 15}">${esc(g)}</text>`;
+    for (let h = 0; h < 24; h++) { const v = d.isiHaritasi[i][h]; s += `<rect x="${L + h * W}" y="${T + i * H}" width="${W - 2}" height="${H - 2}" rx="3" fill="var(--h1)" fill-opacity="${v ? 0.12 + 0.88 * (v / mx) : 0.06}"><title>${esc(g)} ${h}:00 — ${esc(dk(v))}</title></rect>`; }
+  });
+  return s + '</svg>';
+}
+function gunluk(d) {
+  if (!d.gunluk.length) return '<div class="empty">Veri yok.</div>';
+  const names = [...new Set(d.gunluk.flatMap((g) => Object.keys(g.siteDk)))];
+  const pal = ['#0f766e', '#2563eb', '#d97706', '#9333ea', '#dc2626', '#0891b2', '#65a30d', '#db2777', '#64748b'];
+  const mx = Math.max(0.1, ...d.gunluk.map((g) => g.toplamDk));
+  const bw = Math.max(14, Math.min(48, 700 / d.gunluk.length)), HH = 160, L = 40, n = d.gunluk.length;
+  let s = `<div class="scroll"><svg role="img" aria-label="Günlük eğilim" viewBox="0 0 ${L + n * (bw + 6)} ${HH + 40}" width="${L + n * (bw + 6)}" height="${HH + 40}" class="hm">`;
+  s += `<text x="0" y="10">${esc(dk(mx))}</text><line x1="${L - 4}" x2="${L + n * (bw + 6)}" y1="${HH + 14}" y2="${HH + 14}" stroke="var(--line)"/>`;
+  d.gunluk.forEach((g, i) => {
+    let y = HH + 14; const x = L + i * (bw + 6);
+    names.forEach((nm, j) => { const v = g.siteDk[nm] || 0; if (!v) return; const h = (v / mx) * HH; y -= h; s += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" fill="${pal[j % pal.length]}"><title>${esc(g.gun)} ${esc(nm)} ${esc(dk(v))}</title></rect>`; });
+    s += `<text x="${x + bw / 2}" y="${HH + 28}" text-anchor="middle">${esc(g.gun.slice(5))}</text>`;
+  });
+  s += '</svg></div><div style="font-size:13px;margin-top:6px">' + names.map((nm, j) => `<span style="margin-right:12px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${pal[j % pal.length]}"></span> ${esc(nm === 'diğer' ? 'Diğer' : nm)}</span>`).join('') + '</div>';
+  return s;
+}
+
+// ---- Kayıtlar ----
+const F = { tur: '', site: '', gun: '', q: '', sayfa: 1, boyut: 200 };
+function kayitKur() {
+  const sec = D.secenek, opt = (l, all) => `<option value="">${all}</option>` + l.map((x) => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  $('t-kayit').innerHTML = `<h2>Ham kayıtlar</h2><div class="filters">
+    <label>Tür<select id="f-tur">${opt(sec.turler.map((x) => x), 'Hepsi')}</select></label>
+    <label>Site<select id="f-site">${opt(sec.siteler, 'Hepsi')}</select></label>
+    <label>Gün<select id="f-gun">${opt(sec.gunler, 'Hepsi')}</select></label>
+    <label>Ara (sayfa/etiket/alan)<input id="f-q" type="search" placeholder="örn. orders"></label>
+    <label>Sayfa başına<select id="f-boyut"><option>50</option><option>100</option><option selected>200</option><option>500</option><option>1000</option></select></label>
+    <button class="b pri" id="f-csv">CSV indir</button></div>
+    <div class="pager"><button class="b" id="f-prev">‹ Önceki</button><span id="f-info" class="mute"></span><button class="b" id="f-next">Sonraki ›</button></div>
+    <div class="card scroll" id="f-tbl"></div>`;
+  const apply = () => { F.tur = $('f-tur').value; F.site = $('f-site').value; F.gun = $('f-gun').value; F.q = $('f-q').value.trim(); F.boyut = +$('f-boyut').value; F.sayfa = 1; kayitGetir(); };
+  for (const id of ['f-tur', 'f-site', 'f-gun', 'f-boyut']) $(id).addEventListener('change', apply);
+  let t; $('f-q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(apply, 350); });
+  $('f-prev').onclick = () => { if (F.sayfa > 1) { F.sayfa--; kayitGetir(); } };
+  $('f-next').onclick = () => { F.sayfa++; kayitGetir(); };
+  $('f-csv').onclick = csvIndir;
+  kayitGetir();
+}
+const qs = (extra) => new URLSearchParams({ sadece: 'kayit', ...Object.fromEntries(Object.entries({ tur: F.tur, site: F.site, gun: F.gun, q: F.q }).filter(([, v]) => v)), ...extra }).toString();
+const detay = (r) => {
+  switch (r.tur) {
+    case 'visit': return `süre ${ms2(r.ms)}`;
+    case 'switch': return `${r.from} → ${r.to}`;
+    case 'click': return `${r.kind === 'link' ? 'bağlantı' : 'düğme'}: ${r.label}`;
+    case 'submit': return 'alanlar: ' + r.fields.join(', ');
+    case 'paste': return `kaynak: ${r.srcSite}${r.srcPath ? ' ' + r.srcPath : ''}${r.field ? ' → alan: ' + r.field : ''}${r.gapMs ? ' · ' + Math.round(r.gapMs / 1000) + ' sn sonra' : ''}`;
+    case 'download': return 'tür: ' + r.ext;
+    case 'upload': return `${r.count} dosya: ${r.exts.join(', ')}`;
+    default: return '';
+  }
+};
+function kayitGetir() {
+  fetch('/api/panel?' + qs({ sayfa: F.sayfa, boyut: F.boyut })).then((r) => r.json()).then((d) => {
+    const k = d.kayitlar; F.sayfa = k.sayfa;
+    $('f-info').textContent = `${k.toplam} kayıt · sayfa ${k.sayfa}/${k.sayfaSay}`;
+    $('f-prev').disabled = k.sayfa <= 1; $('f-next').disabled = k.sayfa >= k.sayfaSay;
+    $('f-tbl').innerHTML = tbl(['Zaman', 'Oturum', 'Tür', 'Site', 'Sayfa', 'Ayrıntı'], k.satirlar.map((r) => [esc(tarih(r.ts)), r.oturum, esc(tur(r.tur)), esc(r.site), `<span class="mono">${esc(r.path)}</span>`, esc(detay(r))]), [1]);
+  }).catch((e) => { $('f-tbl').textContent = 'Alınamadı: ' + e.message; });
+}
+const csvCell = (v) => { let s = String(v ?? ''); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+function csvIndir() {
+  const b = $('f-csv'); b.disabled = true;
+  fetch('/api/panel?' + qs({ sayfa: 1, boyut: 5000 })).then((r) => r.json()).then((d) => {
+    const rows = d.kayitlar.satirlar;
+    const head = ['zaman', 'oturum', 'tur', 'site', 'host', 'sayfa', 'ayrinti'];
+    const csv = '﻿' + [head.join(','), ...rows.map((r) => [r.zaman, r.oturum, r.tur, r.site, r.host, r.path, detay(r)].map(csvCell).join(','))].join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'kayitlar-' + new Date().toISOString().slice(0, 10) + '.csv'; document.body.appendChild(a); a.click(); a.remove();
+    if (d.kayitlar.toplam > rows.length) alert(`İlk ${rows.length} kayıt indirildi (toplam ${d.kayitlar.toplam}). Filtreyi daraltın.`);
+  }).catch((e) => alert('CSV alınamadı: ' + e.message)).finally(() => { b.disabled = false; });
+}
+</script>
+</body></html>

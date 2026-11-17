@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>İş Akışı Kaydı</title>
+<style>
+ body{font:14px system-ui,sans-serif;width:290px;margin:0;padding:14px;color:#111}
+ .st{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;margin-bottom:6px}
+ .dot{width:12px;height:12px;border-radius:50%;background:#888}
+ .rec .dot{background:#dc2626;box-shadow:0 0 0 4px #fecaca}
+ .pau .dot{background:#6b7280}
+ .no .dot{background:#d97706}
+ p{margin:6px 0;color:#444;font-size:13px}
+ button{display:block;width:100%;margin-top:8px;padding:8px;border:1px solid #ccc;border-radius:6px;background:#fff;font:inherit;cursor:pointer}
+ button.main{background:#111;color:#fff;border-color:#111}
+ button.warn{color:#b91c1c;border-color:#fca5a5}
+ a{color:#2563eb;font-size:13px}
+ small{color:#666}
+</style></head>
+<body>
+ <div id="st" class="st"><span class="dot"></span><span id="stText">…</span></div>
+ <p id="info"></p>
+ <div id="btns"></div>
+ <p><a id="mine" href="#" target="_blank">Kaydedilen verilerimi gör</a> · <a href="onboarding.html" target="_blank">Ne toplanır?</a></p>
+ <small id="q"></small>
+ <script src="popup.js"></script>
+</body></html>
