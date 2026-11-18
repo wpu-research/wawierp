@@ -19,6 +19,7 @@ export default function Layout() {
 
   return (
     <Stack>
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="index" options={{ title: 'Gelen Kutusu' }} />
       <Stack.Screen name="settings" options={{ title: 'Ayarlar' }} />
       <Stack.Screen name="message/[uid]" options={{ title: 'Mail' }} />
