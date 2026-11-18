@@ -26,7 +26,7 @@ export default function Inbox() {
     setError('');
     try {
       const { url, token } = await loadSettings();
-      if (!url || !token) { router.push('/settings'); return; }
+      if (!url || !token) { router.replace('/login'); return; }
       const before = more && items.length ? items[items.length - 1].uid : undefined;
       const page = await api.messages(f, before, PAGE);
       done.current = page.length < PAGE;
