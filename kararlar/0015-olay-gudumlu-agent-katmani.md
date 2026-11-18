@@ -55,3 +55,7 @@ Sahibinin sorusu: “Bunu ve benzer bir sistemi tüm şirketi yönetmek için ku
 ## Açık kalanlar
 - LLM sağlayıcısı ve AB içi işleme bölgesi (öneri: `0006` ile uyumlu olarak Claude; veri işleme sözleşmesi gerekiyor).
 - Coolify sunucusunun AB'de olduğunun doğrulanması.
+
+## Ek (2026-11-18) — posta pilotu canlıda
+- Sahibinin isteğiyle pilot **Railway**'de (AB, europe-west4) çalışıyor; Coolify yerine. Kalıcı yer ve son sunucu kararı açık: pilot süresince Railway, gerçek sistemde yeniden değerlendirilir.
+- Kod `tools/posta-agent/`, kural `seidel-beyin/kurallar/K-001`. Sınıflayıcı şimdilik anahtar kelimeli; LLM (Claude) kullanımı veri işleme sözleşmesi sorusu kapanınca açılır.

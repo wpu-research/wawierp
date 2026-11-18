@@ -109,7 +109,7 @@ def kaynak_eml(c, klasor):
     return yeni
 
 
-def kaynak_imap(c, kullanici, son_n=200):
+def kaynak_imap(c, kullanici, son_n=200, taban=False):
     m = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT)
     try:
         m.login(kullanici, imap_sifresi(kullanici))
@@ -121,6 +121,10 @@ def kaynak_imap(c, kullanici, son_n=200):
             _, d = m.uid("fetch", uid, "(BODY.PEEK[HEADER.FIELDS (MESSAGE-ID)])")
             hdr = email.message_from_bytes(d[0][1]).get("Message-ID", "").strip()
             if hdr and c.execute("SELECT 1 FROM olay WHERE message_id=?", (hdr,)).fetchone():
+                continue
+            if taban and hdr:  # ilk çalıştırma: eski mailler işlenmez, yalnız "görüldü" diye kimliği yazılır
+                c.execute("INSERT OR IGNORE INTO olay(message_id,kaynak,alindi,durum,guncellendi) "
+                          "VALUES(?,?,?,'atlandi',?)", (hdr, f"imap:{uid.decode()}", simdi(), simdi()))
                 continue
             _, d = m.uid("fetch", uid, "(BODY.PEEK[])")  # PEEK: \Seen işaretlenmez
             yeni += kuyruga_al(c, d[0][1], f"imap:{uid.decode()}")
@@ -370,9 +374,16 @@ def main():
     elif a.komut == "izle":
         if not a.kullanici:
             sys.exit("POSTA_IMAP_USER ya da --kullanici gerekli")
+        port = os.environ.get("PORT")  # Railway/Coolify: ntfy düğmeleri için onay ucu aynı süreçte
+        if port:
+            import threading
+            threading.Thread(target=onay_sunucusu, args=(int(port),), daemon=True).start()
+        taban = not c.execute("SELECT 1 FROM olay LIMIT 1").fetchone() and os.environ.get("POSTA_ILK_TARAMA", "atla") == "atla"
+        if taban:
+            log("boş veritabanı: mevcut mailler 'atlandi' olarak işaretlenecek, yalnız yeni gelenler işlenir")
         while True:
             try:
-                n = kaynak_imap(c, a.kullanici)
+                n = kaynak_imap(c, a.kullanici, taban=taban); taban = False
                 if n: log(f"yeni olay: {n}, işlenen: {isle(c, siniflayici_sec(a.siniflayici))}")
             except Exception as ex:
                 log(f"yoklama hatası: {type(ex).__name__}")

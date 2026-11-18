@@ -59,3 +59,10 @@ ANTHROPIC_API_KEY=... python3 agent.py izle --kullanici KUTU_ADRESI --aralik 120
 - Sınıflama hatası aynı çalıştırmada 3 kez denenir, sonra `hata` olur; geri çekilme (backoff) yok.
 - `sunucu` ucunun önüne Coolify'da TLS ve erişim kısıtı konmalı.
 - isakisi ve /tv entegrasyonu henüz yok (kaynak: `olay` tablosundaki `onay_bekliyor` kayıtları).
+
+## Canlı: Railway (2026-11-18)
+- Proje `posta-agent`, servis `posta-agent`, bölge europe-west4 (Amsterdam), **tek kopya** (volume tek kopyaya bağlanır; ikinci bölge açılırsa deploy düşer).
+- Volume `/data` → `POSTA_DB=/data/posta.db`. Alan adı: `https://posta-agent-production.up.railway.app` (onay ucu `/onay`).
+- Değişkenler: `POSTA_IMAP_USER`, `POSTA_IMAP_SIFRE` (gizli, sahibi girdi), `NTFY_URL`, `NTFY_TOPIC`, `POSTA_ONAY_URL`, `PORT=8080`.
+- `PORT` tanımlıysa `izle` onay ucunu aynı süreçte açar. Veritabanı boşsa ilk yoklamada mevcut mailler işlenmez, `atlandi` olarak işaretlenir (`POSTA_ILK_TARAMA=isle` ile kapatılır).
+- Deploy: bu klasörde `railway up --detach`. Sınıflayıcı şimdilik `sahte` (Dockerfile CMD); LLM için sahibinin onayı ve `ANTHROPIC_API_KEY` gerekir.
