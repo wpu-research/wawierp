@@ -1,0 +1,24 @@
+From: buchhaltung@lieferant-beispiel.de
+To: posta@sirket-ornek.test
+Subject: Rechnung RE-2026-1182 zu Ihrer Bestellung
+Message-ID: <179497193020.544490.1665085426738479136@ornek.test>
+Date: Wed, 18 Nov 2026 09:00:00 +0100
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0439133499943048665=="
+
+--===============0439133499943048665==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Sehr geehrte Damen und Herren, anbei die Rechnung RE-2026-1182 (Lieferschein =
+LS-551). Betrag 1.240,00 EUR. Zahlbar bis 30.11.
+
+--===============0439133499943048665==
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="RE-2026-1182.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQgc2FodGU=
+
+--===============0439133499943048665==--
