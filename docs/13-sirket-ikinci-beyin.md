@@ -10,7 +10,7 @@ Tarih: 2026-11-18 · Durum: **öneri, onay bekliyor** · Kapsam: Lady Empire Gmb
 Bugün her proje kendi hafızasını ayrı ayrı tutuyor ve hepsi tek makinede. Öneri:
 
 1. **Doğruluk düz markdown + git'te kalır.** Cognee ve graphify bunun üstünde türetilmiş dizinlerdir; silinse yeniden kurulur.
-2. **Tek şirket deposu (`seidel-beyin`)** projeler arası bilgiyi tutar: kararlar, kurallar, sözlük, kişiler-roller, projelerin özeti. Proje depoları kendi `kararlar/` ve `docs/` klasörlerini korur.
+2. **Tek şirket deposu (`wawi-beyin`)** projeler arası bilgiyi tutar: kararlar, kurallar, sözlük, kişiler-roller, projelerin özeti. Proje depoları kendi `kararlar/` ve `docs/` klasörlerini korur.
 3. **Her gerçek kaynağını taşır** (dosya:satır, commit, oturum kimliği, kişi, tarih, güven düzeyi).
 4. **Gece "rüya" işi** gün içindeki oturumları ve gelen kutusunu okur, tekrarları birleştirir, çelişkileri işaretler, tekrarlanan düzeltmeleri **kural önerisine** çevirir. Kuralı insan onaylar; iş hiçbir şeyi kendi başına silmez.
 5. **Şifre, anahtar ve müşteri kişisel verisi hiçbir katmana girmez**; girişte ve gece iki kez taranır.
@@ -65,16 +65,16 @@ Ortak ders: **Bu projelerin hiçbiri hafızayı veritabanında saklamıyor; heps
 
 | Katman | Nerede | Ne | Kim yazar |
 |---|---|---|---|
-| **Kaynak** | Proje depoları (`docs/`, `kararlar/`, kod) + şirket deposu `seidel-beyin` | Tek doğruluk. Düz markdown, git geçmişi = denetim izi | İnsan; ajan yalnız `gelen-kutusu/` ve PR ile |
+| **Kaynak** | Proje depoları (`docs/`, `kararlar/`, kod) + şirket deposu `wawi-beyin` | Tek doğruluk. Düz markdown, git geçmişi = denetim izi | İnsan; ajan yalnız `gelen-kutusu/` ve PR ile |
 | **Beyin** | graphify: proje başına `graphify-out/` + şirket deposunda birleşik grafik | "Ne neye bağlı?" Projeler arası bağlar (ör. Mixo fiyat karşılaştırma ↔ WawiERP katalog) | Türetilir, elle yazılmaz |
 | **Hafıza** | Cognee | "Neden? Ne zaman? Kim söyledi?" anlamsal arama ve otomatik hatırlama | Rüya işi `wiki/` ve `kararlar/`'dan besler; oturumda `cognee-remember` |
 
 Değişen tek şey: **Cognee artık birincil yazma yeri değil, okuma dizini.** Oturumda Cognee'ye yazılan her kayıt, aynı gece rüya işiyle markdown'a da iner (ya da tersi). Böylece Cognee kaybolsa da hiçbir şey kaybolmaz.
 
-### 4.2 Şirket deposu düzeni (`seidel-beyin`)
+### 4.2 Şirket deposu düzeni (`wawi-beyin`)
 
 ```
-seidel-beyin/
+wawi-beyin/
 ├── index.md                 giriş: projeler, sözlük, son kararlar (rüya işi günceller)
 ├── raw/                     değişmez girdiler: toplantı notu, ses dökümü, dış belge (Karpathy)
 ├── gelen-kutusu/            ajanların ve insanların ham notları; rüya işi buradan alır
@@ -91,7 +91,7 @@ seidel-beyin/
 └── rapor/                   gece raporları
 ```
 
-Proje depoları değişmez; yalnız `CLAUDE.md`'lerine tek satır eklenir: `@~/…/seidel-beyin/kurallar/genel.md`.
+Proje depoları değişmez; yalnız `CLAUDE.md`'lerine tek satır eklenir: `@~/…/wawi-beyin/kurallar/genel.md`.
 
 ### 4.3 Kaynak (provenance) standardı
 
@@ -156,7 +156,7 @@ Ek olarak haftada bir **büyük toparlama**: 41 dağınık `~/.claude/projects/*
 
 | Önlem | Nasıl |
 |---|---|
-| Girişte tarama | `seidel-beyin` deposuna pre-commit kancası: gitleaks (sır) + basit KVK/DSGVO kalıpları (e-posta, telefon, IBAN, Steuer-ID) |
+| Girişte tarama | `wawi-beyin` deposuna pre-commit kancası: gitleaks (sır) + basit KVK/DSGVO kalıpları (e-posta, telefon, IBAN, Steuer-ID) |
 | Gece tarama | Rüya işinin 1. adımı; bulduğunu atlar, yerini raporlar |
 | Kişiler | Ad yerine rol (`rol:ar-ge`, `rol:depo-sorumlusu`); çalışan adı yalnız yetki tablosunda, hafızada değil |
 | Erişim düzeyi | `genel` (tüm şirket) · `proje` (o projenin ekibi) · `gizli` (yalnız yönetim). Aşama 2'de her düzey ayrı Cognee veri kümesi ve ayrı klasör izni |
@@ -198,7 +198,7 @@ Fiyatlar 2026-11 itibarıyla tahmindir; Sonnet 2 $/10 $ (1M giriş/çıkış) ü
 | Aşama | Ne zaman | İş | Bitti sayılır |
 |---|---|---|---|
 | **0 — MVP** | Hemen, 1 hafta, hesap gerekmez | §10 | 7 gece rapor üretildi; en az 1 kural önerisi onaylandı/reddedildi |
-| **1 — Ortak depo** | Şirket GitHub organizasyonu açılınca (talep listesi madde 13) | `seidel-beyin`'i organizasyona taşı; dal koruması; rüya işi PR açar; ekip üyeleri okur | İlk PR insan onayıyla birleşti |
+| **1 — Ortak depo** | Şirket GitHub organizasyonu açılınca (talep listesi madde 13) | `wawi-beyin`'i organizasyona taşı; dal koruması; rüya işi PR açar; ekip üyeleri okur | İlk PR insan onayıyla birleşti |
 | **2 — Paylaşılan hafıza** | Claude Console + sunucu açılınca | Cognee'yi Hetzner'de Coolify ile çalıştır; erişim düzeyi başına veri kümesi; rüya işi sunucuya taşınır; Cognee MCP'si ekip makinelerine | İki farklı kişinin ajanı aynı kararı hatırlıyor |
 | **3 — Yakalama** | Aşama 2 + 2 hafta | Telegram sesli not → `gelen-kutusu/`; toplantı notu şablonu; panel asistanlarının (WawiERP W, DigiBank ops) `gelen-kutusu/`'na yazması | Haftada ≥10 girdi kanaldan geliyor |
 | **4 — Değerlendirme** | 1 ay kullanım sonrası | Managed Agents "dreams" ile kendi rüya işini karşılaştır; Cognee yetmiyorsa gbrain/ai-memory dene; ölçü: aynı 20 soruya doğru cevap oranı | Karar kaydı yazıldı |
@@ -207,7 +207,7 @@ Fiyatlar 2026-11 itibarıyla tahmindir; Sonnet 2 $/10 $ (1M giriş/çıkış) ü
 
 Hesap açmadan, yeni yazılım kurmadan, bu makinede:
 
-1. `~/Desktop/Urunler/seidel-beyin/` klasörü + `git init`; §4.2 düzeni; `index.md`, `wiki/projeler/{mixo,digibank,wawierp}.md` mevcut belgelerden özetlenir.
+1. `~/Desktop/Urunler/wawi-beyin/` klasörü + `git init`; §4.2 düzeni; `index.md`, `wiki/projeler/{mixo,digibank,wawierp}.md` mevcut belgelerden özetlenir.
 2. Mevcut `kararlar/`, `KARARLAR.md`, `_vault/continue-*` ve dolu `memory/` klasörlerinden **tek seferlik içe alma** (Sonnet alt ajanı) → `gelen-kutusu/` → ilk rüya geçişi.
 3. `beceriler/ruya/SKILL.md`: §5'teki 8 adım; `beceriler/yakala/SKILL.md`: oturum sonunda `gelen-kutusu/`'na kaynaklı not bırakma.
 4. Zamanlanmış görev: her gece 03:00 rüya becerisi, Sonnet, bütçe sınırlı.
@@ -217,7 +217,7 @@ Hesap açmadan, yeni yazılım kurmadan, bu makinede:
 **MVP'de yapılmayacak:** sunucu, yeni hesap, push, Cognee'nin taşınması, sesli not, gitleaks dışında yeni araç (gitleaks da kurulmadan önce sorulur).
 
 **Kullanıcıdan onay gereken noktalar:**
-- `seidel-beyin` klasörünün açılması ve adı.
+- `wawi-beyin` klasörünün açılması ve adı.
 - Zamanlanmış gece görevinin kurulması.
 - Proje `CLAUDE.md`'lerine satır eklenmesi.
 - gitleaks kurulumu.

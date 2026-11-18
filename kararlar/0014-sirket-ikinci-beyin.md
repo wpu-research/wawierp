@@ -7,7 +7,7 @@ Ayrıntı: `docs/13-sirket-ikinci-beyin.md`
 Mixo, DigiBank ve WawiERP hafızasını ayrı ayrı ve tek makinede tutuyor: Cognee (yerel, etiketle ayrılmış), 6 ayrı graphify grafiği, üç farklı karar biçimi, 41 Claude Code hafıza klasörü (26'sı boş). Şirket e-postası, GitHub organizasyonu ve Claude Console yakında açılacak (talep listesi madde 13). Sahibi gbrain, Karpathy LLM Wiki, ai-memory, COG, agent-second-brain, open-second-brain ve Anthropic "dreaming" örneklerini referans gösterdi.
 
 ## Karar (önerilen)
-1. Doğruluk kaynağı düz markdown + git. Şirket geneli bilgi yeni `seidel-beyin` deposunda; proje bilgisi kendi deposunda kalır.
+1. Doğruluk kaynağı düz markdown + git. Şirket geneli bilgi yeni `wawi-beyin` deposunda; proje bilgisi kendi deposunda kalır.
 2. Cognee ve graphify türetilmiş dizinlerdir; Cognee'ye yazılan her kayıt markdown'a da iner.
 3. Her gerçek kaynak, güven düzeyi ve erişim düzeyi taşır; kaynaksız gerçek wiki'ye girmez.
 4. Gece rüya işi (Sonnet, bütçe sınırlı): birleştirir, çelişkiyi işaretler, 3 oturumda tekrarlanan düzeltmeyi kural önerisi yapar. Silmez, `main`'e yazmaz, CLAUDE.md'yi değiştirmez; insan onaylar.

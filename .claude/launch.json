@@ -8,9 +8,9 @@
       "port": 5179
     },
     {
-      "name": "seidel-beyin",
+      "name": "wawi-beyin",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--bind", "127.0.0.1", "--directory", "/home/wpu/Desktop/Urunler/seidel-beyin"],
+      "runtimeArgs": ["-m", "http.server", "8765", "--bind", "127.0.0.1", "--directory", "/home/wpu/Desktop/Urunler/wawi-beyin"],
       "port": 8765
     }
   ]
