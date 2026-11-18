@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Şirket Mail",
+    "slug": "mail-mobil",
+    "version": "0.1.0",
+    "scheme": "sirketmail",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": { "bundleIdentifier": "com.example.sirketmail", "supportsTablet": true },
+    "android": { "package": "com.example.sirketmail" },
+    "plugins": ["expo-router", "expo-secure-store", "expo-notifications"],
+    "experiments": { "typedRoutes": false }
+  }
+}
