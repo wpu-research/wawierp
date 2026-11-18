@@ -348,8 +348,19 @@ def onay_sunucusu(port):
     HTTPServer(("0.0.0.0", port), E).serve_forever()
 
 
+def siniflandir_llm_yedekli(girdi):
+    """LLM erişilemezse mail kaybolmaz: anahtar kelime sonucu en çok 0.5 güvenle döner → kural onaya gönderir."""
+    try:
+        return siniflandir_llm(girdi)
+    except Exception as e:
+        log(f"LLM hatası ({type(e).__name__}), yedek sınıflayıcı kullanıldı")
+        r = siniflandir_sahte(girdi)
+        r["guven"] = min(r["guven"], 0.5)
+        return r
+
+
 def siniflayici_sec(ad):
-    return siniflandir_sahte if ad == "sahte" else siniflandir_llm
+    return siniflandir_sahte if ad == "sahte" else siniflandir_llm_yedekli
 
 
 def main():
@@ -359,7 +370,8 @@ def main():
     i = alt.add_parser("izle", help="IMAP'ı periyodik olarak yokla (salt okunur)")
     i.add_argument("--kullanici", default=IMAP_USER); i.add_argument("--aralik", type=int, default=120)
     for p in (e, i):
-        p.add_argument("--siniflayici", choices=["llm", "sahte"], default="llm")
+        p.add_argument("--siniflayici", choices=["llm", "sahte"],
+                       default=os.environ.get("POSTA_SINIFLAYICI", "llm"))
     alt.add_parser("durum", help="kuyruk ve onay bekleyenler")
     for ad in ("onayla", "reddet"):
         p = alt.add_parser(ad); p.add_argument("message_id")

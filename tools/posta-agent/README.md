@@ -65,4 +65,4 @@ ANTHROPIC_API_KEY=... python3 agent.py izle --kullanici KUTU_ADRESI --aralik 120
 - Volume `/data` → `POSTA_DB=/data/posta.db`. Alan adı: `https://posta-agent-production.up.railway.app` (onay ucu `/onay`).
 - Değişkenler: `POSTA_IMAP_USER`, `POSTA_IMAP_SIFRE` (gizli, sahibi girdi), `NTFY_URL`, `NTFY_TOPIC`, `POSTA_ONAY_URL`, `PORT=8080`.
 - `PORT` tanımlıysa `izle` onay ucunu aynı süreçte açar. Veritabanı boşsa ilk yoklamada mevcut mailler işlenmez, `atlandi` olarak işaretlenir (`POSTA_ILK_TARAMA=isle` ile kapatılır).
-- Deploy: bu klasörde `railway up --detach`. Sınıflayıcı şimdilik `sahte` (Dockerfile CMD); LLM için sahibinin onayı ve `ANTHROPIC_API_KEY` gerekir.
+- Deploy: bu klasörde `railway up --detach`. Sınıflayıcı `POSTA_SINIFLAYICI` ile seçilir (`llm` | `sahte`); 2026-11-18 sahibinin onayıyla `llm` açıldı, `ANTHROPIC_API_KEY` Railway gizli değişkeninde. LLM hatasında yedek sınıflayıcı en çok 0,5 güven verir, mail onaya düşer.

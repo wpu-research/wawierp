@@ -58,4 +58,4 @@ Sahibinin sorusu: “Bunu ve benzer bir sistemi tüm şirketi yönetmek için ku
 
 ## Ek (2026-11-18) — posta pilotu canlıda
 - Sahibinin isteğiyle pilot **Railway**'de (AB, europe-west4) çalışıyor; Coolify yerine. Kalıcı yer ve son sunucu kararı açık: pilot süresince Railway, gerçek sistemde yeniden değerlendirilir.
-- Kod `tools/posta-agent/`, kural `seidel-beyin/kurallar/K-001`. Sınıflayıcı şimdilik anahtar kelimeli; LLM (Claude) kullanımı veri işleme sözleşmesi sorusu kapanınca açılır.
+- Kod `tools/posta-agent/`, kural `seidel-beyin/kurallar/K-001`. LLM (Claude Haiku) sınıflaması sahibinin onayıyla açıldı; maskeli girdi gider. Veri işleme sözleşmesi ve AB bölgesi sorusu hâlâ açık.
